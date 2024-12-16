@@ -18,7 +18,7 @@ class EmailServiceTest {
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val emailService = client.emails()
+        val emailService = client.email()
         val emailCreateResponse =
             emailService.create(EmailCreateParams.builder().email("john@example.com").build())
         println(emailCreateResponse)

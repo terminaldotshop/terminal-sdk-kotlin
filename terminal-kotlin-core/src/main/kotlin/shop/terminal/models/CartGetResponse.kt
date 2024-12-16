@@ -14,9 +14,9 @@ import shop.terminal.core.JsonValue
 import shop.terminal.core.NoAutoDetect
 import shop.terminal.core.toImmutable
 
-@JsonDeserialize(builder = CartListResponse.Builder::class)
+@JsonDeserialize(builder = CartGetResponse.Builder::class)
 @NoAutoDetect
-class CartListResponse
+class CartGetResponse
 private constructor(
     private val data: JsonField<Cart>,
     private val additionalProperties: Map<String, JsonValue>,
@@ -34,7 +34,7 @@ private constructor(
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
-    fun validate(): CartListResponse = apply {
+    fun validate(): CartGetResponse = apply {
         if (!validated) {
             data().validate()
             validated = true
@@ -53,9 +53,9 @@ private constructor(
         private var data: JsonField<Cart> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-        internal fun from(cartListResponse: CartListResponse) = apply {
-            this.data = cartListResponse.data
-            additionalProperties(cartListResponse.additionalProperties)
+        internal fun from(cartGetResponse: CartGetResponse) = apply {
+            this.data = cartGetResponse.data
+            additionalProperties(cartGetResponse.additionalProperties)
         }
 
         /** The current Terminal shop user's cart. */
@@ -80,7 +80,7 @@ private constructor(
             this.additionalProperties.putAll(additionalProperties)
         }
 
-        fun build(): CartListResponse = CartListResponse(data, additionalProperties.toImmutable())
+        fun build(): CartGetResponse = CartGetResponse(data, additionalProperties.toImmutable())
     }
 
     override fun equals(other: Any?): Boolean {
@@ -88,7 +88,7 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CartListResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is CartGetResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -98,5 +98,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CartListResponse{data=$data, additionalProperties=$additionalProperties}"
+        "CartGetResponse{data=$data, additionalProperties=$additionalProperties}"
 }

@@ -8,26 +8,26 @@ import shop.terminal.services.blocking.CartService
 import shop.terminal.services.blocking.EmailService
 import shop.terminal.services.blocking.OrderService
 import shop.terminal.services.blocking.ProductService
+import shop.terminal.services.blocking.ProfileService
 import shop.terminal.services.blocking.SubscriptionService
-import shop.terminal.services.blocking.UserService
 
 interface TerminalClient {
 
     fun async(): TerminalClientAsync
 
-    fun products(): ProductService
+    fun product(): ProductService
 
-    fun users(): UserService
+    fun profile(): ProfileService
 
-    fun addresses(): AddressService
+    fun address(): AddressService
 
-    fun cards(): CardService
+    fun card(): CardService
 
     fun cart(): CartService
 
-    fun orders(): OrderService
+    fun order(): OrderService
 
-    fun subscriptions(): SubscriptionService
+    fun subscription(): SubscriptionService
 
-    fun emails(): EmailService
+    fun email(): EmailService
 }

@@ -20,7 +20,7 @@ class CardServiceTest {
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val cardService = client.cards()
+        val cardService = client.card()
         val cardCreateResponse =
             cardService.create(
                 CardCreateParams.builder().token("tok_1N3T00LkdIwHu7ixt44h1F8k").build()
@@ -36,7 +36,7 @@ class CardServiceTest {
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val cardService = client.cards()
+        val cardService = client.card()
         val cardListResponse = cardService.list(CardListParams.builder().build())
         println(cardListResponse)
         cardListResponse.validate()
@@ -49,7 +49,7 @@ class CardServiceTest {
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val cardService = client.cards()
+        val cardService = client.card()
         val cardDeleteResponse =
             cardService.delete(
                 CardDeleteParams.builder().id("crd_XXXXXXXXXXXXXXXXXXXXXXXXX").build()

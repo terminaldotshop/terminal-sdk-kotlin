@@ -4,10 +4,10 @@ package shop.terminal.models
 
 import org.junit.jupiter.api.Test
 
-class UserMeParamsTest {
+class ProfileMeParamsTest {
 
     @Test
-    fun createUserMeParams() {
-        UserMeParams.builder().build()
+    fun createProfileMeParams() {
+        ProfileMeParams.builder().build()
     }
 }

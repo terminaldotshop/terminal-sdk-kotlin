@@ -3,8 +3,10 @@
 package shop.terminal.services.async
 
 import shop.terminal.core.RequestOptions
-import shop.terminal.models.CartListParams
-import shop.terminal.models.CartListResponse
+import shop.terminal.models.CartConvertParams
+import shop.terminal.models.CartConvertResponse
+import shop.terminal.models.CartGetParams
+import shop.terminal.models.CartGetResponse
 import shop.terminal.models.CartSetAddressParams
 import shop.terminal.models.CartSetAddressResponse
 import shop.terminal.models.CartSetCardParams
@@ -14,11 +16,17 @@ import shop.terminal.models.CartSetItemResponse
 
 interface CartServiceAsync {
 
-    /** Get the current user's cart. */
-    suspend fun list(
-        params: CartListParams,
+    /** Convert the current user's cart to an order. */
+    suspend fun convert(
+        params: CartConvertParams,
         requestOptions: RequestOptions = RequestOptions.none()
-    ): CartListResponse
+    ): CartConvertResponse
+
+    /** Get the current user's cart. */
+    suspend fun get(
+        params: CartGetParams,
+        requestOptions: RequestOptions = RequestOptions.none()
+    ): CartGetResponse
 
     /** Set the shipping address for the current user's cart. */
     suspend fun setAddress(

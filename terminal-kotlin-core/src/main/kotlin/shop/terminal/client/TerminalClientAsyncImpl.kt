@@ -16,10 +16,10 @@ import shop.terminal.services.async.OrderServiceAsync
 import shop.terminal.services.async.OrderServiceAsyncImpl
 import shop.terminal.services.async.ProductServiceAsync
 import shop.terminal.services.async.ProductServiceAsyncImpl
+import shop.terminal.services.async.ProfileServiceAsync
+import shop.terminal.services.async.ProfileServiceAsyncImpl
 import shop.terminal.services.async.SubscriptionServiceAsync
 import shop.terminal.services.async.SubscriptionServiceAsyncImpl
-import shop.terminal.services.async.UserServiceAsync
-import shop.terminal.services.async.UserServiceAsyncImpl
 
 class TerminalClientAsyncImpl
 constructor(
@@ -37,47 +37,49 @@ constructor(
     // Pass the original clientOptions so that this client sets its own User-Agent.
     private val sync: TerminalClient by lazy { TerminalClientImpl(clientOptions) }
 
-    private val products: ProductServiceAsync by lazy {
+    private val product: ProductServiceAsync by lazy {
         ProductServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
-    private val users: UserServiceAsync by lazy { UserServiceAsyncImpl(clientOptionsWithUserAgent) }
+    private val profile: ProfileServiceAsync by lazy {
+        ProfileServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
 
-    private val addresses: AddressServiceAsync by lazy {
+    private val address: AddressServiceAsync by lazy {
         AddressServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
-    private val cards: CardServiceAsync by lazy { CardServiceAsyncImpl(clientOptionsWithUserAgent) }
+    private val card: CardServiceAsync by lazy { CardServiceAsyncImpl(clientOptionsWithUserAgent) }
 
     private val cart: CartServiceAsync by lazy { CartServiceAsyncImpl(clientOptionsWithUserAgent) }
 
-    private val orders: OrderServiceAsync by lazy {
+    private val order: OrderServiceAsync by lazy {
         OrderServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
-    private val subscriptions: SubscriptionServiceAsync by lazy {
+    private val subscription: SubscriptionServiceAsync by lazy {
         SubscriptionServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
-    private val emails: EmailServiceAsync by lazy {
+    private val email: EmailServiceAsync by lazy {
         EmailServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
     override fun sync(): TerminalClient = sync
 
-    override fun products(): ProductServiceAsync = products
+    override fun product(): ProductServiceAsync = product
 
-    override fun users(): UserServiceAsync = users
+    override fun profile(): ProfileServiceAsync = profile
 
-    override fun addresses(): AddressServiceAsync = addresses
+    override fun address(): AddressServiceAsync = address
 
-    override fun cards(): CardServiceAsync = cards
+    override fun card(): CardServiceAsync = card
 
     override fun cart(): CartServiceAsync = cart
 
-    override fun orders(): OrderServiceAsync = orders
+    override fun order(): OrderServiceAsync = order
 
-    override fun subscriptions(): SubscriptionServiceAsync = subscriptions
+    override fun subscription(): SubscriptionServiceAsync = subscription
 
-    override fun emails(): EmailServiceAsync = emails
+    override fun email(): EmailServiceAsync = email
 }

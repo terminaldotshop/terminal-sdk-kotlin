@@ -4,10 +4,10 @@ package shop.terminal.models
 
 import org.junit.jupiter.api.Test
 
-class CartListParamsTest {
+class CartConvertParamsTest {
 
     @Test
-    fun createCartListParams() {
-        CartListParams.builder().build()
+    fun createCartConvertParams() {
+        CartConvertParams.builder().build()
     }
 }
