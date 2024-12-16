@@ -20,6 +20,8 @@ import shop.terminal.services.blocking.ProfileService
 import shop.terminal.services.blocking.ProfileServiceImpl
 import shop.terminal.services.blocking.SubscriptionService
 import shop.terminal.services.blocking.SubscriptionServiceImpl
+import shop.terminal.services.blocking.ViewService
+import shop.terminal.services.blocking.ViewServiceImpl
 
 class TerminalClientImpl
 constructor(
@@ -55,6 +57,8 @@ constructor(
 
     private val email: EmailService by lazy { EmailServiceImpl(clientOptionsWithUserAgent) }
 
+    private val view: ViewService by lazy { ViewServiceImpl(clientOptionsWithUserAgent) }
+
     override fun async(): TerminalClientAsync = async
 
     override fun product(): ProductService = product
@@ -72,4 +76,6 @@ constructor(
     override fun subscription(): SubscriptionService = subscription
 
     override fun email(): EmailService = email
+
+    override fun view(): ViewService = view
 }
