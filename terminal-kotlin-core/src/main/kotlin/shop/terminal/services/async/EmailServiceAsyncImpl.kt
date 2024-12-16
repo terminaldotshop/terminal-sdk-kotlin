@@ -33,7 +33,7 @@ constructor(
         val request =
             HttpRequest.builder()
                 .method(HttpMethod.POST)
-                .addPathSegments("emails")
+                .addPathSegments("email")
                 .putAllQueryParams(clientOptions.queryParams)
                 .replaceAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)

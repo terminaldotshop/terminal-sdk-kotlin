@@ -18,6 +18,8 @@ The REST API documentation can be found on [terminal.shop](https://terminal.sho
 
 #### Gradle
 
+<!-- x-release-please-start-version -->
+
 ```kotlin
 implementation("shop.terminal:terminal-kotlin:0.0.1-alpha.0")
 ```
@@ -31,6 +33,8 @@ implementation("shop.terminal:terminal-kotlin:0.0.1-alpha.0")
     <version>0.0.1-alpha.0</version>
 </dependency>
 ```
+
+<!-- x-release-please-end -->
 
 ### Configure the client
 
@@ -68,14 +72,14 @@ Read the documentation for more configuration options.
 ### Example: creating a resource
 
 To create a new product, first use the `ProductListParams` builder to specify attributes,
-then pass that to the `list` method of the `products` service.
+then pass that to the `list` method of the `product` service.
 
 ```kotlin
 import shop.terminal.models.ProductListParams
 import shop.terminal.models.ProductListResponse
 
 val params = ProductListParams.builder().build()
-val product = client.products().list(params)
+val product = client.product().list(params)
 ```
 
 ---
@@ -87,7 +91,7 @@ val product = client.products().list(params)
 To make a request to the Terminal API, you generally build an instance of the appropriate `Params` class.
 
 In [Example: creating a resource](#example-creating-a-resource) above, we used the `ProductListParams.builder()` to pass to
-the `list` method of the `products` service.
+the `list` method of the `product` service.
 
 Sometimes, the API may support other properties that are not yet supported in the Kotlin SDK types. In that case,
 you can attach them using the `putAdditionalProperty` method.
@@ -107,7 +111,7 @@ val params = ProductListParams.builder()
 When receiving a response, the Terminal Kotlin SDK will deserialize it into instances of the typed model classes. In rare cases, the API may return a response property that doesn't match the expected Kotlin type. If you directly access the mistaken property, the SDK will throw an unchecked `TerminalInvalidDataException` at runtime. If you would prefer to check in advance that that response is completely well-typed, call `.validate()` on the returned model.
 
 ```kotlin
-val product = client.products().list().validate()
+val product = client.product().list().validate()
 ```
 
 ### Response properties as JSON
@@ -242,7 +246,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/terminal-kotlin/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/terminaldotshop/terminal-sdk-kotlin/issues) with questions, bugs, or suggestions.
 
 ## Requirements
 

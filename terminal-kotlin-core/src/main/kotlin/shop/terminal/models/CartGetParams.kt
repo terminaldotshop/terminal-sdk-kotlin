@@ -7,7 +7,7 @@ import shop.terminal.core.NoAutoDetect
 import shop.terminal.core.http.Headers
 import shop.terminal.core.http.QueryParams
 
-class UserInitParams
+class CartGetParams
 constructor(
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -34,9 +34,9 @@ constructor(
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
-        internal fun from(userInitParams: UserInitParams) = apply {
-            additionalHeaders = userInitParams.additionalHeaders.toBuilder()
-            additionalQueryParams = userInitParams.additionalQueryParams.toBuilder()
+        internal fun from(cartGetParams: CartGetParams) = apply {
+            additionalHeaders = cartGetParams.additionalHeaders.toBuilder()
+            additionalQueryParams = cartGetParams.additionalQueryParams.toBuilder()
         }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -137,8 +137,8 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun build(): UserInitParams =
-            UserInitParams(additionalHeaders.build(), additionalQueryParams.build())
+        fun build(): CartGetParams =
+            CartGetParams(additionalHeaders.build(), additionalQueryParams.build())
     }
 
     override fun equals(other: Any?): Boolean {
@@ -146,11 +146,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is UserInitParams && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is CartGetParams && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
     override fun hashCode(): Int = /* spotless:off */ Objects.hash(additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "UserInitParams{additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "CartGetParams{additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

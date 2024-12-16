@@ -20,7 +20,7 @@ class AddressServiceTest {
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val addressService = client.addresses()
+        val addressService = client.address()
         val addressCreateResponse =
             addressService.create(
                 AddressCreateParams.builder()
@@ -45,7 +45,7 @@ class AddressServiceTest {
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val addressService = client.addresses()
+        val addressService = client.address()
         val addressListResponse = addressService.list(AddressListParams.builder().build())
         println(addressListResponse)
         addressListResponse.validate()
@@ -58,7 +58,7 @@ class AddressServiceTest {
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val addressService = client.addresses()
+        val addressService = client.address()
         val addressDeleteResponse =
             addressService.delete(
                 AddressDeleteParams.builder().id("shp_XXXXXXXXXXXXXXXXXXXXXXXXX").build()

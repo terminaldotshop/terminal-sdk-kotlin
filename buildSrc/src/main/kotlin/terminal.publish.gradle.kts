@@ -33,9 +33,9 @@ configure<PublishingExtension> {
                 }
 
                 scm {
-                    connection.set("scm:git:git://github.com/stainless-sdks/terminal-kotlin.git")
-                    developerConnection.set("scm:git:git://github.com/stainless-sdks/terminal-kotlin.git")
-                    url.set("https://github.com/stainless-sdks/terminal-kotlin")
+                    connection.set("scm:git:git://github.com/terminaldotshop/terminal-sdk-kotlin.git")
+                    developerConnection.set("scm:git:git://github.com/terminaldotshop/terminal-sdk-kotlin.git")
+                    url.set("https://github.com/terminaldotshop/terminal-sdk-kotlin")
                 }
 
                 versionMapping {

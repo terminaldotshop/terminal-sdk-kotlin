@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.TestServerExtension
 import shop.terminal.client.okhttp.TerminalOkHttpClient
-import shop.terminal.models.CartListParams
+import shop.terminal.models.CartConvertParams
+import shop.terminal.models.CartGetParams
 import shop.terminal.models.CartSetAddressParams
 import shop.terminal.models.CartSetCardParams
 import shop.terminal.models.CartSetItemParams
@@ -15,16 +16,29 @@ import shop.terminal.models.CartSetItemParams
 class CartServiceTest {
 
     @Test
-    fun callList() {
+    fun callConvert() {
         val client =
             TerminalOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
         val cartService = client.cart()
-        val cartListResponse = cartService.list(CartListParams.builder().build())
-        println(cartListResponse)
-        cartListResponse.validate()
+        val cartConvertResponse = cartService.convert(CartConvertParams.builder().build())
+        println(cartConvertResponse)
+        cartConvertResponse.validate()
+    }
+
+    @Test
+    fun callGet() {
+        val client =
+            TerminalOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val cartService = client.cart()
+        val cartGetResponse = cartService.get(CartGetParams.builder().build())
+        println(cartGetResponse)
+        cartGetResponse.validate()
     }
 
     @Test
