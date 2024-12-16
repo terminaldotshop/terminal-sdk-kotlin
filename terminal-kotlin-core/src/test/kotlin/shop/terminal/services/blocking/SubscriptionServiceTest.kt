@@ -20,7 +20,7 @@ class SubscriptionServiceTest {
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val subscriptionService = client.subscriptions()
+        val subscriptionService = client.subscription()
         val subscriptionCreateResponse =
             subscriptionService.create(
                 SubscriptionCreateParams.builder()
@@ -43,7 +43,7 @@ class SubscriptionServiceTest {
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val subscriptionService = client.subscriptions()
+        val subscriptionService = client.subscription()
         val subscriptionListResponse =
             subscriptionService.list(SubscriptionListParams.builder().build())
         println(subscriptionListResponse)
@@ -57,7 +57,7 @@ class SubscriptionServiceTest {
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val subscriptionService = client.subscriptions()
+        val subscriptionService = client.subscription()
         val subscriptionDeleteResponse =
             subscriptionService.delete(
                 SubscriptionDeleteParams.builder().id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX").build()

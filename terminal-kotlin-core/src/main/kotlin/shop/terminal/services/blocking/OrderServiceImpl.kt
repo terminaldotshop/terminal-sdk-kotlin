@@ -10,10 +10,7 @@ import shop.terminal.core.handlers.withErrorHandler
 import shop.terminal.core.http.HttpMethod
 import shop.terminal.core.http.HttpRequest
 import shop.terminal.core.http.HttpResponse.Handler
-import shop.terminal.core.json
 import shop.terminal.errors.TerminalError
-import shop.terminal.models.OrderCreateParams
-import shop.terminal.models.OrderCreateResponse
 import shop.terminal.models.OrderGetParams
 import shop.terminal.models.OrderGetResponse
 import shop.terminal.models.OrderListParams
@@ -26,35 +23,6 @@ constructor(
 
     private val errorHandler: Handler<TerminalError> = errorHandler(clientOptions.jsonMapper)
 
-    private val createHandler: Handler<OrderCreateResponse> =
-        jsonHandler<OrderCreateResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
-
-    /** Create an order from the current user's cart. */
-    override fun create(
-        params: OrderCreateParams,
-        requestOptions: RequestOptions
-    ): OrderCreateResponse {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.POST)
-                .addPathSegments("orders")
-                .putAllQueryParams(clientOptions.queryParams)
-                .replaceAllQueryParams(params.getQueryParams())
-                .putAllHeaders(clientOptions.headers)
-                .replaceAllHeaders(params.getHeaders())
-                .apply { params.getBody()?.also { body(json(clientOptions.jsonMapper, it)) } }
-                .build()
-        return clientOptions.httpClient.execute(request, requestOptions).let { response ->
-            response
-                .use { createHandler.handle(it) }
-                .apply {
-                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                        validate()
-                    }
-                }
-        }
-    }
-
     private val listHandler: Handler<OrderListResponse> =
         jsonHandler<OrderListResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
@@ -63,7 +31,7 @@ constructor(
         val request =
             HttpRequest.builder()
                 .method(HttpMethod.GET)
-                .addPathSegments("orders")
+                .addPathSegments("order")
                 .putAllQueryParams(clientOptions.queryParams)
                 .replaceAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
@@ -88,7 +56,7 @@ constructor(
         val request =
             HttpRequest.builder()
                 .method(HttpMethod.GET)
-                .addPathSegments("orders", params.getPathParam(0))
+                .addPathSegments("order", params.getPathParam(0))
                 .putAllQueryParams(clientOptions.queryParams)
                 .replaceAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)

@@ -4,10 +4,10 @@ package shop.terminal.models
 
 import org.junit.jupiter.api.Test
 
-class UserInitParamsTest {
+class CartGetParamsTest {
 
     @Test
-    fun createUserInitParams() {
-        UserInitParams.builder().build()
+    fun createCartGetParams() {
+        CartGetParams.builder().build()
     }
 }

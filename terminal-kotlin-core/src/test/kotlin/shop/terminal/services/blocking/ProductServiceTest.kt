@@ -18,7 +18,7 @@ class ProductServiceTest {
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val productService = client.products()
+        val productService = client.product()
         val productListResponse = productService.list(ProductListParams.builder().build())
         println(productListResponse)
         productListResponse.validate()

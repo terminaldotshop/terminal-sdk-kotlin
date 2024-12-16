@@ -37,7 +37,7 @@ constructor(
         val request =
             HttpRequest.builder()
                 .method(HttpMethod.POST)
-                .addPathSegments("cards")
+                .addPathSegments("card")
                 .putAllQueryParams(clientOptions.queryParams)
                 .replaceAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
@@ -66,7 +66,7 @@ constructor(
         val request =
             HttpRequest.builder()
                 .method(HttpMethod.GET)
-                .addPathSegments("cards")
+                .addPathSegments("card")
                 .putAllQueryParams(clientOptions.queryParams)
                 .replaceAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)
@@ -94,7 +94,7 @@ constructor(
         val request =
             HttpRequest.builder()
                 .method(HttpMethod.DELETE)
-                .addPathSegments("cards", params.getPathParam(0))
+                .addPathSegments("card", params.getPathParam(0))
                 .putAllQueryParams(clientOptions.queryParams)
                 .replaceAllQueryParams(params.getQueryParams())
                 .putAllHeaders(clientOptions.headers)

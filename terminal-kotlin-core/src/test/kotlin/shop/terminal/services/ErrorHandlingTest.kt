@@ -91,7 +91,7 @@ class ErrorHandlingTest {
 
         stubFor(get(anyUrl()).willReturn(ok().withBody(toJson(expected))))
 
-        assertThat(client.products().list(params)).isEqualTo(expected)
+        assertThat(client.product().list(params)).isEqualTo(expected)
     }
 
     @Test
@@ -103,7 +103,7 @@ class ErrorHandlingTest {
                 .willReturn(status(400).withHeader("Foo", "Bar").withBody(toJson(TERMINAL_ERROR)))
         )
 
-        assertThatThrownBy({ client.products().list(params) })
+        assertThatThrownBy({ client.product().list(params) })
             .satisfies({ e ->
                 assertBadRequest(e, Headers.builder().put("Foo", "Bar").build(), TERMINAL_ERROR)
             })
@@ -118,7 +118,7 @@ class ErrorHandlingTest {
                 .willReturn(status(401).withHeader("Foo", "Bar").withBody(toJson(TERMINAL_ERROR)))
         )
 
-        assertThatThrownBy({ client.products().list(params) })
+        assertThatThrownBy({ client.product().list(params) })
             .satisfies({ e ->
                 assertUnauthorized(e, Headers.builder().put("Foo", "Bar").build(), TERMINAL_ERROR)
             })
@@ -133,7 +133,7 @@ class ErrorHandlingTest {
                 .willReturn(status(403).withHeader("Foo", "Bar").withBody(toJson(TERMINAL_ERROR)))
         )
 
-        assertThatThrownBy({ client.products().list(params) })
+        assertThatThrownBy({ client.product().list(params) })
             .satisfies({ e ->
                 assertPermissionDenied(
                     e,
@@ -152,7 +152,7 @@ class ErrorHandlingTest {
                 .willReturn(status(404).withHeader("Foo", "Bar").withBody(toJson(TERMINAL_ERROR)))
         )
 
-        assertThatThrownBy({ client.products().list(params) })
+        assertThatThrownBy({ client.product().list(params) })
             .satisfies({ e ->
                 assertNotFound(e, Headers.builder().put("Foo", "Bar").build(), TERMINAL_ERROR)
             })
@@ -167,7 +167,7 @@ class ErrorHandlingTest {
                 .willReturn(status(422).withHeader("Foo", "Bar").withBody(toJson(TERMINAL_ERROR)))
         )
 
-        assertThatThrownBy({ client.products().list(params) })
+        assertThatThrownBy({ client.product().list(params) })
             .satisfies({ e ->
                 assertUnprocessableEntity(
                     e,
@@ -186,7 +186,7 @@ class ErrorHandlingTest {
                 .willReturn(status(429).withHeader("Foo", "Bar").withBody(toJson(TERMINAL_ERROR)))
         )
 
-        assertThatThrownBy({ client.products().list(params) })
+        assertThatThrownBy({ client.product().list(params) })
             .satisfies({ e ->
                 assertRateLimit(e, Headers.builder().put("Foo", "Bar").build(), TERMINAL_ERROR)
             })
@@ -201,7 +201,7 @@ class ErrorHandlingTest {
                 .willReturn(status(500).withHeader("Foo", "Bar").withBody(toJson(TERMINAL_ERROR)))
         )
 
-        assertThatThrownBy({ client.products().list(params) })
+        assertThatThrownBy({ client.product().list(params) })
             .satisfies({ e ->
                 assertInternalServer(e, Headers.builder().put("Foo", "Bar").build(), TERMINAL_ERROR)
             })
@@ -216,7 +216,7 @@ class ErrorHandlingTest {
                 .willReturn(status(999).withHeader("Foo", "Bar").withBody(toJson(TERMINAL_ERROR)))
         )
 
-        assertThatThrownBy({ client.products().list(params) })
+        assertThatThrownBy({ client.product().list(params) })
             .satisfies({ e ->
                 assertUnexpectedStatusCodeException(
                     e,
@@ -233,7 +233,7 @@ class ErrorHandlingTest {
 
         stubFor(get(anyUrl()).willReturn(status(200).withBody("Not JSON")))
 
-        assertThatThrownBy({ client.products().list(params) })
+        assertThatThrownBy({ client.product().list(params) })
             .satisfies({ e ->
                 assertThat(e)
                     .isInstanceOf(TerminalException::class.java)
@@ -247,7 +247,7 @@ class ErrorHandlingTest {
 
         stubFor(get(anyUrl()).willReturn(status(400).withBody("Not JSON")))
 
-        assertThatThrownBy({ client.products().list(params) })
+        assertThatThrownBy({ client.product().list(params) })
             .satisfies({ e ->
                 assertBadRequest(e, Headers.builder().build(), TerminalError.builder().build())
             })
