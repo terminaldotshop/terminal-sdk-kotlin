@@ -10,6 +10,7 @@ import shop.terminal.services.async.OrderServiceAsync
 import shop.terminal.services.async.ProductServiceAsync
 import shop.terminal.services.async.ProfileServiceAsync
 import shop.terminal.services.async.SubscriptionServiceAsync
+import shop.terminal.services.async.ViewServiceAsync
 
 interface TerminalClientAsync {
 
@@ -30,4 +31,6 @@ interface TerminalClientAsync {
     fun subscription(): SubscriptionServiceAsync
 
     fun email(): EmailServiceAsync
+
+    fun view(): ViewServiceAsync
 }

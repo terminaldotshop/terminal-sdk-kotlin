@@ -10,6 +10,7 @@ import shop.terminal.services.blocking.OrderService
 import shop.terminal.services.blocking.ProductService
 import shop.terminal.services.blocking.ProfileService
 import shop.terminal.services.blocking.SubscriptionService
+import shop.terminal.services.blocking.ViewService
 
 interface TerminalClient {
 
@@ -30,4 +31,6 @@ interface TerminalClient {
     fun subscription(): SubscriptionService
 
     fun email(): EmailService
+
+    fun view(): ViewService
 }
