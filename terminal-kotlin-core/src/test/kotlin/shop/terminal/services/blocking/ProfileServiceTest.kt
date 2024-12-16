@@ -21,7 +21,9 @@ class ProfileServiceTest {
                 .build()
         val profileService = client.profile()
         val profileUpdateResponse =
-            profileService.update(ProfileUpdateParams.builder().email("email").name("name").build())
+            profileService.update(
+                ProfileUpdateParams.builder().email("john@example.com").name("John Doe").build()
+            )
         println(profileUpdateResponse)
         profileUpdateResponse.validate()
     }

@@ -9,16 +9,17 @@ class ProfileUpdateParamsTest {
 
     @Test
     fun createProfileUpdateParams() {
-        ProfileUpdateParams.builder().email("email").name("name").build()
+        ProfileUpdateParams.builder().email("john@example.com").name("John Doe").build()
     }
 
     @Test
     fun getBody() {
-        val params = ProfileUpdateParams.builder().email("email").name("name").build()
+        val params =
+            ProfileUpdateParams.builder().email("john@example.com").name("John Doe").build()
         val body = params.getBody()
         assertThat(body).isNotNull
-        assertThat(body.email()).isEqualTo("email")
-        assertThat(body.name()).isEqualTo("name")
+        assertThat(body.email()).isEqualTo("john@example.com")
+        assertThat(body.name()).isEqualTo("John Doe")
     }
 
     @Test
