@@ -16,10 +16,10 @@ import shop.terminal.services.blocking.OrderService
 import shop.terminal.services.blocking.OrderServiceImpl
 import shop.terminal.services.blocking.ProductService
 import shop.terminal.services.blocking.ProductServiceImpl
+import shop.terminal.services.blocking.ProfileService
+import shop.terminal.services.blocking.ProfileServiceImpl
 import shop.terminal.services.blocking.SubscriptionService
 import shop.terminal.services.blocking.SubscriptionServiceImpl
-import shop.terminal.services.blocking.UserService
-import shop.terminal.services.blocking.UserServiceImpl
 
 class TerminalClientImpl
 constructor(
@@ -37,39 +37,39 @@ constructor(
     // Pass the original clientOptions so that this client sets its own User-Agent.
     private val async: TerminalClientAsync by lazy { TerminalClientAsyncImpl(clientOptions) }
 
-    private val products: ProductService by lazy { ProductServiceImpl(clientOptionsWithUserAgent) }
+    private val product: ProductService by lazy { ProductServiceImpl(clientOptionsWithUserAgent) }
 
-    private val users: UserService by lazy { UserServiceImpl(clientOptionsWithUserAgent) }
+    private val profile: ProfileService by lazy { ProfileServiceImpl(clientOptionsWithUserAgent) }
 
-    private val addresses: AddressService by lazy { AddressServiceImpl(clientOptionsWithUserAgent) }
+    private val address: AddressService by lazy { AddressServiceImpl(clientOptionsWithUserAgent) }
 
-    private val cards: CardService by lazy { CardServiceImpl(clientOptionsWithUserAgent) }
+    private val card: CardService by lazy { CardServiceImpl(clientOptionsWithUserAgent) }
 
     private val cart: CartService by lazy { CartServiceImpl(clientOptionsWithUserAgent) }
 
-    private val orders: OrderService by lazy { OrderServiceImpl(clientOptionsWithUserAgent) }
+    private val order: OrderService by lazy { OrderServiceImpl(clientOptionsWithUserAgent) }
 
-    private val subscriptions: SubscriptionService by lazy {
+    private val subscription: SubscriptionService by lazy {
         SubscriptionServiceImpl(clientOptionsWithUserAgent)
     }
 
-    private val emails: EmailService by lazy { EmailServiceImpl(clientOptionsWithUserAgent) }
+    private val email: EmailService by lazy { EmailServiceImpl(clientOptionsWithUserAgent) }
 
     override fun async(): TerminalClientAsync = async
 
-    override fun products(): ProductService = products
+    override fun product(): ProductService = product
 
-    override fun users(): UserService = users
+    override fun profile(): ProfileService = profile
 
-    override fun addresses(): AddressService = addresses
+    override fun address(): AddressService = address
 
-    override fun cards(): CardService = cards
+    override fun card(): CardService = card
 
     override fun cart(): CartService = cart
 
-    override fun orders(): OrderService = orders
+    override fun order(): OrderService = order
 
-    override fun subscriptions(): SubscriptionService = subscriptions
+    override fun subscription(): SubscriptionService = subscription
 
-    override fun emails(): EmailService = emails
+    override fun email(): EmailService = email
 }

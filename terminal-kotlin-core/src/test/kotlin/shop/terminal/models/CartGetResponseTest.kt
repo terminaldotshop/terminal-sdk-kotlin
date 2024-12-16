@@ -5,12 +5,12 @@ package shop.terminal.models
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CartListResponseTest {
+class CartGetResponseTest {
 
     @Test
-    fun createCartListResponse() {
-        val cartListResponse =
-            CartListResponse.builder()
+    fun createCartGetResponse() {
+        val cartGetResponse =
+            CartGetResponse.builder()
                 .data(
                     Cart.builder()
                         .amount(Cart.Amount.builder().subtotal(4400L).shipping(800L).build())
@@ -36,8 +36,8 @@ class CartListResponseTest {
                         .build()
                 )
                 .build()
-        assertThat(cartListResponse).isNotNull
-        assertThat(cartListResponse.data())
+        assertThat(cartGetResponse).isNotNull
+        assertThat(cartGetResponse.data())
             .isEqualTo(
                 Cart.builder()
                     .amount(Cart.Amount.builder().subtotal(4400L).shipping(800L).build())

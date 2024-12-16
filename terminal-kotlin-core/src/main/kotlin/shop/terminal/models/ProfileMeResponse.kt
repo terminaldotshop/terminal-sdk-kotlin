@@ -14,27 +14,27 @@ import shop.terminal.core.JsonValue
 import shop.terminal.core.NoAutoDetect
 import shop.terminal.core.toImmutable
 
-@JsonDeserialize(builder = OrderCreateResponse.Builder::class)
+@JsonDeserialize(builder = ProfileMeResponse.Builder::class)
 @NoAutoDetect
-class OrderCreateResponse
+class ProfileMeResponse
 private constructor(
-    private val data: JsonField<Order>,
+    private val data: JsonField<Profile>,
     private val additionalProperties: Map<String, JsonValue>,
 ) {
 
     private var validated: Boolean = false
 
-    /** An order from the Terminal shop. */
-    fun data(): Order = data.getRequired("data")
+    /** A Terminal shop user's profile. (We have users, btw.) */
+    fun data(): Profile = data.getRequired("data")
 
-    /** An order from the Terminal shop. */
+    /** A Terminal shop user's profile. (We have users, btw.) */
     @JsonProperty("data") @ExcludeMissing fun _data() = data
 
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
-    fun validate(): OrderCreateResponse = apply {
+    fun validate(): ProfileMeResponse = apply {
         if (!validated) {
             data().validate()
             validated = true
@@ -50,21 +50,21 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<Order> = JsonMissing.of()
+        private var data: JsonField<Profile> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-        internal fun from(orderCreateResponse: OrderCreateResponse) = apply {
-            this.data = orderCreateResponse.data
-            additionalProperties(orderCreateResponse.additionalProperties)
+        internal fun from(profileMeResponse: ProfileMeResponse) = apply {
+            this.data = profileMeResponse.data
+            additionalProperties(profileMeResponse.additionalProperties)
         }
 
-        /** An order from the Terminal shop. */
-        fun data(data: Order) = data(JsonField.of(data))
+        /** A Terminal shop user's profile. (We have users, btw.) */
+        fun data(data: Profile) = data(JsonField.of(data))
 
-        /** An order from the Terminal shop. */
+        /** A Terminal shop user's profile. (We have users, btw.) */
         @JsonProperty("data")
         @ExcludeMissing
-        fun data(data: JsonField<Order>) = apply { this.data = data }
+        fun data(data: JsonField<Profile>) = apply { this.data = data }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -80,8 +80,7 @@ private constructor(
             this.additionalProperties.putAll(additionalProperties)
         }
 
-        fun build(): OrderCreateResponse =
-            OrderCreateResponse(data, additionalProperties.toImmutable())
+        fun build(): ProfileMeResponse = ProfileMeResponse(data, additionalProperties.toImmutable())
     }
 
     override fun equals(other: Any?): Boolean {
@@ -89,7 +88,7 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is OrderCreateResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ProfileMeResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -99,5 +98,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "OrderCreateResponse{data=$data, additionalProperties=$additionalProperties}"
+        "ProfileMeResponse{data=$data, additionalProperties=$additionalProperties}"
 }

@@ -8,26 +8,26 @@ import shop.terminal.services.async.CartServiceAsync
 import shop.terminal.services.async.EmailServiceAsync
 import shop.terminal.services.async.OrderServiceAsync
 import shop.terminal.services.async.ProductServiceAsync
+import shop.terminal.services.async.ProfileServiceAsync
 import shop.terminal.services.async.SubscriptionServiceAsync
-import shop.terminal.services.async.UserServiceAsync
 
 interface TerminalClientAsync {
 
     fun sync(): TerminalClient
 
-    fun products(): ProductServiceAsync
+    fun product(): ProductServiceAsync
 
-    fun users(): UserServiceAsync
+    fun profile(): ProfileServiceAsync
 
-    fun addresses(): AddressServiceAsync
+    fun address(): AddressServiceAsync
 
-    fun cards(): CardServiceAsync
+    fun card(): CardServiceAsync
 
     fun cart(): CartServiceAsync
 
-    fun orders(): OrderServiceAsync
+    fun order(): OrderServiceAsync
 
-    fun subscriptions(): SubscriptionServiceAsync
+    fun subscription(): SubscriptionServiceAsync
 
-    fun emails(): EmailServiceAsync
+    fun email(): EmailServiceAsync
 }

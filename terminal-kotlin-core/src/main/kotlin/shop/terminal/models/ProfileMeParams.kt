@@ -7,7 +7,7 @@ import shop.terminal.core.NoAutoDetect
 import shop.terminal.core.http.Headers
 import shop.terminal.core.http.QueryParams
 
-class CartListParams
+class ProfileMeParams
 constructor(
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -34,9 +34,9 @@ constructor(
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
-        internal fun from(cartListParams: CartListParams) = apply {
-            additionalHeaders = cartListParams.additionalHeaders.toBuilder()
-            additionalQueryParams = cartListParams.additionalQueryParams.toBuilder()
+        internal fun from(profileMeParams: ProfileMeParams) = apply {
+            additionalHeaders = profileMeParams.additionalHeaders.toBuilder()
+            additionalQueryParams = profileMeParams.additionalQueryParams.toBuilder()
         }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -137,8 +137,8 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun build(): CartListParams =
-            CartListParams(additionalHeaders.build(), additionalQueryParams.build())
+        fun build(): ProfileMeParams =
+            ProfileMeParams(additionalHeaders.build(), additionalQueryParams.build())
     }
 
     override fun equals(other: Any?): Boolean {
@@ -146,11 +146,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CartListParams && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is ProfileMeParams && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
     override fun hashCode(): Int = /* spotless:off */ Objects.hash(additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CartListParams{additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "ProfileMeParams{additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
