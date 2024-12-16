@@ -20,6 +20,8 @@ import shop.terminal.services.async.ProfileServiceAsync
 import shop.terminal.services.async.ProfileServiceAsyncImpl
 import shop.terminal.services.async.SubscriptionServiceAsync
 import shop.terminal.services.async.SubscriptionServiceAsyncImpl
+import shop.terminal.services.async.ViewServiceAsync
+import shop.terminal.services.async.ViewServiceAsyncImpl
 
 class TerminalClientAsyncImpl
 constructor(
@@ -65,6 +67,8 @@ constructor(
         EmailServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
+    private val view: ViewServiceAsync by lazy { ViewServiceAsyncImpl(clientOptionsWithUserAgent) }
+
     override fun sync(): TerminalClient = sync
 
     override fun product(): ProductServiceAsync = product
@@ -82,4 +86,6 @@ constructor(
     override fun subscription(): SubscriptionServiceAsync = subscription
 
     override fun email(): EmailServiceAsync = email
+
+    override fun view(): ViewServiceAsync = view
 }
