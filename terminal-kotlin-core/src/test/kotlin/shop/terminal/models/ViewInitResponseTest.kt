@@ -29,6 +29,15 @@ class ViewInitResponseTest {
                                     .build()
                             )
                         )
+                        .apps(
+                            listOf(
+                                App.builder()
+                                    .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                                    .name("Example App")
+                                    .redirectUri("https://example.com/callback")
+                                    .build()
+                            )
+                        )
                         .cards(
                             listOf(
                                 Card.builder()
@@ -168,6 +177,19 @@ class ViewInitResponseTest {
                                     .build()
                             )
                         )
+                        .tokens(
+                            listOf(
+                                Token.builder()
+                                    .id("pat_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                                    .token("terminal_test_************XXXX")
+                                    .time(
+                                        Token.Time.builder()
+                                            .created("2024-06-29T19:36:19.000Z")
+                                            .build()
+                                    )
+                                    .build()
+                            )
+                        )
                         .build()
                 )
                 .build()
@@ -187,6 +209,15 @@ class ViewInitResponseTest {
                                 .phone("5555555555")
                                 .province("CA")
                                 .street2("Apt 1")
+                                .build()
+                        )
+                    )
+                    .apps(
+                        listOf(
+                            App.builder()
+                                .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                                .name("Example App")
+                                .redirectUri("https://example.com/callback")
                                 .build()
                         )
                     )
@@ -318,6 +349,17 @@ class ViewInitResponseTest {
                                 .frequency(Subscription.Frequency.FIXED)
                                 .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                                 .quantity(1L)
+                                .build()
+                        )
+                    )
+                    .tokens(
+                        listOf(
+                            Token.builder()
+                                .id("pat_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                                .token("terminal_test_************XXXX")
+                                .time(
+                                    Token.Time.builder().created("2024-06-29T19:36:19.000Z").build()
+                                )
                                 .build()
                         )
                     )
