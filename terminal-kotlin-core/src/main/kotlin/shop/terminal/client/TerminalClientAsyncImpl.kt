@@ -6,6 +6,8 @@ import shop.terminal.core.ClientOptions
 import shop.terminal.core.getPackageVersion
 import shop.terminal.services.async.AddressServiceAsync
 import shop.terminal.services.async.AddressServiceAsyncImpl
+import shop.terminal.services.async.AppServiceAsync
+import shop.terminal.services.async.AppServiceAsyncImpl
 import shop.terminal.services.async.CardServiceAsync
 import shop.terminal.services.async.CardServiceAsyncImpl
 import shop.terminal.services.async.CartServiceAsync
@@ -20,6 +22,8 @@ import shop.terminal.services.async.ProfileServiceAsync
 import shop.terminal.services.async.ProfileServiceAsyncImpl
 import shop.terminal.services.async.SubscriptionServiceAsync
 import shop.terminal.services.async.SubscriptionServiceAsyncImpl
+import shop.terminal.services.async.TokenServiceAsync
+import shop.terminal.services.async.TokenServiceAsyncImpl
 import shop.terminal.services.async.ViewServiceAsync
 import shop.terminal.services.async.ViewServiceAsyncImpl
 
@@ -63,6 +67,12 @@ constructor(
         SubscriptionServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
+    private val token: TokenServiceAsync by lazy {
+        TokenServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
+
+    private val app: AppServiceAsync by lazy { AppServiceAsyncImpl(clientOptionsWithUserAgent) }
+
     private val email: EmailServiceAsync by lazy {
         EmailServiceAsyncImpl(clientOptionsWithUserAgent)
     }
@@ -84,6 +94,10 @@ constructor(
     override fun order(): OrderServiceAsync = order
 
     override fun subscription(): SubscriptionServiceAsync = subscription
+
+    override fun token(): TokenServiceAsync = token
+
+    override fun app(): AppServiceAsync = app
 
     override fun email(): EmailServiceAsync = email
 
