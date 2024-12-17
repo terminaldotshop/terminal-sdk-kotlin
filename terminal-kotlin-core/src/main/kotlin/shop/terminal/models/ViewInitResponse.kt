@@ -95,6 +95,8 @@ private constructor(
         private val cards: JsonField<List<Card>>,
         private val subscriptions: JsonField<List<Subscription>>,
         private val orders: JsonField<List<Order>>,
+        private val tokens: JsonField<List<Token>>,
+        private val apps: JsonField<List<App>>,
         private val additionalProperties: Map<String, JsonValue>,
     ) {
 
@@ -116,6 +118,10 @@ private constructor(
 
         fun orders(): List<Order> = orders.getRequired("orders")
 
+        fun tokens(): List<Token> = tokens.getRequired("tokens")
+
+        fun apps(): List<App> = apps.getRequired("apps")
+
         /** A Terminal shop user's profile. (We have users, btw.) */
         @JsonProperty("profile") @ExcludeMissing fun _profile() = profile
 
@@ -132,6 +138,10 @@ private constructor(
 
         @JsonProperty("orders") @ExcludeMissing fun _orders() = orders
 
+        @JsonProperty("tokens") @ExcludeMissing fun _tokens() = tokens
+
+        @JsonProperty("apps") @ExcludeMissing fun _apps() = apps
+
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -145,6 +155,8 @@ private constructor(
                 cards().forEach { it.validate() }
                 subscriptions().forEach { it.validate() }
                 orders().forEach { it.validate() }
+                tokens().forEach { it.validate() }
+                apps().forEach { it.validate() }
                 validated = true
             }
         }
@@ -165,6 +177,8 @@ private constructor(
             private var cards: JsonField<List<Card>> = JsonMissing.of()
             private var subscriptions: JsonField<List<Subscription>> = JsonMissing.of()
             private var orders: JsonField<List<Order>> = JsonMissing.of()
+            private var tokens: JsonField<List<Token>> = JsonMissing.of()
+            private var apps: JsonField<List<App>> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(data: Data) = apply {
@@ -175,6 +189,8 @@ private constructor(
                 this.cards = data.cards
                 this.subscriptions = data.subscriptions
                 this.orders = data.orders
+                this.tokens = data.tokens
+                this.apps = data.apps
                 additionalProperties(data.additionalProperties)
             }
 
@@ -229,6 +245,18 @@ private constructor(
             @ExcludeMissing
             fun orders(orders: JsonField<List<Order>>) = apply { this.orders = orders }
 
+            fun tokens(tokens: List<Token>) = tokens(JsonField.of(tokens))
+
+            @JsonProperty("tokens")
+            @ExcludeMissing
+            fun tokens(tokens: JsonField<List<Token>>) = apply { this.tokens = tokens }
+
+            fun apps(apps: List<App>) = apps(JsonField.of(apps))
+
+            @JsonProperty("apps")
+            @ExcludeMissing
+            fun apps(apps: JsonField<List<App>>) = apply { this.apps = apps }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 this.additionalProperties.putAll(additionalProperties)
@@ -252,6 +280,8 @@ private constructor(
                     cards.map { it.toImmutable() },
                     subscriptions.map { it.toImmutable() },
                     orders.map { it.toImmutable() },
+                    tokens.map { it.toImmutable() },
+                    apps.map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -261,17 +291,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Data && profile == other.profile && products == other.products && cart == other.cart && addresses == other.addresses && cards == other.cards && subscriptions == other.subscriptions && orders == other.orders && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Data && profile == other.profile && products == other.products && cart == other.cart && addresses == other.addresses && cards == other.cards && subscriptions == other.subscriptions && orders == other.orders && tokens == other.tokens && apps == other.apps && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(profile, products, cart, addresses, cards, subscriptions, orders, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(profile, products, cart, addresses, cards, subscriptions, orders, tokens, apps, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Data{profile=$profile, products=$products, cart=$cart, addresses=$addresses, cards=$cards, subscriptions=$subscriptions, orders=$orders, additionalProperties=$additionalProperties}"
+            "Data{profile=$profile, products=$products, cart=$cart, addresses=$addresses, cards=$cards, subscriptions=$subscriptions, orders=$orders, tokens=$tokens, apps=$apps, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
