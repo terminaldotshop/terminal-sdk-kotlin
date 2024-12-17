@@ -21,14 +21,14 @@ The REST API documentation can be found on [terminal.shop](https://terminal.sho
 <!-- x-release-please-start-version -->
 
 ```kotlin
-implementation("shop.terminal:terminal-kotlin:0.0.1-alpha.0")
+implementation("shop.terminal.api:terminal-kotlin:0.0.1-alpha.0")
 ```
 
 #### Maven
 
 ```xml
 <dependency>
-    <groupId>shop.terminal</groupId>
+    <groupId>shop.terminal.api</groupId>
     <artifactId>terminal-kotlin</artifactId>
     <version>0.0.1-alpha.0</version>
 </dependency>
@@ -41,8 +41,8 @@ implementation("shop.terminal:terminal-kotlin:0.0.1-alpha.0")
 Use `TerminalOkHttpClient.builder()` to configure the client. At a minimum you need to set `.bearerToken()`:
 
 ```kotlin
-import shop.terminal.client.TerminalClient
-import shop.terminal.client.okhttp.TerminalOkHttpClient
+import shop.terminal.api.client.TerminalClient
+import shop.terminal.api.client.okhttp.TerminalOkHttpClient
 
 val client = TerminalOkHttpClient.builder()
     .bearerToken("My Bearer Token")
@@ -75,8 +75,8 @@ To create a new product, first use the `ProductListParams` builder to specify at
 then pass that to the `list` method of the `product` service.
 
 ```kotlin
-import shop.terminal.models.ProductListParams
-import shop.terminal.models.ProductListResponse
+import shop.terminal.api.models.ProductListParams
+import shop.terminal.api.models.ProductListResponse
 
 val params = ProductListParams.builder().build()
 val product = client.product().list(params)
@@ -97,7 +97,7 @@ Sometimes, the API may support other properties that are not yet supported in th
 you can attach them using the `putAdditionalProperty` method.
 
 ```kotlin
-import shop.terminal.models.core.JsonValue
+import shop.terminal.api.models.core.JsonValue
 val params = ProductListParams.builder()
     // ... normal properties
     .putAdditionalProperty("secret_param", JsonValue.from("4242"))
