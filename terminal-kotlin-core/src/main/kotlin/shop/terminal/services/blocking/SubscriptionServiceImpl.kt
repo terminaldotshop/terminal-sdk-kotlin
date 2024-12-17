@@ -37,7 +37,7 @@ constructor(
     ): SubscriptionCreateResponse {
         val request =
             HttpRequest.builder()
-                .method(HttpMethod.PUT)
+                .method(HttpMethod.POST)
                 .addPathSegments("subscription")
                 .putAllQueryParams(clientOptions.queryParams)
                 .replaceAllQueryParams(params.getQueryParams())

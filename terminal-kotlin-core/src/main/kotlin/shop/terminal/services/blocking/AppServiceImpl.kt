@@ -12,6 +12,8 @@ import shop.terminal.core.http.HttpRequest
 import shop.terminal.core.http.HttpResponse.Handler
 import shop.terminal.core.json
 import shop.terminal.errors.TerminalError
+import shop.terminal.models.AppCreateParams
+import shop.terminal.models.AppCreateResponse
 import shop.terminal.models.AppDeleteParams
 import shop.terminal.models.AppDeleteResponse
 import shop.terminal.models.AppGetParams
@@ -25,6 +27,35 @@ constructor(
 ) : AppService {
 
     private val errorHandler: Handler<TerminalError> = errorHandler(clientOptions.jsonMapper)
+
+    private val createHandler: Handler<AppCreateResponse> =
+        jsonHandler<AppCreateResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+    /** Create an app. */
+    override fun create(
+        params: AppCreateParams,
+        requestOptions: RequestOptions
+    ): AppCreateResponse {
+        val request =
+            HttpRequest.builder()
+                .method(HttpMethod.POST)
+                .addPathSegments("app")
+                .putAllQueryParams(clientOptions.queryParams)
+                .replaceAllQueryParams(params.getQueryParams())
+                .putAllHeaders(clientOptions.headers)
+                .replaceAllHeaders(params.getHeaders())
+                .body(json(clientOptions.jsonMapper, params.getBody()))
+                .build()
+        return clientOptions.httpClient.execute(request, requestOptions).let { response ->
+            response
+                .use { createHandler.handle(it) }
+                .apply {
+                    if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
+                        validate()
+                    }
+                }
+        }
+    }
 
     private val listHandler: Handler<AppListResponse> =
         jsonHandler<AppListResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
