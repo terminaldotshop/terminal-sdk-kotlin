@@ -3,6 +3,7 @@
 package shop.terminal.client
 
 import shop.terminal.services.blocking.AddressService
+import shop.terminal.services.blocking.AppService
 import shop.terminal.services.blocking.CardService
 import shop.terminal.services.blocking.CartService
 import shop.terminal.services.blocking.EmailService
@@ -10,6 +11,7 @@ import shop.terminal.services.blocking.OrderService
 import shop.terminal.services.blocking.ProductService
 import shop.terminal.services.blocking.ProfileService
 import shop.terminal.services.blocking.SubscriptionService
+import shop.terminal.services.blocking.TokenService
 import shop.terminal.services.blocking.ViewService
 
 interface TerminalClient {
@@ -29,6 +31,10 @@ interface TerminalClient {
     fun order(): OrderService
 
     fun subscription(): SubscriptionService
+
+    fun token(): TokenService
+
+    fun app(): AppService
 
     fun email(): EmailService
 
