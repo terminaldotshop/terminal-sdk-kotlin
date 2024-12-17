@@ -3,6 +3,8 @@
 package shop.terminal.services.async
 
 import shop.terminal.core.RequestOptions
+import shop.terminal.models.TokenCreateParams
+import shop.terminal.models.TokenCreateResponse
 import shop.terminal.models.TokenDeleteParams
 import shop.terminal.models.TokenDeleteResponse
 import shop.terminal.models.TokenGetParams
@@ -11,6 +13,12 @@ import shop.terminal.models.TokenListParams
 import shop.terminal.models.TokenListResponse
 
 interface TokenServiceAsync {
+
+    /** Create a personal access token. */
+    suspend fun create(
+        params: TokenCreateParams,
+        requestOptions: RequestOptions = RequestOptions.none()
+    ): TokenCreateResponse
 
     /** List the current user's personal access tokens. */
     suspend fun list(

@@ -6,12 +6,26 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.TestServerExtension
 import shop.terminal.client.okhttp.TerminalOkHttpClient
+import shop.terminal.models.TokenCreateParams
 import shop.terminal.models.TokenDeleteParams
 import shop.terminal.models.TokenGetParams
 import shop.terminal.models.TokenListParams
 
 @ExtendWith(TestServerExtension::class)
 class TokenServiceTest {
+
+    @Test
+    fun callCreate() {
+        val client =
+            TerminalOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val tokenService = client.token()
+        val tokenCreateResponse = tokenService.create(TokenCreateParams.builder().build())
+        println(tokenCreateResponse)
+        tokenCreateResponse.validate()
+    }
 
     @Test
     fun callList() {

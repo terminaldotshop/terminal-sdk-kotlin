@@ -6,12 +6,33 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.TestServerExtension
 import shop.terminal.client.okhttp.TerminalOkHttpClient
+import shop.terminal.models.AppCreateParams
 import shop.terminal.models.AppDeleteParams
 import shop.terminal.models.AppGetParams
 import shop.terminal.models.AppListParams
 
 @ExtendWith(TestServerExtension::class)
 class AppServiceTest {
+
+    @Test
+    fun callCreate() {
+        val client =
+            TerminalOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val appService = client.app()
+        val appCreateResponse =
+            appService.create(
+                AppCreateParams.builder()
+                    .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .name("Example App")
+                    .redirectUri("https://example.com/callback")
+                    .build()
+            )
+        println(appCreateResponse)
+        appCreateResponse.validate()
+    }
 
     @Test
     fun callList() {
