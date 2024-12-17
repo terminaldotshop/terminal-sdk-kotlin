@@ -15,7 +15,7 @@ class TokenListResponseTest {
                     listOf(
                         Token.builder()
                             .id("pat_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                            .token("terminal_test_************XXXX")
+                            .token("trm_test_******XXXX")
                             .time(Token.Time.builder().created("2024-06-29T19:36:19.000Z").build())
                             .build()
                     )
@@ -26,7 +26,7 @@ class TokenListResponseTest {
             .containsExactly(
                 Token.builder()
                     .id("pat_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                    .token("terminal_test_************XXXX")
+                    .token("trm_test_******XXXX")
                     .time(Token.Time.builder().created("2024-06-29T19:36:19.000Z").build())
                     .build()
             )
