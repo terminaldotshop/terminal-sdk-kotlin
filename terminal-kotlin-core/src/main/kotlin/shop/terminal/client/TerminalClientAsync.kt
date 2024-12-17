@@ -3,6 +3,7 @@
 package shop.terminal.client
 
 import shop.terminal.services.async.AddressServiceAsync
+import shop.terminal.services.async.AppServiceAsync
 import shop.terminal.services.async.CardServiceAsync
 import shop.terminal.services.async.CartServiceAsync
 import shop.terminal.services.async.EmailServiceAsync
@@ -10,6 +11,7 @@ import shop.terminal.services.async.OrderServiceAsync
 import shop.terminal.services.async.ProductServiceAsync
 import shop.terminal.services.async.ProfileServiceAsync
 import shop.terminal.services.async.SubscriptionServiceAsync
+import shop.terminal.services.async.TokenServiceAsync
 import shop.terminal.services.async.ViewServiceAsync
 
 interface TerminalClientAsync {
@@ -29,6 +31,10 @@ interface TerminalClientAsync {
     fun order(): OrderServiceAsync
 
     fun subscription(): SubscriptionServiceAsync
+
+    fun token(): TokenServiceAsync
+
+    fun app(): AppServiceAsync
 
     fun email(): EmailServiceAsync
 

@@ -6,6 +6,8 @@ import shop.terminal.core.ClientOptions
 import shop.terminal.core.getPackageVersion
 import shop.terminal.services.blocking.AddressService
 import shop.terminal.services.blocking.AddressServiceImpl
+import shop.terminal.services.blocking.AppService
+import shop.terminal.services.blocking.AppServiceImpl
 import shop.terminal.services.blocking.CardService
 import shop.terminal.services.blocking.CardServiceImpl
 import shop.terminal.services.blocking.CartService
@@ -20,6 +22,8 @@ import shop.terminal.services.blocking.ProfileService
 import shop.terminal.services.blocking.ProfileServiceImpl
 import shop.terminal.services.blocking.SubscriptionService
 import shop.terminal.services.blocking.SubscriptionServiceImpl
+import shop.terminal.services.blocking.TokenService
+import shop.terminal.services.blocking.TokenServiceImpl
 import shop.terminal.services.blocking.ViewService
 import shop.terminal.services.blocking.ViewServiceImpl
 
@@ -55,6 +59,10 @@ constructor(
         SubscriptionServiceImpl(clientOptionsWithUserAgent)
     }
 
+    private val token: TokenService by lazy { TokenServiceImpl(clientOptionsWithUserAgent) }
+
+    private val app: AppService by lazy { AppServiceImpl(clientOptionsWithUserAgent) }
+
     private val email: EmailService by lazy { EmailServiceImpl(clientOptionsWithUserAgent) }
 
     private val view: ViewService by lazy { ViewServiceImpl(clientOptionsWithUserAgent) }
@@ -74,6 +82,10 @@ constructor(
     override fun order(): OrderService = order
 
     override fun subscription(): SubscriptionService = subscription
+
+    override fun token(): TokenService = token
+
+    override fun app(): AppService = app
 
     override fun email(): EmailService = email
 
