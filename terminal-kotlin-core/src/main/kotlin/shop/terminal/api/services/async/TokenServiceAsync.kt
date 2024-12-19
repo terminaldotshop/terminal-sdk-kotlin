@@ -32,7 +32,7 @@ interface TokenServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none()
     ): TokenDeleteResponse
 
-    /** Get the personal token with the given ID. */
+    /** Get the personal access token with the given ID. */
     suspend fun get(
         params: TokenGetParams,
         requestOptions: RequestOptions = RequestOptions.none()

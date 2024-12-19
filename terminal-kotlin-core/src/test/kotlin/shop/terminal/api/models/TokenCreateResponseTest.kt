@@ -14,7 +14,7 @@ class TokenCreateResponseTest {
                 .data(
                     TokenCreateResponse.Data.builder()
                         .id("pat_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                        .token("terminal_test_************XXXX")
+                        .token("trm_test_******XXXX")
                         .build()
                 )
                 .build()
@@ -23,7 +23,7 @@ class TokenCreateResponseTest {
             .isEqualTo(
                 TokenCreateResponse.Data.builder()
                     .id("pat_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                    .token("terminal_test_************XXXX")
+                    .token("trm_test_******XXXX")
                     .build()
             )
     }

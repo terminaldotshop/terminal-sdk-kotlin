@@ -29,7 +29,7 @@ configure<MavenPublishBaseExtension> {
 
     pom {
         name.set("Terminal API")
-        description.set("Development documentation")
+        description.set("The Terminal API gives you access to the same API that powers the award winning\nTerminal SSH shop (`ssh terminal.shop`).")
         url.set("https://terminal.shop/docs")
 
         licenses {
