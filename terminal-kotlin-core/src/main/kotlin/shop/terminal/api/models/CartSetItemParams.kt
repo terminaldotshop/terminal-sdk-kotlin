@@ -4,14 +4,15 @@ package shop.terminal.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.util.Objects
 import shop.terminal.api.core.ExcludeMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
+import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
 class CartSetItemParams
@@ -45,20 +46,21 @@ constructor(
 
     internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = CartSetItemBody.Builder::class)
     @NoAutoDetect
     class CartSetItemBody
+    @JsonCreator
     internal constructor(
-        private val productVariantId: String?,
-        private val quantity: Long?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("productVariantID") private val productVariantId: String,
+        @JsonProperty("quantity") private val quantity: Long,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** ID of the product variant to add to the cart. */
-        @JsonProperty("productVariantID") fun productVariantId(): String? = productVariantId
+        @JsonProperty("productVariantID") fun productVariantId(): String = productVariantId
 
         /** Quantity of the item to add to the cart. */
-        @JsonProperty("quantity") fun quantity(): Long? = quantity
+        @JsonProperty("quantity") fun quantity(): Long = quantity
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -78,33 +80,36 @@ constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(cartSetItemBody: CartSetItemBody) = apply {
-                this.productVariantId = cartSetItemBody.productVariantId
-                this.quantity = cartSetItemBody.quantity
-                additionalProperties(cartSetItemBody.additionalProperties)
+                productVariantId = cartSetItemBody.productVariantId
+                quantity = cartSetItemBody.quantity
+                additionalProperties = cartSetItemBody.additionalProperties.toMutableMap()
             }
 
             /** ID of the product variant to add to the cart. */
-            @JsonProperty("productVariantID")
             fun productVariantId(productVariantId: String) = apply {
                 this.productVariantId = productVariantId
             }
 
             /** Quantity of the item to add to the cart. */
-            @JsonProperty("quantity")
             fun quantity(quantity: Long) = apply { this.quantity = quantity }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): CartSetItemBody =

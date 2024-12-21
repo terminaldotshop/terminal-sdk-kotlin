@@ -4,14 +4,15 @@ package shop.terminal.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.util.Objects
 import shop.terminal.api.core.ExcludeMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
+import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
 class AddressCreateParams
@@ -70,35 +71,36 @@ constructor(
     internal fun getQueryParams(): QueryParams = additionalQueryParams
 
     /** Address information. */
-    @JsonDeserialize(builder = AddressCreateBody.Builder::class)
     @NoAutoDetect
     class AddressCreateBody
+    @JsonCreator
     internal constructor(
-        private val city: String?,
-        private val country: String?,
-        private val name: String?,
-        private val street1: String?,
-        private val zip: String?,
-        private val phone: String?,
-        private val province: String?,
-        private val street2: String?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("city") private val city: String,
+        @JsonProperty("country") private val country: String,
+        @JsonProperty("name") private val name: String,
+        @JsonProperty("street1") private val street1: String,
+        @JsonProperty("zip") private val zip: String,
+        @JsonProperty("phone") private val phone: String?,
+        @JsonProperty("province") private val province: String?,
+        @JsonProperty("street2") private val street2: String?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** City of the address. */
-        @JsonProperty("city") fun city(): String? = city
+        @JsonProperty("city") fun city(): String = city
 
         /** ISO 3166-1 alpha-2 country code of the address. */
-        @JsonProperty("country") fun country(): String? = country
+        @JsonProperty("country") fun country(): String = country
 
         /** The recipient's name. */
-        @JsonProperty("name") fun name(): String? = name
+        @JsonProperty("name") fun name(): String = name
 
         /** Street of the address. */
-        @JsonProperty("street1") fun street1(): String? = street1
+        @JsonProperty("street1") fun street1(): String = street1
 
         /** Zip code of the address. */
-        @JsonProperty("zip") fun zip(): String? = zip
+        @JsonProperty("zip") fun zip(): String = zip
 
         /** Phone number of the recipient. */
         @JsonProperty("phone") fun phone(): String? = phone
@@ -133,54 +135,58 @@ constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(addressCreateBody: AddressCreateBody) = apply {
-                this.city = addressCreateBody.city
-                this.country = addressCreateBody.country
-                this.name = addressCreateBody.name
-                this.street1 = addressCreateBody.street1
-                this.zip = addressCreateBody.zip
-                this.phone = addressCreateBody.phone
-                this.province = addressCreateBody.province
-                this.street2 = addressCreateBody.street2
-                additionalProperties(addressCreateBody.additionalProperties)
+                city = addressCreateBody.city
+                country = addressCreateBody.country
+                name = addressCreateBody.name
+                street1 = addressCreateBody.street1
+                zip = addressCreateBody.zip
+                phone = addressCreateBody.phone
+                province = addressCreateBody.province
+                street2 = addressCreateBody.street2
+                additionalProperties = addressCreateBody.additionalProperties.toMutableMap()
             }
 
             /** City of the address. */
-            @JsonProperty("city") fun city(city: String) = apply { this.city = city }
+            fun city(city: String) = apply { this.city = city }
 
             /** ISO 3166-1 alpha-2 country code of the address. */
-            @JsonProperty("country") fun country(country: String) = apply { this.country = country }
+            fun country(country: String) = apply { this.country = country }
 
             /** The recipient's name. */
-            @JsonProperty("name") fun name(name: String) = apply { this.name = name }
+            fun name(name: String) = apply { this.name = name }
 
             /** Street of the address. */
-            @JsonProperty("street1") fun street1(street1: String) = apply { this.street1 = street1 }
+            fun street1(street1: String) = apply { this.street1 = street1 }
 
             /** Zip code of the address. */
-            @JsonProperty("zip") fun zip(zip: String) = apply { this.zip = zip }
+            fun zip(zip: String) = apply { this.zip = zip }
 
             /** Phone number of the recipient. */
-            @JsonProperty("phone") fun phone(phone: String) = apply { this.phone = phone }
+            fun phone(phone: String?) = apply { this.phone = phone }
 
             /** Province or state of the address. */
-            @JsonProperty("province")
-            fun province(province: String) = apply { this.province = province }
+            fun province(province: String?) = apply { this.province = province }
 
             /** Apartment, suite, etc. of the address. */
-            @JsonProperty("street2") fun street2(street2: String) = apply { this.street2 = street2 }
+            fun street2(street2: String?) = apply { this.street2 = street2 }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): AddressCreateBody =

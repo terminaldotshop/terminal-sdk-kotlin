@@ -4,29 +4,30 @@ package shop.terminal.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.util.Objects
 import shop.terminal.api.core.ExcludeMissing
 import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
+import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
 /** Credit card used for payments in the Terminal shop. */
-@JsonDeserialize(builder = Card.Builder::class)
 @NoAutoDetect
 class Card
+@JsonCreator
 private constructor(
-    private val id: JsonField<String>,
-    private val brand: JsonField<String>,
-    private val expiration: JsonField<Expiration>,
-    private val last4: JsonField<String>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("brand") @ExcludeMissing private val brand: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("expiration")
+    @ExcludeMissing
+    private val expiration: JsonField<Expiration> = JsonMissing.of(),
+    @JsonProperty("last4") @ExcludeMissing private val last4: JsonField<String> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
-
-    private var validated: Boolean = false
 
     /** Unique object identifier. The format and length of IDs may change over time. */
     fun id(): String = id.getRequired("id")
@@ -56,6 +57,8 @@ private constructor(
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+    private var validated: Boolean = false
+
     fun validate(): Card = apply {
         if (!validated) {
             id()
@@ -82,55 +85,54 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(card: Card) = apply {
-            this.id = card.id
-            this.brand = card.brand
-            this.expiration = card.expiration
-            this.last4 = card.last4
-            additionalProperties(card.additionalProperties)
+            id = card.id
+            brand = card.brand
+            expiration = card.expiration
+            last4 = card.last4
+            additionalProperties = card.additionalProperties.toMutableMap()
         }
 
         /** Unique object identifier. The format and length of IDs may change over time. */
         fun id(id: String) = id(JsonField.of(id))
 
         /** Unique object identifier. The format and length of IDs may change over time. */
-        @JsonProperty("id") @ExcludeMissing fun id(id: JsonField<String>) = apply { this.id = id }
+        fun id(id: JsonField<String>) = apply { this.id = id }
 
         /** Brand of the card. */
         fun brand(brand: String) = brand(JsonField.of(brand))
 
         /** Brand of the card. */
-        @JsonProperty("brand")
-        @ExcludeMissing
         fun brand(brand: JsonField<String>) = apply { this.brand = brand }
 
         /** Expiration of the card. */
         fun expiration(expiration: Expiration) = expiration(JsonField.of(expiration))
 
         /** Expiration of the card. */
-        @JsonProperty("expiration")
-        @ExcludeMissing
         fun expiration(expiration: JsonField<Expiration>) = apply { this.expiration = expiration }
 
         /** Last four digits of the card. */
         fun last4(last4: String) = last4(JsonField.of(last4))
 
         /** Last four digits of the card. */
-        @JsonProperty("last4")
-        @ExcludeMissing
         fun last4(last4: JsonField<String>) = apply { this.last4 = last4 }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
         }
 
         fun build(): Card =
@@ -144,16 +146,17 @@ private constructor(
     }
 
     /** Expiration of the card. */
-    @JsonDeserialize(builder = Expiration.Builder::class)
     @NoAutoDetect
     class Expiration
+    @JsonCreator
     private constructor(
-        private val year: JsonField<Long>,
-        private val month: JsonField<Long>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("year") @ExcludeMissing private val year: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("month")
+        @ExcludeMissing
+        private val month: JsonField<Long> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
-
-        private var validated: Boolean = false
 
         /** Expiration year of the card. */
         fun year(): Long = year.getRequired("year")
@@ -170,6 +173,8 @@ private constructor(
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
 
         fun validate(): Expiration = apply {
             if (!validated) {
@@ -193,39 +198,40 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(expiration: Expiration) = apply {
-                this.year = expiration.year
-                this.month = expiration.month
-                additionalProperties(expiration.additionalProperties)
+                year = expiration.year
+                month = expiration.month
+                additionalProperties = expiration.additionalProperties.toMutableMap()
             }
 
             /** Expiration year of the card. */
             fun year(year: Long) = year(JsonField.of(year))
 
             /** Expiration year of the card. */
-            @JsonProperty("year")
-            @ExcludeMissing
             fun year(year: JsonField<Long>) = apply { this.year = year }
 
             /** Expiration month of the card. */
             fun month(month: Long) = month(JsonField.of(month))
 
             /** Expiration month of the card. */
-            @JsonProperty("month")
-            @ExcludeMissing
             fun month(month: JsonField<Long>) = apply { this.month = month }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Expiration =
