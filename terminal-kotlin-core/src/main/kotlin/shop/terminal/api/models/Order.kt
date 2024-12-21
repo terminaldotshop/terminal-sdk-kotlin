@@ -4,31 +4,38 @@ package shop.terminal.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.util.Objects
 import shop.terminal.api.core.ExcludeMissing
 import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
+import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
 /** An order from the Terminal shop. */
-@JsonDeserialize(builder = Order.Builder::class)
 @NoAutoDetect
 class Order
+@JsonCreator
 private constructor(
-    private val id: JsonField<String>,
-    private val index: JsonField<Long>,
-    private val shipping: JsonField<Shipping>,
-    private val amount: JsonField<Amount>,
-    private val tracking: JsonField<Tracking>,
-    private val items: JsonField<List<Item>>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("index") @ExcludeMissing private val index: JsonField<Long> = JsonMissing.of(),
+    @JsonProperty("shipping")
+    @ExcludeMissing
+    private val shipping: JsonField<Shipping> = JsonMissing.of(),
+    @JsonProperty("amount")
+    @ExcludeMissing
+    private val amount: JsonField<Amount> = JsonMissing.of(),
+    @JsonProperty("tracking")
+    @ExcludeMissing
+    private val tracking: JsonField<Tracking> = JsonMissing.of(),
+    @JsonProperty("items")
+    @ExcludeMissing
+    private val items: JsonField<List<Item>> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
-
-    private var validated: Boolean = false
 
     /** Unique object identifier. The format and length of IDs may change over time. */
     fun id(): String = id.getRequired("id")
@@ -70,6 +77,8 @@ private constructor(
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+    private var validated: Boolean = false
+
     fun validate(): Order = apply {
         if (!validated) {
             id()
@@ -100,73 +109,68 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(order: Order) = apply {
-            this.id = order.id
-            this.index = order.index
-            this.shipping = order.shipping
-            this.amount = order.amount
-            this.tracking = order.tracking
-            this.items = order.items
-            additionalProperties(order.additionalProperties)
+            id = order.id
+            index = order.index
+            shipping = order.shipping
+            amount = order.amount
+            tracking = order.tracking
+            items = order.items
+            additionalProperties = order.additionalProperties.toMutableMap()
         }
 
         /** Unique object identifier. The format and length of IDs may change over time. */
         fun id(id: String) = id(JsonField.of(id))
 
         /** Unique object identifier. The format and length of IDs may change over time. */
-        @JsonProperty("id") @ExcludeMissing fun id(id: JsonField<String>) = apply { this.id = id }
+        fun id(id: JsonField<String>) = apply { this.id = id }
 
         /** Zero-based index of the order for this user only. */
         fun index(index: Long) = index(JsonField.of(index))
 
         /** Zero-based index of the order for this user only. */
-        @JsonProperty("index")
-        @ExcludeMissing
         fun index(index: JsonField<Long>) = apply { this.index = index }
 
         /** Shipping address of the order. */
         fun shipping(shipping: Shipping) = shipping(JsonField.of(shipping))
 
         /** Shipping address of the order. */
-        @JsonProperty("shipping")
-        @ExcludeMissing
         fun shipping(shipping: JsonField<Shipping>) = apply { this.shipping = shipping }
 
         /** The subtotal and shipping amounts of the order. */
         fun amount(amount: Amount) = amount(JsonField.of(amount))
 
         /** The subtotal and shipping amounts of the order. */
-        @JsonProperty("amount")
-        @ExcludeMissing
         fun amount(amount: JsonField<Amount>) = apply { this.amount = amount }
 
         /** Tracking information of the order. */
         fun tracking(tracking: Tracking) = tracking(JsonField.of(tracking))
 
         /** Tracking information of the order. */
-        @JsonProperty("tracking")
-        @ExcludeMissing
         fun tracking(tracking: JsonField<Tracking>) = apply { this.tracking = tracking }
 
         /** Items in the order. */
         fun items(items: List<Item>) = items(JsonField.of(items))
 
         /** Items in the order. */
-        @JsonProperty("items")
-        @ExcludeMissing
         fun items(items: JsonField<List<Item>>) = apply { this.items = items }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
         }
 
         fun build(): Order =
@@ -182,16 +186,19 @@ private constructor(
     }
 
     /** The subtotal and shipping amounts of the order. */
-    @JsonDeserialize(builder = Amount.Builder::class)
     @NoAutoDetect
     class Amount
+    @JsonCreator
     private constructor(
-        private val shipping: JsonField<Long>,
-        private val subtotal: JsonField<Long>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("shipping")
+        @ExcludeMissing
+        private val shipping: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("subtotal")
+        @ExcludeMissing
+        private val subtotal: JsonField<Long> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
-
-        private var validated: Boolean = false
 
         /** Shipping amount of the order, in cents (USD). */
         fun shipping(): Long = shipping.getRequired("shipping")
@@ -208,6 +215,8 @@ private constructor(
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
 
         fun validate(): Amount = apply {
             if (!validated) {
@@ -231,39 +240,40 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(amount: Amount) = apply {
-                this.shipping = amount.shipping
-                this.subtotal = amount.subtotal
-                additionalProperties(amount.additionalProperties)
+                shipping = amount.shipping
+                subtotal = amount.subtotal
+                additionalProperties = amount.additionalProperties.toMutableMap()
             }
 
             /** Shipping amount of the order, in cents (USD). */
             fun shipping(shipping: Long) = shipping(JsonField.of(shipping))
 
             /** Shipping amount of the order, in cents (USD). */
-            @JsonProperty("shipping")
-            @ExcludeMissing
             fun shipping(shipping: JsonField<Long>) = apply { this.shipping = shipping }
 
             /** Subtotal amount of the order, in cents (USD). */
             fun subtotal(subtotal: Long) = subtotal(JsonField.of(subtotal))
 
             /** Subtotal amount of the order, in cents (USD). */
-            @JsonProperty("subtotal")
-            @ExcludeMissing
             fun subtotal(subtotal: JsonField<Long>) = apply { this.subtotal = subtotal }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Amount =
@@ -292,19 +302,26 @@ private constructor(
             "Amount{shipping=$shipping, subtotal=$subtotal, additionalProperties=$additionalProperties}"
     }
 
-    @JsonDeserialize(builder = Item.Builder::class)
     @NoAutoDetect
     class Item
+    @JsonCreator
     private constructor(
-        private val id: JsonField<String>,
-        private val description: JsonField<String>,
-        private val amount: JsonField<Long>,
-        private val quantity: JsonField<Long>,
-        private val productVariantId: JsonField<String>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("description")
+        @ExcludeMissing
+        private val description: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("amount")
+        @ExcludeMissing
+        private val amount: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("quantity")
+        @ExcludeMissing
+        private val quantity: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("productVariantID")
+        @ExcludeMissing
+        private val productVariantId: JsonField<String> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
-
-        private var validated: Boolean = false
 
         /** Unique object identifier. The format and length of IDs may change over time. */
         fun id(): String = id.getRequired("id")
@@ -340,6 +357,8 @@ private constructor(
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+        private var validated: Boolean = false
+
         fun validate(): Item = apply {
             if (!validated) {
                 id()
@@ -368,28 +387,24 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(item: Item) = apply {
-                this.id = item.id
-                this.description = item.description
-                this.amount = item.amount
-                this.quantity = item.quantity
-                this.productVariantId = item.productVariantId
-                additionalProperties(item.additionalProperties)
+                id = item.id
+                description = item.description
+                amount = item.amount
+                quantity = item.quantity
+                productVariantId = item.productVariantId
+                additionalProperties = item.additionalProperties.toMutableMap()
             }
 
             /** Unique object identifier. The format and length of IDs may change over time. */
             fun id(id: String) = id(JsonField.of(id))
 
             /** Unique object identifier. The format and length of IDs may change over time. */
-            @JsonProperty("id")
-            @ExcludeMissing
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             /** Description of the item in the order. */
             fun description(description: String) = description(JsonField.of(description))
 
             /** Description of the item in the order. */
-            @JsonProperty("description")
-            @ExcludeMissing
             fun description(description: JsonField<String>) = apply {
                 this.description = description
             }
@@ -398,16 +413,12 @@ private constructor(
             fun amount(amount: Long) = amount(JsonField.of(amount))
 
             /** Amount of the item in the order, in cents (USD). */
-            @JsonProperty("amount")
-            @ExcludeMissing
             fun amount(amount: JsonField<Long>) = apply { this.amount = amount }
 
             /** Quantity of the item in the order. */
             fun quantity(quantity: Long) = quantity(JsonField.of(quantity))
 
             /** Quantity of the item in the order. */
-            @JsonProperty("quantity")
-            @ExcludeMissing
             fun quantity(quantity: JsonField<Long>) = apply { this.quantity = quantity }
 
             /** ID of the product variant of the item in the order. */
@@ -415,24 +426,27 @@ private constructor(
                 productVariantId(JsonField.of(productVariantId))
 
             /** ID of the product variant of the item in the order. */
-            @JsonProperty("productVariantID")
-            @ExcludeMissing
             fun productVariantId(productVariantId: JsonField<String>) = apply {
                 this.productVariantId = productVariantId
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Item =
@@ -465,22 +479,35 @@ private constructor(
     }
 
     /** Shipping address of the order. */
-    @JsonDeserialize(builder = Shipping.Builder::class)
     @NoAutoDetect
     class Shipping
+    @JsonCreator
     private constructor(
-        private val name: JsonField<String>,
-        private val street1: JsonField<String>,
-        private val street2: JsonField<String>,
-        private val city: JsonField<String>,
-        private val province: JsonField<String>,
-        private val country: JsonField<String>,
-        private val zip: JsonField<String>,
-        private val phone: JsonField<String>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("street1")
+        @ExcludeMissing
+        private val street1: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("street2")
+        @ExcludeMissing
+        private val street2: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("city")
+        @ExcludeMissing
+        private val city: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("province")
+        @ExcludeMissing
+        private val province: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("country")
+        @ExcludeMissing
+        private val country: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("zip") @ExcludeMissing private val zip: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("phone")
+        @ExcludeMissing
+        private val phone: JsonField<String> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
-
-        private var validated: Boolean = false
 
         /** The recipient's name. */
         fun name(): String = name.getRequired("name")
@@ -534,6 +561,8 @@ private constructor(
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+        private var validated: Boolean = false
+
         fun validate(): Shipping = apply {
             if (!validated) {
                 name()
@@ -568,93 +597,82 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(shipping: Shipping) = apply {
-                this.name = shipping.name
-                this.street1 = shipping.street1
-                this.street2 = shipping.street2
-                this.city = shipping.city
-                this.province = shipping.province
-                this.country = shipping.country
-                this.zip = shipping.zip
-                this.phone = shipping.phone
-                additionalProperties(shipping.additionalProperties)
+                name = shipping.name
+                street1 = shipping.street1
+                street2 = shipping.street2
+                city = shipping.city
+                province = shipping.province
+                country = shipping.country
+                zip = shipping.zip
+                phone = shipping.phone
+                additionalProperties = shipping.additionalProperties.toMutableMap()
             }
 
             /** The recipient's name. */
             fun name(name: String) = name(JsonField.of(name))
 
             /** The recipient's name. */
-            @JsonProperty("name")
-            @ExcludeMissing
             fun name(name: JsonField<String>) = apply { this.name = name }
 
             /** Street of the address. */
             fun street1(street1: String) = street1(JsonField.of(street1))
 
             /** Street of the address. */
-            @JsonProperty("street1")
-            @ExcludeMissing
             fun street1(street1: JsonField<String>) = apply { this.street1 = street1 }
 
             /** Apartment, suite, etc. of the address. */
             fun street2(street2: String) = street2(JsonField.of(street2))
 
             /** Apartment, suite, etc. of the address. */
-            @JsonProperty("street2")
-            @ExcludeMissing
             fun street2(street2: JsonField<String>) = apply { this.street2 = street2 }
 
             /** City of the address. */
             fun city(city: String) = city(JsonField.of(city))
 
             /** City of the address. */
-            @JsonProperty("city")
-            @ExcludeMissing
             fun city(city: JsonField<String>) = apply { this.city = city }
 
             /** Province or state of the address. */
             fun province(province: String) = province(JsonField.of(province))
 
             /** Province or state of the address. */
-            @JsonProperty("province")
-            @ExcludeMissing
             fun province(province: JsonField<String>) = apply { this.province = province }
 
             /** ISO 3166-1 alpha-2 country code of the address. */
             fun country(country: String) = country(JsonField.of(country))
 
             /** ISO 3166-1 alpha-2 country code of the address. */
-            @JsonProperty("country")
-            @ExcludeMissing
             fun country(country: JsonField<String>) = apply { this.country = country }
 
             /** Zip code of the address. */
             fun zip(zip: String) = zip(JsonField.of(zip))
 
             /** Zip code of the address. */
-            @JsonProperty("zip")
-            @ExcludeMissing
             fun zip(zip: JsonField<String>) = apply { this.zip = zip }
 
             /** Phone number of the recipient. */
             fun phone(phone: String) = phone(JsonField.of(phone))
 
             /** Phone number of the recipient. */
-            @JsonProperty("phone")
-            @ExcludeMissing
             fun phone(phone: JsonField<String>) = apply { this.phone = phone }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Shipping =
@@ -690,17 +708,20 @@ private constructor(
     }
 
     /** Tracking information of the order. */
-    @JsonDeserialize(builder = Tracking.Builder::class)
     @NoAutoDetect
     class Tracking
+    @JsonCreator
     private constructor(
-        private val service: JsonField<String>,
-        private val number: JsonField<String>,
-        private val url: JsonField<String>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("service")
+        @ExcludeMissing
+        private val service: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("number")
+        @ExcludeMissing
+        private val number: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("url") @ExcludeMissing private val url: JsonField<String> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
-
-        private var validated: Boolean = false
 
         /** Shipping service of the order. */
         fun service(): String? = service.getNullable("service")
@@ -723,6 +744,8 @@ private constructor(
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
 
         fun validate(): Tracking = apply {
             if (!validated) {
@@ -748,48 +771,47 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(tracking: Tracking) = apply {
-                this.service = tracking.service
-                this.number = tracking.number
-                this.url = tracking.url
-                additionalProperties(tracking.additionalProperties)
+                service = tracking.service
+                number = tracking.number
+                url = tracking.url
+                additionalProperties = tracking.additionalProperties.toMutableMap()
             }
 
             /** Shipping service of the order. */
             fun service(service: String) = service(JsonField.of(service))
 
             /** Shipping service of the order. */
-            @JsonProperty("service")
-            @ExcludeMissing
             fun service(service: JsonField<String>) = apply { this.service = service }
 
             /** Tracking number of the order. */
             fun number(number: String) = number(JsonField.of(number))
 
             /** Tracking number of the order. */
-            @JsonProperty("number")
-            @ExcludeMissing
             fun number(number: JsonField<String>) = apply { this.number = number }
 
             /** Tracking URL of the order. */
             fun url(url: String) = url(JsonField.of(url))
 
             /** Tracking URL of the order. */
-            @JsonProperty("url")
-            @ExcludeMissing
             fun url(url: JsonField<String>) = apply { this.url = url }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Tracking =

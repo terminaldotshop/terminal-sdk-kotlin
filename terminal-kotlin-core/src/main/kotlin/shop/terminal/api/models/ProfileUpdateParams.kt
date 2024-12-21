@@ -4,14 +4,15 @@ package shop.terminal.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.util.Objects
 import shop.terminal.api.core.ExcludeMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
+import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
 class ProfileUpdateParams
@@ -46,13 +47,14 @@ constructor(
     internal fun getQueryParams(): QueryParams = additionalQueryParams
 
     /** The user's updated profile information. */
-    @JsonDeserialize(builder = ProfileUpdateBody.Builder::class)
     @NoAutoDetect
     class ProfileUpdateBody
+    @JsonCreator
     internal constructor(
-        private val email: String?,
-        private val name: String?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("email") private val email: String?,
+        @JsonProperty("name") private val name: String?,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** Email address of the user. */
@@ -79,29 +81,34 @@ constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(profileUpdateBody: ProfileUpdateBody) = apply {
-                this.email = profileUpdateBody.email
-                this.name = profileUpdateBody.name
-                additionalProperties(profileUpdateBody.additionalProperties)
+                email = profileUpdateBody.email
+                name = profileUpdateBody.name
+                additionalProperties = profileUpdateBody.additionalProperties.toMutableMap()
             }
 
             /** Email address of the user. */
-            @JsonProperty("email") fun email(email: String) = apply { this.email = email }
+            fun email(email: String?) = apply { this.email = email }
 
             /** Name of the user. */
-            @JsonProperty("name") fun name(name: String) = apply { this.name = name }
+            fun name(name: String?) = apply { this.name = name }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): ProfileUpdateBody =

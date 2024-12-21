@@ -4,14 +4,15 @@ package shop.terminal.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.util.Objects
 import shop.terminal.api.core.ExcludeMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
+import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
 class EmailCreateParams
@@ -38,16 +39,17 @@ constructor(
 
     internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = EmailCreateBody.Builder::class)
     @NoAutoDetect
     class EmailCreateBody
+    @JsonCreator
     internal constructor(
-        private val email: String?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("email") private val email: String,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** Email address to subscribe to Terminal updates with. */
-        @JsonProperty("email") fun email(): String? = email
+        @JsonProperty("email") fun email(): String = email
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -66,25 +68,30 @@ constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(emailCreateBody: EmailCreateBody) = apply {
-                this.email = emailCreateBody.email
-                additionalProperties(emailCreateBody.additionalProperties)
+                email = emailCreateBody.email
+                additionalProperties = emailCreateBody.additionalProperties.toMutableMap()
             }
 
             /** Email address to subscribe to Terminal updates with. */
-            @JsonProperty("email") fun email(email: String) = apply { this.email = email }
+            fun email(email: String) = apply { this.email = email }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): EmailCreateBody =
