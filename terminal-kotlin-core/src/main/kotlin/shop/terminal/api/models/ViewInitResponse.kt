@@ -4,25 +4,24 @@ package shop.terminal.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.util.Objects
 import shop.terminal.api.core.ExcludeMissing
 import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
+import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
-@JsonDeserialize(builder = ViewInitResponse.Builder::class)
 @NoAutoDetect
 class ViewInitResponse
+@JsonCreator
 private constructor(
-    private val data: JsonField<Data>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("data") @ExcludeMissing private val data: JsonField<Data> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
-
-    private var validated: Boolean = false
 
     /** Initial app data. */
     fun data(): Data = data.getRequired("data")
@@ -33,6 +32,8 @@ private constructor(
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+    private var validated: Boolean = false
 
     fun validate(): ViewInitResponse = apply {
         if (!validated) {
@@ -54,53 +55,71 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(viewInitResponse: ViewInitResponse) = apply {
-            this.data = viewInitResponse.data
-            additionalProperties(viewInitResponse.additionalProperties)
+            data = viewInitResponse.data
+            additionalProperties = viewInitResponse.additionalProperties.toMutableMap()
         }
 
         /** Initial app data. */
         fun data(data: Data) = data(JsonField.of(data))
 
         /** Initial app data. */
-        @JsonProperty("data")
-        @ExcludeMissing
         fun data(data: JsonField<Data>) = apply { this.data = data }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
         }
 
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
+
         fun build(): ViewInitResponse = ViewInitResponse(data, additionalProperties.toImmutable())
     }
 
     /** Initial app data. */
-    @JsonDeserialize(builder = Data.Builder::class)
     @NoAutoDetect
     class Data
+    @JsonCreator
     private constructor(
-        private val profile: JsonField<Profile>,
-        private val products: JsonField<List<Product>>,
-        private val cart: JsonField<Cart>,
-        private val addresses: JsonField<List<Address>>,
-        private val cards: JsonField<List<Card>>,
-        private val subscriptions: JsonField<List<Subscription>>,
-        private val orders: JsonField<List<Order>>,
-        private val tokens: JsonField<List<Token>>,
-        private val apps: JsonField<List<App>>,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("profile")
+        @ExcludeMissing
+        private val profile: JsonField<Profile> = JsonMissing.of(),
+        @JsonProperty("products")
+        @ExcludeMissing
+        private val products: JsonField<List<Product>> = JsonMissing.of(),
+        @JsonProperty("cart") @ExcludeMissing private val cart: JsonField<Cart> = JsonMissing.of(),
+        @JsonProperty("addresses")
+        @ExcludeMissing
+        private val addresses: JsonField<List<Address>> = JsonMissing.of(),
+        @JsonProperty("cards")
+        @ExcludeMissing
+        private val cards: JsonField<List<Card>> = JsonMissing.of(),
+        @JsonProperty("subscriptions")
+        @ExcludeMissing
+        private val subscriptions: JsonField<List<Subscription>> = JsonMissing.of(),
+        @JsonProperty("orders")
+        @ExcludeMissing
+        private val orders: JsonField<List<Order>> = JsonMissing.of(),
+        @JsonProperty("tokens")
+        @ExcludeMissing
+        private val tokens: JsonField<List<Token>> = JsonMissing.of(),
+        @JsonProperty("apps")
+        @ExcludeMissing
+        private val apps: JsonField<List<App>> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
-
-        private var validated: Boolean = false
 
         /** A Terminal shop user's profile. (We have users, btw.) */
         fun profile(): Profile = profile.getRequired("profile")
@@ -146,6 +165,8 @@ private constructor(
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+        private var validated: Boolean = false
+
         fun validate(): Data = apply {
             if (!validated) {
                 profile().validate()
@@ -182,93 +203,80 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(data: Data) = apply {
-                this.profile = data.profile
-                this.products = data.products
-                this.cart = data.cart
-                this.addresses = data.addresses
-                this.cards = data.cards
-                this.subscriptions = data.subscriptions
-                this.orders = data.orders
-                this.tokens = data.tokens
-                this.apps = data.apps
-                additionalProperties(data.additionalProperties)
+                profile = data.profile
+                products = data.products
+                cart = data.cart
+                addresses = data.addresses
+                cards = data.cards
+                subscriptions = data.subscriptions
+                orders = data.orders
+                tokens = data.tokens
+                apps = data.apps
+                additionalProperties = data.additionalProperties.toMutableMap()
             }
 
             /** A Terminal shop user's profile. (We have users, btw.) */
             fun profile(profile: Profile) = profile(JsonField.of(profile))
 
             /** A Terminal shop user's profile. (We have users, btw.) */
-            @JsonProperty("profile")
-            @ExcludeMissing
             fun profile(profile: JsonField<Profile>) = apply { this.profile = profile }
 
             fun products(products: List<Product>) = products(JsonField.of(products))
 
-            @JsonProperty("products")
-            @ExcludeMissing
             fun products(products: JsonField<List<Product>>) = apply { this.products = products }
 
             /** The current Terminal shop user's cart. */
             fun cart(cart: Cart) = cart(JsonField.of(cart))
 
             /** The current Terminal shop user's cart. */
-            @JsonProperty("cart")
-            @ExcludeMissing
             fun cart(cart: JsonField<Cart>) = apply { this.cart = cart }
 
             fun addresses(addresses: List<Address>) = addresses(JsonField.of(addresses))
 
-            @JsonProperty("addresses")
-            @ExcludeMissing
             fun addresses(addresses: JsonField<List<Address>>) = apply {
                 this.addresses = addresses
             }
 
             fun cards(cards: List<Card>) = cards(JsonField.of(cards))
 
-            @JsonProperty("cards")
-            @ExcludeMissing
             fun cards(cards: JsonField<List<Card>>) = apply { this.cards = cards }
 
             fun subscriptions(subscriptions: List<Subscription>) =
                 subscriptions(JsonField.of(subscriptions))
 
-            @JsonProperty("subscriptions")
-            @ExcludeMissing
             fun subscriptions(subscriptions: JsonField<List<Subscription>>) = apply {
                 this.subscriptions = subscriptions
             }
 
             fun orders(orders: List<Order>) = orders(JsonField.of(orders))
 
-            @JsonProperty("orders")
-            @ExcludeMissing
             fun orders(orders: JsonField<List<Order>>) = apply { this.orders = orders }
 
             fun tokens(tokens: List<Token>) = tokens(JsonField.of(tokens))
 
-            @JsonProperty("tokens")
-            @ExcludeMissing
             fun tokens(tokens: JsonField<List<Token>>) = apply { this.tokens = tokens }
 
             fun apps(apps: List<App>) = apps(JsonField.of(apps))
 
-            @JsonProperty("apps")
-            @ExcludeMissing
             fun apps(apps: JsonField<List<App>>) = apply { this.apps = apps }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Data =

@@ -4,14 +4,15 @@ package shop.terminal.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.util.Objects
 import shop.terminal.api.core.ExcludeMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
+import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
 class AppCreateParams
@@ -50,24 +51,25 @@ constructor(
     internal fun getQueryParams(): QueryParams = additionalQueryParams
 
     /** A Terminal App used for configuring an OAuth 2.0 client. */
-    @JsonDeserialize(builder = AppCreateBody.Builder::class)
     @NoAutoDetect
     class AppCreateBody
+    @JsonCreator
     internal constructor(
-        private val id: String?,
-        private val name: String?,
-        private val redirectUri: String?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("id") private val id: String,
+        @JsonProperty("name") private val name: String,
+        @JsonProperty("redirectURI") private val redirectUri: String,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** Unique object identifier. The format and length of IDs may change over time. */
-        @JsonProperty("id") fun id(): String? = id
+        @JsonProperty("id") fun id(): String = id
 
         /** Name of the app. */
-        @JsonProperty("name") fun name(): String? = name
+        @JsonProperty("name") fun name(): String = name
 
         /** Redirect URI of the app. */
-        @JsonProperty("redirectURI") fun redirectUri(): String? = redirectUri
+        @JsonProperty("redirectURI") fun redirectUri(): String = redirectUri
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -88,34 +90,38 @@ constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(appCreateBody: AppCreateBody) = apply {
-                this.id = appCreateBody.id
-                this.name = appCreateBody.name
-                this.redirectUri = appCreateBody.redirectUri
-                additionalProperties(appCreateBody.additionalProperties)
+                id = appCreateBody.id
+                name = appCreateBody.name
+                redirectUri = appCreateBody.redirectUri
+                additionalProperties = appCreateBody.additionalProperties.toMutableMap()
             }
 
             /** Unique object identifier. The format and length of IDs may change over time. */
-            @JsonProperty("id") fun id(id: String) = apply { this.id = id }
+            fun id(id: String) = apply { this.id = id }
 
             /** Name of the app. */
-            @JsonProperty("name") fun name(name: String) = apply { this.name = name }
+            fun name(name: String) = apply { this.name = name }
 
             /** Redirect URI of the app. */
-            @JsonProperty("redirectURI")
             fun redirectUri(redirectUri: String) = apply { this.redirectUri = redirectUri }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): AppCreateBody =

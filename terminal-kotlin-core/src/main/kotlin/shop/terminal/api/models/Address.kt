@@ -4,34 +4,41 @@ package shop.terminal.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.util.Objects
 import shop.terminal.api.core.ExcludeMissing
 import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
+import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
 /** Physical address associated with a Terminal shop user. */
-@JsonDeserialize(builder = Address.Builder::class)
 @NoAutoDetect
 class Address
+@JsonCreator
 private constructor(
-    private val id: JsonField<String>,
-    private val name: JsonField<String>,
-    private val street1: JsonField<String>,
-    private val street2: JsonField<String>,
-    private val city: JsonField<String>,
-    private val province: JsonField<String>,
-    private val country: JsonField<String>,
-    private val zip: JsonField<String>,
-    private val phone: JsonField<String>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("street1")
+    @ExcludeMissing
+    private val street1: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("street2")
+    @ExcludeMissing
+    private val street2: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("city") @ExcludeMissing private val city: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("province")
+    @ExcludeMissing
+    private val province: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("country")
+    @ExcludeMissing
+    private val country: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("zip") @ExcludeMissing private val zip: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("phone") @ExcludeMissing private val phone: JsonField<String> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
-
-    private var validated: Boolean = false
 
     /** Unique object identifier. The format and length of IDs may change over time. */
     fun id(): String = id.getRequired("id")
@@ -91,6 +98,8 @@ private constructor(
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+    private var validated: Boolean = false
+
     fun validate(): Address = apply {
         if (!validated) {
             id()
@@ -127,100 +136,89 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(address: Address) = apply {
-            this.id = address.id
-            this.name = address.name
-            this.street1 = address.street1
-            this.street2 = address.street2
-            this.city = address.city
-            this.province = address.province
-            this.country = address.country
-            this.zip = address.zip
-            this.phone = address.phone
-            additionalProperties(address.additionalProperties)
+            id = address.id
+            name = address.name
+            street1 = address.street1
+            street2 = address.street2
+            city = address.city
+            province = address.province
+            country = address.country
+            zip = address.zip
+            phone = address.phone
+            additionalProperties = address.additionalProperties.toMutableMap()
         }
 
         /** Unique object identifier. The format and length of IDs may change over time. */
         fun id(id: String) = id(JsonField.of(id))
 
         /** Unique object identifier. The format and length of IDs may change over time. */
-        @JsonProperty("id") @ExcludeMissing fun id(id: JsonField<String>) = apply { this.id = id }
+        fun id(id: JsonField<String>) = apply { this.id = id }
 
         /** The recipient's name. */
         fun name(name: String) = name(JsonField.of(name))
 
         /** The recipient's name. */
-        @JsonProperty("name")
-        @ExcludeMissing
         fun name(name: JsonField<String>) = apply { this.name = name }
 
         /** Street of the address. */
         fun street1(street1: String) = street1(JsonField.of(street1))
 
         /** Street of the address. */
-        @JsonProperty("street1")
-        @ExcludeMissing
         fun street1(street1: JsonField<String>) = apply { this.street1 = street1 }
 
         /** Apartment, suite, etc. of the address. */
         fun street2(street2: String) = street2(JsonField.of(street2))
 
         /** Apartment, suite, etc. of the address. */
-        @JsonProperty("street2")
-        @ExcludeMissing
         fun street2(street2: JsonField<String>) = apply { this.street2 = street2 }
 
         /** City of the address. */
         fun city(city: String) = city(JsonField.of(city))
 
         /** City of the address. */
-        @JsonProperty("city")
-        @ExcludeMissing
         fun city(city: JsonField<String>) = apply { this.city = city }
 
         /** Province or state of the address. */
         fun province(province: String) = province(JsonField.of(province))
 
         /** Province or state of the address. */
-        @JsonProperty("province")
-        @ExcludeMissing
         fun province(province: JsonField<String>) = apply { this.province = province }
 
         /** ISO 3166-1 alpha-2 country code of the address. */
         fun country(country: String) = country(JsonField.of(country))
 
         /** ISO 3166-1 alpha-2 country code of the address. */
-        @JsonProperty("country")
-        @ExcludeMissing
         fun country(country: JsonField<String>) = apply { this.country = country }
 
         /** Zip code of the address. */
         fun zip(zip: String) = zip(JsonField.of(zip))
 
         /** Zip code of the address. */
-        @JsonProperty("zip")
-        @ExcludeMissing
         fun zip(zip: JsonField<String>) = apply { this.zip = zip }
 
         /** Phone number of the recipient. */
         fun phone(phone: String) = phone(JsonField.of(phone))
 
         /** Phone number of the recipient. */
-        @JsonProperty("phone")
-        @ExcludeMissing
         fun phone(phone: JsonField<String>) = apply { this.phone = phone }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
         }
 
         fun build(): Address =
