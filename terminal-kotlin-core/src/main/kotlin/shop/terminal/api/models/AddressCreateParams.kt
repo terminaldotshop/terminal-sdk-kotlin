@@ -17,54 +17,42 @@ import shop.terminal.api.core.toImmutable
 
 class AddressCreateParams
 constructor(
-    private val city: String,
-    private val country: String,
-    private val name: String,
-    private val street1: String,
-    private val zip: String,
-    private val phone: String?,
-    private val province: String?,
-    private val street2: String?,
+    private val body: AddressCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun city(): String = city
+    /** City of the address. */
+    fun city(): String = body.city()
 
-    fun country(): String = country
+    /** ISO 3166-1 alpha-2 country code of the address. */
+    fun country(): String = body.country()
 
-    fun name(): String = name
+    /** The recipient's name. */
+    fun name(): String = body.name()
 
-    fun street1(): String = street1
+    /** Street of the address. */
+    fun street1(): String = body.street1()
 
-    fun zip(): String = zip
+    /** Zip code of the address. */
+    fun zip(): String = body.zip()
 
-    fun phone(): String? = phone
+    /** Phone number of the recipient. */
+    fun phone(): String? = body.phone()
 
-    fun province(): String? = province
+    /** Province or state of the address. */
+    fun province(): String? = body.province()
 
-    fun street2(): String? = street2
+    /** Apartment, suite, etc. of the address. */
+    fun street2(): String? = body.street2()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    internal fun getBody(): AddressCreateBody {
-        return AddressCreateBody(
-            city,
-            country,
-            name,
-            street1,
-            zip,
-            phone,
-            province,
-            street2,
-            additionalBodyProperties,
-        )
-    }
+    internal fun getBody(): AddressCreateBody = body
 
     internal fun getHeaders(): Headers = additionalHeaders
 
@@ -162,13 +150,13 @@ constructor(
             fun zip(zip: String) = apply { this.zip = zip }
 
             /** Phone number of the recipient. */
-            fun phone(phone: String?) = apply { this.phone = phone }
+            fun phone(phone: String) = apply { this.phone = phone }
 
             /** Province or state of the address. */
-            fun province(province: String?) = apply { this.province = province }
+            fun province(province: String) = apply { this.province = province }
 
             /** Apartment, suite, etc. of the address. */
-            fun street2(street2: String?) = apply { this.street2 = street2 }
+            fun street2(street2: String) = apply { this.street2 = street2 }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -231,55 +219,39 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var city: String? = null
-        private var country: String? = null
-        private var name: String? = null
-        private var street1: String? = null
-        private var zip: String? = null
-        private var phone: String? = null
-        private var province: String? = null
-        private var street2: String? = null
+        private var body: AddressCreateBody.Builder = AddressCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(addressCreateParams: AddressCreateParams) = apply {
-            city = addressCreateParams.city
-            country = addressCreateParams.country
-            name = addressCreateParams.name
-            street1 = addressCreateParams.street1
-            zip = addressCreateParams.zip
-            phone = addressCreateParams.phone
-            province = addressCreateParams.province
-            street2 = addressCreateParams.street2
+            body = addressCreateParams.body.toBuilder()
             additionalHeaders = addressCreateParams.additionalHeaders.toBuilder()
             additionalQueryParams = addressCreateParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties = addressCreateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** City of the address. */
-        fun city(city: String) = apply { this.city = city }
+        fun city(city: String) = apply { body.city(city) }
 
         /** ISO 3166-1 alpha-2 country code of the address. */
-        fun country(country: String) = apply { this.country = country }
+        fun country(country: String) = apply { body.country(country) }
 
         /** The recipient's name. */
-        fun name(name: String) = apply { this.name = name }
+        fun name(name: String) = apply { body.name(name) }
 
         /** Street of the address. */
-        fun street1(street1: String) = apply { this.street1 = street1 }
+        fun street1(street1: String) = apply { body.street1(street1) }
 
         /** Zip code of the address. */
-        fun zip(zip: String) = apply { this.zip = zip }
+        fun zip(zip: String) = apply { body.zip(zip) }
 
         /** Phone number of the recipient. */
-        fun phone(phone: String) = apply { this.phone = phone }
+        fun phone(phone: String) = apply { body.phone(phone) }
 
         /** Province or state of the address. */
-        fun province(province: String) = apply { this.province = province }
+        fun province(province: String) = apply { body.province(province) }
 
         /** Apartment, suite, etc. of the address. */
-        fun street2(street2: String) = apply { this.street2 = street2 }
+        fun street2(street2: String) = apply { body.street2(street2) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -380,40 +352,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): AddressCreateParams =
             AddressCreateParams(
-                checkNotNull(city) { "`city` is required but was not set" },
-                checkNotNull(country) { "`country` is required but was not set" },
-                checkNotNull(name) { "`name` is required but was not set" },
-                checkNotNull(street1) { "`street1` is required but was not set" },
-                checkNotNull(zip) { "`zip` is required but was not set" },
-                phone,
-                province,
-                street2,
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -422,11 +383,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is AddressCreateParams && city == other.city && country == other.country && name == other.name && street1 == other.street1 && zip == other.zip && phone == other.phone && province == other.province && street2 == other.street2 && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is AddressCreateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(city, country, name, street1, zip, phone, province, street2, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "AddressCreateParams{city=$city, country=$country, name=$name, street1=$street1, zip=$zip, phone=$phone, province=$province, street2=$street2, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "AddressCreateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
