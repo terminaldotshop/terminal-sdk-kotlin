@@ -17,23 +17,24 @@ import shop.terminal.api.core.toImmutable
 
 class CardCreateParams
 constructor(
-    private val token: String,
+    private val body: CardCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun token(): String = token
+    /**
+     * Stripe card token. Learn how to
+     * [create one here](https://docs.stripe.com/api/tokens/create_card).
+     */
+    fun token(): String = body.token()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    internal fun getBody(): CardCreateBody {
-        return CardCreateBody(token, additionalBodyProperties)
-    }
+    internal fun getBody(): CardCreateBody = body
 
     internal fun getHeaders(): Headers = additionalHeaders
 
@@ -135,23 +136,21 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var token: String? = null
+        private var body: CardCreateBody.Builder = CardCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(cardCreateParams: CardCreateParams) = apply {
-            token = cardCreateParams.token
+            body = cardCreateParams.body.toBuilder()
             additionalHeaders = cardCreateParams.additionalHeaders.toBuilder()
             additionalQueryParams = cardCreateParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties = cardCreateParams.additionalBodyProperties.toMutableMap()
         }
 
         /**
          * Stripe card token. Learn how to
          * [create one here](https://docs.stripe.com/api/tokens/create_card).
          */
-        fun token(token: String) = apply { this.token = token }
+        fun token(token: String) = apply { body.token(token) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -252,33 +251,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CardCreateParams =
             CardCreateParams(
-                checkNotNull(token) { "`token` is required but was not set" },
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -287,11 +282,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CardCreateParams && token == other.token && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CardCreateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(token, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CardCreateParams{token=$token, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CardCreateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

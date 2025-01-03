@@ -22,9 +22,7 @@ constructor(
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
-    internal fun getBody(): Map<String, JsonValue>? {
-        return additionalBodyProperties.ifEmpty { null }
-    }
+    internal fun getBody(): Map<String, JsonValue>? = additionalBodyProperties.ifEmpty { null }
 
     internal fun getHeaders(): Headers = additionalHeaders
 
