@@ -14,6 +14,7 @@ constructor(
     private val additionalQueryParams: QueryParams,
 ) {
 
+    /** ID of the app to get. */
     fun id(): String = id
 
     fun _additionalHeaders(): Headers = additionalHeaders

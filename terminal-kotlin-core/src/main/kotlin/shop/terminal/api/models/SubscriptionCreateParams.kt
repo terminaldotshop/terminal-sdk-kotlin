@@ -20,46 +20,36 @@ import shop.terminal.api.errors.TerminalInvalidDataException
 
 class SubscriptionCreateParams
 constructor(
-    private val id: String,
-    private val addressId: String,
-    private val cardId: String,
-    private val frequency: Frequency,
-    private val productVariantId: String,
-    private val quantity: Long,
+    private val body: SubscriptionCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun id(): String = id
+    /** Unique object identifier. The format and length of IDs may change over time. */
+    fun id(): String = body.id()
 
-    fun addressId(): String = addressId
+    /** ID of the shipping address used for the subscription. */
+    fun addressId(): String = body.addressId()
 
-    fun cardId(): String = cardId
+    /** ID of the card used for the subscription. */
+    fun cardId(): String = body.cardId()
 
-    fun frequency(): Frequency = frequency
+    /** Frequency of the subscription. */
+    fun frequency(): Frequency = body.frequency()
 
-    fun productVariantId(): String = productVariantId
+    /** ID of the product variant being subscribed to. */
+    fun productVariantId(): String = body.productVariantId()
 
-    fun quantity(): Long = quantity
+    /** Quantity of the subscription. */
+    fun quantity(): Long = body.quantity()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    internal fun getBody(): SubscriptionCreateBody {
-        return SubscriptionCreateBody(
-            id,
-            addressId,
-            cardId,
-            frequency,
-            productVariantId,
-            quantity,
-            additionalBodyProperties,
-        )
-    }
+    internal fun getBody(): SubscriptionCreateBody = body
 
     internal fun getHeaders(): Headers = additionalHeaders
 
@@ -210,48 +200,35 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var id: String? = null
-        private var addressId: String? = null
-        private var cardId: String? = null
-        private var frequency: Frequency? = null
-        private var productVariantId: String? = null
-        private var quantity: Long? = null
+        private var body: SubscriptionCreateBody.Builder = SubscriptionCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(subscriptionCreateParams: SubscriptionCreateParams) = apply {
-            id = subscriptionCreateParams.id
-            addressId = subscriptionCreateParams.addressId
-            cardId = subscriptionCreateParams.cardId
-            frequency = subscriptionCreateParams.frequency
-            productVariantId = subscriptionCreateParams.productVariantId
-            quantity = subscriptionCreateParams.quantity
+            body = subscriptionCreateParams.body.toBuilder()
             additionalHeaders = subscriptionCreateParams.additionalHeaders.toBuilder()
             additionalQueryParams = subscriptionCreateParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                subscriptionCreateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** Unique object identifier. The format and length of IDs may change over time. */
-        fun id(id: String) = apply { this.id = id }
+        fun id(id: String) = apply { body.id(id) }
 
         /** ID of the shipping address used for the subscription. */
-        fun addressId(addressId: String) = apply { this.addressId = addressId }
+        fun addressId(addressId: String) = apply { body.addressId(addressId) }
 
         /** ID of the card used for the subscription. */
-        fun cardId(cardId: String) = apply { this.cardId = cardId }
+        fun cardId(cardId: String) = apply { body.cardId(cardId) }
 
         /** Frequency of the subscription. */
-        fun frequency(frequency: Frequency) = apply { this.frequency = frequency }
+        fun frequency(frequency: Frequency) = apply { body.frequency(frequency) }
 
         /** ID of the product variant being subscribed to. */
         fun productVariantId(productVariantId: String) = apply {
-            this.productVariantId = productVariantId
+            body.productVariantId(productVariantId)
         }
 
         /** Quantity of the subscription. */
-        fun quantity(quantity: Long) = apply { this.quantity = quantity }
+        fun quantity(quantity: Long) = apply { body.quantity(quantity) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -352,38 +329,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): SubscriptionCreateParams =
             SubscriptionCreateParams(
-                checkNotNull(id) { "`id` is required but was not set" },
-                checkNotNull(addressId) { "`addressId` is required but was not set" },
-                checkNotNull(cardId) { "`cardId` is required but was not set" },
-                checkNotNull(frequency) { "`frequency` is required but was not set" },
-                checkNotNull(productVariantId) { "`productVariantId` is required but was not set" },
-                checkNotNull(quantity) { "`quantity` is required but was not set" },
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -467,11 +435,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is SubscriptionCreateParams && id == other.id && addressId == other.addressId && cardId == other.cardId && frequency == other.frequency && productVariantId == other.productVariantId && quantity == other.quantity && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is SubscriptionCreateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, addressId, cardId, frequency, productVariantId, quantity, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "SubscriptionCreateParams{id=$id, addressId=$addressId, cardId=$cardId, frequency=$frequency, productVariantId=$productVariantId, quantity=$quantity, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "SubscriptionCreateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

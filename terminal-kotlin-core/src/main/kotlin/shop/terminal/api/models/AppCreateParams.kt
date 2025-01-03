@@ -17,34 +17,27 @@ import shop.terminal.api.core.toImmutable
 
 class AppCreateParams
 constructor(
-    private val id: String,
-    private val name: String,
-    private val redirectUri: String,
+    private val body: AppCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun id(): String = id
+    /** Unique object identifier. The format and length of IDs may change over time. */
+    fun id(): String = body.id()
 
-    fun name(): String = name
+    /** Name of the app. */
+    fun name(): String = body.name()
 
-    fun redirectUri(): String = redirectUri
+    /** Redirect URI of the app. */
+    fun redirectUri(): String = body.redirectUri()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    internal fun getBody(): AppCreateBody {
-        return AppCreateBody(
-            id,
-            name,
-            redirectUri,
-            additionalBodyProperties,
-        )
-    }
+    internal fun getBody(): AppCreateBody = body
 
     internal fun getHeaders(): Headers = additionalHeaders
 
@@ -161,30 +154,24 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var id: String? = null
-        private var name: String? = null
-        private var redirectUri: String? = null
+        private var body: AppCreateBody.Builder = AppCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(appCreateParams: AppCreateParams) = apply {
-            id = appCreateParams.id
-            name = appCreateParams.name
-            redirectUri = appCreateParams.redirectUri
+            body = appCreateParams.body.toBuilder()
             additionalHeaders = appCreateParams.additionalHeaders.toBuilder()
             additionalQueryParams = appCreateParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties = appCreateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** Unique object identifier. The format and length of IDs may change over time. */
-        fun id(id: String) = apply { this.id = id }
+        fun id(id: String) = apply { body.id(id) }
 
         /** Name of the app. */
-        fun name(name: String) = apply { this.name = name }
+        fun name(name: String) = apply { body.name(name) }
 
         /** Redirect URI of the app. */
-        fun redirectUri(redirectUri: String) = apply { this.redirectUri = redirectUri }
+        fun redirectUri(redirectUri: String) = apply { body.redirectUri(redirectUri) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -285,35 +272,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): AppCreateParams =
             AppCreateParams(
-                checkNotNull(id) { "`id` is required but was not set" },
-                checkNotNull(name) { "`name` is required but was not set" },
-                checkNotNull(redirectUri) { "`redirectUri` is required but was not set" },
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -322,11 +303,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is AppCreateParams && id == other.id && name == other.name && redirectUri == other.redirectUri && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is AppCreateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, name, redirectUri, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "AppCreateParams{id=$id, name=$name, redirectUri=$redirectUri, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "AppCreateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

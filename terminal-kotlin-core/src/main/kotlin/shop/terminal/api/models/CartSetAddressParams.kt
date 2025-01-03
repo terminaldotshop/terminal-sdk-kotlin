@@ -17,23 +17,21 @@ import shop.terminal.api.core.toImmutable
 
 class CartSetAddressParams
 constructor(
-    private val addressId: String,
+    private val body: CartSetAddressBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun addressId(): String = addressId
+    /** ID of the shipping address to set for the current user's cart. */
+    fun addressId(): String = body.addressId()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
-    internal fun getBody(): CartSetAddressBody {
-        return CartSetAddressBody(addressId, additionalBodyProperties)
-    }
+    internal fun getBody(): CartSetAddressBody = body
 
     internal fun getHeaders(): Headers = additionalHeaders
 
@@ -129,20 +127,18 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var addressId: String? = null
+        private var body: CartSetAddressBody.Builder = CartSetAddressBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(cartSetAddressParams: CartSetAddressParams) = apply {
-            addressId = cartSetAddressParams.addressId
+            body = cartSetAddressParams.body.toBuilder()
             additionalHeaders = cartSetAddressParams.additionalHeaders.toBuilder()
             additionalQueryParams = cartSetAddressParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties = cartSetAddressParams.additionalBodyProperties.toMutableMap()
         }
 
         /** ID of the shipping address to set for the current user's cart. */
-        fun addressId(addressId: String) = apply { this.addressId = addressId }
+        fun addressId(addressId: String) = apply { body.addressId(addressId) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -243,33 +239,29 @@ constructor(
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
+            body.additionalProperties(additionalBodyProperties)
         }
 
         fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
+            body.putAdditionalProperty(key, value)
         }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
+                body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
         fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CartSetAddressParams =
             CartSetAddressParams(
-                checkNotNull(addressId) { "`addressId` is required but was not set" },
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -278,11 +270,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is CartSetAddressParams && addressId == other.addressId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is CartSetAddressParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(addressId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CartSetAddressParams{addressId=$addressId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "CartSetAddressParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
