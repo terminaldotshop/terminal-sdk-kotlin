@@ -150,13 +150,13 @@ constructor(
             fun zip(zip: String) = apply { this.zip = zip }
 
             /** Phone number of the recipient. */
-            fun phone(phone: String) = apply { this.phone = phone }
+            fun phone(phone: String?) = apply { this.phone = phone }
 
             /** Province or state of the address. */
-            fun province(province: String) = apply { this.province = province }
+            fun province(province: String?) = apply { this.province = province }
 
             /** Apartment, suite, etc. of the address. */
-            fun street2(street2: String) = apply { this.street2 = street2 }
+            fun street2(street2: String?) = apply { this.street2 = street2 }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -245,13 +245,13 @@ constructor(
         fun zip(zip: String) = apply { body.zip(zip) }
 
         /** Phone number of the recipient. */
-        fun phone(phone: String) = apply { body.phone(phone) }
+        fun phone(phone: String?) = apply { body.phone(phone) }
 
         /** Province or state of the address. */
-        fun province(province: String) = apply { body.province(province) }
+        fun province(province: String?) = apply { body.province(province) }
 
         /** Apartment, suite, etc. of the address. */
-        fun street2(street2: String) = apply { body.street2(street2) }
+        fun street2(street2: String?) = apply { body.street2(street2) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
