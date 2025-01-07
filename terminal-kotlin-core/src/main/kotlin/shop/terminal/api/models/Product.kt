@@ -23,10 +23,10 @@ class Product
 @JsonCreator
 private constructor(
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
     @JsonProperty("description")
     @ExcludeMissing
     private val description: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
     @JsonProperty("variants")
     @ExcludeMissing
     private val variants: JsonField<List<ProductVariant>> = JsonMissing.of(),
@@ -41,11 +41,11 @@ private constructor(
     /** Unique object identifier. The format and length of IDs may change over time. */
     fun id(): String = id.getRequired("id")
 
-    /** Name of the product. */
-    fun name(): String = name.getRequired("name")
-
     /** Description of the product. */
     fun description(): String = description.getRequired("description")
+
+    /** Name of the product. */
+    fun name(): String = name.getRequired("name")
 
     /** List of variants of the product. */
     fun variants(): List<ProductVariant> = variants.getRequired("variants")
@@ -62,11 +62,11 @@ private constructor(
     /** Unique object identifier. The format and length of IDs may change over time. */
     @JsonProperty("id") @ExcludeMissing fun _id() = id
 
-    /** Name of the product. */
-    @JsonProperty("name") @ExcludeMissing fun _name() = name
-
     /** Description of the product. */
     @JsonProperty("description") @ExcludeMissing fun _description() = description
+
+    /** Name of the product. */
+    @JsonProperty("name") @ExcludeMissing fun _name() = name
 
     /** List of variants of the product. */
     @JsonProperty("variants") @ExcludeMissing fun _variants() = variants
@@ -89,8 +89,8 @@ private constructor(
     fun validate(): Product = apply {
         if (!validated) {
             id()
-            name()
             description()
+            name()
             variants().forEach { it.validate() }
             order()
             subscription()
@@ -109,8 +109,8 @@ private constructor(
     class Builder {
 
         private var id: JsonField<String> = JsonMissing.of()
-        private var name: JsonField<String> = JsonMissing.of()
         private var description: JsonField<String> = JsonMissing.of()
+        private var name: JsonField<String> = JsonMissing.of()
         private var variants: JsonField<List<ProductVariant>> = JsonMissing.of()
         private var order: JsonField<Long> = JsonMissing.of()
         private var subscription: JsonField<Subscription> = JsonMissing.of()
@@ -119,8 +119,8 @@ private constructor(
 
         internal fun from(product: Product) = apply {
             id = product.id
-            name = product.name
             description = product.description
+            name = product.name
             variants = product.variants
             order = product.order
             subscription = product.subscription
@@ -134,17 +134,17 @@ private constructor(
         /** Unique object identifier. The format and length of IDs may change over time. */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
-        /** Name of the product. */
-        fun name(name: String) = name(JsonField.of(name))
-
-        /** Name of the product. */
-        fun name(name: JsonField<String>) = apply { this.name = name }
-
         /** Description of the product. */
         fun description(description: String) = description(JsonField.of(description))
 
         /** Description of the product. */
         fun description(description: JsonField<String>) = apply { this.description = description }
+
+        /** Name of the product. */
+        fun name(name: String) = name(JsonField.of(name))
+
+        /** Name of the product. */
+        fun name(name: JsonField<String>) = apply { this.name = name }
 
         /** List of variants of the product. */
         fun variants(variants: List<ProductVariant>) = variants(JsonField.of(variants))
@@ -194,8 +194,8 @@ private constructor(
         fun build(): Product =
             Product(
                 id,
-                name,
                 description,
+                name,
                 variants.map { it.toImmutable() },
                 order,
                 subscription,
@@ -341,15 +341,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Product && id == other.id && name == other.name && description == other.description && variants == other.variants && order == other.order && subscription == other.subscription && tags == other.tags && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Product && id == other.id && description == other.description && name == other.name && variants == other.variants && order == other.order && subscription == other.subscription && tags == other.tags && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, name, description, variants, order, subscription, tags, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, description, name, variants, order, subscription, tags, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Product{id=$id, name=$name, description=$description, variants=$variants, order=$order, subscription=$subscription, tags=$tags, additionalProperties=$additionalProperties}"
+        "Product{id=$id, description=$description, name=$name, variants=$variants, order=$order, subscription=$subscription, tags=$tags, additionalProperties=$additionalProperties}"
 }

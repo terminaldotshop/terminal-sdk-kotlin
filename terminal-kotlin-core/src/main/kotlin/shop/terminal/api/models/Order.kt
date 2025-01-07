@@ -21,57 +21,57 @@ class Order
 @JsonCreator
 private constructor(
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("index") @ExcludeMissing private val index: JsonField<Long> = JsonMissing.of(),
-    @JsonProperty("shipping")
-    @ExcludeMissing
-    private val shipping: JsonField<Shipping> = JsonMissing.of(),
     @JsonProperty("amount")
     @ExcludeMissing
     private val amount: JsonField<Amount> = JsonMissing.of(),
-    @JsonProperty("tracking")
-    @ExcludeMissing
-    private val tracking: JsonField<Tracking> = JsonMissing.of(),
     @JsonProperty("items")
     @ExcludeMissing
     private val items: JsonField<List<Item>> = JsonMissing.of(),
+    @JsonProperty("shipping")
+    @ExcludeMissing
+    private val shipping: JsonField<Shipping> = JsonMissing.of(),
+    @JsonProperty("tracking")
+    @ExcludeMissing
+    private val tracking: JsonField<Tracking> = JsonMissing.of(),
+    @JsonProperty("index") @ExcludeMissing private val index: JsonField<Long> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     /** Unique object identifier. The format and length of IDs may change over time. */
     fun id(): String = id.getRequired("id")
 
-    /** Zero-based index of the order for this user only. */
-    fun index(): Long? = index.getNullable("index")
-
-    /** Shipping address of the order. */
-    fun shipping(): Shipping = shipping.getRequired("shipping")
-
     /** The subtotal and shipping amounts of the order. */
     fun amount(): Amount = amount.getRequired("amount")
-
-    /** Tracking information of the order. */
-    fun tracking(): Tracking = tracking.getRequired("tracking")
 
     /** Items in the order. */
     fun items(): List<Item> = items.getRequired("items")
 
-    /** Unique object identifier. The format and length of IDs may change over time. */
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    /** Shipping address of the order. */
+    fun shipping(): Shipping = shipping.getRequired("shipping")
+
+    /** Tracking information of the order. */
+    fun tracking(): Tracking = tracking.getRequired("tracking")
 
     /** Zero-based index of the order for this user only. */
-    @JsonProperty("index") @ExcludeMissing fun _index() = index
+    fun index(): Long? = index.getNullable("index")
 
-    /** Shipping address of the order. */
-    @JsonProperty("shipping") @ExcludeMissing fun _shipping() = shipping
+    /** Unique object identifier. The format and length of IDs may change over time. */
+    @JsonProperty("id") @ExcludeMissing fun _id() = id
 
     /** The subtotal and shipping amounts of the order. */
     @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
 
+    /** Items in the order. */
+    @JsonProperty("items") @ExcludeMissing fun _items() = items
+
+    /** Shipping address of the order. */
+    @JsonProperty("shipping") @ExcludeMissing fun _shipping() = shipping
+
     /** Tracking information of the order. */
     @JsonProperty("tracking") @ExcludeMissing fun _tracking() = tracking
 
-    /** Items in the order. */
-    @JsonProperty("items") @ExcludeMissing fun _items() = items
+    /** Zero-based index of the order for this user only. */
+    @JsonProperty("index") @ExcludeMissing fun _index() = index
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -82,11 +82,11 @@ private constructor(
     fun validate(): Order = apply {
         if (!validated) {
             id()
-            index()
-            shipping().validate()
             amount().validate()
-            tracking().validate()
             items().forEach { it.validate() }
+            shipping().validate()
+            tracking().validate()
+            index()
             validated = true
         }
     }
@@ -101,20 +101,20 @@ private constructor(
     class Builder {
 
         private var id: JsonField<String> = JsonMissing.of()
-        private var index: JsonField<Long> = JsonMissing.of()
-        private var shipping: JsonField<Shipping> = JsonMissing.of()
         private var amount: JsonField<Amount> = JsonMissing.of()
-        private var tracking: JsonField<Tracking> = JsonMissing.of()
         private var items: JsonField<List<Item>> = JsonMissing.of()
+        private var shipping: JsonField<Shipping> = JsonMissing.of()
+        private var tracking: JsonField<Tracking> = JsonMissing.of()
+        private var index: JsonField<Long> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(order: Order) = apply {
             id = order.id
-            index = order.index
-            shipping = order.shipping
             amount = order.amount
-            tracking = order.tracking
             items = order.items
+            shipping = order.shipping
+            tracking = order.tracking
+            index = order.index
             additionalProperties = order.additionalProperties.toMutableMap()
         }
 
@@ -124,11 +124,17 @@ private constructor(
         /** Unique object identifier. The format and length of IDs may change over time. */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
-        /** Zero-based index of the order for this user only. */
-        fun index(index: Long) = index(JsonField.of(index))
+        /** The subtotal and shipping amounts of the order. */
+        fun amount(amount: Amount) = amount(JsonField.of(amount))
 
-        /** Zero-based index of the order for this user only. */
-        fun index(index: JsonField<Long>) = apply { this.index = index }
+        /** The subtotal and shipping amounts of the order. */
+        fun amount(amount: JsonField<Amount>) = apply { this.amount = amount }
+
+        /** Items in the order. */
+        fun items(items: List<Item>) = items(JsonField.of(items))
+
+        /** Items in the order. */
+        fun items(items: JsonField<List<Item>>) = apply { this.items = items }
 
         /** Shipping address of the order. */
         fun shipping(shipping: Shipping) = shipping(JsonField.of(shipping))
@@ -136,23 +142,17 @@ private constructor(
         /** Shipping address of the order. */
         fun shipping(shipping: JsonField<Shipping>) = apply { this.shipping = shipping }
 
-        /** The subtotal and shipping amounts of the order. */
-        fun amount(amount: Amount) = amount(JsonField.of(amount))
-
-        /** The subtotal and shipping amounts of the order. */
-        fun amount(amount: JsonField<Amount>) = apply { this.amount = amount }
-
         /** Tracking information of the order. */
         fun tracking(tracking: Tracking) = tracking(JsonField.of(tracking))
 
         /** Tracking information of the order. */
         fun tracking(tracking: JsonField<Tracking>) = apply { this.tracking = tracking }
 
-        /** Items in the order. */
-        fun items(items: List<Item>) = items(JsonField.of(items))
+        /** Zero-based index of the order for this user only. */
+        fun index(index: Long) = index(JsonField.of(index))
 
-        /** Items in the order. */
-        fun items(items: JsonField<List<Item>>) = apply { this.items = items }
+        /** Zero-based index of the order for this user only. */
+        fun index(index: JsonField<Long>) = apply { this.index = index }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -176,11 +176,11 @@ private constructor(
         fun build(): Order =
             Order(
                 id,
-                index,
-                shipping,
                 amount,
-                tracking,
                 items.map { it.toImmutable() },
+                shipping,
+                tracking,
+                index,
                 additionalProperties.toImmutable(),
             )
     }
@@ -307,15 +307,15 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("description")
-        @ExcludeMissing
-        private val description: JsonField<String> = JsonMissing.of(),
         @JsonProperty("amount")
         @ExcludeMissing
         private val amount: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("quantity")
         @ExcludeMissing
         private val quantity: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("description")
+        @ExcludeMissing
+        private val description: JsonField<String> = JsonMissing.of(),
         @JsonProperty("productVariantID")
         @ExcludeMissing
         private val productVariantId: JsonField<String> = JsonMissing.of(),
@@ -326,14 +326,14 @@ private constructor(
         /** Unique object identifier. The format and length of IDs may change over time. */
         fun id(): String = id.getRequired("id")
 
-        /** Description of the item in the order. */
-        fun description(): String? = description.getNullable("description")
-
         /** Amount of the item in the order, in cents (USD). */
         fun amount(): Long = amount.getRequired("amount")
 
         /** Quantity of the item in the order. */
         fun quantity(): Long = quantity.getRequired("quantity")
+
+        /** Description of the item in the order. */
+        fun description(): String? = description.getNullable("description")
 
         /** ID of the product variant of the item in the order. */
         fun productVariantId(): String? = productVariantId.getNullable("productVariantID")
@@ -341,14 +341,14 @@ private constructor(
         /** Unique object identifier. The format and length of IDs may change over time. */
         @JsonProperty("id") @ExcludeMissing fun _id() = id
 
-        /** Description of the item in the order. */
-        @JsonProperty("description") @ExcludeMissing fun _description() = description
-
         /** Amount of the item in the order, in cents (USD). */
         @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
 
         /** Quantity of the item in the order. */
         @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
+
+        /** Description of the item in the order. */
+        @JsonProperty("description") @ExcludeMissing fun _description() = description
 
         /** ID of the product variant of the item in the order. */
         @JsonProperty("productVariantID") @ExcludeMissing fun _productVariantId() = productVariantId
@@ -362,9 +362,9 @@ private constructor(
         fun validate(): Item = apply {
             if (!validated) {
                 id()
-                description()
                 amount()
                 quantity()
+                description()
                 productVariantId()
                 validated = true
             }
@@ -380,17 +380,17 @@ private constructor(
         class Builder {
 
             private var id: JsonField<String> = JsonMissing.of()
-            private var description: JsonField<String> = JsonMissing.of()
             private var amount: JsonField<Long> = JsonMissing.of()
             private var quantity: JsonField<Long> = JsonMissing.of()
+            private var description: JsonField<String> = JsonMissing.of()
             private var productVariantId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(item: Item) = apply {
                 id = item.id
-                description = item.description
                 amount = item.amount
                 quantity = item.quantity
+                description = item.description
                 productVariantId = item.productVariantId
                 additionalProperties = item.additionalProperties.toMutableMap()
             }
@@ -400,14 +400,6 @@ private constructor(
 
             /** Unique object identifier. The format and length of IDs may change over time. */
             fun id(id: JsonField<String>) = apply { this.id = id }
-
-            /** Description of the item in the order. */
-            fun description(description: String) = description(JsonField.of(description))
-
-            /** Description of the item in the order. */
-            fun description(description: JsonField<String>) = apply {
-                this.description = description
-            }
 
             /** Amount of the item in the order, in cents (USD). */
             fun amount(amount: Long) = amount(JsonField.of(amount))
@@ -420,6 +412,14 @@ private constructor(
 
             /** Quantity of the item in the order. */
             fun quantity(quantity: JsonField<Long>) = apply { this.quantity = quantity }
+
+            /** Description of the item in the order. */
+            fun description(description: String) = description(JsonField.of(description))
+
+            /** Description of the item in the order. */
+            fun description(description: JsonField<String>) = apply {
+                this.description = description
+            }
 
             /** ID of the product variant of the item in the order. */
             fun productVariantId(productVariantId: String) =
@@ -452,9 +452,9 @@ private constructor(
             fun build(): Item =
                 Item(
                     id,
-                    description,
                     amount,
                     quantity,
+                    description,
                     productVariantId,
                     additionalProperties.toImmutable(),
                 )
@@ -465,17 +465,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Item && id == other.id && description == other.description && amount == other.amount && quantity == other.quantity && productVariantId == other.productVariantId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Item && id == other.id && amount == other.amount && quantity == other.quantity && description == other.description && productVariantId == other.productVariantId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, description, amount, quantity, productVariantId, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, amount, quantity, description, productVariantId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Item{id=$id, description=$description, amount=$amount, quantity=$quantity, productVariantId=$productVariantId, additionalProperties=$additionalProperties}"
+            "Item{id=$id, amount=$amount, quantity=$quantity, description=$description, productVariantId=$productVariantId, additionalProperties=$additionalProperties}"
     }
 
     /** Shipping address of the order. */
@@ -483,31 +483,37 @@ private constructor(
     class Shipping
     @JsonCreator
     private constructor(
+        @JsonProperty("city")
+        @ExcludeMissing
+        private val city: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("country")
+        @ExcludeMissing
+        private val country: JsonField<String> = JsonMissing.of(),
         @JsonProperty("name")
         @ExcludeMissing
         private val name: JsonField<String> = JsonMissing.of(),
         @JsonProperty("street1")
         @ExcludeMissing
         private val street1: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("street2")
-        @ExcludeMissing
-        private val street2: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("city")
-        @ExcludeMissing
-        private val city: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("province")
-        @ExcludeMissing
-        private val province: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("country")
-        @ExcludeMissing
-        private val country: JsonField<String> = JsonMissing.of(),
         @JsonProperty("zip") @ExcludeMissing private val zip: JsonField<String> = JsonMissing.of(),
         @JsonProperty("phone")
         @ExcludeMissing
         private val phone: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("province")
+        @ExcludeMissing
+        private val province: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("street2")
+        @ExcludeMissing
+        private val street2: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
+
+        /** City of the address. */
+        fun city(): String = city.getRequired("city")
+
+        /** ISO 3166-1 alpha-2 country code of the address. */
+        fun country(): String = country.getRequired("country")
 
         /** The recipient's name. */
         fun name(): String = name.getRequired("name")
@@ -515,23 +521,23 @@ private constructor(
         /** Street of the address. */
         fun street1(): String = street1.getRequired("street1")
 
-        /** Apartment, suite, etc. of the address. */
-        fun street2(): String? = street2.getNullable("street2")
-
-        /** City of the address. */
-        fun city(): String = city.getRequired("city")
-
-        /** Province or state of the address. */
-        fun province(): String? = province.getNullable("province")
-
-        /** ISO 3166-1 alpha-2 country code of the address. */
-        fun country(): String = country.getRequired("country")
-
         /** Zip code of the address. */
         fun zip(): String = zip.getRequired("zip")
 
         /** Phone number of the recipient. */
         fun phone(): String? = phone.getNullable("phone")
+
+        /** Province or state of the address. */
+        fun province(): String? = province.getNullable("province")
+
+        /** Apartment, suite, etc. of the address. */
+        fun street2(): String? = street2.getNullable("street2")
+
+        /** City of the address. */
+        @JsonProperty("city") @ExcludeMissing fun _city() = city
+
+        /** ISO 3166-1 alpha-2 country code of the address. */
+        @JsonProperty("country") @ExcludeMissing fun _country() = country
 
         /** The recipient's name. */
         @JsonProperty("name") @ExcludeMissing fun _name() = name
@@ -539,23 +545,17 @@ private constructor(
         /** Street of the address. */
         @JsonProperty("street1") @ExcludeMissing fun _street1() = street1
 
-        /** Apartment, suite, etc. of the address. */
-        @JsonProperty("street2") @ExcludeMissing fun _street2() = street2
-
-        /** City of the address. */
-        @JsonProperty("city") @ExcludeMissing fun _city() = city
-
-        /** Province or state of the address. */
-        @JsonProperty("province") @ExcludeMissing fun _province() = province
-
-        /** ISO 3166-1 alpha-2 country code of the address. */
-        @JsonProperty("country") @ExcludeMissing fun _country() = country
-
         /** Zip code of the address. */
         @JsonProperty("zip") @ExcludeMissing fun _zip() = zip
 
         /** Phone number of the recipient. */
         @JsonProperty("phone") @ExcludeMissing fun _phone() = phone
+
+        /** Province or state of the address. */
+        @JsonProperty("province") @ExcludeMissing fun _province() = province
+
+        /** Apartment, suite, etc. of the address. */
+        @JsonProperty("street2") @ExcludeMissing fun _street2() = street2
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -565,14 +565,14 @@ private constructor(
 
         fun validate(): Shipping = apply {
             if (!validated) {
+                city()
+                country()
                 name()
                 street1()
-                street2()
-                city()
-                province()
-                country()
                 zip()
                 phone()
+                province()
+                street2()
                 validated = true
             }
         }
@@ -586,27 +586,39 @@ private constructor(
 
         class Builder {
 
+            private var city: JsonField<String> = JsonMissing.of()
+            private var country: JsonField<String> = JsonMissing.of()
             private var name: JsonField<String> = JsonMissing.of()
             private var street1: JsonField<String> = JsonMissing.of()
-            private var street2: JsonField<String> = JsonMissing.of()
-            private var city: JsonField<String> = JsonMissing.of()
-            private var province: JsonField<String> = JsonMissing.of()
-            private var country: JsonField<String> = JsonMissing.of()
             private var zip: JsonField<String> = JsonMissing.of()
             private var phone: JsonField<String> = JsonMissing.of()
+            private var province: JsonField<String> = JsonMissing.of()
+            private var street2: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(shipping: Shipping) = apply {
+                city = shipping.city
+                country = shipping.country
                 name = shipping.name
                 street1 = shipping.street1
-                street2 = shipping.street2
-                city = shipping.city
-                province = shipping.province
-                country = shipping.country
                 zip = shipping.zip
                 phone = shipping.phone
+                province = shipping.province
+                street2 = shipping.street2
                 additionalProperties = shipping.additionalProperties.toMutableMap()
             }
+
+            /** City of the address. */
+            fun city(city: String) = city(JsonField.of(city))
+
+            /** City of the address. */
+            fun city(city: JsonField<String>) = apply { this.city = city }
+
+            /** ISO 3166-1 alpha-2 country code of the address. */
+            fun country(country: String) = country(JsonField.of(country))
+
+            /** ISO 3166-1 alpha-2 country code of the address. */
+            fun country(country: JsonField<String>) = apply { this.country = country }
 
             /** The recipient's name. */
             fun name(name: String) = name(JsonField.of(name))
@@ -620,30 +632,6 @@ private constructor(
             /** Street of the address. */
             fun street1(street1: JsonField<String>) = apply { this.street1 = street1 }
 
-            /** Apartment, suite, etc. of the address. */
-            fun street2(street2: String) = street2(JsonField.of(street2))
-
-            /** Apartment, suite, etc. of the address. */
-            fun street2(street2: JsonField<String>) = apply { this.street2 = street2 }
-
-            /** City of the address. */
-            fun city(city: String) = city(JsonField.of(city))
-
-            /** City of the address. */
-            fun city(city: JsonField<String>) = apply { this.city = city }
-
-            /** Province or state of the address. */
-            fun province(province: String) = province(JsonField.of(province))
-
-            /** Province or state of the address. */
-            fun province(province: JsonField<String>) = apply { this.province = province }
-
-            /** ISO 3166-1 alpha-2 country code of the address. */
-            fun country(country: String) = country(JsonField.of(country))
-
-            /** ISO 3166-1 alpha-2 country code of the address. */
-            fun country(country: JsonField<String>) = apply { this.country = country }
-
             /** Zip code of the address. */
             fun zip(zip: String) = zip(JsonField.of(zip))
 
@@ -655,6 +643,18 @@ private constructor(
 
             /** Phone number of the recipient. */
             fun phone(phone: JsonField<String>) = apply { this.phone = phone }
+
+            /** Province or state of the address. */
+            fun province(province: String) = province(JsonField.of(province))
+
+            /** Province or state of the address. */
+            fun province(province: JsonField<String>) = apply { this.province = province }
+
+            /** Apartment, suite, etc. of the address. */
+            fun street2(street2: String) = street2(JsonField.of(street2))
+
+            /** Apartment, suite, etc. of the address. */
+            fun street2(street2: JsonField<String>) = apply { this.street2 = street2 }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -677,14 +677,14 @@ private constructor(
 
             fun build(): Shipping =
                 Shipping(
+                    city,
+                    country,
                     name,
                     street1,
-                    street2,
-                    city,
-                    province,
-                    country,
                     zip,
                     phone,
+                    province,
+                    street2,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -694,17 +694,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Shipping && name == other.name && street1 == other.street1 && street2 == other.street2 && city == other.city && province == other.province && country == other.country && zip == other.zip && phone == other.phone && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Shipping && city == other.city && country == other.country && name == other.name && street1 == other.street1 && zip == other.zip && phone == other.phone && province == other.province && street2 == other.street2 && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(name, street1, street2, city, province, country, zip, phone, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(city, country, name, street1, zip, phone, province, street2, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Shipping{name=$name, street1=$street1, street2=$street2, city=$city, province=$province, country=$country, zip=$zip, phone=$phone, additionalProperties=$additionalProperties}"
+            "Shipping{city=$city, country=$country, name=$name, street1=$street1, zip=$zip, phone=$phone, province=$province, street2=$street2, additionalProperties=$additionalProperties}"
     }
 
     /** Tracking information of the order. */
@@ -712,31 +712,31 @@ private constructor(
     class Tracking
     @JsonCreator
     private constructor(
-        @JsonProperty("service")
-        @ExcludeMissing
-        private val service: JsonField<String> = JsonMissing.of(),
         @JsonProperty("number")
         @ExcludeMissing
         private val number: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("service")
+        @ExcludeMissing
+        private val service: JsonField<String> = JsonMissing.of(),
         @JsonProperty("url") @ExcludeMissing private val url: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** Shipping service of the order. */
-        fun service(): String? = service.getNullable("service")
-
         /** Tracking number of the order. */
         fun number(): String? = number.getNullable("number")
+
+        /** Shipping service of the order. */
+        fun service(): String? = service.getNullable("service")
 
         /** Tracking URL of the order. */
         fun url(): String? = url.getNullable("url")
 
-        /** Shipping service of the order. */
-        @JsonProperty("service") @ExcludeMissing fun _service() = service
-
         /** Tracking number of the order. */
         @JsonProperty("number") @ExcludeMissing fun _number() = number
+
+        /** Shipping service of the order. */
+        @JsonProperty("service") @ExcludeMissing fun _service() = service
 
         /** Tracking URL of the order. */
         @JsonProperty("url") @ExcludeMissing fun _url() = url
@@ -749,8 +749,8 @@ private constructor(
 
         fun validate(): Tracking = apply {
             if (!validated) {
-                service()
                 number()
+                service()
                 url()
                 validated = true
             }
@@ -765,29 +765,29 @@ private constructor(
 
         class Builder {
 
-            private var service: JsonField<String> = JsonMissing.of()
             private var number: JsonField<String> = JsonMissing.of()
+            private var service: JsonField<String> = JsonMissing.of()
             private var url: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(tracking: Tracking) = apply {
-                service = tracking.service
                 number = tracking.number
+                service = tracking.service
                 url = tracking.url
                 additionalProperties = tracking.additionalProperties.toMutableMap()
             }
-
-            /** Shipping service of the order. */
-            fun service(service: String) = service(JsonField.of(service))
-
-            /** Shipping service of the order. */
-            fun service(service: JsonField<String>) = apply { this.service = service }
 
             /** Tracking number of the order. */
             fun number(number: String) = number(JsonField.of(number))
 
             /** Tracking number of the order. */
             fun number(number: JsonField<String>) = apply { this.number = number }
+
+            /** Shipping service of the order. */
+            fun service(service: String) = service(JsonField.of(service))
+
+            /** Shipping service of the order. */
+            fun service(service: JsonField<String>) = apply { this.service = service }
 
             /** Tracking URL of the order. */
             fun url(url: String) = url(JsonField.of(url))
@@ -816,8 +816,8 @@ private constructor(
 
             fun build(): Tracking =
                 Tracking(
-                    service,
                     number,
+                    service,
                     url,
                     additionalProperties.toImmutable(),
                 )
@@ -828,17 +828,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Tracking && service == other.service && number == other.number && url == other.url && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Tracking && number == other.number && service == other.service && url == other.url && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(service, number, url, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(number, service, url, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Tracking{service=$service, number=$number, url=$url, additionalProperties=$additionalProperties}"
+            "Tracking{number=$number, service=$service, url=$url, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -846,15 +846,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Order && id == other.id && index == other.index && shipping == other.shipping && amount == other.amount && tracking == other.tracking && items == other.items && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Order && id == other.id && amount == other.amount && items == other.items && shipping == other.shipping && tracking == other.tracking && index == other.index && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, index, shipping, amount, tracking, items, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, amount, items, shipping, tracking, index, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Order{id=$id, index=$index, shipping=$shipping, amount=$amount, tracking=$tracking, items=$items, additionalProperties=$additionalProperties}"
+        "Order{id=$id, amount=$amount, items=$items, shipping=$shipping, tracking=$tracking, index=$index, additionalProperties=$additionalProperties}"
 }
