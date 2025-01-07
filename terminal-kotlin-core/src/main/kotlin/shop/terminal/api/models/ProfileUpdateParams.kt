@@ -81,10 +81,10 @@ constructor(
             }
 
             /** Email address of the user. */
-            fun email(email: String) = apply { this.email = email }
+            fun email(email: String?) = apply { this.email = email }
 
             /** Name of the user. */
-            fun name(name: String) = apply { this.name = name }
+            fun name(name: String?) = apply { this.name = name }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -152,10 +152,10 @@ constructor(
         }
 
         /** Email address of the user. */
-        fun email(email: String) = apply { body.email(email) }
+        fun email(email: String?) = apply { body.email(email) }
 
         /** Name of the user. */
-        fun name(name: String) = apply { body.name(name) }
+        fun name(name: String?) = apply { body.name(name) }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
