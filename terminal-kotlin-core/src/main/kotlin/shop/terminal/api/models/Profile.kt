@@ -94,15 +94,15 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("name")
-        @ExcludeMissing
-        private val name: JsonField<String> = JsonMissing.of(),
         @JsonProperty("email")
         @ExcludeMissing
         private val email: JsonField<String> = JsonMissing.of(),
         @JsonProperty("fingerprint")
         @ExcludeMissing
         private val fingerprint: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
         @JsonProperty("stripeCustomerID")
         @ExcludeMissing
         private val stripeCustomerId: JsonField<String> = JsonMissing.of(),
@@ -113,14 +113,14 @@ private constructor(
         /** Unique object identifier. The format and length of IDs may change over time. */
         fun id(): String = id.getRequired("id")
 
-        /** Name of the user. */
-        fun name(): String? = name.getNullable("name")
-
         /** Email address of the user. */
         fun email(): String? = email.getNullable("email")
 
         /** The user's fingerprint, derived from their public SSH key. */
         fun fingerprint(): String? = fingerprint.getNullable("fingerprint")
+
+        /** Name of the user. */
+        fun name(): String? = name.getNullable("name")
 
         /** Stripe customer ID of the user. */
         fun stripeCustomerId(): String = stripeCustomerId.getRequired("stripeCustomerID")
@@ -128,14 +128,14 @@ private constructor(
         /** Unique object identifier. The format and length of IDs may change over time. */
         @JsonProperty("id") @ExcludeMissing fun _id() = id
 
-        /** Name of the user. */
-        @JsonProperty("name") @ExcludeMissing fun _name() = name
-
         /** Email address of the user. */
         @JsonProperty("email") @ExcludeMissing fun _email() = email
 
         /** The user's fingerprint, derived from their public SSH key. */
         @JsonProperty("fingerprint") @ExcludeMissing fun _fingerprint() = fingerprint
+
+        /** Name of the user. */
+        @JsonProperty("name") @ExcludeMissing fun _name() = name
 
         /** Stripe customer ID of the user. */
         @JsonProperty("stripeCustomerID") @ExcludeMissing fun _stripeCustomerId() = stripeCustomerId
@@ -149,9 +149,9 @@ private constructor(
         fun validate(): User = apply {
             if (!validated) {
                 id()
-                name()
                 email()
                 fingerprint()
+                name()
                 stripeCustomerId()
                 validated = true
             }
@@ -167,17 +167,17 @@ private constructor(
         class Builder {
 
             private var id: JsonField<String> = JsonMissing.of()
-            private var name: JsonField<String> = JsonMissing.of()
             private var email: JsonField<String> = JsonMissing.of()
             private var fingerprint: JsonField<String> = JsonMissing.of()
+            private var name: JsonField<String> = JsonMissing.of()
             private var stripeCustomerId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(user: User) = apply {
                 id = user.id
-                name = user.name
                 email = user.email
                 fingerprint = user.fingerprint
+                name = user.name
                 stripeCustomerId = user.stripeCustomerId
                 additionalProperties = user.additionalProperties.toMutableMap()
             }
@@ -187,12 +187,6 @@ private constructor(
 
             /** Unique object identifier. The format and length of IDs may change over time. */
             fun id(id: JsonField<String>) = apply { this.id = id }
-
-            /** Name of the user. */
-            fun name(name: String) = name(JsonField.of(name))
-
-            /** Name of the user. */
-            fun name(name: JsonField<String>) = apply { this.name = name }
 
             /** Email address of the user. */
             fun email(email: String) = email(JsonField.of(email))
@@ -207,6 +201,12 @@ private constructor(
             fun fingerprint(fingerprint: JsonField<String>) = apply {
                 this.fingerprint = fingerprint
             }
+
+            /** Name of the user. */
+            fun name(name: String) = name(JsonField.of(name))
+
+            /** Name of the user. */
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
             /** Stripe customer ID of the user. */
             fun stripeCustomerId(stripeCustomerId: String) =
@@ -239,9 +239,9 @@ private constructor(
             fun build(): User =
                 User(
                     id,
-                    name,
                     email,
                     fingerprint,
+                    name,
                     stripeCustomerId,
                     additionalProperties.toImmutable(),
                 )
@@ -252,17 +252,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is User && id == other.id && name == other.name && email == other.email && fingerprint == other.fingerprint && stripeCustomerId == other.stripeCustomerId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is User && id == other.id && email == other.email && fingerprint == other.fingerprint && name == other.name && stripeCustomerId == other.stripeCustomerId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, name, email, fingerprint, stripeCustomerId, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, email, fingerprint, name, stripeCustomerId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "User{id=$id, name=$name, email=$email, fingerprint=$fingerprint, stripeCustomerId=$stripeCustomerId, additionalProperties=$additionalProperties}"
+            "User{id=$id, email=$email, fingerprint=$fingerprint, name=$name, stripeCustomerId=$stripeCustomerId, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

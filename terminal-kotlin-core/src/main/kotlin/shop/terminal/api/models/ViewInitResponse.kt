@@ -92,74 +92,74 @@ private constructor(
     class Data
     @JsonCreator
     private constructor(
-        @JsonProperty("profile")
-        @ExcludeMissing
-        private val profile: JsonField<Profile> = JsonMissing.of(),
-        @JsonProperty("products")
-        @ExcludeMissing
-        private val products: JsonField<List<Product>> = JsonMissing.of(),
-        @JsonProperty("cart") @ExcludeMissing private val cart: JsonField<Cart> = JsonMissing.of(),
         @JsonProperty("addresses")
         @ExcludeMissing
         private val addresses: JsonField<List<Address>> = JsonMissing.of(),
-        @JsonProperty("cards")
-        @ExcludeMissing
-        private val cards: JsonField<List<Card>> = JsonMissing.of(),
-        @JsonProperty("subscriptions")
-        @ExcludeMissing
-        private val subscriptions: JsonField<List<Subscription>> = JsonMissing.of(),
-        @JsonProperty("orders")
-        @ExcludeMissing
-        private val orders: JsonField<List<Order>> = JsonMissing.of(),
-        @JsonProperty("tokens")
-        @ExcludeMissing
-        private val tokens: JsonField<List<Token>> = JsonMissing.of(),
         @JsonProperty("apps")
         @ExcludeMissing
         private val apps: JsonField<List<App>> = JsonMissing.of(),
+        @JsonProperty("cards")
+        @ExcludeMissing
+        private val cards: JsonField<List<Card>> = JsonMissing.of(),
+        @JsonProperty("cart") @ExcludeMissing private val cart: JsonField<Cart> = JsonMissing.of(),
+        @JsonProperty("orders")
+        @ExcludeMissing
+        private val orders: JsonField<List<Order>> = JsonMissing.of(),
+        @JsonProperty("products")
+        @ExcludeMissing
+        private val products: JsonField<List<Product>> = JsonMissing.of(),
+        @JsonProperty("profile")
+        @ExcludeMissing
+        private val profile: JsonField<Profile> = JsonMissing.of(),
+        @JsonProperty("subscriptions")
+        @ExcludeMissing
+        private val subscriptions: JsonField<List<Subscription>> = JsonMissing.of(),
+        @JsonProperty("tokens")
+        @ExcludeMissing
+        private val tokens: JsonField<List<Token>> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** A Terminal shop user's profile. (We have users, btw.) */
-        fun profile(): Profile = profile.getRequired("profile")
+        fun addresses(): List<Address> = addresses.getRequired("addresses")
 
-        fun products(): List<Product> = products.getRequired("products")
+        fun apps(): List<App> = apps.getRequired("apps")
+
+        fun cards(): List<Card> = cards.getRequired("cards")
 
         /** The current Terminal shop user's cart. */
         fun cart(): Cart = cart.getRequired("cart")
 
-        fun addresses(): List<Address> = addresses.getRequired("addresses")
+        fun orders(): List<Order> = orders.getRequired("orders")
 
-        fun cards(): List<Card> = cards.getRequired("cards")
+        fun products(): List<Product> = products.getRequired("products")
+
+        /** A Terminal shop user's profile. (We have users, btw.) */
+        fun profile(): Profile = profile.getRequired("profile")
 
         fun subscriptions(): List<Subscription> = subscriptions.getRequired("subscriptions")
 
-        fun orders(): List<Order> = orders.getRequired("orders")
-
         fun tokens(): List<Token> = tokens.getRequired("tokens")
 
-        fun apps(): List<App> = apps.getRequired("apps")
+        @JsonProperty("addresses") @ExcludeMissing fun _addresses() = addresses
 
-        /** A Terminal shop user's profile. (We have users, btw.) */
-        @JsonProperty("profile") @ExcludeMissing fun _profile() = profile
+        @JsonProperty("apps") @ExcludeMissing fun _apps() = apps
 
-        @JsonProperty("products") @ExcludeMissing fun _products() = products
+        @JsonProperty("cards") @ExcludeMissing fun _cards() = cards
 
         /** The current Terminal shop user's cart. */
         @JsonProperty("cart") @ExcludeMissing fun _cart() = cart
 
-        @JsonProperty("addresses") @ExcludeMissing fun _addresses() = addresses
+        @JsonProperty("orders") @ExcludeMissing fun _orders() = orders
 
-        @JsonProperty("cards") @ExcludeMissing fun _cards() = cards
+        @JsonProperty("products") @ExcludeMissing fun _products() = products
+
+        /** A Terminal shop user's profile. (We have users, btw.) */
+        @JsonProperty("profile") @ExcludeMissing fun _profile() = profile
 
         @JsonProperty("subscriptions") @ExcludeMissing fun _subscriptions() = subscriptions
 
-        @JsonProperty("orders") @ExcludeMissing fun _orders() = orders
-
         @JsonProperty("tokens") @ExcludeMissing fun _tokens() = tokens
-
-        @JsonProperty("apps") @ExcludeMissing fun _apps() = apps
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -169,15 +169,15 @@ private constructor(
 
         fun validate(): Data = apply {
             if (!validated) {
-                profile().validate()
-                products().forEach { it.validate() }
-                cart().validate()
                 addresses().forEach { it.validate() }
-                cards().forEach { it.validate() }
-                subscriptions().forEach { it.validate() }
-                orders().forEach { it.validate() }
-                tokens().forEach { it.validate() }
                 apps().forEach { it.validate() }
+                cards().forEach { it.validate() }
+                cart().validate()
+                orders().forEach { it.validate() }
+                products().forEach { it.validate() }
+                profile().validate()
+                subscriptions().forEach { it.validate() }
+                tokens().forEach { it.validate() }
                 validated = true
             }
         }
@@ -191,45 +191,29 @@ private constructor(
 
         class Builder {
 
-            private var profile: JsonField<Profile> = JsonMissing.of()
-            private var products: JsonField<List<Product>> = JsonMissing.of()
-            private var cart: JsonField<Cart> = JsonMissing.of()
             private var addresses: JsonField<List<Address>> = JsonMissing.of()
-            private var cards: JsonField<List<Card>> = JsonMissing.of()
-            private var subscriptions: JsonField<List<Subscription>> = JsonMissing.of()
-            private var orders: JsonField<List<Order>> = JsonMissing.of()
-            private var tokens: JsonField<List<Token>> = JsonMissing.of()
             private var apps: JsonField<List<App>> = JsonMissing.of()
+            private var cards: JsonField<List<Card>> = JsonMissing.of()
+            private var cart: JsonField<Cart> = JsonMissing.of()
+            private var orders: JsonField<List<Order>> = JsonMissing.of()
+            private var products: JsonField<List<Product>> = JsonMissing.of()
+            private var profile: JsonField<Profile> = JsonMissing.of()
+            private var subscriptions: JsonField<List<Subscription>> = JsonMissing.of()
+            private var tokens: JsonField<List<Token>> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(data: Data) = apply {
-                profile = data.profile
-                products = data.products
-                cart = data.cart
                 addresses = data.addresses
-                cards = data.cards
-                subscriptions = data.subscriptions
-                orders = data.orders
-                tokens = data.tokens
                 apps = data.apps
+                cards = data.cards
+                cart = data.cart
+                orders = data.orders
+                products = data.products
+                profile = data.profile
+                subscriptions = data.subscriptions
+                tokens = data.tokens
                 additionalProperties = data.additionalProperties.toMutableMap()
             }
-
-            /** A Terminal shop user's profile. (We have users, btw.) */
-            fun profile(profile: Profile) = profile(JsonField.of(profile))
-
-            /** A Terminal shop user's profile. (We have users, btw.) */
-            fun profile(profile: JsonField<Profile>) = apply { this.profile = profile }
-
-            fun products(products: List<Product>) = products(JsonField.of(products))
-
-            fun products(products: JsonField<List<Product>>) = apply { this.products = products }
-
-            /** The current Terminal shop user's cart. */
-            fun cart(cart: Cart) = cart(JsonField.of(cart))
-
-            /** The current Terminal shop user's cart. */
-            fun cart(cart: JsonField<Cart>) = apply { this.cart = cart }
 
             fun addresses(addresses: List<Address>) = addresses(JsonField.of(addresses))
 
@@ -237,9 +221,33 @@ private constructor(
                 this.addresses = addresses
             }
 
+            fun apps(apps: List<App>) = apps(JsonField.of(apps))
+
+            fun apps(apps: JsonField<List<App>>) = apply { this.apps = apps }
+
             fun cards(cards: List<Card>) = cards(JsonField.of(cards))
 
             fun cards(cards: JsonField<List<Card>>) = apply { this.cards = cards }
+
+            /** The current Terminal shop user's cart. */
+            fun cart(cart: Cart) = cart(JsonField.of(cart))
+
+            /** The current Terminal shop user's cart. */
+            fun cart(cart: JsonField<Cart>) = apply { this.cart = cart }
+
+            fun orders(orders: List<Order>) = orders(JsonField.of(orders))
+
+            fun orders(orders: JsonField<List<Order>>) = apply { this.orders = orders }
+
+            fun products(products: List<Product>) = products(JsonField.of(products))
+
+            fun products(products: JsonField<List<Product>>) = apply { this.products = products }
+
+            /** A Terminal shop user's profile. (We have users, btw.) */
+            fun profile(profile: Profile) = profile(JsonField.of(profile))
+
+            /** A Terminal shop user's profile. (We have users, btw.) */
+            fun profile(profile: JsonField<Profile>) = apply { this.profile = profile }
 
             fun subscriptions(subscriptions: List<Subscription>) =
                 subscriptions(JsonField.of(subscriptions))
@@ -248,17 +256,9 @@ private constructor(
                 this.subscriptions = subscriptions
             }
 
-            fun orders(orders: List<Order>) = orders(JsonField.of(orders))
-
-            fun orders(orders: JsonField<List<Order>>) = apply { this.orders = orders }
-
             fun tokens(tokens: List<Token>) = tokens(JsonField.of(tokens))
 
             fun tokens(tokens: JsonField<List<Token>>) = apply { this.tokens = tokens }
-
-            fun apps(apps: List<App>) = apps(JsonField.of(apps))
-
-            fun apps(apps: JsonField<List<App>>) = apply { this.apps = apps }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -281,15 +281,15 @@ private constructor(
 
             fun build(): Data =
                 Data(
-                    profile,
-                    products.map { it.toImmutable() },
-                    cart,
                     addresses.map { it.toImmutable() },
-                    cards.map { it.toImmutable() },
-                    subscriptions.map { it.toImmutable() },
-                    orders.map { it.toImmutable() },
-                    tokens.map { it.toImmutable() },
                     apps.map { it.toImmutable() },
+                    cards.map { it.toImmutable() },
+                    cart,
+                    orders.map { it.toImmutable() },
+                    products.map { it.toImmutable() },
+                    profile,
+                    subscriptions.map { it.toImmutable() },
+                    tokens.map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -299,17 +299,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Data && profile == other.profile && products == other.products && cart == other.cart && addresses == other.addresses && cards == other.cards && subscriptions == other.subscriptions && orders == other.orders && tokens == other.tokens && apps == other.apps && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Data && addresses == other.addresses && apps == other.apps && cards == other.cards && cart == other.cart && orders == other.orders && products == other.products && profile == other.profile && subscriptions == other.subscriptions && tokens == other.tokens && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(profile, products, cart, addresses, cards, subscriptions, orders, tokens, apps, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(addresses, apps, cards, cart, orders, products, profile, subscriptions, tokens, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Data{profile=$profile, products=$products, cart=$cart, addresses=$addresses, cards=$cards, subscriptions=$subscriptions, orders=$orders, tokens=$tokens, apps=$apps, additionalProperties=$additionalProperties}"
+            "Data{addresses=$addresses, apps=$apps, cards=$cards, cart=$cart, orders=$orders, products=$products, profile=$profile, subscriptions=$subscriptions, tokens=$tokens, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

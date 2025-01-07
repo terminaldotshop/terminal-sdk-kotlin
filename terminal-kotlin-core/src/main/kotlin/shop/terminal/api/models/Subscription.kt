@@ -23,12 +23,6 @@ class Subscription
 @JsonCreator
 private constructor(
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("productVariantID")
-    @ExcludeMissing
-    private val productVariantId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("quantity")
-    @ExcludeMissing
-    private val quantity: JsonField<Long> = JsonMissing.of(),
     @JsonProperty("addressID")
     @ExcludeMissing
     private val addressId: JsonField<String> = JsonMissing.of(),
@@ -38,17 +32,17 @@ private constructor(
     @JsonProperty("frequency")
     @ExcludeMissing
     private val frequency: JsonField<Frequency> = JsonMissing.of(),
+    @JsonProperty("productVariantID")
+    @ExcludeMissing
+    private val productVariantId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("quantity")
+    @ExcludeMissing
+    private val quantity: JsonField<Long> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
     /** Unique object identifier. The format and length of IDs may change over time. */
     fun id(): String = id.getRequired("id")
-
-    /** ID of the product variant being subscribed to. */
-    fun productVariantId(): String = productVariantId.getRequired("productVariantID")
-
-    /** Quantity of the subscription. */
-    fun quantity(): Long = quantity.getRequired("quantity")
 
     /** ID of the shipping address used for the subscription. */
     fun addressId(): String = addressId.getRequired("addressID")
@@ -59,14 +53,14 @@ private constructor(
     /** Frequency of the subscription. */
     fun frequency(): Frequency = frequency.getRequired("frequency")
 
-    /** Unique object identifier. The format and length of IDs may change over time. */
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
-
     /** ID of the product variant being subscribed to. */
-    @JsonProperty("productVariantID") @ExcludeMissing fun _productVariantId() = productVariantId
+    fun productVariantId(): String = productVariantId.getRequired("productVariantID")
 
     /** Quantity of the subscription. */
-    @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
+    fun quantity(): Long = quantity.getRequired("quantity")
+
+    /** Unique object identifier. The format and length of IDs may change over time. */
+    @JsonProperty("id") @ExcludeMissing fun _id() = id
 
     /** ID of the shipping address used for the subscription. */
     @JsonProperty("addressID") @ExcludeMissing fun _addressId() = addressId
@@ -77,6 +71,12 @@ private constructor(
     /** Frequency of the subscription. */
     @JsonProperty("frequency") @ExcludeMissing fun _frequency() = frequency
 
+    /** ID of the product variant being subscribed to. */
+    @JsonProperty("productVariantID") @ExcludeMissing fun _productVariantId() = productVariantId
+
+    /** Quantity of the subscription. */
+    @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
+
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -86,11 +86,11 @@ private constructor(
     fun validate(): Subscription = apply {
         if (!validated) {
             id()
-            productVariantId()
-            quantity()
             addressId()
             cardId()
             frequency()
+            productVariantId()
+            quantity()
             validated = true
         }
     }
@@ -105,20 +105,20 @@ private constructor(
     class Builder {
 
         private var id: JsonField<String> = JsonMissing.of()
-        private var productVariantId: JsonField<String> = JsonMissing.of()
-        private var quantity: JsonField<Long> = JsonMissing.of()
         private var addressId: JsonField<String> = JsonMissing.of()
         private var cardId: JsonField<String> = JsonMissing.of()
         private var frequency: JsonField<Frequency> = JsonMissing.of()
+        private var productVariantId: JsonField<String> = JsonMissing.of()
+        private var quantity: JsonField<Long> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(subscription: Subscription) = apply {
             id = subscription.id
-            productVariantId = subscription.productVariantId
-            quantity = subscription.quantity
             addressId = subscription.addressId
             cardId = subscription.cardId
             frequency = subscription.frequency
+            productVariantId = subscription.productVariantId
+            quantity = subscription.quantity
             additionalProperties = subscription.additionalProperties.toMutableMap()
         }
 
@@ -127,21 +127,6 @@ private constructor(
 
         /** Unique object identifier. The format and length of IDs may change over time. */
         fun id(id: JsonField<String>) = apply { this.id = id }
-
-        /** ID of the product variant being subscribed to. */
-        fun productVariantId(productVariantId: String) =
-            productVariantId(JsonField.of(productVariantId))
-
-        /** ID of the product variant being subscribed to. */
-        fun productVariantId(productVariantId: JsonField<String>) = apply {
-            this.productVariantId = productVariantId
-        }
-
-        /** Quantity of the subscription. */
-        fun quantity(quantity: Long) = quantity(JsonField.of(quantity))
-
-        /** Quantity of the subscription. */
-        fun quantity(quantity: JsonField<Long>) = apply { this.quantity = quantity }
 
         /** ID of the shipping address used for the subscription. */
         fun addressId(addressId: String) = addressId(JsonField.of(addressId))
@@ -160,6 +145,21 @@ private constructor(
 
         /** Frequency of the subscription. */
         fun frequency(frequency: JsonField<Frequency>) = apply { this.frequency = frequency }
+
+        /** ID of the product variant being subscribed to. */
+        fun productVariantId(productVariantId: String) =
+            productVariantId(JsonField.of(productVariantId))
+
+        /** ID of the product variant being subscribed to. */
+        fun productVariantId(productVariantId: JsonField<String>) = apply {
+            this.productVariantId = productVariantId
+        }
+
+        /** Quantity of the subscription. */
+        fun quantity(quantity: Long) = quantity(JsonField.of(quantity))
+
+        /** Quantity of the subscription. */
+        fun quantity(quantity: JsonField<Long>) = apply { this.quantity = quantity }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -183,11 +183,11 @@ private constructor(
         fun build(): Subscription =
             Subscription(
                 id,
-                productVariantId,
-                quantity,
                 addressId,
                 cardId,
                 frequency,
+                productVariantId,
+                quantity,
                 additionalProperties.toImmutable(),
             )
     }
@@ -272,15 +272,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Subscription && id == other.id && productVariantId == other.productVariantId && quantity == other.quantity && addressId == other.addressId && cardId == other.cardId && frequency == other.frequency && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Subscription && id == other.id && addressId == other.addressId && cardId == other.cardId && frequency == other.frequency && productVariantId == other.productVariantId && quantity == other.quantity && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, productVariantId, quantity, addressId, cardId, frequency, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, addressId, cardId, frequency, productVariantId, quantity, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Subscription{id=$id, productVariantId=$productVariantId, quantity=$quantity, addressId=$addressId, cardId=$cardId, frequency=$frequency, additionalProperties=$additionalProperties}"
+        "Subscription{id=$id, addressId=$addressId, cardId=$cardId, frequency=$frequency, productVariantId=$productVariantId, quantity=$quantity, additionalProperties=$additionalProperties}"
 }
