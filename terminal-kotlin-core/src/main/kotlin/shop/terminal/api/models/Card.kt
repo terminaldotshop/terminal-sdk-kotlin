@@ -150,25 +150,25 @@ private constructor(
     class Expiration
     @JsonCreator
     private constructor(
-        @JsonProperty("year") @ExcludeMissing private val year: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("month")
         @ExcludeMissing
         private val month: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("year") @ExcludeMissing private val year: JsonField<Long> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
-
-        /** Expiration year of the card. */
-        fun year(): Long = year.getRequired("year")
 
         /** Expiration month of the card. */
         fun month(): Long = month.getRequired("month")
 
         /** Expiration year of the card. */
-        @JsonProperty("year") @ExcludeMissing fun _year() = year
+        fun year(): Long = year.getRequired("year")
 
         /** Expiration month of the card. */
         @JsonProperty("month") @ExcludeMissing fun _month() = month
+
+        /** Expiration year of the card. */
+        @JsonProperty("year") @ExcludeMissing fun _year() = year
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -178,8 +178,8 @@ private constructor(
 
         fun validate(): Expiration = apply {
             if (!validated) {
-                year()
                 month()
+                year()
                 validated = true
             }
         }
@@ -193,27 +193,27 @@ private constructor(
 
         class Builder {
 
-            private var year: JsonField<Long> = JsonMissing.of()
             private var month: JsonField<Long> = JsonMissing.of()
+            private var year: JsonField<Long> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(expiration: Expiration) = apply {
-                year = expiration.year
                 month = expiration.month
+                year = expiration.year
                 additionalProperties = expiration.additionalProperties.toMutableMap()
             }
-
-            /** Expiration year of the card. */
-            fun year(year: Long) = year(JsonField.of(year))
-
-            /** Expiration year of the card. */
-            fun year(year: JsonField<Long>) = apply { this.year = year }
 
             /** Expiration month of the card. */
             fun month(month: Long) = month(JsonField.of(month))
 
             /** Expiration month of the card. */
             fun month(month: JsonField<Long>) = apply { this.month = month }
+
+            /** Expiration year of the card. */
+            fun year(year: Long) = year(JsonField.of(year))
+
+            /** Expiration year of the card. */
+            fun year(year: JsonField<Long>) = apply { this.year = year }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -236,8 +236,8 @@ private constructor(
 
             fun build(): Expiration =
                 Expiration(
-                    year,
                     month,
+                    year,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -247,17 +247,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Expiration && year == other.year && month == other.month && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Expiration && month == other.month && year == other.year && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(year, month, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(month, year, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Expiration{year=$year, month=$month, additionalProperties=$additionalProperties}"
+            "Expiration{month=$month, year=$year, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
