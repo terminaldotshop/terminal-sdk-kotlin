@@ -27,7 +27,7 @@ private constructor(
 
     fun data(): Data = data.getRequired("data")
 
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -51,7 +51,7 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<Data> = JsonMissing.of()
+        private var data: JsonField<Data>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(subscriptionDeleteResponse: SubscriptionDeleteResponse) = apply {
@@ -83,7 +83,10 @@ private constructor(
         }
 
         fun build(): SubscriptionDeleteResponse =
-            SubscriptionDeleteResponse(data, additionalProperties.toImmutable())
+            SubscriptionDeleteResponse(
+                checkNotNull(data) { "`data` is required but was not set" },
+                additionalProperties.toImmutable()
+            )
     }
 
     class Data

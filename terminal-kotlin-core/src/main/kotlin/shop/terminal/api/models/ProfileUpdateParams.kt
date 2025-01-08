@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Objects
 import shop.terminal.api.core.ExcludeMissing
+import shop.terminal.api.core.JsonField
+import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.http.Headers
@@ -15,6 +17,7 @@ import shop.terminal.api.core.http.QueryParams
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
+/** Update the current user's profile. */
 class ProfileUpdateParams
 constructor(
     private val body: ProfileUpdateBody,
@@ -28,11 +31,17 @@ constructor(
     /** Name of the user. */
     fun name(): String? = body.name()
 
+    /** Email address of the user. */
+    fun _email(): JsonField<String> = body._email()
+
+    /** Name of the user. */
+    fun _name(): JsonField<String> = body._name()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     internal fun getBody(): ProfileUpdateBody = body
 
@@ -45,21 +54,41 @@ constructor(
     class ProfileUpdateBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("email") private val email: String?,
-        @JsonProperty("name") private val name: String?,
+        @JsonProperty("email")
+        @ExcludeMissing
+        private val email: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** Email address of the user. */
-        @JsonProperty("email") fun email(): String? = email
+        fun email(): String? = email.getNullable("email")
 
         /** Name of the user. */
-        @JsonProperty("name") fun name(): String? = name
+        fun name(): String? = name.getNullable("name")
+
+        /** Email address of the user. */
+        @JsonProperty("email") @ExcludeMissing fun _email(): JsonField<String> = email
+
+        /** Name of the user. */
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): ProfileUpdateBody = apply {
+            if (!validated) {
+                email()
+                name()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -70,8 +99,8 @@ constructor(
 
         class Builder {
 
-            private var email: String? = null
-            private var name: String? = null
+            private var email: JsonField<String> = JsonMissing.of()
+            private var name: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(profileUpdateBody: ProfileUpdateBody) = apply {
@@ -81,10 +110,16 @@ constructor(
             }
 
             /** Email address of the user. */
-            fun email(email: String?) = apply { this.email = email }
+            fun email(email: String?) = email(JsonField.ofNullable(email))
+
+            /** Email address of the user. */
+            fun email(email: JsonField<String>) = apply { this.email = email }
 
             /** Name of the user. */
-            fun name(name: String?) = apply { this.name = name }
+            fun name(name: String?) = name(JsonField.ofNullable(name))
+
+            /** Name of the user. */
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -154,8 +189,33 @@ constructor(
         /** Email address of the user. */
         fun email(email: String?) = apply { body.email(email) }
 
+        /** Email address of the user. */
+        fun email(email: JsonField<String>) = apply { body.email(email) }
+
         /** Name of the user. */
         fun name(name: String?) = apply { body.name(name) }
+
+        /** Name of the user. */
+        fun name(name: JsonField<String>) = apply { body.name(name) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -253,25 +313,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): ProfileUpdateParams =

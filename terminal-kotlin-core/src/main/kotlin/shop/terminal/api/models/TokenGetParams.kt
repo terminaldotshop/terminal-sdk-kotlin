@@ -7,6 +7,7 @@ import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 
+/** Get the personal access token with the given ID. */
 class TokenGetParams
 constructor(
     private val id: String,

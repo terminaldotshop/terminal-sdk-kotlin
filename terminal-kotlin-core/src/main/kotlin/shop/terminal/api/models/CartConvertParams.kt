@@ -9,6 +9,7 @@ import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 import shop.terminal.api.core.toImmutable
 
+/** Convert the current user's cart to an order. */
 class CartConvertParams
 constructor(
     private val additionalHeaders: Headers,

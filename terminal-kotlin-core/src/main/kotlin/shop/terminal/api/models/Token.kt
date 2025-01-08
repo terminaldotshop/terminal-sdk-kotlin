@@ -39,13 +39,13 @@ private constructor(
     fun time(): Time = time.getRequired("time")
 
     /** Unique object identifier. The format and length of IDs may change over time. */
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
     /** Personal access token (obfuscated). */
-    @JsonProperty("token") @ExcludeMissing fun _token() = token
+    @JsonProperty("token") @ExcludeMissing fun _token(): JsonField<String> = token
 
     /** Relevant timestamps for the token. */
-    @JsonProperty("time") @ExcludeMissing fun _time() = time
+    @JsonProperty("time") @ExcludeMissing fun _time(): JsonField<Time> = time
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -71,9 +71,9 @@ private constructor(
 
     class Builder {
 
-        private var id: JsonField<String> = JsonMissing.of()
-        private var token: JsonField<String> = JsonMissing.of()
-        private var time: JsonField<Time> = JsonMissing.of()
+        private var id: JsonField<String>? = null
+        private var token: JsonField<String>? = null
+        private var time: JsonField<Time>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(token: Token) = apply {
@@ -122,9 +122,9 @@ private constructor(
 
         fun build(): Token =
             Token(
-                id,
-                token,
-                time,
+                checkNotNull(id) { "`id` is required but was not set" },
+                checkNotNull(token) { "`token` is required but was not set" },
+                checkNotNull(time) { "`time` is required but was not set" },
                 additionalProperties.toImmutable(),
             )
     }
@@ -145,7 +145,7 @@ private constructor(
         fun created(): String = created.getRequired("created")
 
         /** The created time for the token. */
-        @JsonProperty("created") @ExcludeMissing fun _created() = created
+        @JsonProperty("created") @ExcludeMissing fun _created(): JsonField<String> = created
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -169,7 +169,7 @@ private constructor(
 
         class Builder {
 
-            private var created: JsonField<String> = JsonMissing.of()
+            private var created: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(time: Time) = apply {
@@ -202,7 +202,11 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): Time = Time(created, additionalProperties.toImmutable())
+            fun build(): Time =
+                Time(
+                    checkNotNull(created) { "`created` is required but was not set" },
+                    additionalProperties.toImmutable()
+                )
         }
 
         override fun equals(other: Any?): Boolean {

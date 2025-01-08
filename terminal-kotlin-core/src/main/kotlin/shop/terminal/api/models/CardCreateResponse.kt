@@ -27,7 +27,7 @@ private constructor(
     fun data(): String = data.getRequired("data")
 
     /** ID of the card. */
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<String> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -51,7 +51,7 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<String> = JsonMissing.of()
+        private var data: JsonField<String>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(cardCreateResponse: CardCreateResponse) = apply {
@@ -85,7 +85,10 @@ private constructor(
         }
 
         fun build(): CardCreateResponse =
-            CardCreateResponse(data, additionalProperties.toImmutable())
+            CardCreateResponse(
+                checkNotNull(data) { "`data` is required but was not set" },
+                additionalProperties.toImmutable()
+            )
     }
 
     override fun equals(other: Any?): Boolean {

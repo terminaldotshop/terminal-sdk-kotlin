@@ -27,7 +27,7 @@ private constructor(
     fun data(): App = data.getRequired("data")
 
     /** A Terminal App used for configuring an OAuth 2.0 client. */
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<App> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -51,7 +51,7 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<App> = JsonMissing.of()
+        private var data: JsonField<App>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(appGetResponse: AppGetResponse) = apply {
@@ -84,7 +84,11 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
-        fun build(): AppGetResponse = AppGetResponse(data, additionalProperties.toImmutable())
+        fun build(): AppGetResponse =
+            AppGetResponse(
+                checkNotNull(data) { "`data` is required but was not set" },
+                additionalProperties.toImmutable()
+            )
     }
 
     override fun equals(other: Any?): Boolean {

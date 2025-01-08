@@ -9,6 +9,7 @@ import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 import shop.terminal.api.core.toImmutable
 
+/** Delete a credit card associated with the current user. */
 class CardDeleteParams
 constructor(
     private val id: String,

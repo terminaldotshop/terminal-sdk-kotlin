@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Objects
 import shop.terminal.api.core.ExcludeMissing
+import shop.terminal.api.core.JsonField
+import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.http.Headers
@@ -15,6 +17,7 @@ import shop.terminal.api.core.http.QueryParams
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
+/** Set the shipping address for the current user's cart. */
 class CartSetAddressParams
 constructor(
     private val body: CartSetAddressBody,
@@ -25,11 +28,14 @@ constructor(
     /** ID of the shipping address to set for the current user's cart. */
     fun addressId(): String = body.addressId()
 
+    /** ID of the shipping address to set for the current user's cart. */
+    fun _addressId(): JsonField<String> = body._addressId()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     internal fun getBody(): CartSetAddressBody = body
 
@@ -41,17 +47,31 @@ constructor(
     class CartSetAddressBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("addressID") private val addressId: String,
+        @JsonProperty("addressID")
+        @ExcludeMissing
+        private val addressId: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** ID of the shipping address to set for the current user's cart. */
-        @JsonProperty("addressID") fun addressId(): String = addressId
+        fun addressId(): String = addressId.getRequired("addressID")
+
+        /** ID of the shipping address to set for the current user's cart. */
+        @JsonProperty("addressID") @ExcludeMissing fun _addressId(): JsonField<String> = addressId
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CartSetAddressBody = apply {
+            if (!validated) {
+                addressId()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -62,7 +82,7 @@ constructor(
 
         class Builder {
 
-            private var addressId: String? = null
+            private var addressId: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(cartSetAddressBody: CartSetAddressBody) = apply {
@@ -71,7 +91,10 @@ constructor(
             }
 
             /** ID of the shipping address to set for the current user's cart. */
-            fun addressId(addressId: String) = apply { this.addressId = addressId }
+            fun addressId(addressId: String) = addressId(JsonField.of(addressId))
+
+            /** ID of the shipping address to set for the current user's cart. */
+            fun addressId(addressId: JsonField<String>) = apply { this.addressId = addressId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -139,6 +162,28 @@ constructor(
 
         /** ID of the shipping address to set for the current user's cart. */
         fun addressId(addressId: String) = apply { body.addressId(addressId) }
+
+        /** ID of the shipping address to set for the current user's cart. */
+        fun addressId(addressId: JsonField<String>) = apply { body.addressId(addressId) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -236,25 +281,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CartSetAddressParams =

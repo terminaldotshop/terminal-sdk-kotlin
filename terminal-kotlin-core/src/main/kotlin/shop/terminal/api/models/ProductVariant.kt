@@ -36,13 +36,13 @@ private constructor(
     fun price(): Long = price.getRequired("price")
 
     /** Unique object identifier. The format and length of IDs may change over time. */
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
     /** Name of the product variant. */
-    @JsonProperty("name") @ExcludeMissing fun _name() = name
+    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
     /** Price of the product variant in cents (USD). */
-    @JsonProperty("price") @ExcludeMissing fun _price() = price
+    @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Long> = price
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -68,9 +68,9 @@ private constructor(
 
     class Builder {
 
-        private var id: JsonField<String> = JsonMissing.of()
-        private var name: JsonField<String> = JsonMissing.of()
-        private var price: JsonField<Long> = JsonMissing.of()
+        private var id: JsonField<String>? = null
+        private var name: JsonField<String>? = null
+        private var price: JsonField<Long>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(productVariant: ProductVariant) = apply {
@@ -119,9 +119,9 @@ private constructor(
 
         fun build(): ProductVariant =
             ProductVariant(
-                id,
-                name,
-                price,
+                checkNotNull(id) { "`id` is required but was not set" },
+                checkNotNull(name) { "`name` is required but was not set" },
+                checkNotNull(price) { "`price` is required but was not set" },
                 additionalProperties.toImmutable(),
             )
     }

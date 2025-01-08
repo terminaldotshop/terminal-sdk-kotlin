@@ -27,7 +27,7 @@ private constructor(
     fun data(): Data = data.getRequired("data")
 
     /** Initial app data. */
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -51,7 +51,7 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<Data> = JsonMissing.of()
+        private var data: JsonField<Data>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(viewInitResponse: ViewInitResponse) = apply {
@@ -84,7 +84,11 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
-        fun build(): ViewInitResponse = ViewInitResponse(data, additionalProperties.toImmutable())
+        fun build(): ViewInitResponse =
+            ViewInitResponse(
+                checkNotNull(data) { "`data` is required but was not set" },
+                additionalProperties.toImmutable()
+            )
     }
 
     /** Initial app data. */
@@ -141,25 +145,31 @@ private constructor(
 
         fun tokens(): List<Token> = tokens.getRequired("tokens")
 
-        @JsonProperty("addresses") @ExcludeMissing fun _addresses() = addresses
+        @JsonProperty("addresses")
+        @ExcludeMissing
+        fun _addresses(): JsonField<List<Address>> = addresses
 
-        @JsonProperty("apps") @ExcludeMissing fun _apps() = apps
+        @JsonProperty("apps") @ExcludeMissing fun _apps(): JsonField<List<App>> = apps
 
-        @JsonProperty("cards") @ExcludeMissing fun _cards() = cards
+        @JsonProperty("cards") @ExcludeMissing fun _cards(): JsonField<List<Card>> = cards
 
         /** The current Terminal shop user's cart. */
-        @JsonProperty("cart") @ExcludeMissing fun _cart() = cart
+        @JsonProperty("cart") @ExcludeMissing fun _cart(): JsonField<Cart> = cart
 
-        @JsonProperty("orders") @ExcludeMissing fun _orders() = orders
+        @JsonProperty("orders") @ExcludeMissing fun _orders(): JsonField<List<Order>> = orders
 
-        @JsonProperty("products") @ExcludeMissing fun _products() = products
+        @JsonProperty("products")
+        @ExcludeMissing
+        fun _products(): JsonField<List<Product>> = products
 
         /** A Terminal shop user's profile. (We have users, btw.) */
-        @JsonProperty("profile") @ExcludeMissing fun _profile() = profile
+        @JsonProperty("profile") @ExcludeMissing fun _profile(): JsonField<Profile> = profile
 
-        @JsonProperty("subscriptions") @ExcludeMissing fun _subscriptions() = subscriptions
+        @JsonProperty("subscriptions")
+        @ExcludeMissing
+        fun _subscriptions(): JsonField<List<Subscription>> = subscriptions
 
-        @JsonProperty("tokens") @ExcludeMissing fun _tokens() = tokens
+        @JsonProperty("tokens") @ExcludeMissing fun _tokens(): JsonField<List<Token>> = tokens
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -191,43 +201,80 @@ private constructor(
 
         class Builder {
 
-            private var addresses: JsonField<List<Address>> = JsonMissing.of()
-            private var apps: JsonField<List<App>> = JsonMissing.of()
-            private var cards: JsonField<List<Card>> = JsonMissing.of()
-            private var cart: JsonField<Cart> = JsonMissing.of()
-            private var orders: JsonField<List<Order>> = JsonMissing.of()
-            private var products: JsonField<List<Product>> = JsonMissing.of()
-            private var profile: JsonField<Profile> = JsonMissing.of()
-            private var subscriptions: JsonField<List<Subscription>> = JsonMissing.of()
-            private var tokens: JsonField<List<Token>> = JsonMissing.of()
+            private var addresses: JsonField<MutableList<Address>>? = null
+            private var apps: JsonField<MutableList<App>>? = null
+            private var cards: JsonField<MutableList<Card>>? = null
+            private var cart: JsonField<Cart>? = null
+            private var orders: JsonField<MutableList<Order>>? = null
+            private var products: JsonField<MutableList<Product>>? = null
+            private var profile: JsonField<Profile>? = null
+            private var subscriptions: JsonField<MutableList<Subscription>>? = null
+            private var tokens: JsonField<MutableList<Token>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(data: Data) = apply {
-                addresses = data.addresses
-                apps = data.apps
-                cards = data.cards
+                addresses = data.addresses.map { it.toMutableList() }
+                apps = data.apps.map { it.toMutableList() }
+                cards = data.cards.map { it.toMutableList() }
                 cart = data.cart
-                orders = data.orders
-                products = data.products
+                orders = data.orders.map { it.toMutableList() }
+                products = data.products.map { it.toMutableList() }
                 profile = data.profile
-                subscriptions = data.subscriptions
-                tokens = data.tokens
+                subscriptions = data.subscriptions.map { it.toMutableList() }
+                tokens = data.tokens.map { it.toMutableList() }
                 additionalProperties = data.additionalProperties.toMutableMap()
             }
 
             fun addresses(addresses: List<Address>) = addresses(JsonField.of(addresses))
 
             fun addresses(addresses: JsonField<List<Address>>) = apply {
-                this.addresses = addresses
+                this.addresses = addresses.map { it.toMutableList() }
+            }
+
+            fun addAddress(address: Address) = apply {
+                addresses =
+                    (addresses ?: JsonField.of(mutableListOf())).apply {
+                        (asKnown()
+                                ?: throw IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                ))
+                            .add(address)
+                    }
             }
 
             fun apps(apps: List<App>) = apps(JsonField.of(apps))
 
-            fun apps(apps: JsonField<List<App>>) = apply { this.apps = apps }
+            fun apps(apps: JsonField<List<App>>) = apply {
+                this.apps = apps.map { it.toMutableList() }
+            }
+
+            fun addApp(app: App) = apply {
+                apps =
+                    (apps ?: JsonField.of(mutableListOf())).apply {
+                        (asKnown()
+                                ?: throw IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                ))
+                            .add(app)
+                    }
+            }
 
             fun cards(cards: List<Card>) = cards(JsonField.of(cards))
 
-            fun cards(cards: JsonField<List<Card>>) = apply { this.cards = cards }
+            fun cards(cards: JsonField<List<Card>>) = apply {
+                this.cards = cards.map { it.toMutableList() }
+            }
+
+            fun addCard(card: Card) = apply {
+                cards =
+                    (cards ?: JsonField.of(mutableListOf())).apply {
+                        (asKnown()
+                                ?: throw IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                ))
+                            .add(card)
+                    }
+            }
 
             /** The current Terminal shop user's cart. */
             fun cart(cart: Cart) = cart(JsonField.of(cart))
@@ -237,11 +284,37 @@ private constructor(
 
             fun orders(orders: List<Order>) = orders(JsonField.of(orders))
 
-            fun orders(orders: JsonField<List<Order>>) = apply { this.orders = orders }
+            fun orders(orders: JsonField<List<Order>>) = apply {
+                this.orders = orders.map { it.toMutableList() }
+            }
+
+            fun addOrder(order: Order) = apply {
+                orders =
+                    (orders ?: JsonField.of(mutableListOf())).apply {
+                        (asKnown()
+                                ?: throw IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                ))
+                            .add(order)
+                    }
+            }
 
             fun products(products: List<Product>) = products(JsonField.of(products))
 
-            fun products(products: JsonField<List<Product>>) = apply { this.products = products }
+            fun products(products: JsonField<List<Product>>) = apply {
+                this.products = products.map { it.toMutableList() }
+            }
+
+            fun addProduct(product: Product) = apply {
+                products =
+                    (products ?: JsonField.of(mutableListOf())).apply {
+                        (asKnown()
+                                ?: throw IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                ))
+                            .add(product)
+                    }
+            }
 
             /** A Terminal shop user's profile. (We have users, btw.) */
             fun profile(profile: Profile) = profile(JsonField.of(profile))
@@ -253,12 +326,36 @@ private constructor(
                 subscriptions(JsonField.of(subscriptions))
 
             fun subscriptions(subscriptions: JsonField<List<Subscription>>) = apply {
-                this.subscriptions = subscriptions
+                this.subscriptions = subscriptions.map { it.toMutableList() }
+            }
+
+            fun addSubscription(subscription: Subscription) = apply {
+                subscriptions =
+                    (subscriptions ?: JsonField.of(mutableListOf())).apply {
+                        (asKnown()
+                                ?: throw IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                ))
+                            .add(subscription)
+                    }
             }
 
             fun tokens(tokens: List<Token>) = tokens(JsonField.of(tokens))
 
-            fun tokens(tokens: JsonField<List<Token>>) = apply { this.tokens = tokens }
+            fun tokens(tokens: JsonField<List<Token>>) = apply {
+                this.tokens = tokens.map { it.toMutableList() }
+            }
+
+            fun addToken(token: Token) = apply {
+                tokens =
+                    (tokens ?: JsonField.of(mutableListOf())).apply {
+                        (asKnown()
+                                ?: throw IllegalStateException(
+                                    "Field was set to non-list type: ${javaClass.simpleName}"
+                                ))
+                            .add(token)
+                    }
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -281,15 +378,22 @@ private constructor(
 
             fun build(): Data =
                 Data(
-                    addresses.map { it.toImmutable() },
-                    apps.map { it.toImmutable() },
-                    cards.map { it.toImmutable() },
-                    cart,
-                    orders.map { it.toImmutable() },
-                    products.map { it.toImmutable() },
-                    profile,
-                    subscriptions.map { it.toImmutable() },
-                    tokens.map { it.toImmutable() },
+                    checkNotNull(addresses) { "`addresses` is required but was not set" }
+                        .map { it.toImmutable() },
+                    checkNotNull(apps) { "`apps` is required but was not set" }
+                        .map { it.toImmutable() },
+                    checkNotNull(cards) { "`cards` is required but was not set" }
+                        .map { it.toImmutable() },
+                    checkNotNull(cart) { "`cart` is required but was not set" },
+                    checkNotNull(orders) { "`orders` is required but was not set" }
+                        .map { it.toImmutable() },
+                    checkNotNull(products) { "`products` is required but was not set" }
+                        .map { it.toImmutable() },
+                    checkNotNull(profile) { "`profile` is required but was not set" },
+                    checkNotNull(subscriptions) { "`subscriptions` is required but was not set" }
+                        .map { it.toImmutable() },
+                    checkNotNull(tokens) { "`tokens` is required but was not set" }
+                        .map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
         }

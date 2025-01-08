@@ -9,6 +9,7 @@ import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 import shop.terminal.api.core.toImmutable
 
+/** Delete a shipping address from the current user. */
 class AddressDeleteParams
 constructor(
     private val id: String,

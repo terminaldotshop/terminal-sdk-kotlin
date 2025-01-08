@@ -28,7 +28,7 @@ private constructor(
     fun user(): User = user.getRequired("user")
 
     /** A Terminal shop user. (We have users, btw.) */
-    @JsonProperty("user") @ExcludeMissing fun _user() = user
+    @JsonProperty("user") @ExcludeMissing fun _user(): JsonField<User> = user
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -52,7 +52,7 @@ private constructor(
 
     class Builder {
 
-        private var user: JsonField<User> = JsonMissing.of()
+        private var user: JsonField<User>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(profile: Profile) = apply {
@@ -85,7 +85,11 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
-        fun build(): Profile = Profile(user, additionalProperties.toImmutable())
+        fun build(): Profile =
+            Profile(
+                checkNotNull(user) { "`user` is required but was not set" },
+                additionalProperties.toImmutable()
+            )
     }
 
     /** A Terminal shop user. (We have users, btw.) */
@@ -126,19 +130,23 @@ private constructor(
         fun stripeCustomerId(): String = stripeCustomerId.getRequired("stripeCustomerID")
 
         /** Unique object identifier. The format and length of IDs may change over time. */
-        @JsonProperty("id") @ExcludeMissing fun _id() = id
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
         /** Email address of the user. */
-        @JsonProperty("email") @ExcludeMissing fun _email() = email
+        @JsonProperty("email") @ExcludeMissing fun _email(): JsonField<String> = email
 
         /** The user's fingerprint, derived from their public SSH key. */
-        @JsonProperty("fingerprint") @ExcludeMissing fun _fingerprint() = fingerprint
+        @JsonProperty("fingerprint")
+        @ExcludeMissing
+        fun _fingerprint(): JsonField<String> = fingerprint
 
         /** Name of the user. */
-        @JsonProperty("name") @ExcludeMissing fun _name() = name
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         /** Stripe customer ID of the user. */
-        @JsonProperty("stripeCustomerID") @ExcludeMissing fun _stripeCustomerId() = stripeCustomerId
+        @JsonProperty("stripeCustomerID")
+        @ExcludeMissing
+        fun _stripeCustomerId(): JsonField<String> = stripeCustomerId
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -166,11 +174,11 @@ private constructor(
 
         class Builder {
 
-            private var id: JsonField<String> = JsonMissing.of()
-            private var email: JsonField<String> = JsonMissing.of()
-            private var fingerprint: JsonField<String> = JsonMissing.of()
-            private var name: JsonField<String> = JsonMissing.of()
-            private var stripeCustomerId: JsonField<String> = JsonMissing.of()
+            private var id: JsonField<String>? = null
+            private var email: JsonField<String>? = null
+            private var fingerprint: JsonField<String>? = null
+            private var name: JsonField<String>? = null
+            private var stripeCustomerId: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(user: User) = apply {
@@ -189,13 +197,13 @@ private constructor(
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             /** Email address of the user. */
-            fun email(email: String) = email(JsonField.of(email))
+            fun email(email: String?) = email(JsonField.ofNullable(email))
 
             /** Email address of the user. */
             fun email(email: JsonField<String>) = apply { this.email = email }
 
             /** The user's fingerprint, derived from their public SSH key. */
-            fun fingerprint(fingerprint: String) = fingerprint(JsonField.of(fingerprint))
+            fun fingerprint(fingerprint: String?) = fingerprint(JsonField.ofNullable(fingerprint))
 
             /** The user's fingerprint, derived from their public SSH key. */
             fun fingerprint(fingerprint: JsonField<String>) = apply {
@@ -203,7 +211,7 @@ private constructor(
             }
 
             /** Name of the user. */
-            fun name(name: String) = name(JsonField.of(name))
+            fun name(name: String?) = name(JsonField.ofNullable(name))
 
             /** Name of the user. */
             fun name(name: JsonField<String>) = apply { this.name = name }
@@ -238,11 +246,13 @@ private constructor(
 
             fun build(): User =
                 User(
-                    id,
-                    email,
-                    fingerprint,
-                    name,
-                    stripeCustomerId,
+                    checkNotNull(id) { "`id` is required but was not set" },
+                    checkNotNull(email) { "`email` is required but was not set" },
+                    checkNotNull(fingerprint) { "`fingerprint` is required but was not set" },
+                    checkNotNull(name) { "`name` is required but was not set" },
+                    checkNotNull(stripeCustomerId) {
+                        "`stripeCustomerId` is required but was not set"
+                    },
                     additionalProperties.toImmutable(),
                 )
         }

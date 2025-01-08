@@ -68,31 +68,31 @@ private constructor(
     fun street2(): String? = street2.getNullable("street2")
 
     /** Unique object identifier. The format and length of IDs may change over time. */
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
     /** City of the address. */
-    @JsonProperty("city") @ExcludeMissing fun _city() = city
+    @JsonProperty("city") @ExcludeMissing fun _city(): JsonField<String> = city
 
     /** ISO 3166-1 alpha-2 country code of the address. */
-    @JsonProperty("country") @ExcludeMissing fun _country() = country
+    @JsonProperty("country") @ExcludeMissing fun _country(): JsonField<String> = country
 
     /** The recipient's name. */
-    @JsonProperty("name") @ExcludeMissing fun _name() = name
+    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
     /** Street of the address. */
-    @JsonProperty("street1") @ExcludeMissing fun _street1() = street1
+    @JsonProperty("street1") @ExcludeMissing fun _street1(): JsonField<String> = street1
 
     /** Zip code of the address. */
-    @JsonProperty("zip") @ExcludeMissing fun _zip() = zip
+    @JsonProperty("zip") @ExcludeMissing fun _zip(): JsonField<String> = zip
 
     /** Phone number of the recipient. */
-    @JsonProperty("phone") @ExcludeMissing fun _phone() = phone
+    @JsonProperty("phone") @ExcludeMissing fun _phone(): JsonField<String> = phone
 
     /** Province or state of the address. */
-    @JsonProperty("province") @ExcludeMissing fun _province() = province
+    @JsonProperty("province") @ExcludeMissing fun _province(): JsonField<String> = province
 
     /** Apartment, suite, etc. of the address. */
-    @JsonProperty("street2") @ExcludeMissing fun _street2() = street2
+    @JsonProperty("street2") @ExcludeMissing fun _street2(): JsonField<String> = street2
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -124,12 +124,12 @@ private constructor(
 
     class Builder {
 
-        private var id: JsonField<String> = JsonMissing.of()
-        private var city: JsonField<String> = JsonMissing.of()
-        private var country: JsonField<String> = JsonMissing.of()
-        private var name: JsonField<String> = JsonMissing.of()
-        private var street1: JsonField<String> = JsonMissing.of()
-        private var zip: JsonField<String> = JsonMissing.of()
+        private var id: JsonField<String>? = null
+        private var city: JsonField<String>? = null
+        private var country: JsonField<String>? = null
+        private var name: JsonField<String>? = null
+        private var street1: JsonField<String>? = null
+        private var zip: JsonField<String>? = null
         private var phone: JsonField<String> = JsonMissing.of()
         private var province: JsonField<String> = JsonMissing.of()
         private var street2: JsonField<String> = JsonMissing.of()
@@ -223,12 +223,12 @@ private constructor(
 
         fun build(): Address =
             Address(
-                id,
-                city,
-                country,
-                name,
-                street1,
-                zip,
+                checkNotNull(id) { "`id` is required but was not set" },
+                checkNotNull(city) { "`city` is required but was not set" },
+                checkNotNull(country) { "`country` is required but was not set" },
+                checkNotNull(name) { "`name` is required but was not set" },
+                checkNotNull(street1) { "`street1` is required but was not set" },
+                checkNotNull(zip) { "`zip` is required but was not set" },
                 phone,
                 province,
                 street2,

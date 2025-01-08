@@ -29,7 +29,7 @@ private constructor(
     fun data(): List<Card> = data.getRequired("data")
 
     /** List of cards associated with the user. */
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<Card>> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -53,11 +53,11 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<List<Card>> = JsonMissing.of()
+        private var data: JsonField<MutableList<Card>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(cardListResponse: CardListResponse) = apply {
-            data = cardListResponse.data
+            data = cardListResponse.data.map { it.toMutableList() }
             additionalProperties = cardListResponse.additionalProperties.toMutableMap()
         }
 
@@ -65,7 +65,21 @@ private constructor(
         fun data(data: List<Card>) = data(JsonField.of(data))
 
         /** List of cards associated with the user. */
-        fun data(data: JsonField<List<Card>>) = apply { this.data = data }
+        fun data(data: JsonField<List<Card>>) = apply {
+            this.data = data.map { it.toMutableList() }
+        }
+
+        /** List of cards associated with the user. */
+        fun addData(data: Card) = apply {
+            this.data =
+                (this.data ?: JsonField.of(mutableListOf())).apply {
+                    (asKnown()
+                            ?: throw IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            ))
+                        .add(data)
+                }
+        }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -87,7 +101,11 @@ private constructor(
         }
 
         fun build(): CardListResponse =
-            CardListResponse(data.map { it.toImmutable() }, additionalProperties.toImmutable())
+            CardListResponse(
+                checkNotNull(data) { "`data` is required but was not set" }
+                    .map { it.toImmutable() },
+                additionalProperties.toImmutable()
+            )
     }
 
     override fun equals(other: Any?): Boolean {
