@@ -33,7 +33,7 @@ private constructor(
      * A personal access token used to access the Terminal API. If you leak this, expect large sums
      * of coffee to be ordered on your credit card.
      */
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Token> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -57,7 +57,7 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<Token> = JsonMissing.of()
+        private var data: JsonField<Token>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(tokenGetResponse: TokenGetResponse) = apply {
@@ -96,7 +96,11 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
-        fun build(): TokenGetResponse = TokenGetResponse(data, additionalProperties.toImmutable())
+        fun build(): TokenGetResponse =
+            TokenGetResponse(
+                checkNotNull(data) { "`data` is required but was not set" },
+                additionalProperties.toImmutable()
+            )
     }
 
     override fun equals(other: Any?): Boolean {

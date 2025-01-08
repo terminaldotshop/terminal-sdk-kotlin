@@ -29,7 +29,7 @@ private constructor(
     fun data(): List<Subscription> = data.getRequired("data")
 
     /** List of subscriptions. */
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<Subscription>> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -53,11 +53,11 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<List<Subscription>> = JsonMissing.of()
+        private var data: JsonField<MutableList<Subscription>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(subscriptionListResponse: SubscriptionListResponse) = apply {
-            data = subscriptionListResponse.data
+            data = subscriptionListResponse.data.map { it.toMutableList() }
             additionalProperties = subscriptionListResponse.additionalProperties.toMutableMap()
         }
 
@@ -65,7 +65,21 @@ private constructor(
         fun data(data: List<Subscription>) = data(JsonField.of(data))
 
         /** List of subscriptions. */
-        fun data(data: JsonField<List<Subscription>>) = apply { this.data = data }
+        fun data(data: JsonField<List<Subscription>>) = apply {
+            this.data = data.map { it.toMutableList() }
+        }
+
+        /** List of subscriptions. */
+        fun addData(data: Subscription) = apply {
+            this.data =
+                (this.data ?: JsonField.of(mutableListOf())).apply {
+                    (asKnown()
+                            ?: throw IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            ))
+                        .add(data)
+                }
+        }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -88,7 +102,8 @@ private constructor(
 
         fun build(): SubscriptionListResponse =
             SubscriptionListResponse(
-                data.map { it.toImmutable() },
+                checkNotNull(data) { "`data` is required but was not set" }
+                    .map { it.toImmutable() },
                 additionalProperties.toImmutable()
             )
     }

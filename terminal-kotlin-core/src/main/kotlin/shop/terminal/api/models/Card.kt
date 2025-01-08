@@ -42,16 +42,18 @@ private constructor(
     fun last4(): String = last4.getRequired("last4")
 
     /** Unique object identifier. The format and length of IDs may change over time. */
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
     /** Brand of the card. */
-    @JsonProperty("brand") @ExcludeMissing fun _brand() = brand
+    @JsonProperty("brand") @ExcludeMissing fun _brand(): JsonField<String> = brand
 
     /** Expiration of the card. */
-    @JsonProperty("expiration") @ExcludeMissing fun _expiration() = expiration
+    @JsonProperty("expiration")
+    @ExcludeMissing
+    fun _expiration(): JsonField<Expiration> = expiration
 
     /** Last four digits of the card. */
-    @JsonProperty("last4") @ExcludeMissing fun _last4() = last4
+    @JsonProperty("last4") @ExcludeMissing fun _last4(): JsonField<String> = last4
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -78,10 +80,10 @@ private constructor(
 
     class Builder {
 
-        private var id: JsonField<String> = JsonMissing.of()
-        private var brand: JsonField<String> = JsonMissing.of()
-        private var expiration: JsonField<Expiration> = JsonMissing.of()
-        private var last4: JsonField<String> = JsonMissing.of()
+        private var id: JsonField<String>? = null
+        private var brand: JsonField<String>? = null
+        private var expiration: JsonField<Expiration>? = null
+        private var last4: JsonField<String>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(card: Card) = apply {
@@ -137,10 +139,10 @@ private constructor(
 
         fun build(): Card =
             Card(
-                id,
-                brand,
-                expiration,
-                last4,
+                checkNotNull(id) { "`id` is required but was not set" },
+                checkNotNull(brand) { "`brand` is required but was not set" },
+                checkNotNull(expiration) { "`expiration` is required but was not set" },
+                checkNotNull(last4) { "`last4` is required but was not set" },
                 additionalProperties.toImmutable(),
             )
     }
@@ -165,10 +167,10 @@ private constructor(
         fun year(): Long = year.getRequired("year")
 
         /** Expiration month of the card. */
-        @JsonProperty("month") @ExcludeMissing fun _month() = month
+        @JsonProperty("month") @ExcludeMissing fun _month(): JsonField<Long> = month
 
         /** Expiration year of the card. */
-        @JsonProperty("year") @ExcludeMissing fun _year() = year
+        @JsonProperty("year") @ExcludeMissing fun _year(): JsonField<Long> = year
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -193,8 +195,8 @@ private constructor(
 
         class Builder {
 
-            private var month: JsonField<Long> = JsonMissing.of()
-            private var year: JsonField<Long> = JsonMissing.of()
+            private var month: JsonField<Long>? = null
+            private var year: JsonField<Long>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(expiration: Expiration) = apply {
@@ -236,8 +238,8 @@ private constructor(
 
             fun build(): Expiration =
                 Expiration(
-                    month,
-                    year,
+                    checkNotNull(month) { "`month` is required but was not set" },
+                    checkNotNull(year) { "`year` is required but was not set" },
                     additionalProperties.toImmutable(),
                 )
         }

@@ -38,13 +38,13 @@ private constructor(
     fun redirectUri(): String = redirectUri.getRequired("redirectURI")
 
     /** Unique object identifier. The format and length of IDs may change over time. */
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
     /** Name of the app. */
-    @JsonProperty("name") @ExcludeMissing fun _name() = name
+    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
     /** Redirect URI of the app. */
-    @JsonProperty("redirectURI") @ExcludeMissing fun _redirectUri() = redirectUri
+    @JsonProperty("redirectURI") @ExcludeMissing fun _redirectUri(): JsonField<String> = redirectUri
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -70,9 +70,9 @@ private constructor(
 
     class Builder {
 
-        private var id: JsonField<String> = JsonMissing.of()
-        private var name: JsonField<String> = JsonMissing.of()
-        private var redirectUri: JsonField<String> = JsonMissing.of()
+        private var id: JsonField<String>? = null
+        private var name: JsonField<String>? = null
+        private var redirectUri: JsonField<String>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(app: App) = apply {
@@ -121,9 +121,9 @@ private constructor(
 
         fun build(): App =
             App(
-                id,
-                name,
-                redirectUri,
+                checkNotNull(id) { "`id` is required but was not set" },
+                checkNotNull(name) { "`name` is required but was not set" },
+                checkNotNull(redirectUri) { "`redirectUri` is required but was not set" },
                 additionalProperties.toImmutable(),
             )
     }

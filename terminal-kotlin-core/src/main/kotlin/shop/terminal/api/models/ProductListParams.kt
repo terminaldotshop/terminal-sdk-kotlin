@@ -7,6 +7,7 @@ import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 
+/** List all products for sale in the Terminal shop. */
 class ProductListParams
 constructor(
     private val additionalHeaders: Headers,

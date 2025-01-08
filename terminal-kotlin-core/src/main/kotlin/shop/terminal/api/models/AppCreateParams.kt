@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Objects
 import shop.terminal.api.core.ExcludeMissing
+import shop.terminal.api.core.JsonField
+import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.http.Headers
@@ -15,6 +17,7 @@ import shop.terminal.api.core.http.QueryParams
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
+/** Create an app. */
 class AppCreateParams
 constructor(
     private val body: AppCreateBody,
@@ -31,11 +34,20 @@ constructor(
     /** Redirect URI of the app. */
     fun redirectUri(): String = body.redirectUri()
 
+    /** Unique object identifier. The format and length of IDs may change over time. */
+    fun _id(): JsonField<String> = body._id()
+
+    /** Name of the app. */
+    fun _name(): JsonField<String> = body._name()
+
+    /** Redirect URI of the app. */
+    fun _redirectUri(): JsonField<String> = body._redirectUri()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     internal fun getBody(): AppCreateBody = body
 
@@ -48,25 +60,51 @@ constructor(
     class AppCreateBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("id") private val id: String,
-        @JsonProperty("name") private val name: String,
-        @JsonProperty("redirectURI") private val redirectUri: String,
+        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("redirectURI")
+        @ExcludeMissing
+        private val redirectUri: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** Unique object identifier. The format and length of IDs may change over time. */
-        @JsonProperty("id") fun id(): String = id
+        fun id(): String = id.getRequired("id")
 
         /** Name of the app. */
-        @JsonProperty("name") fun name(): String = name
+        fun name(): String = name.getRequired("name")
 
         /** Redirect URI of the app. */
-        @JsonProperty("redirectURI") fun redirectUri(): String = redirectUri
+        fun redirectUri(): String = redirectUri.getRequired("redirectURI")
+
+        /** Unique object identifier. The format and length of IDs may change over time. */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        /** Name of the app. */
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+        /** Redirect URI of the app. */
+        @JsonProperty("redirectURI")
+        @ExcludeMissing
+        fun _redirectUri(): JsonField<String> = redirectUri
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): AppCreateBody = apply {
+            if (!validated) {
+                id()
+                name()
+                redirectUri()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -77,9 +115,9 @@ constructor(
 
         class Builder {
 
-            private var id: String? = null
-            private var name: String? = null
-            private var redirectUri: String? = null
+            private var id: JsonField<String>? = null
+            private var name: JsonField<String>? = null
+            private var redirectUri: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(appCreateBody: AppCreateBody) = apply {
@@ -90,13 +128,24 @@ constructor(
             }
 
             /** Unique object identifier. The format and length of IDs may change over time. */
-            fun id(id: String) = apply { this.id = id }
+            fun id(id: String) = id(JsonField.of(id))
+
+            /** Unique object identifier. The format and length of IDs may change over time. */
+            fun id(id: JsonField<String>) = apply { this.id = id }
 
             /** Name of the app. */
-            fun name(name: String) = apply { this.name = name }
+            fun name(name: String) = name(JsonField.of(name))
+
+            /** Name of the app. */
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
             /** Redirect URI of the app. */
-            fun redirectUri(redirectUri: String) = apply { this.redirectUri = redirectUri }
+            fun redirectUri(redirectUri: String) = redirectUri(JsonField.of(redirectUri))
+
+            /** Redirect URI of the app. */
+            fun redirectUri(redirectUri: JsonField<String>) = apply {
+                this.redirectUri = redirectUri
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -167,11 +216,39 @@ constructor(
         /** Unique object identifier. The format and length of IDs may change over time. */
         fun id(id: String) = apply { body.id(id) }
 
+        /** Unique object identifier. The format and length of IDs may change over time. */
+        fun id(id: JsonField<String>) = apply { body.id(id) }
+
         /** Name of the app. */
         fun name(name: String) = apply { body.name(name) }
 
+        /** Name of the app. */
+        fun name(name: JsonField<String>) = apply { body.name(name) }
+
         /** Redirect URI of the app. */
         fun redirectUri(redirectUri: String) = apply { body.redirectUri(redirectUri) }
+
+        /** Redirect URI of the app. */
+        fun redirectUri(redirectUri: JsonField<String>) = apply { body.redirectUri(redirectUri) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -269,25 +346,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): AppCreateParams =

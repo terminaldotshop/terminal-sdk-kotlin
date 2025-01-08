@@ -7,6 +7,7 @@ import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 
+/** List the current user's registered apps. */
 class AppListParams
 constructor(
     private val additionalHeaders: Headers,

@@ -60,25 +60,29 @@ private constructor(
     fun tags(): Tags? = tags.getNullable("tags")
 
     /** Unique object identifier. The format and length of IDs may change over time. */
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
     /** Description of the product. */
-    @JsonProperty("description") @ExcludeMissing fun _description() = description
+    @JsonProperty("description") @ExcludeMissing fun _description(): JsonField<String> = description
 
     /** Name of the product. */
-    @JsonProperty("name") @ExcludeMissing fun _name() = name
+    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
     /** List of variants of the product. */
-    @JsonProperty("variants") @ExcludeMissing fun _variants() = variants
+    @JsonProperty("variants")
+    @ExcludeMissing
+    fun _variants(): JsonField<List<ProductVariant>> = variants
 
     /** Order of the product used when displaying a sorted list of products. */
-    @JsonProperty("order") @ExcludeMissing fun _order() = order
+    @JsonProperty("order") @ExcludeMissing fun _order(): JsonField<Long> = order
 
     /** Whether the product must be or can be subscribed to. */
-    @JsonProperty("subscription") @ExcludeMissing fun _subscription() = subscription
+    @JsonProperty("subscription")
+    @ExcludeMissing
+    fun _subscription(): JsonField<Subscription> = subscription
 
     /** Tags for the product. */
-    @JsonProperty("tags") @ExcludeMissing fun _tags() = tags
+    @JsonProperty("tags") @ExcludeMissing fun _tags(): JsonField<Tags> = tags
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -108,10 +112,10 @@ private constructor(
 
     class Builder {
 
-        private var id: JsonField<String> = JsonMissing.of()
-        private var description: JsonField<String> = JsonMissing.of()
-        private var name: JsonField<String> = JsonMissing.of()
-        private var variants: JsonField<List<ProductVariant>> = JsonMissing.of()
+        private var id: JsonField<String>? = null
+        private var description: JsonField<String>? = null
+        private var name: JsonField<String>? = null
+        private var variants: JsonField<MutableList<ProductVariant>>? = null
         private var order: JsonField<Long> = JsonMissing.of()
         private var subscription: JsonField<Subscription> = JsonMissing.of()
         private var tags: JsonField<Tags> = JsonMissing.of()
@@ -121,7 +125,7 @@ private constructor(
             id = product.id
             description = product.description
             name = product.name
-            variants = product.variants
+            variants = product.variants.map { it.toMutableList() }
             order = product.order
             subscription = product.subscription
             tags = product.tags
@@ -150,7 +154,21 @@ private constructor(
         fun variants(variants: List<ProductVariant>) = variants(JsonField.of(variants))
 
         /** List of variants of the product. */
-        fun variants(variants: JsonField<List<ProductVariant>>) = apply { this.variants = variants }
+        fun variants(variants: JsonField<List<ProductVariant>>) = apply {
+            this.variants = variants.map { it.toMutableList() }
+        }
+
+        /** List of variants of the product. */
+        fun addVariant(variant: ProductVariant) = apply {
+            variants =
+                (variants ?: JsonField.of(mutableListOf())).apply {
+                    (asKnown()
+                            ?: throw IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            ))
+                        .add(variant)
+                }
+        }
 
         /** Order of the product used when displaying a sorted list of products. */
         fun order(order: Long) = order(JsonField.of(order))
@@ -193,10 +211,11 @@ private constructor(
 
         fun build(): Product =
             Product(
-                id,
-                description,
-                name,
-                variants.map { it.toImmutable() },
+                checkNotNull(id) { "`id` is required but was not set" },
+                checkNotNull(description) { "`description` is required but was not set" },
+                checkNotNull(name) { "`name` is required but was not set" },
+                checkNotNull(variants) { "`variants` is required but was not set" }
+                    .map { it.toImmutable() },
                 order,
                 subscription,
                 tags,

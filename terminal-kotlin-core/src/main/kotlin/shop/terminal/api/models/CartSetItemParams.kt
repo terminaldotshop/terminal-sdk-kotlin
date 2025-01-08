@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Objects
 import shop.terminal.api.core.ExcludeMissing
+import shop.terminal.api.core.JsonField
+import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.http.Headers
@@ -15,6 +17,7 @@ import shop.terminal.api.core.http.QueryParams
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
+/** Add an item to the current user's cart. */
 class CartSetItemParams
 constructor(
     private val body: CartSetItemBody,
@@ -28,11 +31,17 @@ constructor(
     /** Quantity of the item to add to the cart. */
     fun quantity(): Long = body.quantity()
 
+    /** ID of the product variant to add to the cart. */
+    fun _productVariantId(): JsonField<String> = body._productVariantId()
+
+    /** Quantity of the item to add to the cart. */
+    fun _quantity(): JsonField<Long> = body._quantity()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     internal fun getBody(): CartSetItemBody = body
 
@@ -44,21 +53,43 @@ constructor(
     class CartSetItemBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("productVariantID") private val productVariantId: String,
-        @JsonProperty("quantity") private val quantity: Long,
+        @JsonProperty("productVariantID")
+        @ExcludeMissing
+        private val productVariantId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("quantity")
+        @ExcludeMissing
+        private val quantity: JsonField<Long> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** ID of the product variant to add to the cart. */
-        @JsonProperty("productVariantID") fun productVariantId(): String = productVariantId
+        fun productVariantId(): String = productVariantId.getRequired("productVariantID")
 
         /** Quantity of the item to add to the cart. */
-        @JsonProperty("quantity") fun quantity(): Long = quantity
+        fun quantity(): Long = quantity.getRequired("quantity")
+
+        /** ID of the product variant to add to the cart. */
+        @JsonProperty("productVariantID")
+        @ExcludeMissing
+        fun _productVariantId(): JsonField<String> = productVariantId
+
+        /** Quantity of the item to add to the cart. */
+        @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Long> = quantity
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CartSetItemBody = apply {
+            if (!validated) {
+                productVariantId()
+                quantity()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -69,8 +100,8 @@ constructor(
 
         class Builder {
 
-            private var productVariantId: String? = null
-            private var quantity: Long? = null
+            private var productVariantId: JsonField<String>? = null
+            private var quantity: JsonField<Long>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(cartSetItemBody: CartSetItemBody) = apply {
@@ -80,12 +111,19 @@ constructor(
             }
 
             /** ID of the product variant to add to the cart. */
-            fun productVariantId(productVariantId: String) = apply {
+            fun productVariantId(productVariantId: String) =
+                productVariantId(JsonField.of(productVariantId))
+
+            /** ID of the product variant to add to the cart. */
+            fun productVariantId(productVariantId: JsonField<String>) = apply {
                 this.productVariantId = productVariantId
             }
 
             /** Quantity of the item to add to the cart. */
-            fun quantity(quantity: Long) = apply { this.quantity = quantity }
+            fun quantity(quantity: Long) = quantity(JsonField.of(quantity))
+
+            /** Quantity of the item to add to the cart. */
+            fun quantity(quantity: JsonField<Long>) = apply { this.quantity = quantity }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -159,8 +197,35 @@ constructor(
             body.productVariantId(productVariantId)
         }
 
+        /** ID of the product variant to add to the cart. */
+        fun productVariantId(productVariantId: JsonField<String>) = apply {
+            body.productVariantId(productVariantId)
+        }
+
         /** Quantity of the item to add to the cart. */
         fun quantity(quantity: Long) = apply { body.quantity(quantity) }
+
+        /** Quantity of the item to add to the cart. */
+        fun quantity(quantity: JsonField<Long>) = apply { body.quantity(quantity) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -258,25 +323,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CartSetItemParams =

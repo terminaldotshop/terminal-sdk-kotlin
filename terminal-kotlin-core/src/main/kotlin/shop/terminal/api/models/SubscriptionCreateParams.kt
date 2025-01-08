@@ -10,6 +10,7 @@ import java.util.Objects
 import shop.terminal.api.core.Enum
 import shop.terminal.api.core.ExcludeMissing
 import shop.terminal.api.core.JsonField
+import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.http.Headers
@@ -18,6 +19,7 @@ import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 import shop.terminal.api.errors.TerminalInvalidDataException
 
+/** Create a subscription for the current user. */
 class SubscriptionCreateParams
 constructor(
     private val body: SubscriptionCreateBody,
@@ -43,11 +45,29 @@ constructor(
     /** Quantity of the subscription. */
     fun quantity(): Long = body.quantity()
 
+    /** Unique object identifier. The format and length of IDs may change over time. */
+    fun _id(): JsonField<String> = body._id()
+
+    /** ID of the shipping address used for the subscription. */
+    fun _addressId(): JsonField<String> = body._addressId()
+
+    /** ID of the card used for the subscription. */
+    fun _cardId(): JsonField<String> = body._cardId()
+
+    /** Frequency of the subscription. */
+    fun _frequency(): JsonField<Frequency> = body._frequency()
+
+    /** ID of the product variant being subscribed to. */
+    fun _productVariantId(): JsonField<String> = body._productVariantId()
+
+    /** Quantity of the subscription. */
+    fun _quantity(): JsonField<Long> = body._quantity()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     internal fun getBody(): SubscriptionCreateBody = body
 
@@ -60,37 +80,83 @@ constructor(
     class SubscriptionCreateBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("id") private val id: String,
-        @JsonProperty("addressID") private val addressId: String,
-        @JsonProperty("cardID") private val cardId: String,
-        @JsonProperty("frequency") private val frequency: Frequency,
-        @JsonProperty("productVariantID") private val productVariantId: String,
-        @JsonProperty("quantity") private val quantity: Long,
+        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("addressID")
+        @ExcludeMissing
+        private val addressId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("cardID")
+        @ExcludeMissing
+        private val cardId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("frequency")
+        @ExcludeMissing
+        private val frequency: JsonField<Frequency> = JsonMissing.of(),
+        @JsonProperty("productVariantID")
+        @ExcludeMissing
+        private val productVariantId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("quantity")
+        @ExcludeMissing
+        private val quantity: JsonField<Long> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** Unique object identifier. The format and length of IDs may change over time. */
-        @JsonProperty("id") fun id(): String = id
+        fun id(): String = id.getRequired("id")
 
         /** ID of the shipping address used for the subscription. */
-        @JsonProperty("addressID") fun addressId(): String = addressId
+        fun addressId(): String = addressId.getRequired("addressID")
 
         /** ID of the card used for the subscription. */
-        @JsonProperty("cardID") fun cardId(): String = cardId
+        fun cardId(): String = cardId.getRequired("cardID")
 
         /** Frequency of the subscription. */
-        @JsonProperty("frequency") fun frequency(): Frequency = frequency
+        fun frequency(): Frequency = frequency.getRequired("frequency")
 
         /** ID of the product variant being subscribed to. */
-        @JsonProperty("productVariantID") fun productVariantId(): String = productVariantId
+        fun productVariantId(): String = productVariantId.getRequired("productVariantID")
 
         /** Quantity of the subscription. */
-        @JsonProperty("quantity") fun quantity(): Long = quantity
+        fun quantity(): Long = quantity.getRequired("quantity")
+
+        /** Unique object identifier. The format and length of IDs may change over time. */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        /** ID of the shipping address used for the subscription. */
+        @JsonProperty("addressID") @ExcludeMissing fun _addressId(): JsonField<String> = addressId
+
+        /** ID of the card used for the subscription. */
+        @JsonProperty("cardID") @ExcludeMissing fun _cardId(): JsonField<String> = cardId
+
+        /** Frequency of the subscription. */
+        @JsonProperty("frequency")
+        @ExcludeMissing
+        fun _frequency(): JsonField<Frequency> = frequency
+
+        /** ID of the product variant being subscribed to. */
+        @JsonProperty("productVariantID")
+        @ExcludeMissing
+        fun _productVariantId(): JsonField<String> = productVariantId
+
+        /** Quantity of the subscription. */
+        @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Long> = quantity
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): SubscriptionCreateBody = apply {
+            if (!validated) {
+                id()
+                addressId()
+                cardId()
+                frequency()
+                productVariantId()
+                quantity()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -101,12 +167,12 @@ constructor(
 
         class Builder {
 
-            private var id: String? = null
-            private var addressId: String? = null
-            private var cardId: String? = null
-            private var frequency: Frequency? = null
-            private var productVariantId: String? = null
-            private var quantity: Long? = null
+            private var id: JsonField<String>? = null
+            private var addressId: JsonField<String>? = null
+            private var cardId: JsonField<String>? = null
+            private var frequency: JsonField<Frequency>? = null
+            private var productVariantId: JsonField<String>? = null
+            private var quantity: JsonField<Long>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(subscriptionCreateBody: SubscriptionCreateBody) = apply {
@@ -120,24 +186,43 @@ constructor(
             }
 
             /** Unique object identifier. The format and length of IDs may change over time. */
-            fun id(id: String) = apply { this.id = id }
+            fun id(id: String) = id(JsonField.of(id))
+
+            /** Unique object identifier. The format and length of IDs may change over time. */
+            fun id(id: JsonField<String>) = apply { this.id = id }
 
             /** ID of the shipping address used for the subscription. */
-            fun addressId(addressId: String) = apply { this.addressId = addressId }
+            fun addressId(addressId: String) = addressId(JsonField.of(addressId))
+
+            /** ID of the shipping address used for the subscription. */
+            fun addressId(addressId: JsonField<String>) = apply { this.addressId = addressId }
 
             /** ID of the card used for the subscription. */
-            fun cardId(cardId: String) = apply { this.cardId = cardId }
+            fun cardId(cardId: String) = cardId(JsonField.of(cardId))
+
+            /** ID of the card used for the subscription. */
+            fun cardId(cardId: JsonField<String>) = apply { this.cardId = cardId }
 
             /** Frequency of the subscription. */
-            fun frequency(frequency: Frequency) = apply { this.frequency = frequency }
+            fun frequency(frequency: Frequency) = frequency(JsonField.of(frequency))
+
+            /** Frequency of the subscription. */
+            fun frequency(frequency: JsonField<Frequency>) = apply { this.frequency = frequency }
 
             /** ID of the product variant being subscribed to. */
-            fun productVariantId(productVariantId: String) = apply {
+            fun productVariantId(productVariantId: String) =
+                productVariantId(JsonField.of(productVariantId))
+
+            /** ID of the product variant being subscribed to. */
+            fun productVariantId(productVariantId: JsonField<String>) = apply {
                 this.productVariantId = productVariantId
             }
 
             /** Quantity of the subscription. */
-            fun quantity(quantity: Long) = apply { this.quantity = quantity }
+            fun quantity(quantity: Long) = quantity(JsonField.of(quantity))
+
+            /** Quantity of the subscription. */
+            fun quantity(quantity: JsonField<Long>) = apply { this.quantity = quantity }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -213,22 +298,61 @@ constructor(
         /** Unique object identifier. The format and length of IDs may change over time. */
         fun id(id: String) = apply { body.id(id) }
 
+        /** Unique object identifier. The format and length of IDs may change over time. */
+        fun id(id: JsonField<String>) = apply { body.id(id) }
+
         /** ID of the shipping address used for the subscription. */
         fun addressId(addressId: String) = apply { body.addressId(addressId) }
+
+        /** ID of the shipping address used for the subscription. */
+        fun addressId(addressId: JsonField<String>) = apply { body.addressId(addressId) }
 
         /** ID of the card used for the subscription. */
         fun cardId(cardId: String) = apply { body.cardId(cardId) }
 
+        /** ID of the card used for the subscription. */
+        fun cardId(cardId: JsonField<String>) = apply { body.cardId(cardId) }
+
         /** Frequency of the subscription. */
         fun frequency(frequency: Frequency) = apply { body.frequency(frequency) }
+
+        /** Frequency of the subscription. */
+        fun frequency(frequency: JsonField<Frequency>) = apply { body.frequency(frequency) }
 
         /** ID of the product variant being subscribed to. */
         fun productVariantId(productVariantId: String) = apply {
             body.productVariantId(productVariantId)
         }
 
+        /** ID of the product variant being subscribed to. */
+        fun productVariantId(productVariantId: JsonField<String>) = apply {
+            body.productVariantId(productVariantId)
+        }
+
         /** Quantity of the subscription. */
         fun quantity(quantity: Long) = apply { body.quantity(quantity) }
+
+        /** Quantity of the subscription. */
+        fun quantity(quantity: JsonField<Long>) = apply { body.quantity(quantity) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -326,25 +450,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): SubscriptionCreateParams =

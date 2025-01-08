@@ -27,7 +27,7 @@ private constructor(
     fun data(): Order = data.getRequired("data")
 
     /** An order from the Terminal shop. */
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Order> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -51,7 +51,7 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<Order> = JsonMissing.of()
+        private var data: JsonField<Order>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(orderGetResponse: OrderGetResponse) = apply {
@@ -84,7 +84,11 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
-        fun build(): OrderGetResponse = OrderGetResponse(data, additionalProperties.toImmutable())
+        fun build(): OrderGetResponse =
+            OrderGetResponse(
+                checkNotNull(data) { "`data` is required but was not set" },
+                additionalProperties.toImmutable()
+            )
     }
 
     override fun equals(other: Any?): Boolean {
