@@ -9,6 +9,7 @@ import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 import shop.terminal.api.core.toImmutable
 
+/** Cancel a subscription for the current user. */
 class SubscriptionDeleteParams
 constructor(
     private val id: String,

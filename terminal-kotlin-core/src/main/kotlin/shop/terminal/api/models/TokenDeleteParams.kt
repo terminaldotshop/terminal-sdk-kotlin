@@ -9,6 +9,7 @@ import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 import shop.terminal.api.core.toImmutable
 
+/** Delete the personal access token with the given ID. */
 class TokenDeleteParams
 constructor(
     private val id: String,

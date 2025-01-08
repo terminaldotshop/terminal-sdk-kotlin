@@ -9,6 +9,7 @@ import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 import shop.terminal.api.core.toImmutable
 
+/** Create a personal access token. */
 class TokenCreateParams
 constructor(
     private val additionalHeaders: Headers,

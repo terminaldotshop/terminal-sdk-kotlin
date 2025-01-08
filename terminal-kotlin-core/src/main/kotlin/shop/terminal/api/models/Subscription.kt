@@ -60,22 +60,24 @@ private constructor(
     fun quantity(): Long = quantity.getRequired("quantity")
 
     /** Unique object identifier. The format and length of IDs may change over time. */
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
     /** ID of the shipping address used for the subscription. */
-    @JsonProperty("addressID") @ExcludeMissing fun _addressId() = addressId
+    @JsonProperty("addressID") @ExcludeMissing fun _addressId(): JsonField<String> = addressId
 
     /** ID of the card used for the subscription. */
-    @JsonProperty("cardID") @ExcludeMissing fun _cardId() = cardId
+    @JsonProperty("cardID") @ExcludeMissing fun _cardId(): JsonField<String> = cardId
 
     /** Frequency of the subscription. */
-    @JsonProperty("frequency") @ExcludeMissing fun _frequency() = frequency
+    @JsonProperty("frequency") @ExcludeMissing fun _frequency(): JsonField<Frequency> = frequency
 
     /** ID of the product variant being subscribed to. */
-    @JsonProperty("productVariantID") @ExcludeMissing fun _productVariantId() = productVariantId
+    @JsonProperty("productVariantID")
+    @ExcludeMissing
+    fun _productVariantId(): JsonField<String> = productVariantId
 
     /** Quantity of the subscription. */
-    @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
+    @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Long> = quantity
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -104,12 +106,12 @@ private constructor(
 
     class Builder {
 
-        private var id: JsonField<String> = JsonMissing.of()
-        private var addressId: JsonField<String> = JsonMissing.of()
-        private var cardId: JsonField<String> = JsonMissing.of()
-        private var frequency: JsonField<Frequency> = JsonMissing.of()
-        private var productVariantId: JsonField<String> = JsonMissing.of()
-        private var quantity: JsonField<Long> = JsonMissing.of()
+        private var id: JsonField<String>? = null
+        private var addressId: JsonField<String>? = null
+        private var cardId: JsonField<String>? = null
+        private var frequency: JsonField<Frequency>? = null
+        private var productVariantId: JsonField<String>? = null
+        private var quantity: JsonField<Long>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(subscription: Subscription) = apply {
@@ -182,12 +184,12 @@ private constructor(
 
         fun build(): Subscription =
             Subscription(
-                id,
-                addressId,
-                cardId,
-                frequency,
-                productVariantId,
-                quantity,
+                checkNotNull(id) { "`id` is required but was not set" },
+                checkNotNull(addressId) { "`addressId` is required but was not set" },
+                checkNotNull(cardId) { "`cardId` is required but was not set" },
+                checkNotNull(frequency) { "`frequency` is required but was not set" },
+                checkNotNull(productVariantId) { "`productVariantId` is required but was not set" },
+                checkNotNull(quantity) { "`quantity` is required but was not set" },
                 additionalProperties.toImmutable(),
             )
     }

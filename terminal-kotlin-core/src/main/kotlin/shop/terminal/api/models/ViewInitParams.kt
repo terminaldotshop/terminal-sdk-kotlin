@@ -7,6 +7,10 @@ import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 
+/**
+ * Get initial app data, including user, products, cart, addresses, cards, subscriptions, and
+ * orders.
+ */
 class ViewInitParams
 constructor(
     private val additionalHeaders: Headers,

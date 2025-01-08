@@ -60,22 +60,22 @@ private constructor(
     fun shipping(): Shipping? = shipping.getNullable("shipping")
 
     /** The subtotal and shipping amounts for the current user's cart. */
-    @JsonProperty("amount") @ExcludeMissing fun _amount() = amount
+    @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Amount> = amount
 
     /** An array of items in the current user's cart. */
-    @JsonProperty("items") @ExcludeMissing fun _items() = items
+    @JsonProperty("items") @ExcludeMissing fun _items(): JsonField<List<Item>> = items
 
     /** The subtotal of all items in the current user's cart, in cents (USD). */
-    @JsonProperty("subtotal") @ExcludeMissing fun _subtotal() = subtotal
+    @JsonProperty("subtotal") @ExcludeMissing fun _subtotal(): JsonField<Long> = subtotal
 
     /** ID of the shipping address selected on the current user's cart. */
-    @JsonProperty("addressID") @ExcludeMissing fun _addressId() = addressId
+    @JsonProperty("addressID") @ExcludeMissing fun _addressId(): JsonField<String> = addressId
 
     /** ID of the card selected on the current user's cart. */
-    @JsonProperty("cardID") @ExcludeMissing fun _cardId() = cardId
+    @JsonProperty("cardID") @ExcludeMissing fun _cardId(): JsonField<String> = cardId
 
     /** Shipping information for the current user's cart. */
-    @JsonProperty("shipping") @ExcludeMissing fun _shipping() = shipping
+    @JsonProperty("shipping") @ExcludeMissing fun _shipping(): JsonField<Shipping> = shipping
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -104,9 +104,9 @@ private constructor(
 
     class Builder {
 
-        private var amount: JsonField<Amount> = JsonMissing.of()
-        private var items: JsonField<List<Item>> = JsonMissing.of()
-        private var subtotal: JsonField<Long> = JsonMissing.of()
+        private var amount: JsonField<Amount>? = null
+        private var items: JsonField<MutableList<Item>>? = null
+        private var subtotal: JsonField<Long>? = null
         private var addressId: JsonField<String> = JsonMissing.of()
         private var cardId: JsonField<String> = JsonMissing.of()
         private var shipping: JsonField<Shipping> = JsonMissing.of()
@@ -114,7 +114,7 @@ private constructor(
 
         internal fun from(cart: Cart) = apply {
             amount = cart.amount
-            items = cart.items
+            items = cart.items.map { it.toMutableList() }
             subtotal = cart.subtotal
             addressId = cart.addressId
             cardId = cart.cardId
@@ -132,7 +132,21 @@ private constructor(
         fun items(items: List<Item>) = items(JsonField.of(items))
 
         /** An array of items in the current user's cart. */
-        fun items(items: JsonField<List<Item>>) = apply { this.items = items }
+        fun items(items: JsonField<List<Item>>) = apply {
+            this.items = items.map { it.toMutableList() }
+        }
+
+        /** An array of items in the current user's cart. */
+        fun addItem(item: Item) = apply {
+            items =
+                (items ?: JsonField.of(mutableListOf())).apply {
+                    (asKnown()
+                            ?: throw IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            ))
+                        .add(item)
+                }
+        }
 
         /** The subtotal of all items in the current user's cart, in cents (USD). */
         fun subtotal(subtotal: Long) = subtotal(JsonField.of(subtotal))
@@ -179,9 +193,10 @@ private constructor(
 
         fun build(): Cart =
             Cart(
-                amount,
-                items.map { it.toImmutable() },
-                subtotal,
+                checkNotNull(amount) { "`amount` is required but was not set" },
+                checkNotNull(items) { "`items` is required but was not set" }
+                    .map { it.toImmutable() },
+                checkNotNull(subtotal) { "`subtotal` is required but was not set" },
                 addressId,
                 cardId,
                 shipping,
@@ -211,10 +226,10 @@ private constructor(
         fun shipping(): Long? = shipping.getNullable("shipping")
 
         /** Subtotal of the current user's cart, in cents (USD). */
-        @JsonProperty("subtotal") @ExcludeMissing fun _subtotal() = subtotal
+        @JsonProperty("subtotal") @ExcludeMissing fun _subtotal(): JsonField<Long> = subtotal
 
         /** Shipping amount of the current user's cart, in cents (USD). */
-        @JsonProperty("shipping") @ExcludeMissing fun _shipping() = shipping
+        @JsonProperty("shipping") @ExcludeMissing fun _shipping(): JsonField<Long> = shipping
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -239,7 +254,7 @@ private constructor(
 
         class Builder {
 
-            private var subtotal: JsonField<Long> = JsonMissing.of()
+            private var subtotal: JsonField<Long>? = null
             private var shipping: JsonField<Long> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -282,7 +297,7 @@ private constructor(
 
             fun build(): Amount =
                 Amount(
-                    subtotal,
+                    checkNotNull(subtotal) { "`subtotal` is required but was not set" },
                     shipping,
                     additionalProperties.toImmutable(),
                 )
@@ -338,16 +353,18 @@ private constructor(
         fun subtotal(): Long = subtotal.getRequired("subtotal")
 
         /** Unique object identifier. The format and length of IDs may change over time. */
-        @JsonProperty("id") @ExcludeMissing fun _id() = id
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
         /** ID of the product variant for this item in the current user's cart. */
-        @JsonProperty("productVariantID") @ExcludeMissing fun _productVariantId() = productVariantId
+        @JsonProperty("productVariantID")
+        @ExcludeMissing
+        fun _productVariantId(): JsonField<String> = productVariantId
 
         /** Quantity of the item in the current user's cart. */
-        @JsonProperty("quantity") @ExcludeMissing fun _quantity() = quantity
+        @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Long> = quantity
 
         /** Subtotal of the item in the current user's cart, in cents (USD). */
-        @JsonProperty("subtotal") @ExcludeMissing fun _subtotal() = subtotal
+        @JsonProperty("subtotal") @ExcludeMissing fun _subtotal(): JsonField<Long> = subtotal
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -374,10 +391,10 @@ private constructor(
 
         class Builder {
 
-            private var id: JsonField<String> = JsonMissing.of()
-            private var productVariantId: JsonField<String> = JsonMissing.of()
-            private var quantity: JsonField<Long> = JsonMissing.of()
-            private var subtotal: JsonField<Long> = JsonMissing.of()
+            private var id: JsonField<String>? = null
+            private var productVariantId: JsonField<String>? = null
+            private var quantity: JsonField<Long>? = null
+            private var subtotal: JsonField<Long>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(item: Item) = apply {
@@ -436,10 +453,12 @@ private constructor(
 
             fun build(): Item =
                 Item(
-                    id,
-                    productVariantId,
-                    quantity,
-                    subtotal,
+                    checkNotNull(id) { "`id` is required but was not set" },
+                    checkNotNull(productVariantId) {
+                        "`productVariantId` is required but was not set"
+                    },
+                    checkNotNull(quantity) { "`quantity` is required but was not set" },
+                    checkNotNull(subtotal) { "`subtotal` is required but was not set" },
                     additionalProperties.toImmutable(),
                 )
         }
@@ -484,10 +503,10 @@ private constructor(
         fun timeframe(): String? = timeframe.getNullable("timeframe")
 
         /** Shipping service name. */
-        @JsonProperty("service") @ExcludeMissing fun _service() = service
+        @JsonProperty("service") @ExcludeMissing fun _service(): JsonField<String> = service
 
         /** Shipping timeframe provided by the shipping carrier. */
-        @JsonProperty("timeframe") @ExcludeMissing fun _timeframe() = timeframe
+        @JsonProperty("timeframe") @ExcludeMissing fun _timeframe(): JsonField<String> = timeframe
 
         @JsonAnyGetter
         @ExcludeMissing

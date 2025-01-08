@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Objects
 import shop.terminal.api.core.ExcludeMissing
+import shop.terminal.api.core.JsonField
+import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.http.Headers
@@ -15,6 +17,7 @@ import shop.terminal.api.core.http.QueryParams
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
+/** Set the credit card for the current user's cart. */
 class CartSetCardParams
 constructor(
     private val body: CartSetCardBody,
@@ -25,11 +28,14 @@ constructor(
     /** ID of the credit card to set for the current user's cart. */
     fun cardId(): String = body.cardId()
 
+    /** ID of the credit card to set for the current user's cart. */
+    fun _cardId(): JsonField<String> = body._cardId()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     internal fun getBody(): CartSetCardBody = body
 
@@ -41,17 +47,31 @@ constructor(
     class CartSetCardBody
     @JsonCreator
     internal constructor(
-        @JsonProperty("cardID") private val cardId: String,
+        @JsonProperty("cardID")
+        @ExcludeMissing
+        private val cardId: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** ID of the credit card to set for the current user's cart. */
-        @JsonProperty("cardID") fun cardId(): String = cardId
+        fun cardId(): String = cardId.getRequired("cardID")
+
+        /** ID of the credit card to set for the current user's cart. */
+        @JsonProperty("cardID") @ExcludeMissing fun _cardId(): JsonField<String> = cardId
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): CartSetCardBody = apply {
+            if (!validated) {
+                cardId()
+                validated = true
+            }
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -62,7 +82,7 @@ constructor(
 
         class Builder {
 
-            private var cardId: String? = null
+            private var cardId: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(cartSetCardBody: CartSetCardBody) = apply {
@@ -71,7 +91,10 @@ constructor(
             }
 
             /** ID of the credit card to set for the current user's cart. */
-            fun cardId(cardId: String) = apply { this.cardId = cardId }
+            fun cardId(cardId: String) = cardId(JsonField.of(cardId))
+
+            /** ID of the credit card to set for the current user's cart. */
+            fun cardId(cardId: JsonField<String>) = apply { this.cardId = cardId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -139,6 +162,28 @@ constructor(
 
         /** ID of the credit card to set for the current user's cart. */
         fun cardId(cardId: String) = apply { body.cardId(cardId) }
+
+        /** ID of the credit card to set for the current user's cart. */
+        fun cardId(cardId: JsonField<String>) = apply { body.cardId(cardId) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -236,25 +281,6 @@ constructor(
 
         fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
             additionalQueryParams.removeAll(keys)
-        }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
         }
 
         fun build(): CartSetCardParams =

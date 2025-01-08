@@ -27,7 +27,7 @@ private constructor(
     fun data(): Cart = data.getRequired("data")
 
     /** The current Terminal shop user's cart. */
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Cart> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -51,7 +51,7 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<Cart> = JsonMissing.of()
+        private var data: JsonField<Cart>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(cartSetItemResponse: CartSetItemResponse) = apply {
@@ -85,7 +85,10 @@ private constructor(
         }
 
         fun build(): CartSetItemResponse =
-            CartSetItemResponse(data, additionalProperties.toImmutable())
+            CartSetItemResponse(
+                checkNotNull(data) { "`data` is required but was not set" },
+                additionalProperties.toImmutable()
+            )
     }
 
     override fun equals(other: Any?): Boolean {

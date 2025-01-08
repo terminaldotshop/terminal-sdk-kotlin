@@ -25,7 +25,7 @@ private constructor(
 
     fun data(): Data = data.getRequired("data")
 
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -49,7 +49,7 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<Data> = JsonMissing.of()
+        private var data: JsonField<Data>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(tokenCreateResponse: TokenCreateResponse) = apply {
@@ -81,7 +81,10 @@ private constructor(
         }
 
         fun build(): TokenCreateResponse =
-            TokenCreateResponse(data, additionalProperties.toImmutable())
+            TokenCreateResponse(
+                checkNotNull(data) { "`data` is required but was not set" },
+                additionalProperties.toImmutable()
+            )
     }
 
     @NoAutoDetect
@@ -106,13 +109,13 @@ private constructor(
         fun token(): String = token.getRequired("token")
 
         /** Personal token ID. */
-        @JsonProperty("id") @ExcludeMissing fun _id() = id
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
         /**
          * Personal access token. Include this in the Authorization header (`Bearer <token>`) when
          * accessing the Terminal API.
          */
-        @JsonProperty("token") @ExcludeMissing fun _token() = token
+        @JsonProperty("token") @ExcludeMissing fun _token(): JsonField<String> = token
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -137,8 +140,8 @@ private constructor(
 
         class Builder {
 
-            private var id: JsonField<String> = JsonMissing.of()
-            private var token: JsonField<String> = JsonMissing.of()
+            private var id: JsonField<String>? = null
+            private var token: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(data: Data) = apply {
@@ -186,8 +189,8 @@ private constructor(
 
             fun build(): Data =
                 Data(
-                    id,
-                    token,
+                    checkNotNull(id) { "`id` is required but was not set" },
+                    checkNotNull(token) { "`token` is required but was not set" },
                     additionalProperties.toImmutable(),
                 )
         }
