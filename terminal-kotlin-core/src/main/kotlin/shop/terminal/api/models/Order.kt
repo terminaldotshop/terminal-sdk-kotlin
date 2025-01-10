@@ -80,15 +80,17 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): Order = apply {
-        if (!validated) {
-            id()
-            amount().validate()
-            items().forEach { it.validate() }
-            shipping().validate()
-            tracking().validate()
-            index()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        amount().validate()
+        items().forEach { it.validate() }
+        shipping().validate()
+        tracking().validate()
+        index()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -234,11 +236,13 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Amount = apply {
-            if (!validated) {
-                shipping()
-                subtotal()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            shipping()
+            subtotal()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -379,14 +383,16 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Item = apply {
-            if (!validated) {
-                id()
-                amount()
-                quantity()
-                description()
-                productVariantId()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            amount()
+            quantity()
+            description()
+            productVariantId()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -583,17 +589,19 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Shipping = apply {
-            if (!validated) {
-                city()
-                country()
-                name()
-                street1()
-                zip()
-                phone()
-                province()
-                street2()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            city()
+            country()
+            name()
+            street1()
+            zip()
+            phone()
+            province()
+            street2()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -767,12 +775,14 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Tracking = apply {
-            if (!validated) {
-                number()
-                service()
-                url()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            number()
+            service()
+            url()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

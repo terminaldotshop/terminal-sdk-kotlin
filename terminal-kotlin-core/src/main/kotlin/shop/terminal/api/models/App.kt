@@ -53,12 +53,14 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): App = apply {
-        if (!validated) {
-            id()
-            name()
-            redirectUri()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        name()
+        redirectUri()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)

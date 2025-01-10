@@ -34,10 +34,12 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): AppCreateResponse = apply {
-        if (!validated) {
-            data().validate()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        data().validate()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -118,11 +120,13 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Data = apply {
-            if (!validated) {
-                id()
-                secret()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            secret()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

@@ -36,10 +36,12 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): CartSetAddressResponse = apply {
-        if (!validated) {
-            data()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        data()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
