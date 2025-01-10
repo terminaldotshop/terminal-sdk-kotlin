@@ -101,18 +101,20 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): Address = apply {
-        if (!validated) {
-            id()
-            city()
-            country()
-            name()
-            street1()
-            zip()
-            phone()
-            province()
-            street2()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        city()
+        country()
+        name()
+        street1()
+        zip()
+        phone()
+        province()
+        street2()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)

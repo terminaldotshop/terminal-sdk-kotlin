@@ -171,17 +171,19 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): AddressCreateBody = apply {
-            if (!validated) {
-                city()
-                country()
-                name()
-                street1()
-                zip()
-                phone()
-                province()
-                street2()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            city()
+            country()
+            name()
+            street1()
+            zip()
+            phone()
+            province()
+            street2()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

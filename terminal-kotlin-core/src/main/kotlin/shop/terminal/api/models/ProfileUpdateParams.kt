@@ -83,11 +83,13 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): ProfileUpdateBody = apply {
-            if (!validated) {
-                email()
-                name()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            email()
+            name()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

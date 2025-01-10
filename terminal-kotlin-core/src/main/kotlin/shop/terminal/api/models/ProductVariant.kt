@@ -51,12 +51,14 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): ProductVariant = apply {
-        if (!validated) {
-            id()
-            name()
-            price()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        name()
+        price()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)

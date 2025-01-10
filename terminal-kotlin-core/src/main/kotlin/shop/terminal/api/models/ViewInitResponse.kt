@@ -36,10 +36,12 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): ViewInitResponse = apply {
-        if (!validated) {
-            data().validate()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        data().validate()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -178,18 +180,20 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Data = apply {
-            if (!validated) {
-                addresses().forEach { it.validate() }
-                apps().forEach { it.validate() }
-                cards().forEach { it.validate() }
-                cart().validate()
-                orders().forEach { it.validate() }
-                products().forEach { it.validate() }
-                profile().validate()
-                subscriptions().forEach { it.validate() }
-                tokens().forEach { it.validate() }
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            addresses().forEach { it.validate() }
+            apps().forEach { it.validate() }
+            cards().forEach { it.validate() }
+            cart().validate()
+            orders().forEach { it.validate() }
+            products().forEach { it.validate() }
+            profile().validate()
+            subscriptions().forEach { it.validate() }
+            tokens().forEach { it.validate() }
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

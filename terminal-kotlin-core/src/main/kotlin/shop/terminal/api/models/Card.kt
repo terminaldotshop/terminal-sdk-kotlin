@@ -62,13 +62,15 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): Card = apply {
-        if (!validated) {
-            id()
-            brand()
-            expiration().validate()
-            last4()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        brand()
+        expiration().validate()
+        last4()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -179,11 +181,13 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Expiration = apply {
-            if (!validated) {
-                month()
-                year()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            month()
+            year()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
