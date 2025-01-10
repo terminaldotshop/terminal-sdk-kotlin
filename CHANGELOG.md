@@ -1,5 +1,39 @@
 # Changelog
 
+## 0.1.0-alpha.2 (2025-01-10)
+
+Full Changelog: [v0.1.0-alpha.1...v0.1.0-alpha.2](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v0.1.0-alpha.1...v0.1.0-alpha.2)
+
+### Features
+
+* **api:** manual updates ([#21](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/21)) ([a828477](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/a8284770c0f147a14936f8c3600638edc1ecf0a7))
+
+
+### Bug Fixes
+
+* **client:** allow passing null for nullable fields where missing ([#32](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/32)) ([ce74ba4](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/ce74ba47032a023e9b186b2b16853ca0b722e34a))
+
+
+### Chores
+
+* **docs:** add example project ([#23](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/23)) ([0606f50](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/0606f50183fcc0c26688ed0fa175efd99559582c))
+* **docs:** add example project ([#25](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/25)) ([47257ac](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/47257ac782ed2d3991d0ff8b0dc932582be42178))
+* **docs:** update readme ([#22](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/22)) ([63d0cce](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/63d0ccee57bcbb1d046dea151a034fcebe620446))
+* **internal:** codegen related update ([#19](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/19)) ([7bd875a](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/7bd875a0caca078baed1bacb4b209a18d980d141))
+* **internal:** codegen related update ([#24](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/24)) ([6d86992](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/6d869923d4ad6b8ab4c06e9aa294204edf01e7f3))
+* **internal:** codegen related update ([#26](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/26)) ([ee53d31](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/ee53d31bcbf7d93ff6e58d9291a73cdf3c2c44c9))
+* **internal:** codegen related update ([#27](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/27)) ([ca0b336](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/ca0b33649ddcd45155edd7645bcbcbb747b02dbb))
+* **internal:** codegen related update ([#29](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/29)) ([eb73b10](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/eb73b10d14e048cc9ee12e387d7feba8faecd22a))
+* **internal:** codegen related update ([#30](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/30)) ([6bf3181](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/6bf3181df2550894ce9d2ef94e2533b66a66ae85))
+* **internal:** codegen related update ([#33](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/33)) ([5e6934b](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/5e6934b2af26d5b68cd82d485dff34dff61cc974))
+* **internal:** codegen related update ([#34](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/34)) ([9535d49](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/9535d49c14056afb7a67fee974e241f3b313f6b2))
+* **internal:** codegen related update ([#35](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/35)) ([6e3a148](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/6e3a1485914effa05dfb5cec9327254b6af7b637))
+
+
+### Styles
+
+* **internal:** sort fields ([#31](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/31)) ([c6fff95](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/c6fff957c3989d3e576ef5e9b3c38fa2f4c4449e))
+
 ## 0.1.0-alpha.1 (2024-12-17)
 
 Full Changelog: [v0.0.1-alpha.0...v0.1.0-alpha.1](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v0.0.1-alpha.0...v0.1.0-alpha.1)
