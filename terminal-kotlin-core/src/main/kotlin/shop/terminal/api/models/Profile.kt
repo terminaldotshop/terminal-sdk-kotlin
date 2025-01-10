@@ -37,10 +37,12 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): Profile = apply {
-        if (!validated) {
-            user().validate()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        user().validate()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -155,14 +157,16 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): User = apply {
-            if (!validated) {
-                id()
-                email()
-                fingerprint()
-                name()
-                stripeCustomerId()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            email()
+            fingerprint()
+            name()
+            stripeCustomerId()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

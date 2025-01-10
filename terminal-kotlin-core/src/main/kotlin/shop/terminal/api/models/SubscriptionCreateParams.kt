@@ -147,15 +147,17 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): SubscriptionCreateBody = apply {
-            if (!validated) {
-                id()
-                addressId()
-                cardId()
-                frequency()
-                productVariantId()
-                quantity()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            id()
+            addressId()
+            cardId()
+            frequency()
+            productVariantId()
+            quantity()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

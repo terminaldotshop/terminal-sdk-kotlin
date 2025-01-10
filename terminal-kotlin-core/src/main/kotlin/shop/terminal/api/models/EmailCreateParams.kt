@@ -67,10 +67,12 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): EmailCreateBody = apply {
-            if (!validated) {
-                email()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            email()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

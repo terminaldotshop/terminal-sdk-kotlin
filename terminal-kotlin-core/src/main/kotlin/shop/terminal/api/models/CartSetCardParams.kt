@@ -67,10 +67,12 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CartSetCardBody = apply {
-            if (!validated) {
-                cardId()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            cardId()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

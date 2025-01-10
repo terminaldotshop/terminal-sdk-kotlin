@@ -84,11 +84,13 @@ constructor(
         private var validated: Boolean = false
 
         fun validate(): CartSetItemBody = apply {
-            if (!validated) {
-                productVariantId()
-                quantity()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            productVariantId()
+            quantity()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

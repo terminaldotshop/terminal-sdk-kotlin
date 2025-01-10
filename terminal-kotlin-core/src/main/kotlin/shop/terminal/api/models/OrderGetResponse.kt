@@ -36,10 +36,12 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): OrderGetResponse = apply {
-        if (!validated) {
-            data().validate()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        data().validate()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)

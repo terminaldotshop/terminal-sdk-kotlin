@@ -54,12 +54,14 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): Token = apply {
-        if (!validated) {
-            id()
-            token()
-            time().validate()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        token()
+        time().validate()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -154,10 +156,12 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Time = apply {
-            if (!validated) {
-                created()
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            created()
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)

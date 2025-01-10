@@ -91,16 +91,18 @@ private constructor(
     private var validated: Boolean = false
 
     fun validate(): Product = apply {
-        if (!validated) {
-            id()
-            description()
-            name()
-            variants().forEach { it.validate() }
-            order()
-            subscription()
-            tags()?.validate()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        description()
+        name()
+        variants().forEach { it.validate() }
+        order()
+        subscription()
+        tags()?.validate()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -296,9 +298,11 @@ private constructor(
         private var validated: Boolean = false
 
         fun validate(): Tags = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
