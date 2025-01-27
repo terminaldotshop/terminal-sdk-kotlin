@@ -4,41 +4,46 @@ package shop.terminal.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.util.Objects
 import shop.terminal.api.core.ExcludeMissing
 import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
+import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
-@JsonDeserialize(builder = CardListResponse.Builder::class)
 @NoAutoDetect
 class CardListResponse
+@JsonCreator
 private constructor(
-    private val data: JsonField<List<Card>>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("data")
+    @ExcludeMissing
+    private val data: JsonField<List<Card>> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
-
-    private var validated: Boolean = false
 
     /** List of cards associated with the user. */
     fun data(): List<Card> = data.getRequired("data")
 
     /** List of cards associated with the user. */
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<Card>> = data
 
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+    private var validated: Boolean = false
+
     fun validate(): CardListResponse = apply {
-        if (!validated) {
-            data().forEach { it.validate() }
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        data().forEach { it.validate() }
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -50,38 +55,59 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<List<Card>> = JsonMissing.of()
+        private var data: JsonField<MutableList<Card>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(cardListResponse: CardListResponse) = apply {
-            this.data = cardListResponse.data
-            additionalProperties(cardListResponse.additionalProperties)
+            data = cardListResponse.data.map { it.toMutableList() }
+            additionalProperties = cardListResponse.additionalProperties.toMutableMap()
         }
 
         /** List of cards associated with the user. */
         fun data(data: List<Card>) = data(JsonField.of(data))
 
         /** List of cards associated with the user. */
-        @JsonProperty("data")
-        @ExcludeMissing
-        fun data(data: JsonField<List<Card>>) = apply { this.data = data }
+        fun data(data: JsonField<List<Card>>) = apply {
+            this.data = data.map { it.toMutableList() }
+        }
+
+        /** List of cards associated with the user. */
+        fun addData(data: Card) = apply {
+            this.data =
+                (this.data ?: JsonField.of(mutableListOf())).apply {
+                    (asKnown()
+                            ?: throw IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            ))
+                        .add(data)
+                }
+        }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
         }
 
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
+
         fun build(): CardListResponse =
-            CardListResponse(data.map { it.toImmutable() }, additionalProperties.toImmutable())
+            CardListResponse(
+                checkNotNull(data) { "`data` is required but was not set" }
+                    .map { it.toImmutable() },
+                additionalProperties.toImmutable()
+            )
     }
 
     override fun equals(other: Any?): Boolean {

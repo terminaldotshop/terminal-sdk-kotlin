@@ -7,6 +7,7 @@ import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 
+/** Get the app with the given ID. */
 class AppGetParams
 constructor(
     private val id: String,
@@ -14,6 +15,7 @@ constructor(
     private val additionalQueryParams: QueryParams,
 ) {
 
+    /** ID of the app to get. */
     fun id(): String = id
 
     fun _additionalHeaders(): Headers = additionalHeaders

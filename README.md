@@ -21,7 +21,7 @@ The REST API documentation can be found on [terminal.shop](https://terminal.sho
 <!-- x-release-please-start-version -->
 
 ```kotlin
-implementation("shop.terminal.api:terminal-kotlin:0.1.0-alpha.1")
+implementation("shop.terminal.api:terminal-kotlin:0.1.0-alpha.2")
 ```
 
 #### Maven
@@ -30,7 +30,7 @@ implementation("shop.terminal.api:terminal-kotlin:0.1.0-alpha.1")
 <dependency>
     <groupId>shop.terminal.api</groupId>
     <artifactId>terminal-kotlin</artifactId>
-    <version>0.1.0-alpha.1</version>
+    <version>0.1.0-alpha.2</version>
 </dependency>
 ```
 
@@ -44,7 +44,7 @@ Use `TerminalOkHttpClient.builder()` to configure the client. At a minimum you n
 import shop.terminal.api.client.TerminalClient
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
 
-val client = TerminalOkHttpClient.builder()
+val client: TerminalClient = TerminalOkHttpClient.builder()
     .bearerToken("My Bearer Token")
     .build()
 ```
@@ -52,10 +52,13 @@ val client = TerminalOkHttpClient.builder()
 Alternately, set the environment with `TERMINAL_BEARER_TOKEN`, and use `TerminalOkHttpClient.fromEnv()` to read from the environment.
 
 ```kotlin
-val client = TerminalOkHttpClient.fromEnv()
+import shop.terminal.api.client.TerminalClient
+import shop.terminal.api.client.okhttp.TerminalOkHttpClient
+
+val client: TerminalClient = TerminalOkHttpClient.fromEnv()
 
 // Note: you can also call fromEnv() from the client builder, for example if you need to set additional properties
-val client = TerminalOkHttpClient.builder()
+val client: TerminalClient = TerminalOkHttpClient.builder()
     .fromEnv()
     // ... set properties on the builder
     .build()
@@ -71,15 +74,14 @@ Read the documentation for more configuration options.
 
 ### Example: creating a resource
 
-To create a new product, first use the `ProductListParams` builder to specify attributes,
-then pass that to the `list` method of the `product` service.
+To create a new product, first use the `ProductListParams` builder to specify attributes, then pass that to the `list` method of the `product` service.
 
 ```kotlin
 import shop.terminal.api.models.ProductListParams
 import shop.terminal.api.models.ProductListResponse
 
-val params = ProductListParams.builder().build()
-val product = client.product().list(params)
+val params: ProductListParams = ProductListParams.builder().build()
+val product: ProductListResponse = client.product().list(params)
 ```
 
 ---
@@ -90,15 +92,15 @@ val product = client.product().list(params)
 
 To make a request to the Terminal API, you generally build an instance of the appropriate `Params` class.
 
-In [Example: creating a resource](#example-creating-a-resource) above, we used the `ProductListParams.builder()` to pass to
-the `list` method of the `product` service.
+In [Example: creating a resource](#example-creating-a-resource) above, we used the `ProductListParams.builder()` to pass to the `list` method of the `product` service.
 
-Sometimes, the API may support other properties that are not yet supported in the Kotlin SDK types. In that case,
-you can attach them using the `putAdditionalProperty` method.
+Sometimes, the API may support other properties that are not yet supported in the Kotlin SDK types. In that case, you can attach them using the `putAdditionalProperty` method.
 
 ```kotlin
-import shop.terminal.api.models.core.JsonValue
-val params = ProductListParams.builder()
+import shop.terminal.api.core.JsonValue
+import shop.terminal.api.models.ProductListParams
+
+val params: ProductListParams = ProductListParams.builder()
     // ... normal properties
     .putAdditionalProperty("secret_param", JsonValue.from("4242"))
     .build()
@@ -111,16 +113,20 @@ val params = ProductListParams.builder()
 When receiving a response, the Terminal Kotlin SDK will deserialize it into instances of the typed model classes. In rare cases, the API may return a response property that doesn't match the expected Kotlin type. If you directly access the mistaken property, the SDK will throw an unchecked `TerminalInvalidDataException` at runtime. If you would prefer to check in advance that that response is completely well-typed, call `.validate()` on the returned model.
 
 ```kotlin
-val product = client.product().list().validate()
+import shop.terminal.api.models.ProductListResponse
+
+val product: ProductListResponse = client.product().list().validate()
 ```
 
 ### Response properties as JSON
 
-In rare cases, you may want to access the underlying JSON value for a response property rather than using the typed version provided by
-this SDK. Each model property has a corresponding JSON version, with an underscore before the method name, which returns a `JsonField` value.
+In rare cases, you may want to access the underlying JSON value for a response property rather than using the typed version provided by this SDK. Each model property has a corresponding JSON version, with an underscore before the method name, which returns a `JsonField` value.
 
 ```kotlin
-val field = responseObj._field
+import java.util.Optional
+import shop.terminal.api.core.JsonField
+
+val field: JsonField = responseObj._field
 
 if (field.isMissing()) {
   // Value was not specified in the JSON response
@@ -132,7 +138,7 @@ if (field.isMissing()) {
 
   // If the value given by the API did not match the shape that the SDK expects
   // you can deserialise into a custom type
-  val myObj = responseObj._field.asUnknown()?.convert(MyClass.class)
+  val myObj: MyClass = responseObj._field.asUnknown()?.convert(MyClass.class)
 }
 ```
 
@@ -141,7 +147,9 @@ if (field.isMissing()) {
 Sometimes, the server response may include additional properties that are not yet available in this library's types. You can access them using the model's `_additionalProperties` method:
 
 ```kotlin
-val secret = product._additionalProperties().get("secret_field")
+import shop.terminal.api.core.JsonValue
+
+val secret: JsonValue = product._additionalProperties().get("secret_field")
 ```
 
 ---
@@ -154,32 +162,34 @@ This library throws exceptions in a single hierarchy for easy handling:
 
 - **`TerminalException`** - Base exception for all exceptions
 
-  - **`TerminalServiceException`** - HTTP errors with a well-formed response body we were able to parse. The exception message and the `.debuggingRequestId()` will be set by the server.
+- **`TerminalServiceException`** - HTTP errors with a well-formed response body we were able to parse. The exception message and the `.debuggingRequestId()` will be set by the server.
 
-    | 400    | BadRequestException           |
-    | ------ | ----------------------------- |
-    | 401    | AuthenticationException       |
-    | 403    | PermissionDeniedException     |
-    | 404    | NotFoundException             |
-    | 422    | UnprocessableEntityException  |
-    | 429    | RateLimitException            |
-    | 5xx    | InternalServerException       |
-    | others | UnexpectedStatusCodeException |
+  | 400    | BadRequestException           |
+  | ------ | ----------------------------- |
+  | 401    | AuthenticationException       |
+  | 403    | PermissionDeniedException     |
+  | 404    | NotFoundException             |
+  | 422    | UnprocessableEntityException  |
+  | 429    | RateLimitException            |
+  | 5xx    | InternalServerException       |
+  | others | UnexpectedStatusCodeException |
 
-  - **`TerminalIoException`** - I/O networking errors
-  - **`TerminalInvalidDataException`** - any other exceptions on the client side, e.g.:
-    - We failed to serialize the request body
-    - We failed to parse the response body (has access to response code and body)
+- **`TerminalIoException`** - I/O networking errors
+- **`TerminalInvalidDataException`** - any other exceptions on the client side, e.g.:
+  - We failed to serialize the request body
+  - We failed to parse the response body (has access to response code and body)
 
 ## Network options
 
 ### Retries
 
-Requests that experience certain errors are automatically retried 2 times by default, with a short exponential backoff. Connection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict, 429 Rate Limit, and >=500 Internal errors will all be retried by default.
-You can provide a `maxRetries` on the client builder to configure this:
+Requests that experience certain errors are automatically retried 2 times by default, with a short exponential backoff. Connection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict, 429 Rate Limit, and >=500 Internal errors will all be retried by default. You can provide a `maxRetries` on the client builder to configure this:
 
 ```kotlin
-val client = TerminalOkHttpClient.builder()
+import shop.terminal.api.client.TerminalClient
+import shop.terminal.api.client.okhttp.TerminalOkHttpClient
+
+val client: TerminalClient = TerminalOkHttpClient.builder()
     .fromEnv()
     .maxRetries(4)
     .build()
@@ -190,7 +200,11 @@ val client = TerminalOkHttpClient.builder()
 Requests time out after 1 minute by default. You can configure this on the client builder:
 
 ```kotlin
-val client = TerminalOkHttpClient.builder()
+import java.time.Duration
+import shop.terminal.api.client.TerminalClient
+import shop.terminal.api.client.okhttp.TerminalOkHttpClient
+
+val client: TerminalClient = TerminalOkHttpClient.builder()
     .fromEnv()
     .timeout(Duration.ofSeconds(30))
     .build()
@@ -201,12 +215,14 @@ val client = TerminalOkHttpClient.builder()
 Requests can be routed through a proxy. You can configure this on the client builder:
 
 ```kotlin
-val client = TerminalOkHttpClient.builder()
+import java.net.InetSocketAddress
+import java.net.Proxy
+import shop.terminal.api.client.TerminalClient
+import shop.terminal.api.client.okhttp.TerminalOkHttpClient
+
+val client: TerminalClient = TerminalOkHttpClient.builder()
     .fromEnv()
-    .proxy(new Proxy(
-        Type.HTTP,
-        new InetSocketAddress("proxy.com", 8080)
-    ))
+    .proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress("example.com", 8080)))
     .build()
 ```
 
@@ -215,7 +231,10 @@ val client = TerminalOkHttpClient.builder()
 Requests are made to the production environment by default. You can connect to other environments, like `sandbox`, via the client builder:
 
 ```kotlin
-val client = TerminalOkHttpClient.builder()
+import shop.terminal.api.client.TerminalClient
+import shop.terminal.api.client.okhttp.TerminalOkHttpClient
+
+val client: TerminalClient = TerminalOkHttpClient.builder()
     .fromEnv()
     .sandbox()
     .build()
@@ -241,7 +260,7 @@ $ export TERMINAL_LOG=debug
 
 This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:
 
-1. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals)_.
+1. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_
 2. Changes that we do not expect to impact the vast majority of users in practice.
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.

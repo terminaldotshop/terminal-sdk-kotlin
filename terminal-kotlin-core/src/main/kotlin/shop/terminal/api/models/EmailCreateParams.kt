@@ -4,54 +4,76 @@ package shop.terminal.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.util.Objects
 import shop.terminal.api.core.ExcludeMissing
+import shop.terminal.api.core.JsonField
+import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
+import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
+/** Subscribe to email updates from Terminal. */
 class EmailCreateParams
 constructor(
-    private val email: String,
+    private val body: EmailCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
-    fun email(): String = email
+    /** Email address to subscribe to Terminal updates with. */
+    fun email(): String = body.email()
+
+    /** Email address to subscribe to Terminal updates with. */
+    fun _email(): JsonField<String> = body._email()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
-
-    internal fun getBody(): EmailCreateBody {
-        return EmailCreateBody(email, additionalBodyProperties)
-    }
+    internal fun getBody(): EmailCreateBody = body
 
     internal fun getHeaders(): Headers = additionalHeaders
 
     internal fun getQueryParams(): QueryParams = additionalQueryParams
 
-    @JsonDeserialize(builder = EmailCreateBody.Builder::class)
     @NoAutoDetect
     class EmailCreateBody
+    @JsonCreator
     internal constructor(
-        private val email: String?,
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonProperty("email")
+        @ExcludeMissing
+        private val email: JsonField<String> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         /** Email address to subscribe to Terminal updates with. */
-        @JsonProperty("email") fun email(): String? = email
+        fun email(): String = email.getRequired("email")
+
+        /** Email address to subscribe to Terminal updates with. */
+        @JsonProperty("email") @ExcludeMissing fun _email(): JsonField<String> = email
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): EmailCreateBody = apply {
+            if (validated) {
+                return@apply
+            }
+
+            email()
+            validated = true
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -62,29 +84,37 @@ constructor(
 
         class Builder {
 
-            private var email: String? = null
+            private var email: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(emailCreateBody: EmailCreateBody) = apply {
-                this.email = emailCreateBody.email
-                additionalProperties(emailCreateBody.additionalProperties)
+                email = emailCreateBody.email
+                additionalProperties = emailCreateBody.additionalProperties.toMutableMap()
             }
 
             /** Email address to subscribe to Terminal updates with. */
-            @JsonProperty("email") fun email(email: String) = apply { this.email = email }
+            fun email(email: String) = email(JsonField.of(email))
+
+            /** Email address to subscribe to Terminal updates with. */
+            fun email(email: JsonField<String>) = apply { this.email = email }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): EmailCreateBody =
@@ -122,20 +152,40 @@ constructor(
     @NoAutoDetect
     class Builder {
 
-        private var email: String? = null
+        private var body: EmailCreateBody.Builder = EmailCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(emailCreateParams: EmailCreateParams) = apply {
-            email = emailCreateParams.email
+            body = emailCreateParams.body.toBuilder()
             additionalHeaders = emailCreateParams.additionalHeaders.toBuilder()
             additionalQueryParams = emailCreateParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties = emailCreateParams.additionalBodyProperties.toMutableMap()
         }
 
         /** Email address to subscribe to Terminal updates with. */
-        fun email(email: String) = apply { this.email = email }
+        fun email(email: String) = apply { body.email(email) }
+
+        /** Email address to subscribe to Terminal updates with. */
+        fun email(email: JsonField<String>) = apply { body.email(email) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -235,34 +285,11 @@ constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
-        }
-
         fun build(): EmailCreateParams =
             EmailCreateParams(
-                checkNotNull(email) { "`email` is required but was not set" },
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
@@ -271,11 +298,11 @@ constructor(
             return true
         }
 
-        return /* spotless:off */ other is EmailCreateParams && email == other.email && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is EmailCreateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(email, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "EmailCreateParams{email=$email, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "EmailCreateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.util.Objects
 import shop.terminal.api.core.Enum
 import shop.terminal.api.core.ExcludeMissing
@@ -14,34 +13,39 @@ import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
+import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 import shop.terminal.api.errors.TerminalInvalidDataException
 
 /** Product sold in the Terminal shop. */
-@JsonDeserialize(builder = Product.Builder::class)
 @NoAutoDetect
 class Product
+@JsonCreator
 private constructor(
-    private val id: JsonField<String>,
-    private val name: JsonField<String>,
-    private val description: JsonField<String>,
-    private val variants: JsonField<List<ProductVariant>>,
-    private val order: JsonField<Long>,
-    private val subscription: JsonField<Subscription>,
-    private val tags: JsonField<Tags>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("description")
+    @ExcludeMissing
+    private val description: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("variants")
+    @ExcludeMissing
+    private val variants: JsonField<List<ProductVariant>> = JsonMissing.of(),
+    @JsonProperty("order") @ExcludeMissing private val order: JsonField<Long> = JsonMissing.of(),
+    @JsonProperty("subscription")
+    @ExcludeMissing
+    private val subscription: JsonField<Subscription> = JsonMissing.of(),
+    @JsonProperty("tags") @ExcludeMissing private val tags: JsonField<Tags> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
-
-    private var validated: Boolean = false
 
     /** Unique object identifier. The format and length of IDs may change over time. */
     fun id(): String = id.getRequired("id")
 
-    /** Name of the product. */
-    fun name(): String = name.getRequired("name")
-
     /** Description of the product. */
     fun description(): String = description.getRequired("description")
+
+    /** Name of the product. */
+    fun name(): String = name.getRequired("name")
 
     /** List of variants of the product. */
     fun variants(): List<ProductVariant> = variants.getRequired("variants")
@@ -56,41 +60,49 @@ private constructor(
     fun tags(): Tags? = tags.getNullable("tags")
 
     /** Unique object identifier. The format and length of IDs may change over time. */
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
-
-    /** Name of the product. */
-    @JsonProperty("name") @ExcludeMissing fun _name() = name
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
     /** Description of the product. */
-    @JsonProperty("description") @ExcludeMissing fun _description() = description
+    @JsonProperty("description") @ExcludeMissing fun _description(): JsonField<String> = description
+
+    /** Name of the product. */
+    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
     /** List of variants of the product. */
-    @JsonProperty("variants") @ExcludeMissing fun _variants() = variants
+    @JsonProperty("variants")
+    @ExcludeMissing
+    fun _variants(): JsonField<List<ProductVariant>> = variants
 
     /** Order of the product used when displaying a sorted list of products. */
-    @JsonProperty("order") @ExcludeMissing fun _order() = order
+    @JsonProperty("order") @ExcludeMissing fun _order(): JsonField<Long> = order
 
     /** Whether the product must be or can be subscribed to. */
-    @JsonProperty("subscription") @ExcludeMissing fun _subscription() = subscription
+    @JsonProperty("subscription")
+    @ExcludeMissing
+    fun _subscription(): JsonField<Subscription> = subscription
 
     /** Tags for the product. */
-    @JsonProperty("tags") @ExcludeMissing fun _tags() = tags
+    @JsonProperty("tags") @ExcludeMissing fun _tags(): JsonField<Tags> = tags
 
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+    private var validated: Boolean = false
+
     fun validate(): Product = apply {
-        if (!validated) {
-            id()
-            name()
-            description()
-            variants().forEach { it.validate() }
-            order()
-            subscription()
-            tags()?.validate()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        description()
+        name()
+        variants().forEach { it.validate() }
+        order()
+        subscription()
+        tags()?.validate()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -102,70 +114,74 @@ private constructor(
 
     class Builder {
 
-        private var id: JsonField<String> = JsonMissing.of()
-        private var name: JsonField<String> = JsonMissing.of()
-        private var description: JsonField<String> = JsonMissing.of()
-        private var variants: JsonField<List<ProductVariant>> = JsonMissing.of()
+        private var id: JsonField<String>? = null
+        private var description: JsonField<String>? = null
+        private var name: JsonField<String>? = null
+        private var variants: JsonField<MutableList<ProductVariant>>? = null
         private var order: JsonField<Long> = JsonMissing.of()
         private var subscription: JsonField<Subscription> = JsonMissing.of()
         private var tags: JsonField<Tags> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(product: Product) = apply {
-            this.id = product.id
-            this.name = product.name
-            this.description = product.description
-            this.variants = product.variants
-            this.order = product.order
-            this.subscription = product.subscription
-            this.tags = product.tags
-            additionalProperties(product.additionalProperties)
+            id = product.id
+            description = product.description
+            name = product.name
+            variants = product.variants.map { it.toMutableList() }
+            order = product.order
+            subscription = product.subscription
+            tags = product.tags
+            additionalProperties = product.additionalProperties.toMutableMap()
         }
 
         /** Unique object identifier. The format and length of IDs may change over time. */
         fun id(id: String) = id(JsonField.of(id))
 
         /** Unique object identifier. The format and length of IDs may change over time. */
-        @JsonProperty("id") @ExcludeMissing fun id(id: JsonField<String>) = apply { this.id = id }
-
-        /** Name of the product. */
-        fun name(name: String) = name(JsonField.of(name))
-
-        /** Name of the product. */
-        @JsonProperty("name")
-        @ExcludeMissing
-        fun name(name: JsonField<String>) = apply { this.name = name }
+        fun id(id: JsonField<String>) = apply { this.id = id }
 
         /** Description of the product. */
         fun description(description: String) = description(JsonField.of(description))
 
         /** Description of the product. */
-        @JsonProperty("description")
-        @ExcludeMissing
         fun description(description: JsonField<String>) = apply { this.description = description }
+
+        /** Name of the product. */
+        fun name(name: String) = name(JsonField.of(name))
+
+        /** Name of the product. */
+        fun name(name: JsonField<String>) = apply { this.name = name }
 
         /** List of variants of the product. */
         fun variants(variants: List<ProductVariant>) = variants(JsonField.of(variants))
 
         /** List of variants of the product. */
-        @JsonProperty("variants")
-        @ExcludeMissing
-        fun variants(variants: JsonField<List<ProductVariant>>) = apply { this.variants = variants }
+        fun variants(variants: JsonField<List<ProductVariant>>) = apply {
+            this.variants = variants.map { it.toMutableList() }
+        }
+
+        /** List of variants of the product. */
+        fun addVariant(variant: ProductVariant) = apply {
+            variants =
+                (variants ?: JsonField.of(mutableListOf())).apply {
+                    (asKnown()
+                            ?: throw IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            ))
+                        .add(variant)
+                }
+        }
 
         /** Order of the product used when displaying a sorted list of products. */
         fun order(order: Long) = order(JsonField.of(order))
 
         /** Order of the product used when displaying a sorted list of products. */
-        @JsonProperty("order")
-        @ExcludeMissing
         fun order(order: JsonField<Long>) = apply { this.order = order }
 
         /** Whether the product must be or can be subscribed to. */
         fun subscription(subscription: Subscription) = subscription(JsonField.of(subscription))
 
         /** Whether the product must be or can be subscribed to. */
-        @JsonProperty("subscription")
-        @ExcludeMissing
         fun subscription(subscription: JsonField<Subscription>) = apply {
             this.subscription = subscription
         }
@@ -174,30 +190,34 @@ private constructor(
         fun tags(tags: Tags) = tags(JsonField.of(tags))
 
         /** Tags for the product. */
-        @JsonProperty("tags")
-        @ExcludeMissing
         fun tags(tags: JsonField<Tags>) = apply { this.tags = tags }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
         }
 
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
+
         fun build(): Product =
             Product(
-                id,
-                name,
-                description,
-                variants.map { it.toImmutable() },
+                checkNotNull(id) { "`id` is required but was not set" },
+                checkNotNull(description) { "`description` is required but was not set" },
+                checkNotNull(name) { "`name` is required but was not set" },
+                checkNotNull(variants) { "`variants` is required but was not set" }
+                    .map { it.toImmutable() },
                 order,
                 subscription,
                 tags,
@@ -263,23 +283,26 @@ private constructor(
     }
 
     /** Tags for the product. */
-    @JsonDeserialize(builder = Tags.Builder::class)
     @NoAutoDetect
     class Tags
+    @JsonCreator
     private constructor(
-        private val additionalProperties: Map<String, JsonValue>,
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
-
-        private var validated: Boolean = false
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+        private var validated: Boolean = false
+
         fun validate(): Tags = apply {
-            if (!validated) {
-                validated = true
+            if (validated) {
+                return@apply
             }
+
+            validated = true
         }
 
         fun toBuilder() = Builder().from(this)
@@ -294,21 +317,26 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(tags: Tags) = apply {
-                additionalProperties(tags.additionalProperties)
+                additionalProperties = tags.additionalProperties.toMutableMap()
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
-                this.additionalProperties.putAll(additionalProperties)
+                putAllAdditionalProperties(additionalProperties)
             }
 
-            @JsonAnySetter
             fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
             }
 
             fun build(): Tags = Tags(additionalProperties.toImmutable())
@@ -336,15 +364,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Product && id == other.id && name == other.name && description == other.description && variants == other.variants && order == other.order && subscription == other.subscription && tags == other.tags && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Product && id == other.id && description == other.description && name == other.name && variants == other.variants && order == other.order && subscription == other.subscription && tags == other.tags && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, name, description, variants, order, subscription, tags, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, description, name, variants, order, subscription, tags, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Product{id=$id, name=$name, description=$description, variants=$variants, order=$order, subscription=$subscription, tags=$tags, additionalProperties=$additionalProperties}"
+        "Product{id=$id, description=$description, name=$name, variants=$variants, order=$order, subscription=$subscription, tags=$tags, additionalProperties=$additionalProperties}"
 }

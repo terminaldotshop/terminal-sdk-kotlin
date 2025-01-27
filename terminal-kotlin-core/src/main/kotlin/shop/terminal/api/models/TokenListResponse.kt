@@ -4,41 +4,46 @@ package shop.terminal.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.util.Objects
 import shop.terminal.api.core.ExcludeMissing
 import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
+import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
-@JsonDeserialize(builder = TokenListResponse.Builder::class)
 @NoAutoDetect
 class TokenListResponse
+@JsonCreator
 private constructor(
-    private val data: JsonField<List<Token>>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("data")
+    @ExcludeMissing
+    private val data: JsonField<List<Token>> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
-
-    private var validated: Boolean = false
 
     /** List of personal access tokens. */
     fun data(): List<Token> = data.getRequired("data")
 
     /** List of personal access tokens. */
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<Token>> = data
 
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+    private var validated: Boolean = false
+
     fun validate(): TokenListResponse = apply {
-        if (!validated) {
-            data().forEach { it.validate() }
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        data().forEach { it.validate() }
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -50,38 +55,59 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<List<Token>> = JsonMissing.of()
+        private var data: JsonField<MutableList<Token>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(tokenListResponse: TokenListResponse) = apply {
-            this.data = tokenListResponse.data
-            additionalProperties(tokenListResponse.additionalProperties)
+            data = tokenListResponse.data.map { it.toMutableList() }
+            additionalProperties = tokenListResponse.additionalProperties.toMutableMap()
         }
 
         /** List of personal access tokens. */
         fun data(data: List<Token>) = data(JsonField.of(data))
 
         /** List of personal access tokens. */
-        @JsonProperty("data")
-        @ExcludeMissing
-        fun data(data: JsonField<List<Token>>) = apply { this.data = data }
+        fun data(data: JsonField<List<Token>>) = apply {
+            this.data = data.map { it.toMutableList() }
+        }
+
+        /** List of personal access tokens. */
+        fun addData(data: Token) = apply {
+            this.data =
+                (this.data ?: JsonField.of(mutableListOf())).apply {
+                    (asKnown()
+                            ?: throw IllegalStateException(
+                                "Field was set to non-list type: ${javaClass.simpleName}"
+                            ))
+                        .add(data)
+                }
+        }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
         }
 
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
+
         fun build(): TokenListResponse =
-            TokenListResponse(data.map { it.toImmutable() }, additionalProperties.toImmutable())
+            TokenListResponse(
+                checkNotNull(data) { "`data` is required but was not set" }
+                    .map { it.toImmutable() },
+                additionalProperties.toImmutable()
+            )
     }
 
     override fun equals(other: Any?): Boolean {

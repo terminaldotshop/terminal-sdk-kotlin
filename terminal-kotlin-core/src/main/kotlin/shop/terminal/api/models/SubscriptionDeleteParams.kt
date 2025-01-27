@@ -9,6 +9,7 @@ import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 import shop.terminal.api.core.toImmutable
 
+/** Cancel a subscription for the current user. */
 class SubscriptionDeleteParams
 constructor(
     private val id: String,
@@ -17,6 +18,7 @@ constructor(
     private val additionalBodyProperties: Map<String, JsonValue>,
 ) {
 
+    /** ID of the subscription to cancel. */
     fun id(): String = id
 
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -25,9 +27,7 @@ constructor(
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
-    internal fun getBody(): Map<String, JsonValue>? {
-        return additionalBodyProperties.ifEmpty { null }
-    }
+    internal fun getBody(): Map<String, JsonValue>? = additionalBodyProperties.ifEmpty { null }
 
     internal fun getHeaders(): Headers = additionalHeaders
 

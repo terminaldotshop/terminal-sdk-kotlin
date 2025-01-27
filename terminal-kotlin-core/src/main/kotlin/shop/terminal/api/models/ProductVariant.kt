@@ -4,28 +4,27 @@ package shop.terminal.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.util.Objects
 import shop.terminal.api.core.ExcludeMissing
 import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
+import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
 /** Variant of a product in the Terminal shop. */
-@JsonDeserialize(builder = ProductVariant.Builder::class)
 @NoAutoDetect
 class ProductVariant
+@JsonCreator
 private constructor(
-    private val id: JsonField<String>,
-    private val name: JsonField<String>,
-    private val price: JsonField<Long>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("price") @ExcludeMissing private val price: JsonField<Long> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
-
-    private var validated: Boolean = false
 
     /** Unique object identifier. The format and length of IDs may change over time. */
     fun id(): String = id.getRequired("id")
@@ -37,25 +36,29 @@ private constructor(
     fun price(): Long = price.getRequired("price")
 
     /** Unique object identifier. The format and length of IDs may change over time. */
-    @JsonProperty("id") @ExcludeMissing fun _id() = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
     /** Name of the product variant. */
-    @JsonProperty("name") @ExcludeMissing fun _name() = name
+    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
     /** Price of the product variant in cents (USD). */
-    @JsonProperty("price") @ExcludeMissing fun _price() = price
+    @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Long> = price
 
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+    private var validated: Boolean = false
+
     fun validate(): ProductVariant = apply {
-        if (!validated) {
-            id()
-            name()
-            price()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        id()
+        name()
+        price()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -67,59 +70,60 @@ private constructor(
 
     class Builder {
 
-        private var id: JsonField<String> = JsonMissing.of()
-        private var name: JsonField<String> = JsonMissing.of()
-        private var price: JsonField<Long> = JsonMissing.of()
+        private var id: JsonField<String>? = null
+        private var name: JsonField<String>? = null
+        private var price: JsonField<Long>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(productVariant: ProductVariant) = apply {
-            this.id = productVariant.id
-            this.name = productVariant.name
-            this.price = productVariant.price
-            additionalProperties(productVariant.additionalProperties)
+            id = productVariant.id
+            name = productVariant.name
+            price = productVariant.price
+            additionalProperties = productVariant.additionalProperties.toMutableMap()
         }
 
         /** Unique object identifier. The format and length of IDs may change over time. */
         fun id(id: String) = id(JsonField.of(id))
 
         /** Unique object identifier. The format and length of IDs may change over time. */
-        @JsonProperty("id") @ExcludeMissing fun id(id: JsonField<String>) = apply { this.id = id }
+        fun id(id: JsonField<String>) = apply { this.id = id }
 
         /** Name of the product variant. */
         fun name(name: String) = name(JsonField.of(name))
 
         /** Name of the product variant. */
-        @JsonProperty("name")
-        @ExcludeMissing
         fun name(name: JsonField<String>) = apply { this.name = name }
 
         /** Price of the product variant in cents (USD). */
         fun price(price: Long) = price(JsonField.of(price))
 
         /** Price of the product variant in cents (USD). */
-        @JsonProperty("price")
-        @ExcludeMissing
         fun price(price: JsonField<Long>) = apply { this.price = price }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
         }
 
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
+
         fun build(): ProductVariant =
             ProductVariant(
-                id,
-                name,
-                price,
+                checkNotNull(id) { "`id` is required but was not set" },
+                checkNotNull(name) { "`name` is required but was not set" },
+                checkNotNull(price) { "`price` is required but was not set" },
                 additionalProperties.toImmutable(),
             )
     }

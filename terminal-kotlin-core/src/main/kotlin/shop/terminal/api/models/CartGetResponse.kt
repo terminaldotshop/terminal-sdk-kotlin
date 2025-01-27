@@ -4,41 +4,44 @@ package shop.terminal.api.models
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import java.util.Objects
 import shop.terminal.api.core.ExcludeMissing
 import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
+import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
-@JsonDeserialize(builder = CartGetResponse.Builder::class)
 @NoAutoDetect
 class CartGetResponse
+@JsonCreator
 private constructor(
-    private val data: JsonField<Cart>,
-    private val additionalProperties: Map<String, JsonValue>,
+    @JsonProperty("data") @ExcludeMissing private val data: JsonField<Cart> = JsonMissing.of(),
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
-
-    private var validated: Boolean = false
 
     /** The current Terminal shop user's cart. */
     fun data(): Cart = data.getRequired("data")
 
     /** The current Terminal shop user's cart. */
-    @JsonProperty("data") @ExcludeMissing fun _data() = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Cart> = data
 
     @JsonAnyGetter
     @ExcludeMissing
     fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
+    private var validated: Boolean = false
+
     fun validate(): CartGetResponse = apply {
-        if (!validated) {
-            data().validate()
-            validated = true
+        if (validated) {
+            return@apply
         }
+
+        data().validate()
+        validated = true
     }
 
     fun toBuilder() = Builder().from(this)
@@ -50,37 +53,44 @@ private constructor(
 
     class Builder {
 
-        private var data: JsonField<Cart> = JsonMissing.of()
+        private var data: JsonField<Cart>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(cartGetResponse: CartGetResponse) = apply {
-            this.data = cartGetResponse.data
-            additionalProperties(cartGetResponse.additionalProperties)
+            data = cartGetResponse.data
+            additionalProperties = cartGetResponse.additionalProperties.toMutableMap()
         }
 
         /** The current Terminal shop user's cart. */
         fun data(data: Cart) = data(JsonField.of(data))
 
         /** The current Terminal shop user's cart. */
-        @JsonProperty("data")
-        @ExcludeMissing
         fun data(data: JsonField<Cart>) = apply { this.data = data }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
-            this.additionalProperties.putAll(additionalProperties)
+            putAllAdditionalProperties(additionalProperties)
         }
 
-        @JsonAnySetter
         fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            this.additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.putAll(additionalProperties)
         }
 
-        fun build(): CartGetResponse = CartGetResponse(data, additionalProperties.toImmutable())
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
+
+        fun build(): CartGetResponse =
+            CartGetResponse(
+                checkNotNull(data) { "`data` is required but was not set" },
+                additionalProperties.toImmutable()
+            )
     }
 
     override fun equals(other: Any?): Boolean {
