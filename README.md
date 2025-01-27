@@ -21,7 +21,7 @@ The REST API documentation can be found on [terminal.shop](https://terminal.sho
 <!-- x-release-please-start-version -->
 
 ```kotlin
-implementation("shop.terminal.api:terminal-kotlin:0.1.0-alpha.1")
+implementation("shop.terminal.api:terminal-kotlin:0.1.0-alpha.2")
 ```
 
 #### Maven
@@ -30,7 +30,7 @@ implementation("shop.terminal.api:terminal-kotlin:0.1.0-alpha.1")
 <dependency>
     <groupId>shop.terminal.api</groupId>
     <artifactId>terminal-kotlin</artifactId>
-    <version>0.1.0-alpha.1</version>
+    <version>0.1.0-alpha.2</version>
 </dependency>
 ```
 
