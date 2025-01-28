@@ -12,6 +12,7 @@ import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
+import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
@@ -191,12 +192,11 @@ private constructor(
 
         fun build(): Order =
             Order(
-                checkNotNull(id) { "`id` is required but was not set" },
-                checkNotNull(amount) { "`amount` is required but was not set" },
-                checkNotNull(items) { "`items` is required but was not set" }
-                    .map { it.toImmutable() },
-                checkNotNull(shipping) { "`shipping` is required but was not set" },
-                checkNotNull(tracking) { "`tracking` is required but was not set" },
+                checkRequired("id", id),
+                checkRequired("amount", amount),
+                checkRequired("items", items).map { it.toImmutable() },
+                checkRequired("shipping", shipping),
+                checkRequired("tracking", tracking),
                 index,
                 additionalProperties.toImmutable(),
             )
@@ -297,8 +297,8 @@ private constructor(
 
             fun build(): Amount =
                 Amount(
-                    checkNotNull(shipping) { "`shipping` is required but was not set" },
-                    checkNotNull(subtotal) { "`subtotal` is required but was not set" },
+                    checkRequired("shipping", shipping),
+                    checkRequired("subtotal", subtotal),
                     additionalProperties.toImmutable(),
                 )
         }
@@ -476,9 +476,9 @@ private constructor(
 
             fun build(): Item =
                 Item(
-                    checkNotNull(id) { "`id` is required but was not set" },
-                    checkNotNull(amount) { "`amount` is required but was not set" },
-                    checkNotNull(quantity) { "`quantity` is required but was not set" },
+                    checkRequired("id", id),
+                    checkRequired("amount", amount),
+                    checkRequired("quantity", quantity),
                     description,
                     productVariantId,
                     additionalProperties.toImmutable(),
@@ -704,11 +704,11 @@ private constructor(
 
             fun build(): Shipping =
                 Shipping(
-                    checkNotNull(city) { "`city` is required but was not set" },
-                    checkNotNull(country) { "`country` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
-                    checkNotNull(street1) { "`street1` is required but was not set" },
-                    checkNotNull(zip) { "`zip` is required but was not set" },
+                    checkRequired("city", city),
+                    checkRequired("country", country),
+                    checkRequired("name", name),
+                    checkRequired("street1", street1),
+                    checkRequired("zip", zip),
                     phone,
                     province,
                     street2,

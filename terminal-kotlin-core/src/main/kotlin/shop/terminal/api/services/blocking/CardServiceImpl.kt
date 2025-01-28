@@ -20,7 +20,7 @@ import shop.terminal.api.models.CardListParams
 import shop.terminal.api.models.CardListResponse
 
 class CardServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : CardService {
 

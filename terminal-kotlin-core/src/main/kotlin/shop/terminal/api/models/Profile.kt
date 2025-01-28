@@ -12,6 +12,7 @@ import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
+import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
@@ -88,10 +89,7 @@ private constructor(
         }
 
         fun build(): Profile =
-            Profile(
-                checkNotNull(user) { "`user` is required but was not set" },
-                additionalProperties.toImmutable()
-            )
+            Profile(checkRequired("user", user), additionalProperties.toImmutable())
     }
 
     /** A Terminal shop user. (We have users, btw.) */
@@ -250,13 +248,11 @@ private constructor(
 
             fun build(): User =
                 User(
-                    checkNotNull(id) { "`id` is required but was not set" },
-                    checkNotNull(email) { "`email` is required but was not set" },
-                    checkNotNull(fingerprint) { "`fingerprint` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
-                    checkNotNull(stripeCustomerId) {
-                        "`stripeCustomerId` is required but was not set"
-                    },
+                    checkRequired("id", id),
+                    checkRequired("email", email),
+                    checkRequired("fingerprint", fingerprint),
+                    checkRequired("name", name),
+                    checkRequired("stripeCustomerId", stripeCustomerId),
                     additionalProperties.toImmutable(),
                 )
         }

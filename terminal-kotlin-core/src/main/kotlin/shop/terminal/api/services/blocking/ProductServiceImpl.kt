@@ -15,7 +15,7 @@ import shop.terminal.api.models.ProductListParams
 import shop.terminal.api.models.ProductListResponse
 
 class ProductServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : ProductService {
 

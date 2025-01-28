@@ -15,6 +15,7 @@ import kotlin.math.pow
 import kotlin.time.toKotlinDuration
 import kotlinx.coroutines.delay
 import shop.terminal.api.core.RequestOptions
+import shop.terminal.api.core.checkRequired
 import shop.terminal.api.errors.TerminalIoException
 
 class RetryingHttpClient
@@ -226,7 +227,7 @@ private constructor(
 
         fun build(): HttpClient =
             RetryingHttpClient(
-                checkNotNull(httpClient) { "`httpClient` is required but was not set" },
+                checkRequired("httpClient", httpClient),
                 clock,
                 maxRetries,
                 idempotencyHeader,

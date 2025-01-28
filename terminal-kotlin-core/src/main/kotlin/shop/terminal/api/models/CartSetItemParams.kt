@@ -12,6 +12,7 @@ import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
+import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 import shop.terminal.api.core.immutableEmptyMap
@@ -148,10 +149,8 @@ constructor(
 
             fun build(): CartSetItemBody =
                 CartSetItemBody(
-                    checkNotNull(productVariantId) {
-                        "`productVariantId` is required but was not set"
-                    },
-                    checkNotNull(quantity) { "`quantity` is required but was not set" },
+                    checkRequired("productVariantId", productVariantId),
+                    checkRequired("quantity", quantity),
                     additionalProperties.toImmutable(),
                 )
         }

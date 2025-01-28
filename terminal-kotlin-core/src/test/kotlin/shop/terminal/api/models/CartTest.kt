@@ -12,15 +12,13 @@ class CartTest {
         val cart =
             Cart.builder()
                 .amount(Cart.Amount.builder().subtotal(4400L).shipping(800L).build())
-                .items(
-                    listOf(
-                        Cart.Item.builder()
-                            .id("itm_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                            .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                            .quantity(2L)
-                            .subtotal(4400L)
-                            .build()
-                    )
+                .addItem(
+                    Cart.Item.builder()
+                        .id("itm_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .quantity(2L)
+                        .subtotal(4400L)
+                        .build()
                 )
                 .subtotal(4400L)
                 .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")

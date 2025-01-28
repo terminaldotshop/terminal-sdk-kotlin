@@ -12,6 +12,7 @@ import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
+import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
@@ -195,10 +196,9 @@ private constructor(
 
         fun build(): Cart =
             Cart(
-                checkNotNull(amount) { "`amount` is required but was not set" },
-                checkNotNull(items) { "`items` is required but was not set" }
-                    .map { it.toImmutable() },
-                checkNotNull(subtotal) { "`subtotal` is required but was not set" },
+                checkRequired("amount", amount),
+                checkRequired("items", items).map { it.toImmutable() },
+                checkRequired("subtotal", subtotal),
                 addressId,
                 cardId,
                 shipping,
@@ -301,7 +301,7 @@ private constructor(
 
             fun build(): Amount =
                 Amount(
-                    checkNotNull(subtotal) { "`subtotal` is required but was not set" },
+                    checkRequired("subtotal", subtotal),
                     shipping,
                     additionalProperties.toImmutable(),
                 )
@@ -459,12 +459,10 @@ private constructor(
 
             fun build(): Item =
                 Item(
-                    checkNotNull(id) { "`id` is required but was not set" },
-                    checkNotNull(productVariantId) {
-                        "`productVariantId` is required but was not set"
-                    },
-                    checkNotNull(quantity) { "`quantity` is required but was not set" },
-                    checkNotNull(subtotal) { "`subtotal` is required but was not set" },
+                    checkRequired("id", id),
+                    checkRequired("productVariantId", productVariantId),
+                    checkRequired("quantity", quantity),
+                    checkRequired("subtotal", subtotal),
                     additionalProperties.toImmutable(),
                 )
         }

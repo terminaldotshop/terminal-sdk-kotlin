@@ -11,14 +11,12 @@ class TokenListResponseTest {
     fun createTokenListResponse() {
         val tokenListResponse =
             TokenListResponse.builder()
-                .data(
-                    listOf(
-                        Token.builder()
-                            .id("pat_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                            .token("trm_test_******XXXX")
-                            .time(Token.Time.builder().created("2024-06-29T19:36:19.000Z").build())
-                            .build()
-                    )
+                .addData(
+                    Token.builder()
+                        .id("pat_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .token("trm_test_******XXXX")
+                        .time(Token.Time.builder().created("2024-06-29T19:36:19.000Z").build())
+                        .build()
                 )
                 .build()
         assertThat(tokenListResponse).isNotNull
