@@ -20,7 +20,7 @@ import shop.terminal.api.core.toImmutable
 
 /** Set the shipping address for the current user's cart. */
 class CartSetAddressParams
-constructor(
+private constructor(
     private val body: CartSetAddressBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -83,7 +83,7 @@ constructor(
             fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var addressId: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -151,7 +151,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: CartSetAddressBody.Builder = CartSetAddressBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
