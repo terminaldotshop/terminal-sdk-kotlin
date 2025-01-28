@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.1.0-alpha.3 (2025-01-28)
+
+Full Changelog: [v0.1.0-alpha.2...v0.1.0-alpha.3](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v0.1.0-alpha.2...v0.1.0-alpha.3)
+
+### Features
+
+* **client:** add `close` method ([#40](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/40)) ([738397f](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/738397f4c0d15af2cf9902a16d608ad9f96c8455))
+
+
+### Bug Fixes
+
+* **client:** make some classes and constructors non-public ([#43](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/43)) ([f8ef89c](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/f8ef89cc1151bd15a3186bc29a4ff9ca916f810a))
+
+
+### Chores
+
+* add max retries to test ([#39](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/39)) ([2124226](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/2124226ec34ef1904b7a6b37ac1c338a5836ade9))
+* **internal:** codegen related update ([#37](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/37)) ([fc33875](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/fc33875bb1fcc115d375c398b29f6b7405af7633))
+* **internal:** remove some unnecessary `constructor` keywords ([f8ef89c](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/f8ef89cc1151bd15a3186bc29a4ff9ca916f810a))
+
+
+### Documentation
+
+* `async` and `sync` method comments ([#42](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/42)) ([27575f3](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/27575f3fcf2d8653ced40afda7d78cafb4496bdb))
+* add client documentation ([#41](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/41)) ([c8883c3](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/c8883c384ea0e053e362e0f1e61a685700e94e93))
+
 ## 0.1.0-alpha.2 (2025-01-10)
 
 Full Changelog: [v0.1.0-alpha.1...v0.1.0-alpha.2](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v0.1.0-alpha.1...v0.1.0-alpha.2)
