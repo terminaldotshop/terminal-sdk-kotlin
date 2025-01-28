@@ -17,7 +17,7 @@ import shop.terminal.api.models.OrderListParams
 import shop.terminal.api.models.OrderListResponse
 
 class OrderServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : OrderServiceAsync {
 

@@ -12,6 +12,7 @@ import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
+import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
@@ -104,8 +105,7 @@ private constructor(
 
         fun build(): CardListResponse =
             CardListResponse(
-                checkNotNull(data) { "`data` is required but was not set" }
-                    .map { it.toImmutable() },
+                checkRequired("data", data).map { it.toImmutable() },
                 additionalProperties.toImmutable()
             )
     }

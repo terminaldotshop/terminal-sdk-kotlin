@@ -24,7 +24,7 @@ import shop.terminal.api.models.CartSetItemParams
 import shop.terminal.api.models.CartSetItemResponse
 
 class CartServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : CartServiceAsync {
 

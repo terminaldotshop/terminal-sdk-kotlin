@@ -1,5 +1,6 @@
 package shop.terminal.api.core.http
 
+import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.toImmutable
 
 class HttpRequest
@@ -133,7 +134,7 @@ private constructor(
 
         fun build(): HttpRequest =
             HttpRequest(
-                checkNotNull(method) { "`method` is required but was not set" },
+                checkRequired("method", method),
                 url,
                 pathSegments.toImmutable(),
                 headers.build(),

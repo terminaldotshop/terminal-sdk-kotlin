@@ -11,15 +11,13 @@ class CardListResponseTest {
     fun createCardListResponse() {
         val cardListResponse =
             CardListResponse.builder()
-                .data(
-                    listOf(
-                        Card.builder()
-                            .id("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                            .brand("Visa")
-                            .expiration(Card.Expiration.builder().month(12L).year(2023L).build())
-                            .last4("1234")
-                            .build()
-                    )
+                .addData(
+                    Card.builder()
+                        .id("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .brand("Visa")
+                        .expiration(Card.Expiration.builder().month(12L).year(2023L).build())
+                        .last4("1234")
+                        .build()
                 )
                 .build()
         assertThat(cardListResponse).isNotNull

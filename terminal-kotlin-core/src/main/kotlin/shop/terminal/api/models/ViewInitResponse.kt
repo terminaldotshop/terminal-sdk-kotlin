@@ -12,6 +12,7 @@ import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
+import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
@@ -87,10 +88,7 @@ private constructor(
         }
 
         fun build(): ViewInitResponse =
-            ViewInitResponse(
-                checkNotNull(data) { "`data` is required but was not set" },
-                additionalProperties.toImmutable()
-            )
+            ViewInitResponse(checkRequired("data", data), additionalProperties.toImmutable())
     }
 
     /** Initial app data. */
@@ -382,22 +380,15 @@ private constructor(
 
             fun build(): Data =
                 Data(
-                    checkNotNull(addresses) { "`addresses` is required but was not set" }
-                        .map { it.toImmutable() },
-                    checkNotNull(apps) { "`apps` is required but was not set" }
-                        .map { it.toImmutable() },
-                    checkNotNull(cards) { "`cards` is required but was not set" }
-                        .map { it.toImmutable() },
-                    checkNotNull(cart) { "`cart` is required but was not set" },
-                    checkNotNull(orders) { "`orders` is required but was not set" }
-                        .map { it.toImmutable() },
-                    checkNotNull(products) { "`products` is required but was not set" }
-                        .map { it.toImmutable() },
-                    checkNotNull(profile) { "`profile` is required but was not set" },
-                    checkNotNull(subscriptions) { "`subscriptions` is required but was not set" }
-                        .map { it.toImmutable() },
-                    checkNotNull(tokens) { "`tokens` is required but was not set" }
-                        .map { it.toImmutable() },
+                    checkRequired("addresses", addresses).map { it.toImmutable() },
+                    checkRequired("apps", apps).map { it.toImmutable() },
+                    checkRequired("cards", cards).map { it.toImmutable() },
+                    checkRequired("cart", cart),
+                    checkRequired("orders", orders).map { it.toImmutable() },
+                    checkRequired("products", products).map { it.toImmutable() },
+                    checkRequired("profile", profile),
+                    checkRequired("subscriptions", subscriptions).map { it.toImmutable() },
+                    checkRequired("tokens", tokens).map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
         }

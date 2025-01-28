@@ -12,6 +12,7 @@ import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
+import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
@@ -141,10 +142,10 @@ private constructor(
 
         fun build(): Card =
             Card(
-                checkNotNull(id) { "`id` is required but was not set" },
-                checkNotNull(brand) { "`brand` is required but was not set" },
-                checkNotNull(expiration) { "`expiration` is required but was not set" },
-                checkNotNull(last4) { "`last4` is required but was not set" },
+                checkRequired("id", id),
+                checkRequired("brand", brand),
+                checkRequired("expiration", expiration),
+                checkRequired("last4", last4),
                 additionalProperties.toImmutable(),
             )
     }
@@ -242,8 +243,8 @@ private constructor(
 
             fun build(): Expiration =
                 Expiration(
-                    checkNotNull(month) { "`month` is required but was not set" },
-                    checkNotNull(year) { "`year` is required but was not set" },
+                    checkRequired("month", month),
+                    checkRequired("year", year),
                     additionalProperties.toImmutable(),
                 )
         }

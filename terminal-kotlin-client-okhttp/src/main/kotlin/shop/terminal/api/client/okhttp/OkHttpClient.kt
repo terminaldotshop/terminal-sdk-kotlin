@@ -18,6 +18,7 @@ import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import okio.BufferedSink
 import shop.terminal.api.core.RequestOptions
+import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.HttpClient
 import shop.terminal.api.core.http.HttpMethod
@@ -183,7 +184,7 @@ private constructor(private val okHttpClient: okhttp3.OkHttpClient, private val 
                     .callTimeout(if (timeout.seconds == 0L) timeout else timeout.plusSeconds(30))
                     .proxy(proxy)
                     .build(),
-                checkNotNull(baseUrl) { "`baseUrl` is required but was not set" },
+                checkRequired("baseUrl", baseUrl),
             )
     }
 

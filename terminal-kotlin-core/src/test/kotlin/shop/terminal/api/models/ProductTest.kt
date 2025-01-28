@@ -17,14 +17,12 @@ class ProductTest {
                     "The interpolation of Caturra and Castillo varietals from Las Cochitas creates this refreshing citrusy and complex coffee."
                 )
                 .name("[object Object]")
-                .variants(
-                    listOf(
-                        ProductVariant.builder()
-                            .id("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                            .name("12oz")
-                            .price(2200L)
-                            .build()
-                    )
+                .addVariant(
+                    ProductVariant.builder()
+                        .id("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .name("12oz")
+                        .price(2200L)
+                        .build()
                 )
                 .order(100L)
                 .subscription(Product.Subscription.ALLOWED)
