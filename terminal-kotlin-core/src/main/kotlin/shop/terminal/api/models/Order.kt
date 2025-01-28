@@ -101,7 +101,7 @@ private constructor(
         fun builder() = Builder()
     }
 
-    class Builder {
+    class Builder internal constructor() {
 
         private var id: JsonField<String>? = null
         private var amount: JsonField<Amount>? = null
@@ -252,7 +252,7 @@ private constructor(
             fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var shipping: JsonField<Long>? = null
             private var subtotal: JsonField<Long>? = null
@@ -402,7 +402,7 @@ private constructor(
             fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
             private var amount: JsonField<Long>? = null
@@ -611,7 +611,7 @@ private constructor(
             fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var city: JsonField<String>? = null
             private var country: JsonField<String>? = null
@@ -792,7 +792,7 @@ private constructor(
             fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var number: JsonField<String> = JsonMissing.of()
             private var service: JsonField<String> = JsonMissing.of()

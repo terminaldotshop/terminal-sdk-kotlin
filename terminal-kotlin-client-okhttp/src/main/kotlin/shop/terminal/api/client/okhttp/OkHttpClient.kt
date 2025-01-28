@@ -162,7 +162,7 @@ private constructor(private val okHttpClient: okhttp3.OkHttpClient, private val 
         fun builder() = Builder()
     }
 
-    class Builder {
+    class Builder internal constructor() {
 
         private var baseUrl: HttpUrl? = null
         // The default timeout is 1 minute.

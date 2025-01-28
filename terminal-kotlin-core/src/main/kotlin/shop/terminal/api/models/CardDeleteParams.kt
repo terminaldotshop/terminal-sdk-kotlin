@@ -12,7 +12,7 @@ import shop.terminal.api.core.toImmutable
 
 /** Delete a credit card associated with the current user. */
 class CardDeleteParams
-constructor(
+private constructor(
     private val id: String,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -49,7 +49,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var id: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()

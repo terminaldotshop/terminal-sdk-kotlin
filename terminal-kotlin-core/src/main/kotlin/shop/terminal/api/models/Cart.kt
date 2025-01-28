@@ -105,7 +105,7 @@ private constructor(
         fun builder() = Builder()
     }
 
-    class Builder {
+    class Builder internal constructor() {
 
         private var amount: JsonField<Amount>? = null
         private var items: JsonField<MutableList<Item>>? = null
@@ -256,7 +256,7 @@ private constructor(
             fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var subtotal: JsonField<Long>? = null
             private var shipping: JsonField<Long> = JsonMissing.of()
@@ -395,7 +395,7 @@ private constructor(
             fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
             private var productVariantId: JsonField<String>? = null
@@ -535,7 +535,7 @@ private constructor(
             fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var service: JsonField<String> = JsonMissing.of()
             private var timeframe: JsonField<String> = JsonMissing.of()

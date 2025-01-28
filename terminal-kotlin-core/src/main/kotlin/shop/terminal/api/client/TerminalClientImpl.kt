@@ -27,8 +27,7 @@ import shop.terminal.api.services.blocking.TokenServiceImpl
 import shop.terminal.api.services.blocking.ViewService
 import shop.terminal.api.services.blocking.ViewServiceImpl
 
-class TerminalClientImpl
-constructor(
+class TerminalClientImpl(
     private val clientOptions: ClientOptions,
 ) : TerminalClient {
 

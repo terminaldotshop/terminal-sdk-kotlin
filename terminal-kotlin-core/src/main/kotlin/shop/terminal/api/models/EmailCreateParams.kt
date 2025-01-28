@@ -20,7 +20,7 @@ import shop.terminal.api.core.toImmutable
 
 /** Subscribe to email updates from Terminal. */
 class EmailCreateParams
-constructor(
+private constructor(
     private val body: EmailCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -83,7 +83,7 @@ constructor(
             fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var email: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -148,7 +148,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: EmailCreateBody.Builder = EmailCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
