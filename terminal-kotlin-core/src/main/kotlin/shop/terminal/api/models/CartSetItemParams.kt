@@ -20,7 +20,7 @@ import shop.terminal.api.core.toImmutable
 
 /** Add an item to the current user's cart. */
 class CartSetItemParams
-constructor(
+private constructor(
     private val body: CartSetItemBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -101,7 +101,7 @@ constructor(
             fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var productVariantId: JsonField<String>? = null
             private var quantity: JsonField<Long>? = null
@@ -181,7 +181,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: CartSetItemBody.Builder = CartSetItemBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()

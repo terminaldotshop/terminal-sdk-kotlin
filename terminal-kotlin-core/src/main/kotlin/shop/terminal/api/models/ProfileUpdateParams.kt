@@ -19,7 +19,7 @@ import shop.terminal.api.core.toImmutable
 
 /** Update the current user's profile. */
 class ProfileUpdateParams
-constructor(
+private constructor(
     private val body: ProfileUpdateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -99,7 +99,7 @@ constructor(
             fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var email: JsonField<String> = JsonMissing.of()
             private var name: JsonField<String> = JsonMissing.of()
@@ -176,7 +176,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: ProfileUpdateBody.Builder = ProfileUpdateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()

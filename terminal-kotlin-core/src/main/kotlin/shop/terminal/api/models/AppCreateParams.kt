@@ -20,7 +20,7 @@ import shop.terminal.api.core.toImmutable
 
 /** Create an app. */
 class AppCreateParams
-constructor(
+private constructor(
     private val body: AppCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -116,7 +116,7 @@ constructor(
             fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
             private var name: JsonField<String>? = null
@@ -204,7 +204,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: AppCreateBody.Builder = AppCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
