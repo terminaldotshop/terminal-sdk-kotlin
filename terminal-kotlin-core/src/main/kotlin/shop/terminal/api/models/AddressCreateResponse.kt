@@ -52,6 +52,7 @@ private constructor(
         fun builder() = Builder()
     }
 
+    /** A builder for [AddressCreateResponse]. */
     class Builder internal constructor() {
 
         private var data: JsonField<String>? = null

@@ -194,6 +194,7 @@ private constructor(
             fun builder() = Builder()
         }
 
+        /** A builder for [AddressCreateBody]. */
         class Builder internal constructor() {
 
             private var city: JsonField<String>? = null
@@ -324,6 +325,7 @@ private constructor(
         fun builder() = Builder()
     }
 
+    /** A builder for [AddressCreateParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

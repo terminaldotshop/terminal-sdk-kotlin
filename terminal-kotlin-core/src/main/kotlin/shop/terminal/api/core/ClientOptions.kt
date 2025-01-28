@@ -37,6 +37,7 @@ private constructor(
         fun fromEnv(): ClientOptions = builder().fromEnv().build()
     }
 
+    /** A builder for [ClientOptions]. */
     class Builder internal constructor() {
 
         private var httpClient: HttpClient? = null

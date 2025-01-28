@@ -50,6 +50,7 @@ private constructor(
         fun builder() = Builder()
     }
 
+    /** A builder for [TokenCreateResponse]. */
     class Builder internal constructor() {
 
         private var data: JsonField<Data>? = null
@@ -140,6 +141,7 @@ private constructor(
             fun builder() = Builder()
         }
 
+        /** A builder for [Data]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null

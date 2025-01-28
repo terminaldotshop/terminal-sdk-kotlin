@@ -48,6 +48,7 @@ private constructor(
         fun builder() = Builder()
     }
 
+    /** A builder for [TokenDeleteParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

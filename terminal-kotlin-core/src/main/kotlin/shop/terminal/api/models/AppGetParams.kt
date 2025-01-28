@@ -41,6 +41,7 @@ private constructor(
         fun builder() = Builder()
     }
 
+    /** A builder for [AppGetParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 
