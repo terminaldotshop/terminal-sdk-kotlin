@@ -30,6 +30,12 @@ import shop.terminal.api.services.blocking.ViewService
  */
 interface TerminalClient {
 
+    /**
+     * Returns a version of this client that uses asynchronous execution.
+     *
+     * The returned client shares its resources, like its connection pool and thread pools, with
+     * this client.
+     */
     fun async(): TerminalClientAsync
 
     fun product(): ProductService
