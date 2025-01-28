@@ -22,7 +22,7 @@ import shop.terminal.api.models.TokenListParams
 import shop.terminal.api.models.TokenListResponse
 
 class TokenServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : TokenService {
 

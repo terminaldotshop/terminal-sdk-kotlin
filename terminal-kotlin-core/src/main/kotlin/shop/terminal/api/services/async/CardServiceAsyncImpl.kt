@@ -20,7 +20,7 @@ import shop.terminal.api.models.CardListParams
 import shop.terminal.api.models.CardListResponse
 
 class CardServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : CardServiceAsync {
 

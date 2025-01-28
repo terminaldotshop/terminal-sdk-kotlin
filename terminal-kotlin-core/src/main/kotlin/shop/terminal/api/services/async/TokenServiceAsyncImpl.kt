@@ -22,7 +22,7 @@ import shop.terminal.api.models.TokenListParams
 import shop.terminal.api.models.TokenListResponse
 
 class TokenServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : TokenServiceAsync {
 

@@ -12,6 +12,7 @@ import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
+import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 import shop.terminal.api.core.immutableEmptyMap
@@ -286,11 +287,11 @@ constructor(
 
             fun build(): AddressCreateBody =
                 AddressCreateBody(
-                    checkNotNull(city) { "`city` is required but was not set" },
-                    checkNotNull(country) { "`country` is required but was not set" },
-                    checkNotNull(name) { "`name` is required but was not set" },
-                    checkNotNull(street1) { "`street1` is required but was not set" },
-                    checkNotNull(zip) { "`zip` is required but was not set" },
+                    checkRequired("city", city),
+                    checkRequired("country", country),
+                    checkRequired("name", name),
+                    checkRequired("street1", street1),
+                    checkRequired("zip", zip),
                     phone,
                     province,
                     street2,

@@ -1,10 +1,3 @@
-import org.gradle.api.publish.PublishingExtension
-import org.gradle.api.publish.maven.MavenPublication
-import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.register
-import org.gradle.kotlin.dsl.get
-import com.vanniktech.maven.publish.JavaLibrary
-import com.vanniktech.maven.publish.JavadocJar
 import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import com.vanniktech.maven.publish.SonatypeHost
 
@@ -25,7 +18,7 @@ configure<MavenPublishBaseExtension> {
     signAllPublications()
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
 
-    this.coordinates(project.group.toString(), project.name, project.version.toString())
+    coordinates(project.group.toString(), project.name, project.version.toString())
 
     pom {
         name.set("Terminal API")

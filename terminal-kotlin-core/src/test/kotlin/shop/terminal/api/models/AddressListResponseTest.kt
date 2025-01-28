@@ -11,20 +11,18 @@ class AddressListResponseTest {
     fun createAddressListResponse() {
         val addressListResponse =
             AddressListResponse.builder()
-                .data(
-                    listOf(
-                        Address.builder()
-                            .id("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                            .city("Anytown")
-                            .country("US")
-                            .name("John Doe")
-                            .street1("123 Main St")
-                            .zip("12345")
-                            .phone("5555555555")
-                            .province("CA")
-                            .street2("Apt 1")
-                            .build()
-                    )
+                .addData(
+                    Address.builder()
+                        .id("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .city("Anytown")
+                        .country("US")
+                        .name("John Doe")
+                        .street1("123 Main St")
+                        .zip("12345")
+                        .phone("5555555555")
+                        .province("CA")
+                        .street2("Apt 1")
+                        .build()
                 )
                 .build()
         assertThat(addressListResponse).isNotNull

@@ -18,7 +18,7 @@ import shop.terminal.api.models.ProfileUpdateParams
 import shop.terminal.api.models.ProfileUpdateResponse
 
 class ProfileServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : ProfileService {
 

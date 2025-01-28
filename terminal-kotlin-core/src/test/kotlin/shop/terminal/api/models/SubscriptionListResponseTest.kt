@@ -11,17 +11,15 @@ class SubscriptionListResponseTest {
     fun createSubscriptionListResponse() {
         val subscriptionListResponse =
             SubscriptionListResponse.builder()
-                .data(
-                    listOf(
-                        Subscription.builder()
-                            .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                            .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                            .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                            .frequency(Subscription.Frequency.FIXED)
-                            .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                            .quantity(1L)
-                            .build()
-                    )
+                .addData(
+                    Subscription.builder()
+                        .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .frequency(Subscription.Frequency.FIXED)
+                        .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .quantity(1L)
+                        .build()
                 )
                 .build()
         assertThat(subscriptionListResponse).isNotNull

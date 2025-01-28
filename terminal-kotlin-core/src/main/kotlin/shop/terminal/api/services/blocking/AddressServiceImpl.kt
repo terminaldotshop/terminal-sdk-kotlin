@@ -20,7 +20,7 @@ import shop.terminal.api.models.AddressListParams
 import shop.terminal.api.models.AddressListResponse
 
 class AddressServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : AddressService {
 

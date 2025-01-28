@@ -5,6 +5,7 @@ package shop.terminal.api.models
 import java.util.Objects
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
+import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 import shop.terminal.api.core.toImmutable
@@ -187,7 +188,7 @@ constructor(
 
         fun build(): AppDeleteParams =
             AppDeleteParams(
-                checkNotNull(id) { "`id` is required but was not set" },
+                checkRequired("id", id),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),

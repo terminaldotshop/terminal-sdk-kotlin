@@ -15,7 +15,7 @@ import shop.terminal.api.models.ProductListParams
 import shop.terminal.api.models.ProductListResponse
 
 class ProductServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : ProductServiceAsync {
 

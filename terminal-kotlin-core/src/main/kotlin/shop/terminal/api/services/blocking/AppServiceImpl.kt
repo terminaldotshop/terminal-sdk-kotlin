@@ -22,7 +22,7 @@ import shop.terminal.api.models.AppListParams
 import shop.terminal.api.models.AppListResponse
 
 class AppServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : AppService {
 

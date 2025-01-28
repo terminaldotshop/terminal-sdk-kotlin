@@ -17,7 +17,7 @@ import shop.terminal.api.models.OrderListParams
 import shop.terminal.api.models.OrderListResponse
 
 class OrderServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : OrderService {
 

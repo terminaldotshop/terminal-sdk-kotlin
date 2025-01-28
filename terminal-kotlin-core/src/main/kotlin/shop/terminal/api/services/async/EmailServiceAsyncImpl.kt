@@ -16,7 +16,7 @@ import shop.terminal.api.models.EmailCreateParams
 import shop.terminal.api.models.EmailCreateResponse
 
 class EmailServiceAsyncImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : EmailServiceAsync {
 

@@ -13,6 +13,7 @@ import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
+import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 import shop.terminal.api.core.immutableEmptyMap
@@ -247,14 +248,12 @@ constructor(
 
             fun build(): SubscriptionCreateBody =
                 SubscriptionCreateBody(
-                    checkNotNull(id) { "`id` is required but was not set" },
-                    checkNotNull(addressId) { "`addressId` is required but was not set" },
-                    checkNotNull(cardId) { "`cardId` is required but was not set" },
-                    checkNotNull(frequency) { "`frequency` is required but was not set" },
-                    checkNotNull(productVariantId) {
-                        "`productVariantId` is required but was not set"
-                    },
-                    checkNotNull(quantity) { "`quantity` is required but was not set" },
+                    checkRequired("id", id),
+                    checkRequired("addressId", addressId),
+                    checkRequired("cardId", cardId),
+                    checkRequired("frequency", frequency),
+                    checkRequired("productVariantId", productVariantId),
+                    checkRequired("quantity", quantity),
                     additionalProperties.toImmutable(),
                 )
         }
@@ -462,6 +461,7 @@ constructor(
             )
     }
 
+    /** Frequency of the subscription. */
     class Frequency
     @JsonCreator
     private constructor(
