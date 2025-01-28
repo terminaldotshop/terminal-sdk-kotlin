@@ -102,4 +102,6 @@ constructor(
     override fun email(): EmailServiceAsync = email
 
     override fun view(): ViewServiceAsync = view
+
+    override fun close() = clientOptions.httpClient.close()
 }
