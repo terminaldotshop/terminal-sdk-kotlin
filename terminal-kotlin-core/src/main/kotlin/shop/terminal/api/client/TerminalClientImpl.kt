@@ -90,4 +90,6 @@ constructor(
     override fun email(): EmailService = email
 
     override fun view(): ViewService = view
+
+    override fun close() = clientOptions.httpClient.close()
 }
