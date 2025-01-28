@@ -21,6 +21,7 @@ class TerminalOkHttpClient private constructor() {
         fun fromEnv(): TerminalClient = builder().fromEnv().build()
     }
 
+    /** A builder for [TerminalOkHttpClient]. */
     class Builder internal constructor() {
 
         private var clientOptions: ClientOptions.Builder = ClientOptions.builder()

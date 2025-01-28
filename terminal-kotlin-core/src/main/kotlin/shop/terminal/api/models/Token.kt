@@ -72,6 +72,7 @@ private constructor(
         fun builder() = Builder()
     }
 
+    /** A builder for [Token]. */
     class Builder internal constructor() {
 
         private var id: JsonField<String>? = null
@@ -172,6 +173,7 @@ private constructor(
             fun builder() = Builder()
         }
 
+        /** A builder for [Time]. */
         class Builder internal constructor() {
 
             private var created: JsonField<String>? = null

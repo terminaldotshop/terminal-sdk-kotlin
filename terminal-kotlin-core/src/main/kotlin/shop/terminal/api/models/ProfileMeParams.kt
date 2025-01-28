@@ -29,6 +29,7 @@ private constructor(
         fun builder() = Builder()
     }
 
+    /** A builder for [ProfileMeParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

@@ -101,6 +101,7 @@ private constructor(
             fun builder() = Builder()
         }
 
+        /** A builder for [CartSetItemBody]. */
         class Builder internal constructor() {
 
             private var productVariantId: JsonField<String>? = null
@@ -180,6 +181,7 @@ private constructor(
         fun builder() = Builder()
     }
 
+    /** A builder for [CartSetItemParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

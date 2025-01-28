@@ -41,6 +41,7 @@ private constructor(
         fun builder() = Builder()
     }
 
+    /** A builder for [OrderGetParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

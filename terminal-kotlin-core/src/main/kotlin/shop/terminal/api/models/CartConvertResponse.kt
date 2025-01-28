@@ -52,6 +52,7 @@ private constructor(
         fun builder() = Builder()
     }
 
+    /** A builder for [CartConvertResponse]. */
     class Builder internal constructor() {
 
         private var data: JsonField<Order>? = null
