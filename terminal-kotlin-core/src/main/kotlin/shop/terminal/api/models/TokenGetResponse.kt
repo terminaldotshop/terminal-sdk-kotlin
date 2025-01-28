@@ -58,6 +58,7 @@ private constructor(
         fun builder() = Builder()
     }
 
+    /** A builder for [TokenGetResponse]. */
     class Builder internal constructor() {
 
         private var data: JsonField<Token>? = null

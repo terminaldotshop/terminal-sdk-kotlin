@@ -83,6 +83,7 @@ private constructor(
             fun builder() = Builder()
         }
 
+        /** A builder for [CartSetAddressBody]. */
         class Builder internal constructor() {
 
             private var addressId: JsonField<String>? = null
@@ -150,6 +151,7 @@ private constructor(
         fun builder() = Builder()
     }
 
+    /** A builder for [CartSetAddressParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

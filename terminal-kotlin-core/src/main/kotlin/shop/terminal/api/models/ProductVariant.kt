@@ -69,6 +69,7 @@ private constructor(
         fun builder() = Builder()
     }
 
+    /** A builder for [ProductVariant]. */
     class Builder internal constructor() {
 
         private var id: JsonField<String>? = null

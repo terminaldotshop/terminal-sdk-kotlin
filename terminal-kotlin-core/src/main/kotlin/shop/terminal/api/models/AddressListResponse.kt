@@ -54,6 +54,7 @@ private constructor(
         fun builder() = Builder()
     }
 
+    /** A builder for [AddressListResponse]. */
     class Builder internal constructor() {
 
         private var data: JsonField<MutableList<Address>>? = null

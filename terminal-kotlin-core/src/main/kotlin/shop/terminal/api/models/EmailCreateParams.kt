@@ -83,6 +83,7 @@ private constructor(
             fun builder() = Builder()
         }
 
+        /** A builder for [EmailCreateBody]. */
         class Builder internal constructor() {
 
             private var email: JsonField<String>? = null
@@ -147,6 +148,7 @@ private constructor(
         fun builder() = Builder()
     }
 
+    /** A builder for [EmailCreateParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 
