@@ -27,8 +27,7 @@ import shop.terminal.api.services.async.TokenServiceAsyncImpl
 import shop.terminal.api.services.async.ViewServiceAsync
 import shop.terminal.api.services.async.ViewServiceAsyncImpl
 
-class TerminalClientAsyncImpl
-constructor(
+class TerminalClientAsyncImpl(
     private val clientOptions: ClientOptions,
 ) : TerminalClientAsync {
 

@@ -22,7 +22,7 @@ import shop.terminal.api.errors.TerminalInvalidDataException
 
 /** Create a subscription for the current user. */
 class SubscriptionCreateParams
-constructor(
+private constructor(
     private val body: SubscriptionCreateBody,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -168,7 +168,7 @@ constructor(
             fun builder() = Builder()
         }
 
-        class Builder {
+        class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
             private var addressId: JsonField<String>? = null
@@ -284,7 +284,7 @@ constructor(
     }
 
     @NoAutoDetect
-    class Builder {
+    class Builder internal constructor() {
 
         private var body: SubscriptionCreateBody.Builder = SubscriptionCreateBody.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
