@@ -14,6 +14,20 @@ import shop.terminal.api.services.blocking.SubscriptionService
 import shop.terminal.api.services.blocking.TokenService
 import shop.terminal.api.services.blocking.ViewService
 
+/**
+ * A client for interacting with the Terminal REST API synchronously. You can also switch to
+ * asynchronous execution via the [async] method.
+ *
+ * This client performs best when you create a single instance and reuse it for all interactions
+ * with the REST API. This is because each client holds its own connection pool and thread pools.
+ * Reusing connections and threads reduces latency and saves memory. The client also handles rate
+ * limiting per client. This means that creating and using multiple instances at the same time will
+ * not respect rate limits.
+ *
+ * The threads and connections that are held will be released automatically if they remain idle. But
+ * if you are writing an application that needs to aggressively release unused resources, then you
+ * may call [close].
+ */
 interface TerminalClient {
 
     fun async(): TerminalClientAsync
