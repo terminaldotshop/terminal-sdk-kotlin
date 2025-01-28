@@ -116,6 +116,7 @@ private constructor(
             fun builder() = Builder()
         }
 
+        /** A builder for [AppCreateBody]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
@@ -203,6 +204,7 @@ private constructor(
         fun builder() = Builder()
     }
 
+    /** A builder for [AppCreateParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

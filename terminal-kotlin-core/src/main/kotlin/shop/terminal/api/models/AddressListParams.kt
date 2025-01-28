@@ -29,6 +29,7 @@ private constructor(
         fun builder() = Builder()
     }
 
+    /** A builder for [AddressListParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

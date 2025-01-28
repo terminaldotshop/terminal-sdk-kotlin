@@ -52,6 +52,7 @@ private constructor(
         fun builder() = Builder()
     }
 
+    /** A builder for [ViewInitResponse]. */
     class Builder internal constructor() {
 
         private var data: JsonField<Data>? = null
@@ -201,6 +202,7 @@ private constructor(
             fun builder() = Builder()
         }
 
+        /** A builder for [Data]. */
         class Builder internal constructor() {
 
             private var addresses: JsonField<MutableList<Address>>? = null

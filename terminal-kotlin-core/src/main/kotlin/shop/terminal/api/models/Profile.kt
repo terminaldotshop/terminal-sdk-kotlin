@@ -53,6 +53,7 @@ private constructor(
         fun builder() = Builder()
     }
 
+    /** A builder for [Profile]. */
     class Builder internal constructor() {
 
         private var user: JsonField<User>? = null
@@ -174,6 +175,7 @@ private constructor(
             fun builder() = Builder()
         }
 
+        /** A builder for [User]. */
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null

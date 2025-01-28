@@ -32,6 +32,7 @@ private constructor(
         fun builder() = Builder()
     }
 
+    /** A builder for [ViewInitParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 

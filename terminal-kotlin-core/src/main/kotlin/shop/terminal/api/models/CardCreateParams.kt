@@ -95,6 +95,7 @@ private constructor(
             fun builder() = Builder()
         }
 
+        /** A builder for [CardCreateBody]. */
         class Builder internal constructor() {
 
             private var token: JsonField<String>? = null
@@ -165,6 +166,7 @@ private constructor(
         fun builder() = Builder()
     }
 
+    /** A builder for [CardCreateParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 
