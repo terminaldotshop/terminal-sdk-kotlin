@@ -12,6 +12,7 @@ import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
+import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
@@ -83,10 +84,7 @@ private constructor(
         }
 
         fun build(): TokenCreateResponse =
-            TokenCreateResponse(
-                checkNotNull(data) { "`data` is required but was not set" },
-                additionalProperties.toImmutable()
-            )
+            TokenCreateResponse(checkRequired("data", data), additionalProperties.toImmutable())
     }
 
     @NoAutoDetect
@@ -193,8 +191,8 @@ private constructor(
 
             fun build(): Data =
                 Data(
-                    checkNotNull(id) { "`id` is required but was not set" },
-                    checkNotNull(token) { "`token` is required but was not set" },
+                    checkRequired("id", id),
+                    checkRequired("token", token),
                     additionalProperties.toImmutable(),
                 )
         }

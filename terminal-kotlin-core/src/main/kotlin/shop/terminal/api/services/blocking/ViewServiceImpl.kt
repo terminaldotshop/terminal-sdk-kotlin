@@ -15,7 +15,7 @@ import shop.terminal.api.models.ViewInitParams
 import shop.terminal.api.models.ViewInitResponse
 
 class ViewServiceImpl
-constructor(
+internal constructor(
     private val clientOptions: ClientOptions,
 ) : ViewService {
 

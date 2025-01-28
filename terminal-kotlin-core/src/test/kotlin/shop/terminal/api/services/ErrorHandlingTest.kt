@@ -60,32 +60,28 @@ class ErrorHandlingTest {
 
         val expected =
             ProductListResponse.builder()
-                .data(
-                    listOf(
-                        Product.builder()
-                            .id("prd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                            .description(
-                                "The interpolation of Caturra and Castillo varietals from Las Cochitas creates this refreshing citrusy and complex coffee."
-                            )
-                            .name("[object Object]")
-                            .variants(
-                                listOf(
-                                    ProductVariant.builder()
-                                        .id("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                                        .name("12oz")
-                                        .price(2200L)
-                                        .build()
-                                )
-                            )
-                            .order(100L)
-                            .subscription(Product.Subscription.ALLOWED)
-                            .tags(
-                                Product.Tags.builder()
-                                    .putAdditionalProperty("featured", JsonValue.from("true"))
-                                    .build()
-                            )
-                            .build()
-                    )
+                .addData(
+                    Product.builder()
+                        .id("prd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .description(
+                            "The interpolation of Caturra and Castillo varietals from Las Cochitas creates this refreshing citrusy and complex coffee."
+                        )
+                        .name("[object Object]")
+                        .addVariant(
+                            ProductVariant.builder()
+                                .id("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                                .name("12oz")
+                                .price(2200L)
+                                .build()
+                        )
+                        .order(100L)
+                        .subscription(Product.Subscription.ALLOWED)
+                        .tags(
+                            Product.Tags.builder()
+                                .putAdditionalProperty("featured", JsonValue.from("true"))
+                                .build()
+                        )
+                        .build()
                 )
                 .build()
 

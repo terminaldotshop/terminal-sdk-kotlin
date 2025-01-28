@@ -11,14 +11,12 @@ class AppListResponseTest {
     fun createAppListResponse() {
         val appListResponse =
             AppListResponse.builder()
-                .data(
-                    listOf(
-                        App.builder()
-                            .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                            .name("Example App")
-                            .redirectUri("https://example.com/callback")
-                            .build()
-                    )
+                .addData(
+                    App.builder()
+                        .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .name("Example App")
+                        .redirectUri("https://example.com/callback")
+                        .build()
                 )
                 .build()
         assertThat(appListResponse).isNotNull

@@ -13,16 +13,14 @@ class OrderTest {
             Order.builder()
                 .id("ord_XXXXXXXXXXXXXXXXXXXXXXXXX")
                 .amount(Order.Amount.builder().shipping(800L).subtotal(4400L).build())
-                .items(
-                    listOf(
-                        Order.Item.builder()
-                            .id("itm_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                            .amount(4400L)
-                            .quantity(2L)
-                            .description("description")
-                            .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                            .build()
-                    )
+                .addItem(
+                    Order.Item.builder()
+                        .id("itm_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .amount(4400L)
+                        .quantity(2L)
+                        .description("description")
+                        .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .build()
                 )
                 .shipping(
                     Order.Shipping.builder()
