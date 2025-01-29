@@ -4,6 +4,7 @@ package shop.terminal.api.models
 
 import java.util.Objects
 import shop.terminal.api.core.NoAutoDetect
+import shop.terminal.api.core.Params
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 
@@ -12,15 +13,15 @@ class ProductListParams
 private constructor(
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-) {
+) : Params {
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    internal fun getHeaders(): Headers = additionalHeaders
+    override fun _headers(): Headers = additionalHeaders
 
-    internal fun getQueryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     fun toBuilder() = Builder().from(this)
 

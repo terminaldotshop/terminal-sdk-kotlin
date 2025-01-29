@@ -20,7 +20,7 @@ class SubscriptionCreateParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             SubscriptionCreateParams.builder()
                 .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
@@ -30,7 +30,7 @@ class SubscriptionCreateParamsTest {
                 .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                 .quantity(1L)
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.id()).isEqualTo("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
         assertThat(body.addressId()).isEqualTo("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
@@ -41,7 +41,7 @@ class SubscriptionCreateParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             SubscriptionCreateParams.builder()
                 .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
@@ -51,7 +51,7 @@ class SubscriptionCreateParamsTest {
                 .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                 .quantity(1L)
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.id()).isEqualTo("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
         assertThat(body.addressId()).isEqualTo("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
