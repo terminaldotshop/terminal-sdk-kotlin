@@ -22,7 +22,7 @@ class AddressCreateParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             AddressCreateParams.builder()
                 .city("Anytown")
@@ -34,7 +34,7 @@ class AddressCreateParamsTest {
                 .province("CA")
                 .street2("Apt 1")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.city()).isEqualTo("Anytown")
         assertThat(body.country()).isEqualTo("US")
@@ -47,7 +47,7 @@ class AddressCreateParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             AddressCreateParams.builder()
                 .city("Anytown")
@@ -56,7 +56,7 @@ class AddressCreateParamsTest {
                 .street1("123 Main St")
                 .zip("12345")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.city()).isEqualTo("Anytown")
         assertThat(body.country()).isEqualTo("US")

@@ -17,14 +17,14 @@ class AppCreateParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params =
             AppCreateParams.builder()
                 .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
                 .name("Example App")
                 .redirectUri("https://example.com/callback")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.id()).isEqualTo("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
         assertThat(body.name()).isEqualTo("Example App")
@@ -32,14 +32,14 @@ class AppCreateParamsTest {
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params =
             AppCreateParams.builder()
                 .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
                 .name("Example App")
                 .redirectUri("https://example.com/callback")
                 .build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.id()).isEqualTo("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
         assertThat(body.name()).isEqualTo("Example App")
