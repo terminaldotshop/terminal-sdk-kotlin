@@ -13,17 +13,17 @@ class EmailCreateParamsTest {
     }
 
     @Test
-    fun getBody() {
+    fun body() {
         val params = EmailCreateParams.builder().email("john@example.com").build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.email()).isEqualTo("john@example.com")
     }
 
     @Test
-    fun getBodyWithoutOptionalFields() {
+    fun bodyWithoutOptionalFields() {
         val params = EmailCreateParams.builder().email("john@example.com").build()
-        val body = params.getBody()
+        val body = params._body()
         assertThat(body).isNotNull
         assertThat(body.email()).isEqualTo("john@example.com")
     }
