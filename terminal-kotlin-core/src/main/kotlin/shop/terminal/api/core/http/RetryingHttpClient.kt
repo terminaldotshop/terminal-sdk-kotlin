@@ -55,15 +55,17 @@ private constructor(
                     }
 
                     response
-                } catch (t: Throwable) {
-                    if (++retries > maxRetries || !shouldRetry(t)) {
-                        throw t
+                } catch (throwable: Throwable) {
+                    if (++retries > maxRetries || !shouldRetry(throwable)) {
+                        throw throwable
                     }
 
                     null
                 }
 
             val backoffMillis = getRetryBackoffMillis(retries, response)
+            // All responses must be closed, so close the failed one before retrying.
+            response?.close()
             Thread.sleep(backoffMillis.toMillis())
         }
     }
@@ -97,15 +99,17 @@ private constructor(
                     }
 
                     response
-                } catch (t: Throwable) {
-                    if (++retries > maxRetries || !shouldRetry(t)) {
-                        throw t
+                } catch (throwable: Throwable) {
+                    if (++retries > maxRetries || !shouldRetry(throwable)) {
+                        throw throwable
                     }
 
                     null
                 }
 
             val backoffMillis = getRetryBackoffMillis(retries, response)
+            // All responses must be closed, so close the failed one before retrying.
+            response?.close()
             delay(backoffMillis.toKotlinDuration())
         }
     }
@@ -207,6 +211,7 @@ private constructor(
     }
 
     companion object {
+
         fun builder() = Builder()
     }
 
