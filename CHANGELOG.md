@@ -1,5 +1,33 @@
 # Changelog
 
+## 0.1.0-alpha.4 (2025-01-30)
+
+Full Changelog: [v0.1.0-alpha.3...v0.1.0-alpha.4](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v0.1.0-alpha.3...v0.1.0-alpha.4)
+
+### Features
+
+* **client:** add `_queryParams` and `_headers` methods ([#47](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/47)) ([f7b944c](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/f7b944c4c69412c2a2914bca8cbd1aa4a89bced5))
+
+
+### Bug Fixes
+
+* **client:** don't leak responses when retrying ([#49](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/49)) ([e483935](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/e483935e8e6487b965fb2f0a9c043042057c616e))
+
+
+### Chores
+
+* **internal:** improve `RetryingHttpClientTest` ([#48](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/48)) ([99c9509](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/99c9509e6a4a2536f22fdcb8805394f175b36381))
+
+
+### Documentation
+
+* builder, enum, and union comments ([#45](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/45)) ([6ea7157](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/6ea7157ac2785a86ebe9b96ecef7f645e18052c7))
+
+
+### Refactors
+
+* **internal:** extract request preparation logic ([f7b944c](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/f7b944c4c69412c2a2914bca8cbd1aa4a89bced5))
+
 ## 0.1.0-alpha.3 (2025-01-28)
 
 Full Changelog: [v0.1.0-alpha.2...v0.1.0-alpha.3](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v0.1.0-alpha.2...v0.1.0-alpha.3)
