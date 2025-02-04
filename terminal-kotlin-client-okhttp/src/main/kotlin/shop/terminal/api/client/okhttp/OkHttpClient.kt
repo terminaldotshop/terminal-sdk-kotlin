@@ -31,7 +31,43 @@ class OkHttpClient
 private constructor(private val okHttpClient: okhttp3.OkHttpClient, private val baseUrl: HttpUrl) :
     HttpClient {
 
-    private fun getClient(requestOptions: RequestOptions): okhttp3.OkHttpClient {
+    override fun execute(
+        request: HttpRequest,
+        requestOptions: RequestOptions,
+    ): HttpResponse {
+        val call = newCall(request, requestOptions)
+
+        return try {
+            call.execute().toResponse()
+        } catch (e: IOException) {
+            throw TerminalIoException("Request failed", e)
+        } finally {
+            request.body?.close()
+        }
+    }
+
+    override suspend fun executeAsync(
+        request: HttpRequest,
+        requestOptions: RequestOptions,
+    ): HttpResponse {
+        val call = newCall(request, requestOptions)
+
+        return try {
+            call.executeAsync().toResponse()
+        } catch (e: IOException) {
+            throw TerminalIoException("Request failed", e)
+        } finally {
+            request.body?.close()
+        }
+    }
+
+    override fun close() {
+        okHttpClient.dispatcher.executorService.shutdown()
+        okHttpClient.connectionPool.evictAll()
+        okHttpClient.cache?.close()
+    }
+
+    private fun newCall(request: HttpRequest, requestOptions: RequestOptions): Call {
         val clientBuilder = okHttpClient.newBuilder()
 
         val logLevel =
@@ -55,46 +91,28 @@ private constructor(private val okHttpClient: okhttp3.OkHttpClient, private val 
                 .callTimeout(if (timeout.seconds == 0L) timeout else timeout.plusSeconds(30))
         }
 
-        return clientBuilder.build()
+        val client = clientBuilder.build()
+        return client.newCall(request.toRequest(client))
     }
 
-    override fun execute(
-        request: HttpRequest,
-        requestOptions: RequestOptions,
-    ): HttpResponse {
-        val call = getClient(requestOptions).newCall(request.toRequest())
+    private suspend fun Call.executeAsync(): Response =
+        suspendCancellableCoroutine { continuation ->
+            continuation.invokeOnCancellation { this.cancel() }
 
-        return try {
-            call.execute().toResponse()
-        } catch (e: IOException) {
-            throw TerminalIoException("Request failed", e)
-        } finally {
-            request.body?.close()
+            enqueue(
+                object : Callback {
+                    override fun onFailure(call: Call, e: IOException) {
+                        continuation.resumeWith(Result.failure(e))
+                    }
+
+                    override fun onResponse(call: Call, response: Response) {
+                        continuation.resumeWith(Result.success(response))
+                    }
+                }
+            )
         }
-    }
 
-    override suspend fun executeAsync(
-        request: HttpRequest,
-        requestOptions: RequestOptions,
-    ): HttpResponse {
-        val call = getClient(requestOptions).newCall(request.toRequest())
-
-        return try {
-            call.executeAsync().toResponse()
-        } catch (e: IOException) {
-            throw TerminalIoException("Request failed", e)
-        } finally {
-            request.body?.close()
-        }
-    }
-
-    override fun close() {
-        okHttpClient.dispatcher.executorService.shutdown()
-        okHttpClient.connectionPool.evictAll()
-        okHttpClient.cache?.close()
-    }
-
-    private fun HttpRequest.toRequest(): Request {
+    private fun HttpRequest.toRequest(client: okhttp3.OkHttpClient): Request {
         var body: RequestBody? = body?.toRequestBody()
         // OkHttpClient always requires a request body for PUT and POST methods.
         if (body == null && (method == HttpMethod.PUT || method == HttpMethod.POST)) {
@@ -104,6 +122,21 @@ private constructor(private val okHttpClient: okhttp3.OkHttpClient, private val 
         val builder = Request.Builder().url(toUrl()).method(method.name, body)
         headers.names().forEach { name ->
             headers.values(name).forEach { builder.header(name, it) }
+        }
+
+        if (
+            !headers.names().contains("X-Stainless-Read-Timeout") && client.readTimeoutMillis != 0
+        ) {
+            builder.header(
+                "X-Stainless-Read-Timeout",
+                Duration.ofMillis(client.readTimeoutMillis.toLong()).seconds.toString()
+            )
+        }
+        if (!headers.names().contains("X-Stainless-Timeout") && client.callTimeoutMillis != 0) {
+            builder.header(
+                "X-Stainless-Timeout",
+                Duration.ofMillis(client.callTimeoutMillis.toLong()).seconds.toString()
+            )
         }
 
         return builder.build()
@@ -187,21 +220,4 @@ private constructor(private val okHttpClient: okhttp3.OkHttpClient, private val 
                 checkRequired("baseUrl", baseUrl),
             )
     }
-
-    private suspend fun Call.executeAsync(): Response =
-        suspendCancellableCoroutine { continuation ->
-            continuation.invokeOnCancellation { this.cancel() }
-
-            enqueue(
-                object : Callback {
-                    override fun onFailure(call: Call, e: IOException) {
-                        continuation.resumeWith(Result.failure(e))
-                    }
-
-                    override fun onResponse(call: Call, response: Response) {
-                        continuation.resumeWith(Result.success(response))
-                    }
-                }
-            )
-        }
 }
