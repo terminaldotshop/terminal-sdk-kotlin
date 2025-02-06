@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 class AddressListParamsTest {
 
     @Test
-    fun createAddressListParams() {
+    fun create() {
         AddressListParams.builder().build()
     }
 }

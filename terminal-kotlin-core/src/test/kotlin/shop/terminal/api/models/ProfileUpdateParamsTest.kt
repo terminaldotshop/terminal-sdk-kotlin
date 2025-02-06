@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class ProfileUpdateParamsTest {
 
     @Test
-    fun createProfileUpdateParams() {
+    fun create() {
         ProfileUpdateParams.builder().email("john@example.com").name("John Doe").build()
     }
 

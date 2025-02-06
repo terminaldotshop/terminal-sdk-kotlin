@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 class ProductListParamsTest {
 
     @Test
-    fun createProductListParams() {
+    fun create() {
         ProductListParams.builder().build()
     }
 }

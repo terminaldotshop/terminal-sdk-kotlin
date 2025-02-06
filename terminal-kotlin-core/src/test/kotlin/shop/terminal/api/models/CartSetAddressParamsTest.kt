@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class CartSetAddressParamsTest {
 
     @Test
-    fun createCartSetAddressParams() {
+    fun create() {
         CartSetAddressParams.builder().addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
     }
 

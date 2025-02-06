@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 class CartConvertParamsTest {
 
     @Test
-    fun createCartConvertParams() {
+    fun create() {
         CartConvertParams.builder().build()
     }
 }

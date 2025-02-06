@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 class ViewInitParamsTest {
 
     @Test
-    fun createViewInitParams() {
+    fun create() {
         ViewInitParams.builder().build()
     }
 }

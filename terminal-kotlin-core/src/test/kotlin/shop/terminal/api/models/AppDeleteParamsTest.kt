@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class AppDeleteParamsTest {
 
     @Test
-    fun createAppDeleteParams() {
+    fun create() {
         AppDeleteParams.builder().id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
     }
 
