@@ -16,6 +16,7 @@ class SubscriptionCreateParamsTest {
             .frequency(SubscriptionCreateParams.Frequency.FIXED)
             .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
             .quantity(1L)
+            .next("2025-02-01T19:36:19.000Z")
             .build()
     }
 
@@ -29,6 +30,7 @@ class SubscriptionCreateParamsTest {
                 .frequency(SubscriptionCreateParams.Frequency.FIXED)
                 .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                 .quantity(1L)
+                .next("2025-02-01T19:36:19.000Z")
                 .build()
         val body = params._body()
         assertThat(body).isNotNull
@@ -38,6 +40,7 @@ class SubscriptionCreateParamsTest {
         assertThat(body.frequency()).isEqualTo(SubscriptionCreateParams.Frequency.FIXED)
         assertThat(body.productVariantId()).isEqualTo("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
         assertThat(body.quantity()).isEqualTo(1L)
+        assertThat(body.next()).isEqualTo("2025-02-01T19:36:19.000Z")
     }
 
     @Test
