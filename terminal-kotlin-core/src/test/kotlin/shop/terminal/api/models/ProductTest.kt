@@ -16,6 +16,7 @@ class ProductTest {
                 .description(
                     "The interpolation of Caturra and Castillo varietals from Las Cochitas creates this refreshing citrusy and complex coffee."
                 )
+                .addFilter(Product.Filter.EU)
                 .name("[object Object]")
                 .addVariant(
                     ProductVariant.builder()
@@ -38,6 +39,7 @@ class ProductTest {
             .isEqualTo(
                 "The interpolation of Caturra and Castillo varietals from Las Cochitas creates this refreshing citrusy and complex coffee."
             )
+        assertThat(product.filters()).containsExactly(Product.Filter.EU)
         assertThat(product.name()).isEqualTo("[object Object]")
         assertThat(product.variants())
             .containsExactly(
