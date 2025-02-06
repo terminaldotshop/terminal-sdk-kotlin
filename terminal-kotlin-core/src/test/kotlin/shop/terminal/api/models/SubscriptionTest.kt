@@ -17,6 +17,7 @@ class SubscriptionTest {
                 .frequency(Subscription.Frequency.FIXED)
                 .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                 .quantity(1L)
+                .next("2025-02-01T19:36:19.000Z")
                 .build()
         assertThat(subscription).isNotNull
         assertThat(subscription.id()).isEqualTo("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
@@ -25,5 +26,6 @@ class SubscriptionTest {
         assertThat(subscription.frequency()).isEqualTo(Subscription.Frequency.FIXED)
         assertThat(subscription.productVariantId()).isEqualTo("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
         assertThat(subscription.quantity()).isEqualTo(1L)
+        assertThat(subscription.next()).isEqualTo("2025-02-01T19:36:19.000Z")
     }
 }

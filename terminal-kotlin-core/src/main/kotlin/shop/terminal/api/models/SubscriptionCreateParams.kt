@@ -47,6 +47,9 @@ private constructor(
     /** Quantity of the subscription. */
     fun quantity(): Long = body.quantity()
 
+    /** Next shipment and billing date for the subscription. */
+    fun next(): String? = body.next()
+
     /** Unique object identifier. The format and length of IDs may change over time. */
     fun _id(): JsonField<String> = body._id()
 
@@ -64,6 +67,9 @@ private constructor(
 
     /** Quantity of the subscription. */
     fun _quantity(): JsonField<Long> = body._quantity()
+
+    /** Next shipment and billing date for the subscription. */
+    fun _next(): JsonField<String> = body._next()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -98,6 +104,9 @@ private constructor(
         @JsonProperty("quantity")
         @ExcludeMissing
         private val quantity: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("next")
+        @ExcludeMissing
+        private val next: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
@@ -119,6 +128,9 @@ private constructor(
 
         /** Quantity of the subscription. */
         fun quantity(): Long = quantity.getRequired("quantity")
+
+        /** Next shipment and billing date for the subscription. */
+        fun next(): String? = next.getNullable("next")
 
         /** Unique object identifier. The format and length of IDs may change over time. */
         @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
@@ -142,6 +154,9 @@ private constructor(
         /** Quantity of the subscription. */
         @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Long> = quantity
 
+        /** Next shipment and billing date for the subscription. */
+        @JsonProperty("next") @ExcludeMissing fun _next(): JsonField<String> = next
+
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
@@ -159,6 +174,7 @@ private constructor(
             frequency()
             productVariantId()
             quantity()
+            next()
             validated = true
         }
 
@@ -178,6 +194,7 @@ private constructor(
             private var frequency: JsonField<Frequency>? = null
             private var productVariantId: JsonField<String>? = null
             private var quantity: JsonField<Long>? = null
+            private var next: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(subscriptionCreateBody: SubscriptionCreateBody) = apply {
@@ -187,6 +204,7 @@ private constructor(
                 frequency = subscriptionCreateBody.frequency
                 productVariantId = subscriptionCreateBody.productVariantId
                 quantity = subscriptionCreateBody.quantity
+                next = subscriptionCreateBody.next
                 additionalProperties = subscriptionCreateBody.additionalProperties.toMutableMap()
             }
 
@@ -229,6 +247,12 @@ private constructor(
             /** Quantity of the subscription. */
             fun quantity(quantity: JsonField<Long>) = apply { this.quantity = quantity }
 
+            /** Next shipment and billing date for the subscription. */
+            fun next(next: String) = next(JsonField.of(next))
+
+            /** Next shipment and billing date for the subscription. */
+            fun next(next: JsonField<String>) = apply { this.next = next }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -256,6 +280,7 @@ private constructor(
                     checkRequired("frequency", frequency),
                     checkRequired("productVariantId", productVariantId),
                     checkRequired("quantity", quantity),
+                    next,
                     additionalProperties.toImmutable(),
                 )
         }
@@ -265,17 +290,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is SubscriptionCreateBody && id == other.id && addressId == other.addressId && cardId == other.cardId && frequency == other.frequency && productVariantId == other.productVariantId && quantity == other.quantity && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is SubscriptionCreateBody && id == other.id && addressId == other.addressId && cardId == other.cardId && frequency == other.frequency && productVariantId == other.productVariantId && quantity == other.quantity && next == other.next && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, addressId, cardId, frequency, productVariantId, quantity, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(id, addressId, cardId, frequency, productVariantId, quantity, next, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "SubscriptionCreateBody{id=$id, addressId=$addressId, cardId=$cardId, frequency=$frequency, productVariantId=$productVariantId, quantity=$quantity, additionalProperties=$additionalProperties}"
+            "SubscriptionCreateBody{id=$id, addressId=$addressId, cardId=$cardId, frequency=$frequency, productVariantId=$productVariantId, quantity=$quantity, next=$next, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -338,6 +363,12 @@ private constructor(
 
         /** Quantity of the subscription. */
         fun quantity(quantity: JsonField<Long>) = apply { body.quantity(quantity) }
+
+        /** Next shipment and billing date for the subscription. */
+        fun next(next: String) = apply { body.next(next) }
+
+        /** Next shipment and billing date for the subscription. */
+        fun next(next: JsonField<String>) = apply { body.next(next) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)

@@ -113,6 +113,7 @@ class ViewInitResponseTest {
                                 .description(
                                     "The interpolation of Caturra and Castillo varietals from Las Cochitas creates this refreshing citrusy and complex coffee."
                                 )
+                                .addFilter(Product.Filter.EU)
                                 .name("[object Object]")
                                 .addVariant(
                                     ProductVariant.builder()
@@ -151,6 +152,7 @@ class ViewInitResponseTest {
                                 .frequency(Subscription.Frequency.FIXED)
                                 .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                                 .quantity(1L)
+                                .next("2025-02-01T19:36:19.000Z")
                                 .build()
                         )
                         .addToken(
@@ -262,6 +264,7 @@ class ViewInitResponseTest {
                             .description(
                                 "The interpolation of Caturra and Castillo varietals from Las Cochitas creates this refreshing citrusy and complex coffee."
                             )
+                            .addFilter(Product.Filter.EU)
                             .name("[object Object]")
                             .addVariant(
                                 ProductVariant.builder()
@@ -300,6 +303,7 @@ class ViewInitResponseTest {
                             .frequency(Subscription.Frequency.FIXED)
                             .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                             .quantity(1L)
+                            .next("2025-02-01T19:36:19.000Z")
                             .build()
                     )
                     .addToken(

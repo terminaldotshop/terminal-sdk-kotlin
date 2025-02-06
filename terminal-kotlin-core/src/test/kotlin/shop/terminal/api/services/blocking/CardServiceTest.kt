@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
+import shop.terminal.api.models.CardCollectParams
 import shop.terminal.api.models.CardCreateParams
 import shop.terminal.api.models.CardDeleteParams
 import shop.terminal.api.models.CardListParams
@@ -56,5 +57,18 @@ class CardServiceTest {
             )
         println(cardDeleteResponse)
         cardDeleteResponse.validate()
+    }
+
+    @Test
+    fun callCollect() {
+        val client =
+            TerminalOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val cardService = client.card()
+        val cardCollectResponse = cardService.collect(CardCollectParams.builder().build())
+        println(cardCollectResponse)
+        cardCollectResponse.validate()
     }
 }

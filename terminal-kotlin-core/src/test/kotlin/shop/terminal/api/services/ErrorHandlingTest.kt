@@ -66,6 +66,7 @@ class ErrorHandlingTest {
                         .description(
                             "The interpolation of Caturra and Castillo varietals from Las Cochitas creates this refreshing citrusy and complex coffee."
                         )
+                        .addFilter(Product.Filter.EU)
                         .name("[object Object]")
                         .addVariant(
                             ProductVariant.builder()
