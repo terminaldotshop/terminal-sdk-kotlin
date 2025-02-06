@@ -30,6 +30,7 @@ class SubscriptionServiceTest {
                     .frequency(SubscriptionCreateParams.Frequency.FIXED)
                     .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                     .quantity(1L)
+                    .next("2025-02-01T19:36:19.000Z")
                     .build()
             )
         println(subscriptionCreateResponse)
