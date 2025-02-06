@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class TokenGetParamsTest {
 
     @Test
-    fun createTokenGetParams() {
+    fun create() {
         TokenGetParams.builder().id("pat_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
     }
 

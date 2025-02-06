@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 class SubscriptionListParamsTest {
 
     @Test
-    fun createSubscriptionListParams() {
+    fun create() {
         SubscriptionListParams.builder().build()
     }
 }

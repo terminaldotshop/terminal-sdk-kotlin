@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class SubscriptionDeleteParamsTest {
 
     @Test
-    fun createSubscriptionDeleteParams() {
+    fun create() {
         SubscriptionDeleteParams.builder().id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
     }
 

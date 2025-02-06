@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class AddressDeleteParamsTest {
 
     @Test
-    fun createAddressDeleteParams() {
+    fun create() {
         AddressDeleteParams.builder().id("shp_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
     }
 

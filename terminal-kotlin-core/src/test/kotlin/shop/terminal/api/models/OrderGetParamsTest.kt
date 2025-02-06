@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class OrderGetParamsTest {
 
     @Test
-    fun createOrderGetParams() {
+    fun create() {
         OrderGetParams.builder().id("ord_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
     }
 

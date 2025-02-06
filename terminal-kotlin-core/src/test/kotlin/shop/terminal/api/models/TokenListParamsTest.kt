@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 class TokenListParamsTest {
 
     @Test
-    fun createTokenListParams() {
+    fun create() {
         TokenListParams.builder().build()
     }
 }

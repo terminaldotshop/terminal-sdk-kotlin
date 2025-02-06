@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 class ProfileMeParamsTest {
 
     @Test
-    fun createProfileMeParams() {
+    fun create() {
         ProfileMeParams.builder().build()
     }
 }

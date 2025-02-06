@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class AddressCreateParamsTest {
 
     @Test
-    fun createAddressCreateParams() {
+    fun create() {
         AddressCreateParams.builder()
             .city("Anytown")
             .country("US")

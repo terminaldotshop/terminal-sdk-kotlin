@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 class OrderListParamsTest {
 
     @Test
-    fun createOrderListParams() {
+    fun create() {
         OrderListParams.builder().build()
     }
 }
