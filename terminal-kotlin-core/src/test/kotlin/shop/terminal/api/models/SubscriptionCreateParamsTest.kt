@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class SubscriptionCreateParamsTest {
 
     @Test
-    fun createSubscriptionCreateParams() {
+    fun create() {
         SubscriptionCreateParams.builder()
             .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
             .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")

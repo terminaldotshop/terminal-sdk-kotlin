@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class CartSetItemParamsTest {
 
     @Test
-    fun createCartSetItemParams() {
+    fun create() {
         CartSetItemParams.builder()
             .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
             .quantity(2L)

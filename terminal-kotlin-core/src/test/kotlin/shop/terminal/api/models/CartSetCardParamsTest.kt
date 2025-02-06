@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class CartSetCardParamsTest {
 
     @Test
-    fun createCartSetCardParams() {
+    fun create() {
         CartSetCardParams.builder().cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
     }
 

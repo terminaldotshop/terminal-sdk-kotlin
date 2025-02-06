@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 class CartGetParamsTest {
 
     @Test
-    fun createCartGetParams() {
+    fun create() {
         CartGetParams.builder().build()
     }
 }

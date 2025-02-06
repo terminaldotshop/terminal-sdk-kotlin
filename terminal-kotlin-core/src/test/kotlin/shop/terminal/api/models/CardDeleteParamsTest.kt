@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class CardDeleteParamsTest {
 
     @Test
-    fun createCardDeleteParams() {
+    fun create() {
         CardDeleteParams.builder().id("crd_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
     }
 
