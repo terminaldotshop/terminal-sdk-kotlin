@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 class TokenCreateParamsTest {
 
     @Test
-    fun createTokenCreateParams() {
+    fun create() {
         TokenCreateParams.builder().build()
     }
 }

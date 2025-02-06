@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class AppGetParamsTest {
 
     @Test
-    fun createAppGetParams() {
+    fun create() {
         AppGetParams.builder().id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
     }
 

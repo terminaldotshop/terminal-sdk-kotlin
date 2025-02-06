@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class TokenDeleteParamsTest {
 
     @Test
-    fun createTokenDeleteParams() {
+    fun create() {
         TokenDeleteParams.builder().id("pat_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
     }
 

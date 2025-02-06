@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 class EmailCreateParamsTest {
 
     @Test
-    fun createEmailCreateParams() {
+    fun create() {
         EmailCreateParams.builder().email("john@example.com").build()
     }
 
