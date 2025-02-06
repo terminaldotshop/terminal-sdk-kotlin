@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.1.0-alpha.5 (2025-02-06)
+
+Full Changelog: [v0.1.0-alpha.4...v0.1.0-alpha.5](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v0.1.0-alpha.4...v0.1.0-alpha.5)
+
+### Features
+
+* **api:** manual updates ([#56](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/56)) ([a8e5ed3](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/a8e5ed3ff7d437a5442bf233eaeb2153e06997f7))
+* **client:** send client-side timeout headers ([#54](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/54)) ([e97ba66](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/e97ba6680d39bf027f9ffff89d43df5198b61d7c))
+
+
+### Chores
+
+* **internal:** codegen related update ([#55](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/55)) ([05454d6](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/05454d60ca4d9f3a0d119bb4835b406b3a5568da))
+
+
+### Documentation
+
+* fix incorrect additional properties info ([#52](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/52)) ([30cd298](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/30cd298b6d44ebb0035a23b43d51c2bb2e3bd24c))
+
 ## 0.1.0-alpha.4 (2025-01-30)
 
 Full Changelog: [v0.1.0-alpha.3...v0.1.0-alpha.4](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v0.1.0-alpha.3...v0.1.0-alpha.4)
