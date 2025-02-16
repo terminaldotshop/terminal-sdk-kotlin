@@ -30,7 +30,7 @@ class TerminalOkHttpClient private constructor() {
         private var timeout: Duration = Duration.ofSeconds(60)
         private var proxy: Proxy? = null
 
-        fun sandbox() = apply { baseUrl(ClientOptions.SANDBOX_URL) }
+        fun dev() = apply { baseUrl(ClientOptions.DEV_URL) }
 
         fun baseUrl(baseUrl: String) = apply {
             clientOptions.baseUrl(baseUrl)
