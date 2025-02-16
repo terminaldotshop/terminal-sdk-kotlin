@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-alpha.7 (2025-02-16)
+
+Full Changelog: [v0.1.0-alpha.6...v0.1.0-alpha.7](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v0.1.0-alpha.6...v0.1.0-alpha.7)
+
+### Features
+
+* **api:** manual updates ([#62](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/62)) ([4ab96c4](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/4ab96c4afa68ac0fdc3894694fefc6a713a6c980))
+
 ## 0.1.0-alpha.6 (2025-02-16)
 
 Full Changelog: [v0.1.0-alpha.5...v0.1.0-alpha.6](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v0.1.0-alpha.5...v0.1.0-alpha.6)
