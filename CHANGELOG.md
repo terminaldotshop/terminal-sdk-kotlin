@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.0-alpha.6 (2025-02-16)
+
+Full Changelog: [v0.1.0-alpha.5...v0.1.0-alpha.6](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v0.1.0-alpha.5...v0.1.0-alpha.6)
+
+### Features
+
+* **api:** manual updates ([#60](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/60)) ([27cbf79](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/27cbf79a14f20b3eb7c94548680bee3db7ca0883))
+
+
+### Documentation
+
+* add more phantom reachability docs ([#58](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/58)) ([f16949f](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/f16949fe6343eff4f7dc3311251fab3806eebbf7))
+
 ## 0.1.0-alpha.5 (2025-02-06)
 
 Full Changelog: [v0.1.0-alpha.4...v0.1.0-alpha.5](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v0.1.0-alpha.4...v0.1.0-alpha.5)
