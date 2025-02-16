@@ -20,6 +20,12 @@ class SubscriptionListResponseTest {
                         .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                         .quantity(1L)
                         .next("2025-02-01T19:36:19.000Z")
+                        .schedule(
+                            Subscription.Schedule.UnionMember1.builder()
+                                .interval(3L)
+                                .type(Subscription.Schedule.UnionMember1.Type.WEEKLY)
+                                .build()
+                        )
                         .build()
                 )
                 .build()
@@ -34,6 +40,12 @@ class SubscriptionListResponseTest {
                     .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                     .quantity(1L)
                     .next("2025-02-01T19:36:19.000Z")
+                    .schedule(
+                        Subscription.Schedule.UnionMember1.builder()
+                            .interval(3L)
+                            .type(Subscription.Schedule.UnionMember1.Type.WEEKLY)
+                            .build()
+                    )
                     .build()
             )
     }

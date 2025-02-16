@@ -222,7 +222,7 @@ val client: TerminalClient = TerminalOkHttpClient.builder()
 
 ### Environments
 
-Requests are made to the production environment by default. You can connect to other environments, like `sandbox`, via the client builder:
+Requests are made to the production environment by default. You can connect to other environments, like `dev`, via the client builder:
 
 ```kotlin
 import shop.terminal.api.client.TerminalClient
@@ -230,7 +230,7 @@ import shop.terminal.api.client.okhttp.TerminalOkHttpClient
 
 val client: TerminalClient = TerminalOkHttpClient.builder()
     .fromEnv()
-    .sandbox()
+    .dev()
     .build()
 ```
 
