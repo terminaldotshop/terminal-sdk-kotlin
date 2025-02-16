@@ -4,8 +4,8 @@ package shop.terminal.api.services
 
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
-import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.client.WireMock.ok
+import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.status
 import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
@@ -30,10 +30,8 @@ import shop.terminal.api.errors.TerminalException
 import shop.terminal.api.errors.UnauthorizedException
 import shop.terminal.api.errors.UnexpectedStatusCodeException
 import shop.terminal.api.errors.UnprocessableEntityException
-import shop.terminal.api.models.Product
-import shop.terminal.api.models.ProductListParams
-import shop.terminal.api.models.ProductListResponse
-import shop.terminal.api.models.ProductVariant
+import shop.terminal.api.models.SubscriptionCreateParams
+import shop.terminal.api.models.SubscriptionCreateResponse
 
 @WireMockTest
 class ErrorHandlingTest {
@@ -55,82 +53,117 @@ class ErrorHandlingTest {
     }
 
     @Test
-    fun productsList200() {
-        val params = ProductListParams.builder().build()
-
-        val expected =
-            ProductListResponse.builder()
-                .addData(
-                    Product.builder()
-                        .id("prd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                        .description(
-                            "The interpolation of Caturra and Castillo varietals from Las Cochitas creates this refreshing citrusy and complex coffee."
-                        )
-                        .addFilter(Product.Filter.EU)
-                        .name("[object Object]")
-                        .addVariant(
-                            ProductVariant.builder()
-                                .id("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                                .name("12oz")
-                                .price(2200L)
-                                .build()
-                        )
-                        .order(100L)
-                        .subscription(Product.Subscription.ALLOWED)
-                        .tags(
-                            Product.Tags.builder()
-                                .putAdditionalProperty("featured", JsonValue.from("true"))
-                                .build()
-                        )
+    fun subscriptionsCreate200() {
+        val params =
+            SubscriptionCreateParams.builder()
+                .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .frequency(SubscriptionCreateParams.Frequency.FIXED)
+                .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .quantity(1L)
+                .next("2025-02-01T19:36:19.000Z")
+                .schedule(
+                    SubscriptionCreateParams.Schedule.UnionMember1.builder()
+                        .interval(3L)
+                        .type(SubscriptionCreateParams.Schedule.UnionMember1.Type.WEEKLY)
                         .build()
                 )
                 .build()
 
-        stubFor(get(anyUrl()).willReturn(ok().withBody(toJson(expected))))
+        val expected =
+            SubscriptionCreateResponse.builder().data(SubscriptionCreateResponse.Data.OK).build()
 
-        assertThat(client.product().list(params)).isEqualTo(expected)
+        stubFor(post(anyUrl()).willReturn(ok().withBody(toJson(expected))))
+
+        assertThat(client.subscription().create(params)).isEqualTo(expected)
     }
 
     @Test
-    fun productsList400() {
-        val params = ProductListParams.builder().build()
+    fun subscriptionsCreate400() {
+        val params =
+            SubscriptionCreateParams.builder()
+                .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .frequency(SubscriptionCreateParams.Frequency.FIXED)
+                .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .quantity(1L)
+                .next("2025-02-01T19:36:19.000Z")
+                .schedule(
+                    SubscriptionCreateParams.Schedule.UnionMember1.builder()
+                        .interval(3L)
+                        .type(SubscriptionCreateParams.Schedule.UnionMember1.Type.WEEKLY)
+                        .build()
+                )
+                .build()
 
         stubFor(
-            get(anyUrl())
+            post(anyUrl())
                 .willReturn(status(400).withHeader("Foo", "Bar").withBody(toJson(TERMINAL_ERROR)))
         )
 
-        assertThatThrownBy({ client.product().list(params) })
+        assertThatThrownBy({ client.subscription().create(params) })
             .satisfies({ e ->
                 assertBadRequest(e, Headers.builder().put("Foo", "Bar").build(), TERMINAL_ERROR)
             })
     }
 
     @Test
-    fun productsList401() {
-        val params = ProductListParams.builder().build()
+    fun subscriptionsCreate401() {
+        val params =
+            SubscriptionCreateParams.builder()
+                .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .frequency(SubscriptionCreateParams.Frequency.FIXED)
+                .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .quantity(1L)
+                .next("2025-02-01T19:36:19.000Z")
+                .schedule(
+                    SubscriptionCreateParams.Schedule.UnionMember1.builder()
+                        .interval(3L)
+                        .type(SubscriptionCreateParams.Schedule.UnionMember1.Type.WEEKLY)
+                        .build()
+                )
+                .build()
 
         stubFor(
-            get(anyUrl())
+            post(anyUrl())
                 .willReturn(status(401).withHeader("Foo", "Bar").withBody(toJson(TERMINAL_ERROR)))
         )
 
-        assertThatThrownBy({ client.product().list(params) })
+        assertThatThrownBy({ client.subscription().create(params) })
             .satisfies({ e ->
                 assertUnauthorized(e, Headers.builder().put("Foo", "Bar").build(), TERMINAL_ERROR)
             })
     }
 
     @Test
-    fun productsList403() {
-        val params = ProductListParams.builder().build()
+    fun subscriptionsCreate403() {
+        val params =
+            SubscriptionCreateParams.builder()
+                .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .frequency(SubscriptionCreateParams.Frequency.FIXED)
+                .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .quantity(1L)
+                .next("2025-02-01T19:36:19.000Z")
+                .schedule(
+                    SubscriptionCreateParams.Schedule.UnionMember1.builder()
+                        .interval(3L)
+                        .type(SubscriptionCreateParams.Schedule.UnionMember1.Type.WEEKLY)
+                        .build()
+                )
+                .build()
 
         stubFor(
-            get(anyUrl())
+            post(anyUrl())
                 .willReturn(status(403).withHeader("Foo", "Bar").withBody(toJson(TERMINAL_ERROR)))
         )
 
-        assertThatThrownBy({ client.product().list(params) })
+        assertThatThrownBy({ client.subscription().create(params) })
             .satisfies({ e ->
                 assertPermissionDenied(
                     e,
@@ -141,30 +174,60 @@ class ErrorHandlingTest {
     }
 
     @Test
-    fun productsList404() {
-        val params = ProductListParams.builder().build()
+    fun subscriptionsCreate404() {
+        val params =
+            SubscriptionCreateParams.builder()
+                .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .frequency(SubscriptionCreateParams.Frequency.FIXED)
+                .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .quantity(1L)
+                .next("2025-02-01T19:36:19.000Z")
+                .schedule(
+                    SubscriptionCreateParams.Schedule.UnionMember1.builder()
+                        .interval(3L)
+                        .type(SubscriptionCreateParams.Schedule.UnionMember1.Type.WEEKLY)
+                        .build()
+                )
+                .build()
 
         stubFor(
-            get(anyUrl())
+            post(anyUrl())
                 .willReturn(status(404).withHeader("Foo", "Bar").withBody(toJson(TERMINAL_ERROR)))
         )
 
-        assertThatThrownBy({ client.product().list(params) })
+        assertThatThrownBy({ client.subscription().create(params) })
             .satisfies({ e ->
                 assertNotFound(e, Headers.builder().put("Foo", "Bar").build(), TERMINAL_ERROR)
             })
     }
 
     @Test
-    fun productsList422() {
-        val params = ProductListParams.builder().build()
+    fun subscriptionsCreate422() {
+        val params =
+            SubscriptionCreateParams.builder()
+                .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .frequency(SubscriptionCreateParams.Frequency.FIXED)
+                .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .quantity(1L)
+                .next("2025-02-01T19:36:19.000Z")
+                .schedule(
+                    SubscriptionCreateParams.Schedule.UnionMember1.builder()
+                        .interval(3L)
+                        .type(SubscriptionCreateParams.Schedule.UnionMember1.Type.WEEKLY)
+                        .build()
+                )
+                .build()
 
         stubFor(
-            get(anyUrl())
+            post(anyUrl())
                 .willReturn(status(422).withHeader("Foo", "Bar").withBody(toJson(TERMINAL_ERROR)))
         )
 
-        assertThatThrownBy({ client.product().list(params) })
+        assertThatThrownBy({ client.subscription().create(params) })
             .satisfies({ e ->
                 assertUnprocessableEntity(
                     e,
@@ -175,30 +238,60 @@ class ErrorHandlingTest {
     }
 
     @Test
-    fun productsList429() {
-        val params = ProductListParams.builder().build()
+    fun subscriptionsCreate429() {
+        val params =
+            SubscriptionCreateParams.builder()
+                .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .frequency(SubscriptionCreateParams.Frequency.FIXED)
+                .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .quantity(1L)
+                .next("2025-02-01T19:36:19.000Z")
+                .schedule(
+                    SubscriptionCreateParams.Schedule.UnionMember1.builder()
+                        .interval(3L)
+                        .type(SubscriptionCreateParams.Schedule.UnionMember1.Type.WEEKLY)
+                        .build()
+                )
+                .build()
 
         stubFor(
-            get(anyUrl())
+            post(anyUrl())
                 .willReturn(status(429).withHeader("Foo", "Bar").withBody(toJson(TERMINAL_ERROR)))
         )
 
-        assertThatThrownBy({ client.product().list(params) })
+        assertThatThrownBy({ client.subscription().create(params) })
             .satisfies({ e ->
                 assertRateLimit(e, Headers.builder().put("Foo", "Bar").build(), TERMINAL_ERROR)
             })
     }
 
     @Test
-    fun productsList500() {
-        val params = ProductListParams.builder().build()
+    fun subscriptionsCreate500() {
+        val params =
+            SubscriptionCreateParams.builder()
+                .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .frequency(SubscriptionCreateParams.Frequency.FIXED)
+                .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .quantity(1L)
+                .next("2025-02-01T19:36:19.000Z")
+                .schedule(
+                    SubscriptionCreateParams.Schedule.UnionMember1.builder()
+                        .interval(3L)
+                        .type(SubscriptionCreateParams.Schedule.UnionMember1.Type.WEEKLY)
+                        .build()
+                )
+                .build()
 
         stubFor(
-            get(anyUrl())
+            post(anyUrl())
                 .willReturn(status(500).withHeader("Foo", "Bar").withBody(toJson(TERMINAL_ERROR)))
         )
 
-        assertThatThrownBy({ client.product().list(params) })
+        assertThatThrownBy({ client.subscription().create(params) })
             .satisfies({ e ->
                 assertInternalServer(e, Headers.builder().put("Foo", "Bar").build(), TERMINAL_ERROR)
             })
@@ -206,14 +299,29 @@ class ErrorHandlingTest {
 
     @Test
     fun unexpectedStatusCode() {
-        val params = ProductListParams.builder().build()
+        val params =
+            SubscriptionCreateParams.builder()
+                .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .frequency(SubscriptionCreateParams.Frequency.FIXED)
+                .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .quantity(1L)
+                .next("2025-02-01T19:36:19.000Z")
+                .schedule(
+                    SubscriptionCreateParams.Schedule.UnionMember1.builder()
+                        .interval(3L)
+                        .type(SubscriptionCreateParams.Schedule.UnionMember1.Type.WEEKLY)
+                        .build()
+                )
+                .build()
 
         stubFor(
-            get(anyUrl())
+            post(anyUrl())
                 .willReturn(status(999).withHeader("Foo", "Bar").withBody(toJson(TERMINAL_ERROR)))
         )
 
-        assertThatThrownBy({ client.product().list(params) })
+        assertThatThrownBy({ client.subscription().create(params) })
             .satisfies({ e ->
                 assertUnexpectedStatusCodeException(
                     e,
@@ -226,11 +334,26 @@ class ErrorHandlingTest {
 
     @Test
     fun invalidBody() {
-        val params = ProductListParams.builder().build()
+        val params =
+            SubscriptionCreateParams.builder()
+                .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .frequency(SubscriptionCreateParams.Frequency.FIXED)
+                .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .quantity(1L)
+                .next("2025-02-01T19:36:19.000Z")
+                .schedule(
+                    SubscriptionCreateParams.Schedule.UnionMember1.builder()
+                        .interval(3L)
+                        .type(SubscriptionCreateParams.Schedule.UnionMember1.Type.WEEKLY)
+                        .build()
+                )
+                .build()
 
-        stubFor(get(anyUrl()).willReturn(status(200).withBody("Not JSON")))
+        stubFor(post(anyUrl()).willReturn(status(200).withBody("Not JSON")))
 
-        assertThatThrownBy({ client.product().list(params) })
+        assertThatThrownBy({ client.subscription().create(params) })
             .satisfies({ e ->
                 assertThat(e)
                     .isInstanceOf(TerminalException::class.java)
@@ -240,11 +363,26 @@ class ErrorHandlingTest {
 
     @Test
     fun invalidErrorBody() {
-        val params = ProductListParams.builder().build()
+        val params =
+            SubscriptionCreateParams.builder()
+                .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .frequency(SubscriptionCreateParams.Frequency.FIXED)
+                .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .quantity(1L)
+                .next("2025-02-01T19:36:19.000Z")
+                .schedule(
+                    SubscriptionCreateParams.Schedule.UnionMember1.builder()
+                        .interval(3L)
+                        .type(SubscriptionCreateParams.Schedule.UnionMember1.Type.WEEKLY)
+                        .build()
+                )
+                .build()
 
-        stubFor(get(anyUrl()).willReturn(status(400).withBody("Not JSON")))
+        stubFor(post(anyUrl()).willReturn(status(400).withBody("Not JSON")))
 
-        assertThatThrownBy({ client.product().list(params) })
+        assertThatThrownBy({ client.subscription().create(params) })
             .satisfies({ e ->
                 assertBadRequest(e, Headers.builder().build(), TerminalError.builder().build())
             })
