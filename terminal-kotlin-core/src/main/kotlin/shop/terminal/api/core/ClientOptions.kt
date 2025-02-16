@@ -30,7 +30,7 @@ private constructor(
 
         const val PRODUCTION_URL = "https://api.terminal.shop/"
 
-        const val SANDBOX_URL = "https://sandbox.terminal.shop/"
+        const val DEV_URL = "https://api.dev.terminal.shop/"
 
         fun builder() = Builder()
 
