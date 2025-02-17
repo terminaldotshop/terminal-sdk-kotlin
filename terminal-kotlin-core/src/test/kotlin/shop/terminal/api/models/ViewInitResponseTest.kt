@@ -154,9 +154,9 @@ class ViewInitResponseTest {
                                 .quantity(1L)
                                 .next("2025-02-01T19:36:19.000Z")
                                 .schedule(
-                                    Subscription.Schedule.UnionMember1.builder()
+                                    Subscription.Schedule.Weekly.builder()
                                         .interval(3L)
-                                        .type(Subscription.Schedule.UnionMember1.Type.WEEKLY)
+                                        .type(Subscription.Schedule.Weekly.Type.WEEKLY)
                                         .build()
                                 )
                                 .build()
@@ -311,9 +311,9 @@ class ViewInitResponseTest {
                             .quantity(1L)
                             .next("2025-02-01T19:36:19.000Z")
                             .schedule(
-                                Subscription.Schedule.UnionMember1.builder()
+                                Subscription.Schedule.Weekly.builder()
                                     .interval(3L)
-                                    .type(Subscription.Schedule.UnionMember1.Type.WEEKLY)
+                                    .type(Subscription.Schedule.Weekly.Type.WEEKLY)
                                     .build()
                             )
                             .build()
