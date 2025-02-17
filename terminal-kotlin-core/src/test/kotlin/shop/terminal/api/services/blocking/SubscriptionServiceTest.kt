@@ -32,9 +32,9 @@ class SubscriptionServiceTest {
                     .quantity(1L)
                     .next("2025-02-01T19:36:19.000Z")
                     .schedule(
-                        SubscriptionCreateParams.Schedule.UnionMember1.builder()
+                        SubscriptionCreateParams.Schedule.Weekly.builder()
                             .interval(3L)
-                            .type(SubscriptionCreateParams.Schedule.UnionMember1.Type.WEEKLY)
+                            .type(SubscriptionCreateParams.Schedule.Weekly.Type.WEEKLY)
                             .build()
                     )
                     .build()

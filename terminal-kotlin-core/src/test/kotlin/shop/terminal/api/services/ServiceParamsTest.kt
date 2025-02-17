@@ -5,10 +5,9 @@ package shop.terminal.api.services
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
-import com.github.tomakehurst.wiremock.client.WireMock.matchingJsonPath
+import com.github.tomakehurst.wiremock.client.WireMock.get
+import com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor
 import com.github.tomakehurst.wiremock.client.WireMock.ok
-import com.github.tomakehurst.wiremock.client.WireMock.post
-import com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor
 import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.client.WireMock.verify
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
@@ -19,8 +18,10 @@ import shop.terminal.api.client.TerminalClient
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.jsonMapper
-import shop.terminal.api.models.SubscriptionCreateParams
-import shop.terminal.api.models.SubscriptionCreateResponse
+import shop.terminal.api.models.Product
+import shop.terminal.api.models.ProductListParams
+import shop.terminal.api.models.ProductListResponse
+import shop.terminal.api.models.ProductVariant
 
 @WireMockTest
 class ServiceParamsTest {
@@ -39,7 +40,7 @@ class ServiceParamsTest {
     }
 
     @Test
-    fun subscriptionsCreateWithAdditionalParams() {
+    fun productsListWithAdditionalParams() {
         val additionalHeaders = mutableMapOf<String, List<String>>()
 
         additionalHeaders.put("x-test-header", listOf("abc1234"))
@@ -48,43 +49,49 @@ class ServiceParamsTest {
 
         additionalQueryParams.put("test_query_param", listOf("def567"))
 
-        val additionalBodyProperties = mutableMapOf<String, JsonValue>()
-
-        additionalBodyProperties.put("testBodyProperty", JsonValue.from("ghi890"))
-
         val params =
-            SubscriptionCreateParams.builder()
-                .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                .frequency(SubscriptionCreateParams.Frequency.FIXED)
-                .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                .quantity(1L)
-                .next("2025-02-01T19:36:19.000Z")
-                .schedule(
-                    SubscriptionCreateParams.Schedule.UnionMember1.builder()
-                        .interval(3L)
-                        .type(SubscriptionCreateParams.Schedule.UnionMember1.Type.WEEKLY)
-                        .build()
-                )
+            ProductListParams.builder()
                 .additionalHeaders(additionalHeaders)
-                .additionalBodyProperties(additionalBodyProperties)
                 .additionalQueryParams(additionalQueryParams)
                 .build()
 
         val apiResponse =
-            SubscriptionCreateResponse.builder().data(SubscriptionCreateResponse.Data.OK).build()
+            ProductListResponse.builder()
+                .addData(
+                    Product.builder()
+                        .id("prd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .description(
+                            "The interpolation of Caturra and Castillo varietals from Las Cochitas creates this refreshing citrusy and complex coffee."
+                        )
+                        .addFilter(Product.Filter.EU)
+                        .name("[object Object]")
+                        .addVariant(
+                            ProductVariant.builder()
+                                .id("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                                .name("12oz")
+                                .price(2200L)
+                                .build()
+                        )
+                        .order(100L)
+                        .subscription(Product.Subscription.ALLOWED)
+                        .tags(
+                            Product.Tags.builder()
+                                .putAdditionalProperty("featured", JsonValue.from("true"))
+                                .build()
+                        )
+                        .build()
+                )
+                .build()
 
         stubFor(
-            post(anyUrl())
+            get(anyUrl())
                 .withHeader("x-test-header", equalTo("abc1234"))
                 .withQueryParam("test_query_param", equalTo("def567"))
-                .withRequestBody(matchingJsonPath("$.testBodyProperty", equalTo("ghi890")))
                 .willReturn(ok(JSON_MAPPER.writeValueAsString(apiResponse)))
         )
 
-        client.subscription().create(params)
+        client.product().list(params)
 
-        verify(postRequestedFor(anyUrl()))
+        verify(getRequestedFor(anyUrl()))
     }
 }
