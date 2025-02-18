@@ -22,7 +22,9 @@ class CartSetItemParamsTest {
                 .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                 .quantity(2L)
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.productVariantId()).isEqualTo("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
         assertThat(body.quantity()).isEqualTo(2L)
@@ -35,7 +37,9 @@ class CartSetItemParamsTest {
                 .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                 .quantity(2L)
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.productVariantId()).isEqualTo("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
         assertThat(body.quantity()).isEqualTo(2L)

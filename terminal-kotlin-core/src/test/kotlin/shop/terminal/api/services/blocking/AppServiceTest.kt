@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
+import shop.terminal.api.models.App
 import shop.terminal.api.models.AppCreateParams
 import shop.terminal.api.models.AppDeleteParams
 import shop.terminal.api.models.AppGetParams
@@ -25,9 +26,13 @@ class AppServiceTest {
         val appCreateResponse =
             appService.create(
                 AppCreateParams.builder()
-                    .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                    .name("Example App")
-                    .redirectUri("https://example.com/callback")
+                    .app(
+                        App.builder()
+                            .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                            .name("Example App")
+                            .redirectUri("https://example.com/callback")
+                            .build()
+                    )
                     .build()
             )
         println(appCreateResponse)

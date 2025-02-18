@@ -15,7 +15,9 @@ class CartSetCardParamsTest {
     @Test
     fun body() {
         val params = CartSetCardParams.builder().cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.cardId()).isEqualTo("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
     }
@@ -23,7 +25,9 @@ class CartSetCardParamsTest {
     @Test
     fun bodyWithoutOptionalFields() {
         val params = CartSetCardParams.builder().cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.cardId()).isEqualTo("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
     }
