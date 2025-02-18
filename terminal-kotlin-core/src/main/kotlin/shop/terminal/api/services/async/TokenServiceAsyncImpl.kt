@@ -22,10 +22,8 @@ import shop.terminal.api.models.TokenGetResponse
 import shop.terminal.api.models.TokenListParams
 import shop.terminal.api.models.TokenListResponse
 
-class TokenServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : TokenServiceAsync {
+class TokenServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    TokenServiceAsync {
 
     private val errorHandler: Handler<TerminalError> = errorHandler(clientOptions.jsonMapper)
 
@@ -35,7 +33,7 @@ internal constructor(
     /** Create a personal access token. */
     override suspend fun create(
         params: TokenCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): TokenCreateResponse {
         val request =
             HttpRequest.builder()
@@ -60,7 +58,7 @@ internal constructor(
     /** List the current user's personal access tokens. */
     override suspend fun list(
         params: TokenListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): TokenListResponse {
         val request =
             HttpRequest.builder()
@@ -84,7 +82,7 @@ internal constructor(
     /** Delete the personal access token with the given ID. */
     override suspend fun delete(
         params: TokenDeleteParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): TokenDeleteResponse {
         val request =
             HttpRequest.builder()
@@ -109,7 +107,7 @@ internal constructor(
     /** Get the personal access token with the given ID. */
     override suspend fun get(
         params: TokenGetParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): TokenGetResponse {
         val request =
             HttpRequest.builder()

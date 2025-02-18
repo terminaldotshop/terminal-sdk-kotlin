@@ -11,6 +11,6 @@ interface ProductServiceAsync {
     /** List all products for sale in the Terminal shop. */
     suspend fun list(
         params: ProductListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): ProductListResponse
 }

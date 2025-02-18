@@ -24,10 +24,7 @@ import shop.terminal.api.models.CartSetCardResponse
 import shop.terminal.api.models.CartSetItemParams
 import shop.terminal.api.models.CartSetItemResponse
 
-class CartServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : CartService {
+class CartServiceImpl internal constructor(private val clientOptions: ClientOptions) : CartService {
 
     private val errorHandler: Handler<TerminalError> = errorHandler(clientOptions.jsonMapper)
 
@@ -37,7 +34,7 @@ internal constructor(
     /** Convert the current user's cart to an order. */
     override fun convert(
         params: CartConvertParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CartConvertResponse {
         val request =
             HttpRequest.builder()
@@ -83,7 +80,7 @@ internal constructor(
     /** Set the shipping address for the current user's cart. */
     override fun setAddress(
         params: CartSetAddressParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CartSetAddressResponse {
         val request =
             HttpRequest.builder()
@@ -108,7 +105,7 @@ internal constructor(
     /** Set the credit card for the current user's cart. */
     override fun setCard(
         params: CartSetCardParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CartSetCardResponse {
         val request =
             HttpRequest.builder()
@@ -133,7 +130,7 @@ internal constructor(
     /** Add an item to the current user's cart. */
     override fun setItem(
         params: CartSetItemParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): CartSetItemResponse {
         val request =
             HttpRequest.builder()

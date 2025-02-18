@@ -17,10 +17,8 @@ import shop.terminal.api.models.OrderGetResponse
 import shop.terminal.api.models.OrderListParams
 import shop.terminal.api.models.OrderListResponse
 
-class OrderServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : OrderService {
+class OrderServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    OrderService {
 
     private val errorHandler: Handler<TerminalError> = errorHandler(clientOptions.jsonMapper)
 
