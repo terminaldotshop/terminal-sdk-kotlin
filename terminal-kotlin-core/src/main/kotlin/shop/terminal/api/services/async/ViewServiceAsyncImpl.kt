@@ -15,10 +15,8 @@ import shop.terminal.api.errors.TerminalError
 import shop.terminal.api.models.ViewInitParams
 import shop.terminal.api.models.ViewInitResponse
 
-class ViewServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : ViewServiceAsync {
+class ViewServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    ViewServiceAsync {
 
     private val errorHandler: Handler<TerminalError> = errorHandler(clientOptions.jsonMapper)
 
@@ -31,7 +29,7 @@ internal constructor(
      */
     override suspend fun init(
         params: ViewInitParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): ViewInitResponse {
         val request =
             HttpRequest.builder()

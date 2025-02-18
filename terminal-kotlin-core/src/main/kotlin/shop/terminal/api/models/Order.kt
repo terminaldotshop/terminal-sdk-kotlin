@@ -849,12 +849,7 @@ private constructor(
             }
 
             fun build(): Tracking =
-                Tracking(
-                    number,
-                    service,
-                    url,
-                    additionalProperties.toImmutable(),
-                )
+                Tracking(number, service, url, additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {

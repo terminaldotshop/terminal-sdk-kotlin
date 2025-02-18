@@ -22,10 +22,8 @@ import shop.terminal.api.models.AppGetResponse
 import shop.terminal.api.models.AppListParams
 import shop.terminal.api.models.AppListResponse
 
-class AppServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : AppServiceAsync {
+class AppServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    AppServiceAsync {
 
     private val errorHandler: Handler<TerminalError> = errorHandler(clientOptions.jsonMapper)
 
@@ -35,7 +33,7 @@ internal constructor(
     /** Create an app. */
     override suspend fun create(
         params: AppCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): AppCreateResponse {
         val request =
             HttpRequest.builder()
@@ -60,7 +58,7 @@ internal constructor(
     /** List the current user's registered apps. */
     override suspend fun list(
         params: AppListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): AppListResponse {
         val request =
             HttpRequest.builder()
@@ -84,7 +82,7 @@ internal constructor(
     /** Delete the app with the given ID. */
     override suspend fun delete(
         params: AppDeleteParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): AppDeleteResponse {
         val request =
             HttpRequest.builder()

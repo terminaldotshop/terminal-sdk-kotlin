@@ -311,11 +311,7 @@ private constructor(
         }
 
         fun build(): CardCreateParams =
-            CardCreateParams(
-                body.build(),
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
-            )
+            CardCreateParams(body.build(), additionalHeaders.build(), additionalQueryParams.build())
     }
 
     override fun equals(other: Any?): Boolean {

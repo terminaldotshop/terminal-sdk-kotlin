@@ -107,7 +107,7 @@ private constructor(
         fun build(): TokenListResponse =
             TokenListResponse(
                 checkRequired("data", data).map { it.toImmutable() },
-                additionalProperties.toImmutable()
+                additionalProperties.toImmutable(),
             )
     }
 

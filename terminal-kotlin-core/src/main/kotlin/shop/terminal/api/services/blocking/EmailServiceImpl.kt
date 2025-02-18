@@ -16,10 +16,8 @@ import shop.terminal.api.errors.TerminalError
 import shop.terminal.api.models.EmailCreateParams
 import shop.terminal.api.models.EmailCreateResponse
 
-class EmailServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : EmailService {
+class EmailServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    EmailService {
 
     private val errorHandler: Handler<TerminalError> = errorHandler(clientOptions.jsonMapper)
 
@@ -29,7 +27,7 @@ internal constructor(
     /** Subscribe to email updates from Terminal. */
     override fun create(
         params: EmailCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): EmailCreateResponse {
         val request =
             HttpRequest.builder()

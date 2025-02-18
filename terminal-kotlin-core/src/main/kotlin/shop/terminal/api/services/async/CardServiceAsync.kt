@@ -17,24 +17,24 @@ interface CardServiceAsync {
     /** Attach a credit card (tokenized via Stripe) to the current user. */
     suspend fun create(
         params: CardCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CardCreateResponse
 
     /** List the credit cards associated with the current user. */
     suspend fun list(
         params: CardListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CardListResponse
 
     /** Delete a credit card associated with the current user. */
     suspend fun delete(
         params: CardDeleteParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CardDeleteResponse
 
     /** Create a temporary URL for collecting credit card information for the current user. */
     suspend fun collect(
         params: CardCollectParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): CardCollectResponse
 }

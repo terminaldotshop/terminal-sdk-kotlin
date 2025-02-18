@@ -11,6 +11,6 @@ interface ProductService {
     /** List all products for sale in the Terminal shop. */
     fun list(
         params: ProductListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): ProductListResponse
 }
