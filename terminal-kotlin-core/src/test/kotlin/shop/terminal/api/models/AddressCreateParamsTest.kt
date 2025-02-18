@@ -34,7 +34,9 @@ class AddressCreateParamsTest {
                 .province("CA")
                 .street2("Apt 1")
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.city()).isEqualTo("Anytown")
         assertThat(body.country()).isEqualTo("US")
@@ -56,7 +58,9 @@ class AddressCreateParamsTest {
                 .street1("123 Main St")
                 .zip("12345")
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.city()).isEqualTo("Anytown")
         assertThat(body.country()).isEqualTo("US")

@@ -10,17 +10,21 @@ class SubscriptionCreateParamsTest {
     @Test
     fun create() {
         SubscriptionCreateParams.builder()
-            .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
-            .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
-            .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-            .frequency(SubscriptionCreateParams.Frequency.FIXED)
-            .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
-            .quantity(1L)
-            .next("2025-02-01T19:36:19.000Z")
-            .schedule(
-                SubscriptionCreateParams.Schedule.Weekly.builder()
-                    .interval(3L)
-                    .type(SubscriptionCreateParams.Schedule.Weekly.Type.WEEKLY)
+            .subscription(
+                Subscription.builder()
+                    .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .frequency(Subscription.Frequency.FIXED)
+                    .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .quantity(1L)
+                    .next("2025-02-01T19:36:19.000Z")
+                    .schedule(
+                        Subscription.Schedule.Weekly.builder()
+                            .interval(3L)
+                            .type(Subscription.Schedule.Weekly.Type.WEEKLY)
+                            .build()
+                    )
                     .build()
             )
             .build()
@@ -30,37 +34,45 @@ class SubscriptionCreateParamsTest {
     fun body() {
         val params =
             SubscriptionCreateParams.builder()
-                .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                .frequency(SubscriptionCreateParams.Frequency.FIXED)
-                .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                .quantity(1L)
-                .next("2025-02-01T19:36:19.000Z")
-                .schedule(
-                    SubscriptionCreateParams.Schedule.Weekly.builder()
-                        .interval(3L)
-                        .type(SubscriptionCreateParams.Schedule.Weekly.Type.WEEKLY)
+                .subscription(
+                    Subscription.builder()
+                        .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .frequency(Subscription.Frequency.FIXED)
+                        .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .quantity(1L)
+                        .next("2025-02-01T19:36:19.000Z")
+                        .schedule(
+                            Subscription.Schedule.Weekly.builder()
+                                .interval(3L)
+                                .type(Subscription.Schedule.Weekly.Type.WEEKLY)
+                                .build()
+                        )
                         .build()
                 )
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
-        assertThat(body.id()).isEqualTo("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
-        assertThat(body.addressId()).isEqualTo("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
-        assertThat(body.cardId()).isEqualTo("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-        assertThat(body.frequency()).isEqualTo(SubscriptionCreateParams.Frequency.FIXED)
-        assertThat(body.productVariantId()).isEqualTo("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
-        assertThat(body.quantity()).isEqualTo(1L)
-        assertThat(body.next()).isEqualTo("2025-02-01T19:36:19.000Z")
-        assertThat(body.schedule())
+        assertThat(body)
             .isEqualTo(
-                SubscriptionCreateParams.Schedule.ofWeekly(
-                    SubscriptionCreateParams.Schedule.Weekly.builder()
-                        .interval(3L)
-                        .type(SubscriptionCreateParams.Schedule.Weekly.Type.WEEKLY)
-                        .build()
-                )
+                Subscription.builder()
+                    .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .frequency(Subscription.Frequency.FIXED)
+                    .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .quantity(1L)
+                    .next("2025-02-01T19:36:19.000Z")
+                    .schedule(
+                        Subscription.Schedule.Weekly.builder()
+                            .interval(3L)
+                            .type(Subscription.Schedule.Weekly.Type.WEEKLY)
+                            .build()
+                    )
+                    .build()
             )
     }
 
@@ -68,20 +80,31 @@ class SubscriptionCreateParamsTest {
     fun bodyWithoutOptionalFields() {
         val params =
             SubscriptionCreateParams.builder()
-                .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                .frequency(SubscriptionCreateParams.Frequency.FIXED)
-                .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                .quantity(1L)
+                .subscription(
+                    Subscription.builder()
+                        .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .frequency(Subscription.Frequency.FIXED)
+                        .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .quantity(1L)
+                        .build()
+                )
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
-        assertThat(body.id()).isEqualTo("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
-        assertThat(body.addressId()).isEqualTo("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
-        assertThat(body.cardId()).isEqualTo("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-        assertThat(body.frequency()).isEqualTo(SubscriptionCreateParams.Frequency.FIXED)
-        assertThat(body.productVariantId()).isEqualTo("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
-        assertThat(body.quantity()).isEqualTo(1L)
+        assertThat(body)
+            .isEqualTo(
+                Subscription.builder()
+                    .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .frequency(Subscription.Frequency.FIXED)
+                    .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .quantity(1L)
+                    .build()
+            )
     }
 }

@@ -10,9 +10,13 @@ class AppCreateParamsTest {
     @Test
     fun create() {
         AppCreateParams.builder()
-            .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
-            .name("Example App")
-            .redirectUri("https://example.com/callback")
+            .app(
+                App.builder()
+                    .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .name("Example App")
+                    .redirectUri("https://example.com/callback")
+                    .build()
+            )
             .build()
     }
 
@@ -20,29 +24,51 @@ class AppCreateParamsTest {
     fun body() {
         val params =
             AppCreateParams.builder()
-                .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                .name("Example App")
-                .redirectUri("https://example.com/callback")
+                .app(
+                    App.builder()
+                        .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .name("Example App")
+                        .redirectUri("https://example.com/callback")
+                        .build()
+                )
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
-        assertThat(body.id()).isEqualTo("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
-        assertThat(body.name()).isEqualTo("Example App")
-        assertThat(body.redirectUri()).isEqualTo("https://example.com/callback")
+        assertThat(body)
+            .isEqualTo(
+                App.builder()
+                    .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .name("Example App")
+                    .redirectUri("https://example.com/callback")
+                    .build()
+            )
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
         val params =
             AppCreateParams.builder()
-                .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                .name("Example App")
-                .redirectUri("https://example.com/callback")
+                .app(
+                    App.builder()
+                        .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .name("Example App")
+                        .redirectUri("https://example.com/callback")
+                        .build()
+                )
                 .build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
-        assertThat(body.id()).isEqualTo("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
-        assertThat(body.name()).isEqualTo("Example App")
-        assertThat(body.redirectUri()).isEqualTo("https://example.com/callback")
+        assertThat(body)
+            .isEqualTo(
+                App.builder()
+                    .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .name("Example App")
+                    .redirectUri("https://example.com/callback")
+                    .build()
+            )
     }
 }
