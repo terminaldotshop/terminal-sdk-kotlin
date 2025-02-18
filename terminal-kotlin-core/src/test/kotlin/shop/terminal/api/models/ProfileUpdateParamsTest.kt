@@ -16,7 +16,9 @@ class ProfileUpdateParamsTest {
     fun body() {
         val params =
             ProfileUpdateParams.builder().email("john@example.com").name("John Doe").build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.email()).isEqualTo("john@example.com")
         assertThat(body.name()).isEqualTo("John Doe")
@@ -25,7 +27,9 @@ class ProfileUpdateParamsTest {
     @Test
     fun bodyWithoutOptionalFields() {
         val params = ProfileUpdateParams.builder().build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
     }
 }

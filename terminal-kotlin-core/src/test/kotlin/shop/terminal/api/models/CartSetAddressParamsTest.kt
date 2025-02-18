@@ -16,7 +16,9 @@ class CartSetAddressParamsTest {
     fun body() {
         val params =
             CartSetAddressParams.builder().addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.addressId()).isEqualTo("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
     }
@@ -25,7 +27,9 @@ class CartSetAddressParamsTest {
     fun bodyWithoutOptionalFields() {
         val params =
             CartSetAddressParams.builder().addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
+
         val body = params._body()
+
         assertThat(body).isNotNull
         assertThat(body.addressId()).isEqualTo("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
     }
