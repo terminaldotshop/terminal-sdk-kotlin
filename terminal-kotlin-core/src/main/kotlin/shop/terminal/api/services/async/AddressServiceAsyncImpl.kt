@@ -20,10 +20,8 @@ import shop.terminal.api.models.AddressDeleteResponse
 import shop.terminal.api.models.AddressListParams
 import shop.terminal.api.models.AddressListResponse
 
-class AddressServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : AddressServiceAsync {
+class AddressServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    AddressServiceAsync {
 
     private val errorHandler: Handler<TerminalError> = errorHandler(clientOptions.jsonMapper)
 
@@ -33,7 +31,7 @@ internal constructor(
     /** Create and add a shipping address to the current user. */
     override suspend fun create(
         params: AddressCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): AddressCreateResponse {
         val request =
             HttpRequest.builder()
@@ -58,7 +56,7 @@ internal constructor(
     /** Get the shipping addresses associated with the current user. */
     override suspend fun list(
         params: AddressListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): AddressListResponse {
         val request =
             HttpRequest.builder()
@@ -82,7 +80,7 @@ internal constructor(
     /** Delete a shipping address from the current user. */
     override suspend fun delete(
         params: AddressDeleteParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): AddressDeleteResponse {
         val request =
             HttpRequest.builder()

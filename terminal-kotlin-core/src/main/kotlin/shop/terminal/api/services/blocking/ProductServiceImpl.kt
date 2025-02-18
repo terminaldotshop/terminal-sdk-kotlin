@@ -15,10 +15,8 @@ import shop.terminal.api.errors.TerminalError
 import shop.terminal.api.models.ProductListParams
 import shop.terminal.api.models.ProductListResponse
 
-class ProductServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : ProductService {
+class ProductServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    ProductService {
 
     private val errorHandler: Handler<TerminalError> = errorHandler(clientOptions.jsonMapper)
 
@@ -28,7 +26,7 @@ internal constructor(
     /** List all products for sale in the Terminal shop. */
     override fun list(
         params: ProductListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): ProductListResponse {
         val request =
             HttpRequest.builder()

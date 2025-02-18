@@ -18,10 +18,8 @@ import shop.terminal.api.models.ProfileMeResponse
 import shop.terminal.api.models.ProfileUpdateParams
 import shop.terminal.api.models.ProfileUpdateResponse
 
-class ProfileServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : ProfileService {
+class ProfileServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    ProfileService {
 
     private val errorHandler: Handler<TerminalError> = errorHandler(clientOptions.jsonMapper)
 
@@ -31,7 +29,7 @@ internal constructor(
     /** Update the current user's profile. */
     override fun update(
         params: ProfileUpdateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): ProfileUpdateResponse {
         val request =
             HttpRequest.builder()

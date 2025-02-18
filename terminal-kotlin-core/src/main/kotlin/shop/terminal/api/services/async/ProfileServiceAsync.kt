@@ -13,12 +13,12 @@ interface ProfileServiceAsync {
     /** Update the current user's profile. */
     suspend fun update(
         params: ProfileUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): ProfileUpdateResponse
 
     /** Get the current user's profile. */
     suspend fun me(
         params: ProfileMeParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): ProfileMeResponse
 }

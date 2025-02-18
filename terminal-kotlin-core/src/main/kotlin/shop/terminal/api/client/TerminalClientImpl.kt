@@ -27,9 +27,7 @@ import shop.terminal.api.services.blocking.TokenServiceImpl
 import shop.terminal.api.services.blocking.ViewService
 import shop.terminal.api.services.blocking.ViewServiceImpl
 
-class TerminalClientImpl(
-    private val clientOptions: ClientOptions,
-) : TerminalClient {
+class TerminalClientImpl(private val clientOptions: ClientOptions) : TerminalClient {
 
     private val clientOptionsWithUserAgent =
         if (clientOptions.headers.names().contains("User-Agent")) clientOptions

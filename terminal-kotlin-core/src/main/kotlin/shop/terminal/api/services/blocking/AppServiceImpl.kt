@@ -22,10 +22,7 @@ import shop.terminal.api.models.AppGetResponse
 import shop.terminal.api.models.AppListParams
 import shop.terminal.api.models.AppListResponse
 
-class AppServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : AppService {
+class AppServiceImpl internal constructor(private val clientOptions: ClientOptions) : AppService {
 
     private val errorHandler: Handler<TerminalError> = errorHandler(clientOptions.jsonMapper)
 
@@ -35,7 +32,7 @@ internal constructor(
     /** Create an app. */
     override fun create(
         params: AppCreateParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): AppCreateResponse {
         val request =
             HttpRequest.builder()
@@ -81,7 +78,7 @@ internal constructor(
     /** Delete the app with the given ID. */
     override fun delete(
         params: AppDeleteParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): AppDeleteResponse {
         val request =
             HttpRequest.builder()

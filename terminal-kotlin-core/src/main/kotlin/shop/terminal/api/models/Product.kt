@@ -254,11 +254,7 @@ private constructor(
             )
     }
 
-    class Filter
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class Filter @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
@@ -347,11 +343,8 @@ private constructor(
     }
 
     /** Whether the product must be or can be subscribed to. */
-    class Subscription
-    @JsonCreator
-    private constructor(
-        private val value: JsonField<String>,
-    ) : Enum {
+    class Subscription @JsonCreator private constructor(private val value: JsonField<String>) :
+        Enum {
 
         /**
          * Returns this class instance's raw value.
@@ -447,7 +440,7 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
     ) {
 
         @JsonAnyGetter

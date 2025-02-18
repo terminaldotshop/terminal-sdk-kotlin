@@ -14,6 +14,6 @@ interface ViewServiceAsync {
      */
     suspend fun init(
         params: ViewInitParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): ViewInitResponse
 }

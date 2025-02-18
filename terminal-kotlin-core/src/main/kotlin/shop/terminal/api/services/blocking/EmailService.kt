@@ -11,6 +11,6 @@ interface EmailService {
     /** Subscribe to email updates from Terminal. */
     fun create(
         params: EmailCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): EmailCreateResponse
 }
