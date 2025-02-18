@@ -145,11 +145,7 @@ private constructor(
             }
 
             fun build(): ProfileUpdateBody =
-                ProfileUpdateBody(
-                    email,
-                    name,
-                    additionalProperties.toImmutable(),
-                )
+                ProfileUpdateBody(email, name, additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {

@@ -15,10 +15,7 @@ import shop.terminal.api.errors.TerminalError
 import shop.terminal.api.models.ViewInitParams
 import shop.terminal.api.models.ViewInitResponse
 
-class ViewServiceImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : ViewService {
+class ViewServiceImpl internal constructor(private val clientOptions: ClientOptions) : ViewService {
 
     private val errorHandler: Handler<TerminalError> = errorHandler(clientOptions.jsonMapper)
 

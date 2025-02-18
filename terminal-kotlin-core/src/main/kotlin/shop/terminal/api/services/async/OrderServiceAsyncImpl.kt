@@ -17,10 +17,8 @@ import shop.terminal.api.models.OrderGetResponse
 import shop.terminal.api.models.OrderListParams
 import shop.terminal.api.models.OrderListResponse
 
-class OrderServiceAsyncImpl
-internal constructor(
-    private val clientOptions: ClientOptions,
-) : OrderServiceAsync {
+class OrderServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    OrderServiceAsync {
 
     private val errorHandler: Handler<TerminalError> = errorHandler(clientOptions.jsonMapper)
 
@@ -30,7 +28,7 @@ internal constructor(
     /** List the orders associated with the current user. */
     override suspend fun list(
         params: OrderListParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): OrderListResponse {
         val request =
             HttpRequest.builder()
@@ -54,7 +52,7 @@ internal constructor(
     /** Get the order with the given ID. */
     override suspend fun get(
         params: OrderGetParams,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): OrderGetResponse {
         val request =
             HttpRequest.builder()

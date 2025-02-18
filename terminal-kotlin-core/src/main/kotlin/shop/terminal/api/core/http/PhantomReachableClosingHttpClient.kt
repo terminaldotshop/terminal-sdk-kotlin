@@ -18,7 +18,7 @@ internal class PhantomReachableClosingHttpClient(private val httpClient: HttpCli
 
     override suspend fun executeAsync(
         request: HttpRequest,
-        requestOptions: RequestOptions
+        requestOptions: RequestOptions,
     ): HttpResponse = httpClient.executeAsync(request, requestOptions)
 
     override fun close() = httpClient.close()

@@ -15,18 +15,18 @@ interface AddressServiceAsync {
     /** Create and add a shipping address to the current user. */
     suspend fun create(
         params: AddressCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): AddressCreateResponse
 
     /** Get the shipping addresses associated with the current user. */
     suspend fun list(
         params: AddressListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): AddressListResponse
 
     /** Delete a shipping address from the current user. */
     suspend fun delete(
         params: AddressDeleteParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): AddressDeleteResponse
 }

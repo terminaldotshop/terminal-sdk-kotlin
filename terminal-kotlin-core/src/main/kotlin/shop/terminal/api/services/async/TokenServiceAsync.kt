@@ -17,24 +17,24 @@ interface TokenServiceAsync {
     /** Create a personal access token. */
     suspend fun create(
         params: TokenCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): TokenCreateResponse
 
     /** List the current user's personal access tokens. */
     suspend fun list(
         params: TokenListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): TokenListResponse
 
     /** Delete the personal access token with the given ID. */
     suspend fun delete(
         params: TokenDeleteParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): TokenDeleteResponse
 
     /** Get the personal access token with the given ID. */
     suspend fun get(
         params: TokenGetParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): TokenGetResponse
 }

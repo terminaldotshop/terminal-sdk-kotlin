@@ -15,18 +15,18 @@ interface SubscriptionServiceAsync {
     /** Create a subscription for the current user. */
     suspend fun create(
         params: SubscriptionCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionCreateResponse
 
     /** List the subscriptions associated with the current user. */
     suspend fun list(
         params: SubscriptionListParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionListResponse
 
     /** Cancel a subscription for the current user. */
     suspend fun delete(
         params: SubscriptionDeleteParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionDeleteResponse
 }

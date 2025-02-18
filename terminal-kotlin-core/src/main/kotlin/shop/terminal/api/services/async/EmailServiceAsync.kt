@@ -11,6 +11,6 @@ interface EmailServiceAsync {
     /** Subscribe to email updates from Terminal. */
     suspend fun create(
         params: EmailCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none()
+        requestOptions: RequestOptions = RequestOptions.none(),
     ): EmailCreateResponse
 }

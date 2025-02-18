@@ -27,9 +27,7 @@ import shop.terminal.api.services.async.TokenServiceAsyncImpl
 import shop.terminal.api.services.async.ViewServiceAsync
 import shop.terminal.api.services.async.ViewServiceAsyncImpl
 
-class TerminalClientAsyncImpl(
-    private val clientOptions: ClientOptions,
-) : TerminalClientAsync {
+class TerminalClientAsyncImpl(private val clientOptions: ClientOptions) : TerminalClientAsync {
 
     private val clientOptionsWithUserAgent =
         if (clientOptions.headers.names().contains("User-Agent")) clientOptions

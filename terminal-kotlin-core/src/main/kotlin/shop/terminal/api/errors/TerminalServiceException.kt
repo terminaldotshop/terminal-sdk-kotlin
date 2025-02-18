@@ -8,7 +8,7 @@ abstract class TerminalServiceException(
     private val body: String,
     private val error: TerminalError,
     message: String = "$statusCode: $error",
-    cause: Throwable? = null
+    cause: Throwable? = null,
 ) : TerminalException(message, cause) {
 
     fun statusCode(): Int = statusCode

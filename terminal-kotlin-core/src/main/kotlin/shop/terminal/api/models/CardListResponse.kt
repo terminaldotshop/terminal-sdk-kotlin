@@ -107,7 +107,7 @@ private constructor(
         fun build(): CardListResponse =
             CardListResponse(
                 checkRequired("data", data).map { it.toImmutable() },
-                additionalProperties.toImmutable()
+                additionalProperties.toImmutable(),
             )
     }
 

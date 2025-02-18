@@ -355,11 +355,7 @@ private constructor(
         }
 
         fun build(): AppCreateParams =
-            AppCreateParams(
-                body.build(),
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
-            )
+            AppCreateParams(body.build(), additionalHeaders.build(), additionalQueryParams.build())
     }
 
     override fun equals(other: Any?): Boolean {
