@@ -280,9 +280,9 @@ To set undocumented parameters, call the `putAdditionalHeader`, `putAdditionalQu
 
 ```kotlin
 import shop.terminal.api.core.JsonValue
-import shop.terminal.api.models.ProfileUpdateParams
+import shop.terminal.api.models.ProductListParams
 
-val params: ProfileUpdateParams = ProfileUpdateParams.builder()
+val params: ProductListParams = ProductListParams.builder()
     .putAdditionalHeader("Secret-Header", "42")
     .putAdditionalQueryParam("secret_query_param", "42")
     .putAdditionalBodyProperty("secretProperty", JsonValue.from("42"))
@@ -295,9 +295,8 @@ To set a documented parameter or property to an undocumented or not yet supporte
 
 ```kotlin
 import shop.terminal.api.models.ProductListParams
-import shop.terminal.api.models.ProfileUpdateParams
 
-val params: ProfileUpdateParams = ProductListParams.builder().build()
+val params: ProductListParams = ProductListParams.builder().build()
 ```
 
 ### Response properties
