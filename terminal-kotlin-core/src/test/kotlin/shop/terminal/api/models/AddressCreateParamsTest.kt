@@ -2,6 +2,7 @@
 
 package shop.terminal.api.models
 
+import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -37,7 +38,7 @@ class AddressCreateParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.city()).isEqualTo("Anytown")
         assertThat(body.country()).isEqualTo("US")
         assertThat(body.name()).isEqualTo("John Doe")
@@ -61,7 +62,7 @@ class AddressCreateParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.city()).isEqualTo("Anytown")
         assertThat(body.country()).isEqualTo("US")
         assertThat(body.name()).isEqualTo("John Doe")
