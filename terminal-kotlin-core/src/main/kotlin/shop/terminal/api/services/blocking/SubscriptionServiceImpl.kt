@@ -38,7 +38,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
             HttpRequest.builder()
                 .method(HttpMethod.POST)
                 .addPathSegments("subscription")
-                .body(json(clientOptions.jsonMapper, params._body()))
+                .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                 .build()
                 .prepare(clientOptions, params)
         val response = clientOptions.httpClient.execute(request, requestOptions)

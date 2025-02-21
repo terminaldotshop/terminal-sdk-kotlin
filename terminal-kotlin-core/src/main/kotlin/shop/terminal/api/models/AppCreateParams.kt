@@ -6,28 +6,29 @@ import java.util.Objects
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.Params
-import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
+import shop.terminal.api.core.immutableEmptyMap
 
 /** Create an app. */
 class AppCreateParams
 private constructor(
-    private val app: App,
+    private val app: App?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     /** A Terminal App used for configuring an OAuth 2.0 client. */
-    fun app(): App = app
+    fun app(): App? = app
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = app._additionalProperties()
+    fun _additionalBodyProperties(): Map<String, JsonValue> =
+        app?._additionalProperties() ?: immutableEmptyMap()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    internal fun _body(): App = app
+    internal fun _body(): App? = app
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -55,7 +56,7 @@ private constructor(
         }
 
         /** A Terminal App used for configuring an OAuth 2.0 client. */
-        fun app(app: App) = apply { this.app = app }
+        fun app(app: App?) = apply { this.app = app }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -156,11 +157,7 @@ private constructor(
         }
 
         fun build(): AppCreateParams =
-            AppCreateParams(
-                checkRequired("app", app),
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
-            )
+            AppCreateParams(app, additionalHeaders.build(), additionalQueryParams.build())
     }
 
     override fun equals(other: Any?): Boolean {

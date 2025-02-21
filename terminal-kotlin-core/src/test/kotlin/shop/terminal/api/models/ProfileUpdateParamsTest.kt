@@ -2,6 +2,7 @@
 
 package shop.terminal.api.models
 
+import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -19,7 +20,7 @@ class ProfileUpdateParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
         assertThat(body.email()).isEqualTo("john@example.com")
         assertThat(body.name()).isEqualTo("John Doe")
     }
@@ -30,6 +31,6 @@ class ProfileUpdateParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
+        assertNotNull(body)
     }
 }
