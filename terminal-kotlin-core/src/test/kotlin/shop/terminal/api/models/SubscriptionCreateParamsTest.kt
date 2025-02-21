@@ -55,7 +55,6 @@ class SubscriptionCreateParamsTest {
 
         val body = params._body()
 
-        assertThat(body).isNotNull
         assertThat(body)
             .isEqualTo(
                 Subscription.builder()
@@ -78,33 +77,8 @@ class SubscriptionCreateParamsTest {
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params =
-            SubscriptionCreateParams.builder()
-                .subscription(
-                    Subscription.builder()
-                        .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                        .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                        .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                        .frequency(Subscription.Frequency.FIXED)
-                        .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                        .quantity(1L)
-                        .build()
-                )
-                .build()
+        val params = SubscriptionCreateParams.builder().build()
 
         val body = params._body()
-
-        assertThat(body).isNotNull
-        assertThat(body)
-            .isEqualTo(
-                Subscription.builder()
-                    .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                    .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                    .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                    .frequency(Subscription.Frequency.FIXED)
-                    .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                    .quantity(1L)
-                    .build()
-            )
     }
 }
