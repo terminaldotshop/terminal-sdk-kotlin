@@ -14,7 +14,7 @@ class AppCreateResponseTest {
                 .data(
                     AppCreateResponse.Data.builder()
                         .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                        .secret("sec_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .secret("sec_******XXXX")
                         .build()
                 )
                 .build()
@@ -23,7 +23,7 @@ class AppCreateResponseTest {
             .isEqualTo(
                 AppCreateResponse.Data.builder()
                     .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                    .secret("sec_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .secret("sec_******XXXX")
                     .build()
             )
     }
