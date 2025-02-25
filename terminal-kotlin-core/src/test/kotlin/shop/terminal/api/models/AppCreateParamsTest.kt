@@ -15,6 +15,7 @@ class AppCreateParamsTest {
                     .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
                     .name("Example App")
                     .redirectUri("https://example.com/callback")
+                    .secret("sec_******XXXX")
                     .build()
             )
             .build()
@@ -29,6 +30,7 @@ class AppCreateParamsTest {
                         .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
                         .name("Example App")
                         .redirectUri("https://example.com/callback")
+                        .secret("sec_******XXXX")
                         .build()
                 )
                 .build()
@@ -41,6 +43,7 @@ class AppCreateParamsTest {
                     .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
                     .name("Example App")
                     .redirectUri("https://example.com/callback")
+                    .secret("sec_******XXXX")
                     .build()
             )
     }
