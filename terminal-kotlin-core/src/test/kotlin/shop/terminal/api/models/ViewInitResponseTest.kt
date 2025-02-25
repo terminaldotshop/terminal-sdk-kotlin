@@ -32,6 +32,7 @@ class ViewInitResponseTest {
                                 .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
                                 .name("Example App")
                                 .redirectUri("https://example.com/callback")
+                                .secret("sec_******XXXX")
                                 .build()
                         )
                         .addCard(
@@ -195,6 +196,7 @@ class ViewInitResponseTest {
                             .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
                             .name("Example App")
                             .redirectUri("https://example.com/callback")
+                            .secret("sec_******XXXX")
                             .build()
                     )
                     .addCard(

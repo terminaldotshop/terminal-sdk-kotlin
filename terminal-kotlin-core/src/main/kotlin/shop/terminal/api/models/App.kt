@@ -26,6 +26,9 @@ private constructor(
     @JsonProperty("redirectURI")
     @ExcludeMissing
     private val redirectUri: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("secret")
+    @ExcludeMissing
+    private val secret: JsonField<String> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
@@ -38,6 +41,9 @@ private constructor(
     /** Redirect URI of the app. */
     fun redirectUri(): String = redirectUri.getRequired("redirectURI")
 
+    /** OAuth 2.0 client secret of the app (obfuscated). */
+    fun secret(): String = secret.getRequired("secret")
+
     /** Unique object identifier. The format and length of IDs may change over time. */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
@@ -46,6 +52,9 @@ private constructor(
 
     /** Redirect URI of the app. */
     @JsonProperty("redirectURI") @ExcludeMissing fun _redirectUri(): JsonField<String> = redirectUri
+
+    /** OAuth 2.0 client secret of the app (obfuscated). */
+    @JsonProperty("secret") @ExcludeMissing fun _secret(): JsonField<String> = secret
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -61,6 +70,7 @@ private constructor(
         id()
         name()
         redirectUri()
+        secret()
         validated = true
     }
 
@@ -77,12 +87,14 @@ private constructor(
         private var id: JsonField<String>? = null
         private var name: JsonField<String>? = null
         private var redirectUri: JsonField<String>? = null
+        private var secret: JsonField<String>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(app: App) = apply {
             id = app.id
             name = app.name
             redirectUri = app.redirectUri
+            secret = app.secret
             additionalProperties = app.additionalProperties.toMutableMap()
         }
 
@@ -103,6 +115,12 @@ private constructor(
 
         /** Redirect URI of the app. */
         fun redirectUri(redirectUri: JsonField<String>) = apply { this.redirectUri = redirectUri }
+
+        /** OAuth 2.0 client secret of the app (obfuscated). */
+        fun secret(secret: String) = secret(JsonField.of(secret))
+
+        /** OAuth 2.0 client secret of the app (obfuscated). */
+        fun secret(secret: JsonField<String>) = apply { this.secret = secret }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -128,6 +146,7 @@ private constructor(
                 checkRequired("id", id),
                 checkRequired("name", name),
                 checkRequired("redirectUri", redirectUri),
+                checkRequired("secret", secret),
                 additionalProperties.toImmutable(),
             )
     }
@@ -137,15 +156,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is App && id == other.id && name == other.name && redirectUri == other.redirectUri && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is App && id == other.id && name == other.name && redirectUri == other.redirectUri && secret == other.secret && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, name, redirectUri, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, name, redirectUri, secret, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "App{id=$id, name=$name, redirectUri=$redirectUri, additionalProperties=$additionalProperties}"
+        "App{id=$id, name=$name, redirectUri=$redirectUri, secret=$secret, additionalProperties=$additionalProperties}"
 }
