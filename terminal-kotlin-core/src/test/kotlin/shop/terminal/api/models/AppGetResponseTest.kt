@@ -16,6 +16,7 @@ class AppGetResponseTest {
                         .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
                         .name("Example App")
                         .redirectUri("https://example.com/callback")
+                        .secret("sec_******XXXX")
                         .build()
                 )
                 .build()
@@ -26,6 +27,7 @@ class AppGetResponseTest {
                     .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
                     .name("Example App")
                     .redirectUri("https://example.com/callback")
+                    .secret("sec_******XXXX")
                     .build()
             )
     }
