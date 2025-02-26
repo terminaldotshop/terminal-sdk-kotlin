@@ -29,7 +29,6 @@ class SubscriptionServiceTest {
                             .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
                             .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
                             .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                            .frequency(Subscription.Frequency.FIXED)
                             .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                             .quantity(1L)
                             .next("2025-02-01T19:36:19.000Z")
