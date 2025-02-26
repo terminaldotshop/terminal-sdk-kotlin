@@ -13,7 +13,14 @@ interface ViewServiceAsync {
      * orders.
      */
     suspend fun init(
-        params: ViewInitParams,
+        params: ViewInitParams = ViewInitParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ViewInitResponse
+
+    /**
+     * Get initial app data, including user, products, cart, addresses, cards, subscriptions, and
+     * orders.
+     */
+    suspend fun init(requestOptions: RequestOptions): ViewInitResponse =
+        init(ViewInitParams.none(), requestOptions)
 }

@@ -51,8 +51,7 @@ import shop.terminal.api.models.ProductListResponse
 // Configures using the `TERMINAL_BEARER_TOKEN` environment variable
 val client: TerminalClient = TerminalOkHttpClient.fromEnv()
 
-val params: ProductListParams = ProductListParams.builder().build()
-val product: ProductListResponse = client.product().list(params)
+val product: ProductListResponse = client.product().list()
 ```
 
 ## Client configuration
@@ -128,8 +127,7 @@ import shop.terminal.api.models.ProductListResponse
 // Configures using the `TERMINAL_BEARER_TOKEN` environment variable
 val client: TerminalClient = TerminalOkHttpClient.fromEnv()
 
-val params: ProductListParams = ProductListParams.builder().build()
-val product: ProductListResponse = client.async().product().list(params)
+val product: ProductListResponse = client.async().product().list()
 ```
 
 Or create an asynchronous client from the beginning:
@@ -143,8 +141,7 @@ import shop.terminal.api.models.ProductListResponse
 // Configures using the `TERMINAL_BEARER_TOKEN` environment variable
 val client: TerminalClientAsync = TerminalOkHttpClientAsync.fromEnv()
 
-val params: ProductListParams = ProductListParams.builder().build()
-val product: ProductListResponse = client.product().list(params)
+val product: ProductListResponse = client.product().list()
 ```
 
 The asynchronous client supports the same options as the synchronous one, except most methods are [suspending](https://kotlinlang.org/docs/coroutines-guide.html).
@@ -226,9 +223,7 @@ To set a custom timeout, configure the method call using the `timeout` method:
 import shop.terminal.api.models.ProductListParams
 import shop.terminal.api.models.ProductListResponse
 
-val product: ProductListResponse = client.product().list(
-  params, RequestOptions.builder().timeout(Duration.ofSeconds(30)).build()
-)
+val product: ProductListResponse = client.product().list(RequestOptions.builder().timeout(Duration.ofSeconds(30)).build())
 ```
 
 Or configure the default for all method calls at the client level:
@@ -370,9 +365,7 @@ Or configure the method call to validate the response using the `responseValidat
 import shop.terminal.api.models.ProductListParams
 import shop.terminal.api.models.ProductListResponse
 
-val product: ProductListResponse = client.product().list(
-  params, RequestOptions.builder().responseValidation(true).build()
-)
+val product: ProductListResponse = client.product().list(RequestOptions.builder().responseValidation(true).build())
 ```
 
 Or configure the default for all method calls at the client level:

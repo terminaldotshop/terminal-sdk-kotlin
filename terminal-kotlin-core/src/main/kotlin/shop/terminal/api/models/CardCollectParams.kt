@@ -34,6 +34,8 @@ private constructor(
 
     companion object {
 
+        fun none(): CardCollectParams = builder().build()
+
         fun builder() = Builder()
     }
 

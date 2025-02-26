@@ -12,9 +12,13 @@ interface OrderService {
 
     /** List the orders associated with the current user. */
     fun list(
-        params: OrderListParams,
+        params: OrderListParams = OrderListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): OrderListResponse
+
+    /** List the orders associated with the current user. */
+    fun list(requestOptions: RequestOptions): OrderListResponse =
+        list(OrderListParams.none(), requestOptions)
 
     /** Get the order with the given ID. */
     fun get(

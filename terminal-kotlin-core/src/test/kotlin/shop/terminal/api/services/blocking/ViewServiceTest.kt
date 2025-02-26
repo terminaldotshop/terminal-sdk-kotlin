@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
-import shop.terminal.api.models.ViewInitParams
 
 @ExtendWith(TestServerExtension::class)
 class ViewServiceTest {
@@ -19,7 +18,7 @@ class ViewServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val viewService = client.view()
-        val viewInitResponse = viewService.init(ViewInitParams.builder().build())
+        val viewInitResponse = viewService.init()
         println(viewInitResponse)
         viewInitResponse.validate()
     }
