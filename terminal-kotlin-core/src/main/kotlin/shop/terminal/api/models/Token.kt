@@ -26,7 +26,9 @@ class Token
 private constructor(
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
     @JsonProperty("token") @ExcludeMissing private val token: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("time") @ExcludeMissing private val time: JsonField<Time> = JsonMissing.of(),
+    @JsonProperty("created")
+    @ExcludeMissing
+    private val created: JsonField<String> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
@@ -36,8 +38,8 @@ private constructor(
     /** Personal access token (obfuscated). */
     fun token(): String = token.getRequired("token")
 
-    /** Relevant timestamps for the token. */
-    fun time(): Time = time.getRequired("time")
+    /** The created time for the token. */
+    fun created(): String = created.getRequired("created")
 
     /** Unique object identifier. The format and length of IDs may change over time. */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
@@ -45,8 +47,8 @@ private constructor(
     /** Personal access token (obfuscated). */
     @JsonProperty("token") @ExcludeMissing fun _token(): JsonField<String> = token
 
-    /** Relevant timestamps for the token. */
-    @JsonProperty("time") @ExcludeMissing fun _time(): JsonField<Time> = time
+    /** The created time for the token. */
+    @JsonProperty("created") @ExcludeMissing fun _created(): JsonField<String> = created
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -61,7 +63,7 @@ private constructor(
 
         id()
         token()
-        time().validate()
+        created()
         validated = true
     }
 
@@ -77,13 +79,13 @@ private constructor(
 
         private var id: JsonField<String>? = null
         private var token: JsonField<String>? = null
-        private var time: JsonField<Time>? = null
+        private var created: JsonField<String>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(token: Token) = apply {
             id = token.id
             this.token = token.token
-            time = token.time
+            created = token.created
             additionalProperties = token.additionalProperties.toMutableMap()
         }
 
@@ -99,11 +101,11 @@ private constructor(
         /** Personal access token (obfuscated). */
         fun token(token: JsonField<String>) = apply { this.token = token }
 
-        /** Relevant timestamps for the token. */
-        fun time(time: Time) = time(JsonField.of(time))
+        /** The created time for the token. */
+        fun created(created: String) = created(JsonField.of(created))
 
-        /** Relevant timestamps for the token. */
-        fun time(time: JsonField<Time>) = apply { this.time = time }
+        /** The created time for the token. */
+        fun created(created: JsonField<String>) = apply { this.created = created }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -128,107 +130,9 @@ private constructor(
             Token(
                 checkRequired("id", id),
                 checkRequired("token", token),
-                checkRequired("time", time),
+                checkRequired("created", created),
                 additionalProperties.toImmutable(),
             )
-    }
-
-    /** Relevant timestamps for the token. */
-    @NoAutoDetect
-    class Time
-    @JsonCreator
-    private constructor(
-        @JsonProperty("created")
-        @ExcludeMissing
-        private val created: JsonField<String> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-    ) {
-
-        /** The created time for the token. */
-        fun created(): String = created.getRequired("created")
-
-        /** The created time for the token. */
-        @JsonProperty("created") @ExcludeMissing fun _created(): JsonField<String> = created
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Time = apply {
-            if (validated) {
-                return@apply
-            }
-
-            created()
-            validated = true
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            fun builder() = Builder()
-        }
-
-        /** A builder for [Time]. */
-        class Builder internal constructor() {
-
-            private var created: JsonField<String>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(time: Time) = apply {
-                created = time.created
-                additionalProperties = time.additionalProperties.toMutableMap()
-            }
-
-            /** The created time for the token. */
-            fun created(created: String) = created(JsonField.of(created))
-
-            /** The created time for the token. */
-            fun created(created: JsonField<String>) = apply { this.created = created }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            fun build(): Time =
-                Time(checkRequired("created", created), additionalProperties.toImmutable())
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Time && created == other.created && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(created, additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Time{created=$created, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -236,15 +140,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Token && id == other.id && token == other.token && time == other.time && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Token && id == other.id && token == other.token && created == other.created && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, token, time, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, token, created, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Token{id=$id, token=$token, time=$time, additionalProperties=$additionalProperties}"
+        "Token{id=$id, token=$token, created=$created, additionalProperties=$additionalProperties}"
 }

@@ -13,12 +13,11 @@ class TokenTest {
             Token.builder()
                 .id("pat_XXXXXXXXXXXXXXXXXXXXXXXXX")
                 .token("trm_test_******XXXX")
-                .time(Token.Time.builder().created("2024-06-29T19:36:19.000Z").build())
+                .created("2024-06-29T19:36:19.000Z")
                 .build()
         assertThat(token).isNotNull
         assertThat(token.id()).isEqualTo("pat_XXXXXXXXXXXXXXXXXXXXXXXXX")
         assertThat(token.token()).isEqualTo("trm_test_******XXXX")
-        assertThat(token.time())
-            .isEqualTo(Token.Time.builder().created("2024-06-29T19:36:19.000Z").build())
+        assertThat(token.created()).isEqualTo("2024-06-29T19:36:19.000Z")
     }
 }
