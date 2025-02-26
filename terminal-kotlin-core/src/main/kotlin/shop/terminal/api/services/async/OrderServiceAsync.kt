@@ -12,9 +12,13 @@ interface OrderServiceAsync {
 
     /** List the orders associated with the current user. */
     suspend fun list(
-        params: OrderListParams,
+        params: OrderListParams = OrderListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): OrderListResponse
+
+    /** List the orders associated with the current user. */
+    suspend fun list(requestOptions: RequestOptions): OrderListResponse =
+        list(OrderListParams.none(), requestOptions)
 
     /** Get the order with the given ID. */
     suspend fun get(

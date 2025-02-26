@@ -10,7 +10,6 @@ import shop.terminal.api.models.App
 import shop.terminal.api.models.AppCreateParams
 import shop.terminal.api.models.AppDeleteParams
 import shop.terminal.api.models.AppGetParams
-import shop.terminal.api.models.AppListParams
 
 @ExtendWith(TestServerExtension::class)
 class AppServiceTest {
@@ -48,7 +47,7 @@ class AppServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val appService = client.app()
-        val appListResponse = appService.list(AppListParams.builder().build())
+        val appListResponse = appService.list()
         println(appListResponse)
         appListResponse.validate()
     }

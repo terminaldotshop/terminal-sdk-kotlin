@@ -9,7 +9,6 @@ import shop.terminal.api.client.okhttp.TerminalOkHttpClient
 import shop.terminal.api.models.Subscription
 import shop.terminal.api.models.SubscriptionCreateParams
 import shop.terminal.api.models.SubscriptionDeleteParams
-import shop.terminal.api.models.SubscriptionListParams
 
 @ExtendWith(TestServerExtension::class)
 class SubscriptionServiceTest {
@@ -56,8 +55,7 @@ class SubscriptionServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val subscriptionService = client.subscription()
-        val subscriptionListResponse =
-            subscriptionService.list(SubscriptionListParams.builder().build())
+        val subscriptionListResponse = subscriptionService.list()
         println(subscriptionListResponse)
         subscriptionListResponse.validate()
     }

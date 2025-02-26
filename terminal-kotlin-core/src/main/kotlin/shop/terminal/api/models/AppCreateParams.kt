@@ -38,6 +38,8 @@ private constructor(
 
     companion object {
 
+        fun none(): AppCreateParams = builder().build()
+
         fun builder() = Builder()
     }
 

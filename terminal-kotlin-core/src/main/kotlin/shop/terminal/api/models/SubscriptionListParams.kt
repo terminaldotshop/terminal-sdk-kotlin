@@ -27,6 +27,8 @@ private constructor(
 
     companion object {
 
+        fun none(): SubscriptionListParams = builder().build()
+
         fun builder() = Builder()
     }
 
