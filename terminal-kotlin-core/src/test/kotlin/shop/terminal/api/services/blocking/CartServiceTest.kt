@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
-import shop.terminal.api.models.CartConvertParams
-import shop.terminal.api.models.CartGetParams
 import shop.terminal.api.models.CartSetAddressParams
 import shop.terminal.api.models.CartSetCardParams
 import shop.terminal.api.models.CartSetItemParams
@@ -23,7 +21,7 @@ class CartServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val cartService = client.cart()
-        val cartConvertResponse = cartService.convert(CartConvertParams.builder().build())
+        val cartConvertResponse = cartService.convert()
         println(cartConvertResponse)
         cartConvertResponse.validate()
     }
@@ -36,7 +34,7 @@ class CartServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val cartService = client.cart()
-        val cartGetResponse = cartService.get(CartGetParams.builder().build())
+        val cartGetResponse = cartService.get()
         println(cartGetResponse)
         cartGetResponse.validate()
     }

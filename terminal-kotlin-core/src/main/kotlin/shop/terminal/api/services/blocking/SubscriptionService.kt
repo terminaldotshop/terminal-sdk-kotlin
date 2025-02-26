@@ -14,15 +14,23 @@ interface SubscriptionService {
 
     /** Create a subscription for the current user. */
     fun create(
-        params: SubscriptionCreateParams,
+        params: SubscriptionCreateParams = SubscriptionCreateParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionCreateResponse
 
+    /** Create a subscription for the current user. */
+    fun create(requestOptions: RequestOptions): SubscriptionCreateResponse =
+        create(SubscriptionCreateParams.none(), requestOptions)
+
     /** List the subscriptions associated with the current user. */
     fun list(
-        params: SubscriptionListParams,
+        params: SubscriptionListParams = SubscriptionListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionListResponse
+
+    /** List the subscriptions associated with the current user. */
+    fun list(requestOptions: RequestOptions): SubscriptionListResponse =
+        list(SubscriptionListParams.none(), requestOptions)
 
     /** Cancel a subscription for the current user. */
     fun delete(

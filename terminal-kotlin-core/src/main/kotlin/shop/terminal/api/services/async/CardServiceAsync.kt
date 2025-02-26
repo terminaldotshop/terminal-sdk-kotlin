@@ -22,9 +22,13 @@ interface CardServiceAsync {
 
     /** List the credit cards associated with the current user. */
     suspend fun list(
-        params: CardListParams,
+        params: CardListParams = CardListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CardListResponse
+
+    /** List the credit cards associated with the current user. */
+    suspend fun list(requestOptions: RequestOptions): CardListResponse =
+        list(CardListParams.none(), requestOptions)
 
     /** Delete a credit card associated with the current user. */
     suspend fun delete(
@@ -34,7 +38,11 @@ interface CardServiceAsync {
 
     /** Create a temporary URL for collecting credit card information for the current user. */
     suspend fun collect(
-        params: CardCollectParams,
+        params: CardCollectParams = CardCollectParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CardCollectResponse
+
+    /** Create a temporary URL for collecting credit card information for the current user. */
+    suspend fun collect(requestOptions: RequestOptions): CardCollectResponse =
+        collect(CardCollectParams.none(), requestOptions)
 }

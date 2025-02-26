@@ -18,15 +18,23 @@ interface CartService {
 
     /** Convert the current user's cart to an order. */
     fun convert(
-        params: CartConvertParams,
+        params: CartConvertParams = CartConvertParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CartConvertResponse
 
+    /** Convert the current user's cart to an order. */
+    fun convert(requestOptions: RequestOptions): CartConvertResponse =
+        convert(CartConvertParams.none(), requestOptions)
+
     /** Get the current user's cart. */
     fun get(
-        params: CartGetParams,
+        params: CartGetParams = CartGetParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CartGetResponse
+
+    /** Get the current user's cart. */
+    fun get(requestOptions: RequestOptions): CartGetResponse =
+        get(CartGetParams.none(), requestOptions)
 
     /** Set the shipping address for the current user's cart. */
     fun setAddress(

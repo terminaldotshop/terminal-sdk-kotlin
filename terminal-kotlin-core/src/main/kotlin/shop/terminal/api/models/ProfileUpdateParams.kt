@@ -169,6 +169,8 @@ private constructor(
 
     companion object {
 
+        fun none(): ProfileUpdateParams = builder().build()
+
         fun builder() = Builder()
     }
 

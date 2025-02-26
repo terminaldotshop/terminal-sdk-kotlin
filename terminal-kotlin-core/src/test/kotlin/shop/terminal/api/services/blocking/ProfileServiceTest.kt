@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
-import shop.terminal.api.models.ProfileMeParams
 import shop.terminal.api.models.ProfileUpdateParams
 
 @ExtendWith(TestServerExtension::class)
@@ -36,7 +35,7 @@ class ProfileServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val profileService = client.profile()
-        val profileMeResponse = profileService.me(ProfileMeParams.builder().build())
+        val profileMeResponse = profileService.me()
         println(profileMeResponse)
         profileMeResponse.validate()
     }
