@@ -20,9 +20,13 @@ interface AddressServiceAsync {
 
     /** Get the shipping addresses associated with the current user. */
     suspend fun list(
-        params: AddressListParams,
+        params: AddressListParams = AddressListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AddressListResponse
+
+    /** Get the shipping addresses associated with the current user. */
+    suspend fun list(requestOptions: RequestOptions): AddressListResponse =
+        list(AddressListParams.none(), requestOptions)
 
     /** Delete a shipping address from the current user. */
     suspend fun delete(

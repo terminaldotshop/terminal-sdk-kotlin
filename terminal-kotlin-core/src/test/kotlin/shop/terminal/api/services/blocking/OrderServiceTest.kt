@@ -7,7 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
 import shop.terminal.api.models.OrderGetParams
-import shop.terminal.api.models.OrderListParams
 
 @ExtendWith(TestServerExtension::class)
 class OrderServiceTest {
@@ -20,7 +19,7 @@ class OrderServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val orderService = client.order()
-        val orderListResponse = orderService.list(OrderListParams.builder().build())
+        val orderListResponse = orderService.list()
         println(orderListResponse)
         orderListResponse.validate()
     }

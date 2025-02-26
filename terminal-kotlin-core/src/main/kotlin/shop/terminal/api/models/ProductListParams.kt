@@ -27,6 +27,8 @@ private constructor(
 
     companion object {
 
+        fun none(): ProductListParams = builder().build()
+
         fun builder() = Builder()
     }
 

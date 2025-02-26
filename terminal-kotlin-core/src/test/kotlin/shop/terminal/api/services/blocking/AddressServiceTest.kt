@@ -8,7 +8,6 @@ import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
 import shop.terminal.api.models.AddressCreateParams
 import shop.terminal.api.models.AddressDeleteParams
-import shop.terminal.api.models.AddressListParams
 
 @ExtendWith(TestServerExtension::class)
 class AddressServiceTest {
@@ -46,7 +45,7 @@ class AddressServiceTest {
                 .bearerToken("My Bearer Token")
                 .build()
         val addressService = client.address()
-        val addressListResponse = addressService.list(AddressListParams.builder().build())
+        val addressListResponse = addressService.list()
         println(addressListResponse)
         addressListResponse.validate()
     }

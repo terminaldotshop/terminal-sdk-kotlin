@@ -18,15 +18,23 @@ interface CartServiceAsync {
 
     /** Convert the current user's cart to an order. */
     suspend fun convert(
-        params: CartConvertParams,
+        params: CartConvertParams = CartConvertParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CartConvertResponse
 
+    /** Convert the current user's cart to an order. */
+    suspend fun convert(requestOptions: RequestOptions): CartConvertResponse =
+        convert(CartConvertParams.none(), requestOptions)
+
     /** Get the current user's cart. */
     suspend fun get(
-        params: CartGetParams,
+        params: CartGetParams = CartGetParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CartGetResponse
+
+    /** Get the current user's cart. */
+    suspend fun get(requestOptions: RequestOptions): CartGetResponse =
+        get(CartGetParams.none(), requestOptions)
 
     /** Set the shipping address for the current user's cart. */
     suspend fun setAddress(

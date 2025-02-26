@@ -20,9 +20,13 @@ interface AddressService {
 
     /** Get the shipping addresses associated with the current user. */
     fun list(
-        params: AddressListParams,
+        params: AddressListParams = AddressListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AddressListResponse
+
+    /** Get the shipping addresses associated with the current user. */
+    fun list(requestOptions: RequestOptions): AddressListResponse =
+        list(AddressListParams.none(), requestOptions)
 
     /** Delete a shipping address from the current user. */
     fun delete(

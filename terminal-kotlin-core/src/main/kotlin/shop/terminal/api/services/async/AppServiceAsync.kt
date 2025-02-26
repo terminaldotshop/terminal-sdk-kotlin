@@ -16,15 +16,23 @@ interface AppServiceAsync {
 
     /** Create an app. */
     suspend fun create(
-        params: AppCreateParams,
+        params: AppCreateParams = AppCreateParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AppCreateResponse
 
+    /** Create an app. */
+    suspend fun create(requestOptions: RequestOptions): AppCreateResponse =
+        create(AppCreateParams.none(), requestOptions)
+
     /** List the current user's registered apps. */
     suspend fun list(
-        params: AppListParams,
+        params: AppListParams = AppListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AppListResponse
+
+    /** List the current user's registered apps. */
+    suspend fun list(requestOptions: RequestOptions): AppListResponse =
+        list(AppListParams.none(), requestOptions)
 
     /** Delete the app with the given ID. */
     suspend fun delete(
