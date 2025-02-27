@@ -1,29 +1,29 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package shop.terminal.api.services.blocking
+package shop.terminal.api.services.async
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
-import shop.terminal.api.client.okhttp.TerminalOkHttpClient
+import shop.terminal.api.client.okhttp.TerminalOkHttpClientAsync
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.models.OrderCreateParams
 import shop.terminal.api.models.OrderGetParams
 
 @ExtendWith(TestServerExtension::class)
-class OrderServiceTest {
+class OrderServiceAsyncTest {
 
     @Test
-    fun create() {
+    suspend fun create() {
         val client =
-            TerminalOkHttpClient.builder()
+            TerminalOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val orderService = client.order()
+        val orderServiceAsync = client.order()
 
         val order =
-            orderService.create(
+            orderServiceAsync.create(
                 OrderCreateParams.builder()
                     .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
                     .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
@@ -42,30 +42,32 @@ class OrderServiceTest {
     }
 
     @Test
-    fun list() {
+    suspend fun list() {
         val client =
-            TerminalOkHttpClient.builder()
+            TerminalOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val orderService = client.order()
+        val orderServiceAsync = client.order()
 
-        val order = orderService.list()
+        val order = orderServiceAsync.list()
 
         order.validate()
     }
 
     @Test
-    fun get() {
+    suspend fun get() {
         val client =
-            TerminalOkHttpClient.builder()
+            TerminalOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val orderService = client.order()
+        val orderServiceAsync = client.order()
 
         val order =
-            orderService.get(OrderGetParams.builder().id("ord_XXXXXXXXXXXXXXXXXXXXXXXXX").build())
+            orderServiceAsync.get(
+                OrderGetParams.builder().id("ord_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
+            )
 
         order.validate()
     }

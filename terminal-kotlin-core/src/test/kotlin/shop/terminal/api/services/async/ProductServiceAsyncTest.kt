@@ -1,26 +1,26 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package shop.terminal.api.services.blocking
+package shop.terminal.api.services.async
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
-import shop.terminal.api.client.okhttp.TerminalOkHttpClient
+import shop.terminal.api.client.okhttp.TerminalOkHttpClientAsync
 
 @ExtendWith(TestServerExtension::class)
-class ViewServiceTest {
+class ProductServiceAsyncTest {
 
     @Test
-    fun init() {
+    suspend fun list() {
         val client =
-            TerminalOkHttpClient.builder()
+            TerminalOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val viewService = client.view()
+        val productServiceAsync = client.product()
 
-        val response = viewService.init()
+        val product = productServiceAsync.list()
 
-        response.validate()
+        product.validate()
     }
 }

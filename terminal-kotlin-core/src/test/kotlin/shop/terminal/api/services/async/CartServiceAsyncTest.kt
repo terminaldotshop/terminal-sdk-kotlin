@@ -1,57 +1,57 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package shop.terminal.api.services.blocking
+package shop.terminal.api.services.async
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
-import shop.terminal.api.client.okhttp.TerminalOkHttpClient
+import shop.terminal.api.client.okhttp.TerminalOkHttpClientAsync
 import shop.terminal.api.models.CartSetAddressParams
 import shop.terminal.api.models.CartSetCardParams
 import shop.terminal.api.models.CartSetItemParams
 
 @ExtendWith(TestServerExtension::class)
-class CartServiceTest {
+class CartServiceAsyncTest {
 
     @Test
-    fun convert() {
+    suspend fun convert() {
         val client =
-            TerminalOkHttpClient.builder()
+            TerminalOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val cartService = client.cart()
+        val cartServiceAsync = client.cart()
 
-        val response = cartService.convert()
+        val response = cartServiceAsync.convert()
 
         response.validate()
     }
 
     @Test
-    fun get() {
+    suspend fun get() {
         val client =
-            TerminalOkHttpClient.builder()
+            TerminalOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val cartService = client.cart()
+        val cartServiceAsync = client.cart()
 
-        val cart = cartService.get()
+        val cart = cartServiceAsync.get()
 
         cart.validate()
     }
 
     @Test
-    fun setAddress() {
+    suspend fun setAddress() {
         val client =
-            TerminalOkHttpClient.builder()
+            TerminalOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val cartService = client.cart()
+        val cartServiceAsync = client.cart()
 
         val response =
-            cartService.setAddress(
+            cartServiceAsync.setAddress(
                 CartSetAddressParams.builder().addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
             )
 
@@ -59,16 +59,16 @@ class CartServiceTest {
     }
 
     @Test
-    fun setCard() {
+    suspend fun setCard() {
         val client =
-            TerminalOkHttpClient.builder()
+            TerminalOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val cartService = client.cart()
+        val cartServiceAsync = client.cart()
 
         val response =
-            cartService.setCard(
+            cartServiceAsync.setCard(
                 CartSetCardParams.builder().cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
             )
 
@@ -76,16 +76,16 @@ class CartServiceTest {
     }
 
     @Test
-    fun setItem() {
+    suspend fun setItem() {
         val client =
-            TerminalOkHttpClient.builder()
+            TerminalOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val cartService = client.cart()
+        val cartServiceAsync = client.cart()
 
         val response =
-            cartService.setItem(
+            cartServiceAsync.setItem(
                 CartSetItemParams.builder()
                     .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                     .quantity(2L)
