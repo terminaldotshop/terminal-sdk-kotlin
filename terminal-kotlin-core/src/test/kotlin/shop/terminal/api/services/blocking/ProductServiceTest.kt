@@ -11,15 +11,16 @@ import shop.terminal.api.client.okhttp.TerminalOkHttpClient
 class ProductServiceTest {
 
     @Test
-    fun callList() {
+    fun list() {
         val client =
             TerminalOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
         val productService = client.product()
-        val productListResponse = productService.list()
-        println(productListResponse)
-        productListResponse.validate()
+
+        val product = productService.list()
+
+        product.validate()
     }
 }

@@ -1,28 +1,28 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package shop.terminal.api.services.blocking
+package shop.terminal.api.services.async
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
-import shop.terminal.api.client.okhttp.TerminalOkHttpClient
+import shop.terminal.api.client.okhttp.TerminalOkHttpClientAsync
 import shop.terminal.api.models.CardCreateParams
 import shop.terminal.api.models.CardDeleteParams
 
 @ExtendWith(TestServerExtension::class)
-class CardServiceTest {
+class CardServiceAsyncTest {
 
     @Test
-    fun create() {
+    suspend fun create() {
         val client =
-            TerminalOkHttpClient.builder()
+            TerminalOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val cardService = client.card()
+        val cardServiceAsync = client.card()
 
         val card =
-            cardService.create(
+            cardServiceAsync.create(
                 CardCreateParams.builder().token("tok_1N3T00LkdIwHu7ixt44h1F8k").build()
             )
 
@@ -30,30 +30,30 @@ class CardServiceTest {
     }
 
     @Test
-    fun list() {
+    suspend fun list() {
         val client =
-            TerminalOkHttpClient.builder()
+            TerminalOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val cardService = client.card()
+        val cardServiceAsync = client.card()
 
-        val card = cardService.list()
+        val card = cardServiceAsync.list()
 
         card.validate()
     }
 
     @Test
-    fun delete() {
+    suspend fun delete() {
         val client =
-            TerminalOkHttpClient.builder()
+            TerminalOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val cardService = client.card()
+        val cardServiceAsync = client.card()
 
         val card =
-            cardService.delete(
+            cardServiceAsync.delete(
                 CardDeleteParams.builder().id("crd_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
             )
 
@@ -61,15 +61,15 @@ class CardServiceTest {
     }
 
     @Test
-    fun collect() {
+    suspend fun collect() {
         val client =
-            TerminalOkHttpClient.builder()
+            TerminalOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val cardService = client.card()
+        val cardServiceAsync = client.card()
 
-        val response = cardService.collect()
+        val response = cardServiceAsync.collect()
 
         response.validate()
     }

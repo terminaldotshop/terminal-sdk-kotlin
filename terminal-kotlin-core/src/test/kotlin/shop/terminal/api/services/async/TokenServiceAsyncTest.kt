@@ -1,56 +1,56 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package shop.terminal.api.services.blocking
+package shop.terminal.api.services.async
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
-import shop.terminal.api.client.okhttp.TerminalOkHttpClient
+import shop.terminal.api.client.okhttp.TerminalOkHttpClientAsync
 import shop.terminal.api.models.TokenDeleteParams
 import shop.terminal.api.models.TokenGetParams
 
 @ExtendWith(TestServerExtension::class)
-class TokenServiceTest {
+class TokenServiceAsyncTest {
 
     @Test
-    fun create() {
+    suspend fun create() {
         val client =
-            TerminalOkHttpClient.builder()
+            TerminalOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val tokenService = client.token()
+        val tokenServiceAsync = client.token()
 
-        val token = tokenService.create()
+        val token = tokenServiceAsync.create()
 
         token.validate()
     }
 
     @Test
-    fun list() {
+    suspend fun list() {
         val client =
-            TerminalOkHttpClient.builder()
+            TerminalOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val tokenService = client.token()
+        val tokenServiceAsync = client.token()
 
-        val token = tokenService.list()
+        val token = tokenServiceAsync.list()
 
         token.validate()
     }
 
     @Test
-    fun delete() {
+    suspend fun delete() {
         val client =
-            TerminalOkHttpClient.builder()
+            TerminalOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val tokenService = client.token()
+        val tokenServiceAsync = client.token()
 
         val token =
-            tokenService.delete(
+            tokenServiceAsync.delete(
                 TokenDeleteParams.builder().id("pat_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
             )
 
@@ -58,16 +58,18 @@ class TokenServiceTest {
     }
 
     @Test
-    fun get() {
+    suspend fun get() {
         val client =
-            TerminalOkHttpClient.builder()
+            TerminalOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
                 .bearerToken("My Bearer Token")
                 .build()
-        val tokenService = client.token()
+        val tokenServiceAsync = client.token()
 
         val token =
-            tokenService.get(TokenGetParams.builder().id("pat_XXXXXXXXXXXXXXXXXXXXXXXXX").build())
+            tokenServiceAsync.get(
+                TokenGetParams.builder().id("pat_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
+            )
 
         token.validate()
     }
