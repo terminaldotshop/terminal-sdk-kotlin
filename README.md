@@ -10,7 +10,7 @@ The Terminal Kotlin SDK provides convenient access to the Terminal REST API from
 
 The Terminal Kotlin SDK is similar to the Terminal Java SDK but with minor differences that make it more ergonomic for use in Kotlin, such as nullable values instead of `Optional`, `Sequence` instead of `Stream`, and suspend functions instead of `CompletableFuture`.
 
-It is generated with [Stainless](https://www.stainlessapi.com/).
+It is generated with [Stainless](https://www.stainless.com/).
 
 The REST API documentation can be found on [terminal.shop](https://terminal.shop/docs).
 
