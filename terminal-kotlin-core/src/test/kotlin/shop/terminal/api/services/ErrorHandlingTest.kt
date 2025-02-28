@@ -51,7 +51,7 @@ class ErrorHandlingTest {
             TerminalOkHttpClient.builder()
                 .baseUrl(wmRuntimeInfo.getHttpBaseUrl())
                 .bearerToken("My Bearer Token")
-                .app("My App")
+                .appId("My App ID")
                 .build()
     }
 
