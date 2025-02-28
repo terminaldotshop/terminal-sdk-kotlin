@@ -22,6 +22,7 @@ private constructor(
     val responseValidation: Boolean,
     val maxRetries: Int,
     val bearerToken: String,
+    val app: String?,
 ) {
 
     fun toBuilder() = Builder().from(this)
@@ -49,6 +50,7 @@ private constructor(
         private var responseValidation: Boolean = false
         private var maxRetries: Int = 2
         private var bearerToken: String? = null
+        private var app: String? = null
 
         internal fun from(clientOptions: ClientOptions) = apply {
             httpClient = clientOptions.originalHttpClient
@@ -60,6 +62,7 @@ private constructor(
             responseValidation = clientOptions.responseValidation
             maxRetries = clientOptions.maxRetries
             bearerToken = clientOptions.bearerToken
+            app = clientOptions.app
         }
 
         fun httpClient(httpClient: HttpClient) = apply { this.httpClient = httpClient }
@@ -77,6 +80,8 @@ private constructor(
         fun maxRetries(maxRetries: Int) = apply { this.maxRetries = maxRetries }
 
         fun bearerToken(bearerToken: String) = apply { this.bearerToken = bearerToken }
+
+        fun app(app: String?) = apply { this.app = app }
 
         fun headers(headers: Headers) = apply {
             this.headers.clear()
@@ -173,6 +178,7 @@ private constructor(
             headers.put("X-Stainless-Package-Version", getPackageVersion())
             headers.put("X-Stainless-Runtime", "JRE")
             headers.put("X-Stainless-Runtime-Version", getJavaVersion())
+            app?.let { headers.put("x-terminal-app", it) }
             bearerToken.let {
                 if (!it.isEmpty()) {
                     headers.put("Authorization", "Bearer $it")
@@ -198,6 +204,7 @@ private constructor(
                 responseValidation,
                 maxRetries,
                 bearerToken,
+                app,
             )
         }
     }
