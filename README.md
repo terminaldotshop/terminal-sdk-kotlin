@@ -86,7 +86,7 @@ import shop.terminal.api.client.okhttp.TerminalOkHttpClient
 val client: TerminalClient = TerminalOkHttpClient.builder()
     // Configures using the `TERMINAL_BEARER_TOKEN` environment variable
     .fromEnv()
-    .bearerToken("My Bearer Token")
+    .app("My App")
     .build()
 ```
 
