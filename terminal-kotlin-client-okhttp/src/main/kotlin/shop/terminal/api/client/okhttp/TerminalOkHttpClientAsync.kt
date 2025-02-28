@@ -133,7 +133,7 @@ class TerminalOkHttpClientAsync private constructor() {
 
         fun bearerToken(bearerToken: String) = apply { clientOptions.bearerToken(bearerToken) }
 
-        fun app(app: String?) = apply { clientOptions.app(app) }
+        fun appId(appId: String?) = apply { clientOptions.appId(appId) }
 
         fun fromEnv() = apply { clientOptions.fromEnv() }
 
