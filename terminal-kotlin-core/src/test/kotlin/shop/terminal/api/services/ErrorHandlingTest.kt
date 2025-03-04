@@ -2,19 +2,17 @@
 
 package shop.terminal.api.services
 
-import com.fasterxml.jackson.databind.json.JsonMapper
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.get
-import com.github.tomakehurst.wiremock.client.WireMock.ok
 import com.github.tomakehurst.wiremock.client.WireMock.status
 import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatThrownBy
-import org.assertj.core.api.InstanceOfAssertFactories
+import org.assertj.core.api.Assertions.entry
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import shop.terminal.api.client.TerminalClient
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
 import shop.terminal.api.core.JsonValue
@@ -30,18 +28,25 @@ import shop.terminal.api.errors.TerminalException
 import shop.terminal.api.errors.UnauthorizedException
 import shop.terminal.api.errors.UnexpectedStatusCodeException
 import shop.terminal.api.errors.UnprocessableEntityException
-import shop.terminal.api.models.Product
-import shop.terminal.api.models.ProductListParams
-import shop.terminal.api.models.ProductListResponse
-import shop.terminal.api.models.ProductVariant
 
 @WireMockTest
 class ErrorHandlingTest {
 
-    private val JSON_MAPPER: JsonMapper = jsonMapper()
+    companion object {
 
-    private val TERMINAL_ERROR: TerminalError =
-        TerminalError.builder().putAdditionalProperty("key", JsonValue.from("value")).build()
+        private val ERROR: TerminalError =
+            TerminalError.builder()
+                .putAdditionalProperty("errorProperty", JsonValue.from("42"))
+                .build()
+
+        private val ERROR_JSON: ByteArray = jsonMapper().writeValueAsBytes(ERROR)
+
+        private const val HEADER_NAME: String = "Error-Header"
+
+        private const val HEADER_VALUE: String = "42"
+
+        private const val NOT_JSON: String = "Not JSON"
+    }
 
     private lateinit var client: TerminalClient
 
@@ -49,309 +54,142 @@ class ErrorHandlingTest {
     fun beforeEach(wmRuntimeInfo: WireMockRuntimeInfo) {
         client =
             TerminalOkHttpClient.builder()
-                .baseUrl(wmRuntimeInfo.getHttpBaseUrl())
+                .baseUrl(wmRuntimeInfo.httpBaseUrl)
                 .bearerToken("My Bearer Token")
-                .appId("My App ID")
                 .build()
     }
 
     @Test
-    fun productsList200() {
-        val params = ProductListParams.builder().build()
-
-        val expected =
-            ProductListResponse.builder()
-                .addData(
-                    Product.builder()
-                        .id("prd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                        .description(
-                            "The interpolation of Caturra and Castillo varietals from Las Cochitas creates this refreshing citrusy and complex coffee."
-                        )
-                        .addFilter(Product.Filter.EU)
-                        .name("[object Object]")
-                        .addVariant(
-                            ProductVariant.builder()
-                                .id("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                                .name("12oz")
-                                .price(2200L)
-                                .build()
-                        )
-                        .order(100L)
-                        .subscription(Product.Subscription.ALLOWED)
-                        .tags(
-                            Product.Tags.builder()
-                                .putAdditionalProperty("featured", JsonValue.from("true"))
-                                .build()
-                        )
-                        .build()
-                )
-                .build()
-
-        stubFor(get(anyUrl()).willReturn(ok().withBody(toJson(expected))))
-
-        assertThat(client.product().list(params)).isEqualTo(expected)
-    }
-
-    @Test
-    fun productsList400() {
-        val params = ProductListParams.builder().build()
-
+    fun productList400() {
+        val productService = client.product()
         stubFor(
             get(anyUrl())
-                .willReturn(status(400).withHeader("Foo", "Bar").withBody(toJson(TERMINAL_ERROR)))
+                .willReturn(status(400).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON))
         )
 
-        assertThatThrownBy({ client.product().list(params) })
-            .satisfies({ e ->
-                assertBadRequest(e, Headers.builder().put("Foo", "Bar").build(), TERMINAL_ERROR)
-            })
+        val e = assertThrows<BadRequestException> { productService.list() }
+
+        assertThat(e.statusCode()).isEqualTo(400)
+        assertThat(e.error()).isEqualTo(ERROR)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
     }
 
     @Test
-    fun productsList401() {
-        val params = ProductListParams.builder().build()
-
+    fun productList401() {
+        val productService = client.product()
         stubFor(
             get(anyUrl())
-                .willReturn(status(401).withHeader("Foo", "Bar").withBody(toJson(TERMINAL_ERROR)))
+                .willReturn(status(401).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON))
         )
 
-        assertThatThrownBy({ client.product().list(params) })
-            .satisfies({ e ->
-                assertUnauthorized(e, Headers.builder().put("Foo", "Bar").build(), TERMINAL_ERROR)
-            })
+        val e = assertThrows<UnauthorizedException> { productService.list() }
+
+        assertThat(e.statusCode()).isEqualTo(401)
+        assertThat(e.error()).isEqualTo(ERROR)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
     }
 
     @Test
-    fun productsList403() {
-        val params = ProductListParams.builder().build()
-
+    fun productList403() {
+        val productService = client.product()
         stubFor(
             get(anyUrl())
-                .willReturn(status(403).withHeader("Foo", "Bar").withBody(toJson(TERMINAL_ERROR)))
+                .willReturn(status(403).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON))
         )
 
-        assertThatThrownBy({ client.product().list(params) })
-            .satisfies({ e ->
-                assertPermissionDenied(
-                    e,
-                    Headers.builder().put("Foo", "Bar").build(),
-                    TERMINAL_ERROR,
-                )
-            })
+        val e = assertThrows<PermissionDeniedException> { productService.list() }
+
+        assertThat(e.statusCode()).isEqualTo(403)
+        assertThat(e.error()).isEqualTo(ERROR)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
     }
 
     @Test
-    fun productsList404() {
-        val params = ProductListParams.builder().build()
-
+    fun productList404() {
+        val productService = client.product()
         stubFor(
             get(anyUrl())
-                .willReturn(status(404).withHeader("Foo", "Bar").withBody(toJson(TERMINAL_ERROR)))
+                .willReturn(status(404).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON))
         )
 
-        assertThatThrownBy({ client.product().list(params) })
-            .satisfies({ e ->
-                assertNotFound(e, Headers.builder().put("Foo", "Bar").build(), TERMINAL_ERROR)
-            })
+        val e = assertThrows<NotFoundException> { productService.list() }
+
+        assertThat(e.statusCode()).isEqualTo(404)
+        assertThat(e.error()).isEqualTo(ERROR)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
     }
 
     @Test
-    fun productsList422() {
-        val params = ProductListParams.builder().build()
-
+    fun productList422() {
+        val productService = client.product()
         stubFor(
             get(anyUrl())
-                .willReturn(status(422).withHeader("Foo", "Bar").withBody(toJson(TERMINAL_ERROR)))
+                .willReturn(status(422).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON))
         )
 
-        assertThatThrownBy({ client.product().list(params) })
-            .satisfies({ e ->
-                assertUnprocessableEntity(
-                    e,
-                    Headers.builder().put("Foo", "Bar").build(),
-                    TERMINAL_ERROR,
-                )
-            })
+        val e = assertThrows<UnprocessableEntityException> { productService.list() }
+
+        assertThat(e.statusCode()).isEqualTo(422)
+        assertThat(e.error()).isEqualTo(ERROR)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
     }
 
     @Test
-    fun productsList429() {
-        val params = ProductListParams.builder().build()
-
+    fun productList429() {
+        val productService = client.product()
         stubFor(
             get(anyUrl())
-                .willReturn(status(429).withHeader("Foo", "Bar").withBody(toJson(TERMINAL_ERROR)))
+                .willReturn(status(429).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON))
         )
 
-        assertThatThrownBy({ client.product().list(params) })
-            .satisfies({ e ->
-                assertRateLimit(e, Headers.builder().put("Foo", "Bar").build(), TERMINAL_ERROR)
-            })
+        val e = assertThrows<RateLimitException> { productService.list() }
+
+        assertThat(e.statusCode()).isEqualTo(429)
+        assertThat(e.error()).isEqualTo(ERROR)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
     }
 
     @Test
-    fun productsList500() {
-        val params = ProductListParams.builder().build()
-
+    fun productList500() {
+        val productService = client.product()
         stubFor(
             get(anyUrl())
-                .willReturn(status(500).withHeader("Foo", "Bar").withBody(toJson(TERMINAL_ERROR)))
+                .willReturn(status(500).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON))
         )
 
-        assertThatThrownBy({ client.product().list(params) })
-            .satisfies({ e ->
-                assertInternalServer(e, Headers.builder().put("Foo", "Bar").build(), TERMINAL_ERROR)
-            })
+        val e = assertThrows<InternalServerException> { productService.list() }
+
+        assertThat(e.statusCode()).isEqualTo(500)
+        assertThat(e.error()).isEqualTo(ERROR)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
     }
 
     @Test
-    fun unexpectedStatusCode() {
-        val params = ProductListParams.builder().build()
-
+    fun productList999() {
+        val productService = client.product()
         stubFor(
             get(anyUrl())
-                .willReturn(status(999).withHeader("Foo", "Bar").withBody(toJson(TERMINAL_ERROR)))
+                .willReturn(status(999).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON))
         )
 
-        assertThatThrownBy({ client.product().list(params) })
-            .satisfies({ e ->
-                assertUnexpectedStatusCodeException(
-                    e,
-                    999,
-                    Headers.builder().put("Foo", "Bar").build(),
-                    toJson(TERMINAL_ERROR),
-                )
-            })
+        val e = assertThrows<UnexpectedStatusCodeException> { productService.list() }
+
+        assertThat(e.statusCode()).isEqualTo(999)
+        assertThat(e.error()).isEqualTo(ERROR)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
     }
 
     @Test
-    fun invalidBody() {
-        val params = ProductListParams.builder().build()
+    fun productListInvalidJsonBody() {
+        val productService = client.product()
+        stubFor(
+            get(anyUrl())
+                .willReturn(status(200).withHeader(HEADER_NAME, HEADER_VALUE).withBody(NOT_JSON))
+        )
 
-        stubFor(get(anyUrl()).willReturn(status(200).withBody("Not JSON")))
+        val e = assertThrows<TerminalException> { productService.list() }
 
-        assertThatThrownBy({ client.product().list(params) })
-            .satisfies({ e ->
-                assertThat(e)
-                    .isInstanceOf(TerminalException::class.java)
-                    .hasMessage("Error reading response")
-            })
-    }
-
-    @Test
-    fun invalidErrorBody() {
-        val params = ProductListParams.builder().build()
-
-        stubFor(get(anyUrl()).willReturn(status(400).withBody("Not JSON")))
-
-        assertThatThrownBy({ client.product().list(params) })
-            .satisfies({ e ->
-                assertBadRequest(e, Headers.builder().build(), TerminalError.builder().build())
-            })
-    }
-
-    private fun <T> toJson(body: T): ByteArray {
-        return JSON_MAPPER.writeValueAsBytes(body)
-    }
-
-    private fun assertUnexpectedStatusCodeException(
-        throwable: Throwable,
-        statusCode: Int,
-        headers: Headers,
-        responseBody: ByteArray,
-    ) {
-        assertThat(throwable)
-            .asInstanceOf(
-                InstanceOfAssertFactories.throwable(UnexpectedStatusCodeException::class.java)
-            )
-            .satisfies({ e ->
-                assertThat(e.statusCode()).isEqualTo(statusCode)
-                assertThat(e.body()).isEqualTo(String(responseBody))
-                assertThat(e.headers().toMap()).containsAllEntriesOf(headers.toMap())
-            })
-    }
-
-    private fun assertBadRequest(throwable: Throwable, headers: Headers, error: TerminalError) {
-        assertThat(throwable)
-            .asInstanceOf(InstanceOfAssertFactories.throwable(BadRequestException::class.java))
-            .satisfies({ e ->
-                assertThat(e.statusCode()).isEqualTo(400)
-                assertThat(e.error()).isEqualTo(error)
-                assertThat(e.headers().toMap()).containsAllEntriesOf(headers.toMap())
-            })
-    }
-
-    private fun assertUnauthorized(throwable: Throwable, headers: Headers, error: TerminalError) {
-        assertThat(throwable)
-            .asInstanceOf(InstanceOfAssertFactories.throwable(UnauthorizedException::class.java))
-            .satisfies({ e ->
-                assertThat(e.statusCode()).isEqualTo(401)
-                assertThat(e.error()).isEqualTo(error)
-                assertThat(e.headers().toMap()).containsAllEntriesOf(headers.toMap())
-            })
-    }
-
-    private fun assertPermissionDenied(
-        throwable: Throwable,
-        headers: Headers,
-        error: TerminalError,
-    ) {
-        assertThat(throwable)
-            .asInstanceOf(
-                InstanceOfAssertFactories.throwable(PermissionDeniedException::class.java)
-            )
-            .satisfies({ e ->
-                assertThat(e.statusCode()).isEqualTo(403)
-                assertThat(e.error()).isEqualTo(error)
-                assertThat(e.headers().toMap()).containsAllEntriesOf(headers.toMap())
-            })
-    }
-
-    private fun assertNotFound(throwable: Throwable, headers: Headers, error: TerminalError) {
-        assertThat(throwable)
-            .asInstanceOf(InstanceOfAssertFactories.throwable(NotFoundException::class.java))
-            .satisfies({ e ->
-                assertThat(e.statusCode()).isEqualTo(404)
-                assertThat(e.error()).isEqualTo(error)
-                assertThat(e.headers().toMap()).containsAllEntriesOf(headers.toMap())
-            })
-    }
-
-    private fun assertUnprocessableEntity(
-        throwable: Throwable,
-        headers: Headers,
-        error: TerminalError,
-    ) {
-        assertThat(throwable)
-            .asInstanceOf(
-                InstanceOfAssertFactories.throwable(UnprocessableEntityException::class.java)
-            )
-            .satisfies({ e ->
-                assertThat(e.statusCode()).isEqualTo(422)
-                assertThat(e.error()).isEqualTo(error)
-                assertThat(e.headers().toMap()).containsAllEntriesOf(headers.toMap())
-            })
-    }
-
-    private fun assertRateLimit(throwable: Throwable, headers: Headers, error: TerminalError) {
-        assertThat(throwable)
-            .asInstanceOf(InstanceOfAssertFactories.throwable(RateLimitException::class.java))
-            .satisfies({ e ->
-                assertThat(e.statusCode()).isEqualTo(429)
-                assertThat(e.error()).isEqualTo(error)
-                assertThat(e.headers().toMap()).containsAllEntriesOf(headers.toMap())
-            })
-    }
-
-    private fun assertInternalServer(throwable: Throwable, headers: Headers, error: TerminalError) {
-        assertThat(throwable)
-            .asInstanceOf(InstanceOfAssertFactories.throwable(InternalServerException::class.java))
-            .satisfies({ e ->
-                assertThat(e.statusCode()).isEqualTo(500)
-                assertThat(e.error()).isEqualTo(error)
-                assertThat(e.headers().toMap()).containsAllEntriesOf(headers.toMap())
-            })
+        assertThat(e).hasMessage("Error reading response")
     }
 
     private fun Headers.toMap(): Map<String, List<String>> =
