@@ -29,6 +29,7 @@ private constructor(
 
         fun none(): AddressListParams = builder().build()
 
+        /** Returns a mutable builder for constructing an instance of [AddressListParams]. */
         fun builder() = Builder()
     }
 

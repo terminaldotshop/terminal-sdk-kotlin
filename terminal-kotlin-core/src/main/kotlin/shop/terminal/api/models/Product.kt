@@ -119,6 +119,18 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [Product].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .id()
+         * .description()
+         * .filters()
+         * .name()
+         * .variants()
+         * ```
+         */
         fun builder() = Builder()
     }
 
@@ -474,6 +486,7 @@ private constructor(
 
         companion object {
 
+            /** Returns a mutable builder for constructing an instance of [Tags]. */
             fun builder() = Builder()
         }
 

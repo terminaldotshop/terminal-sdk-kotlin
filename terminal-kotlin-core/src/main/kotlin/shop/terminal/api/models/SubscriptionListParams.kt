@@ -29,6 +29,7 @@ private constructor(
 
         fun none(): SubscriptionListParams = builder().build()
 
+        /** Returns a mutable builder for constructing an instance of [SubscriptionListParams]. */
         fun builder() = Builder()
     }
 

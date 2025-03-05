@@ -29,6 +29,7 @@ private constructor(
 
         fun none(): ProductListParams = builder().build()
 
+        /** Returns a mutable builder for constructing an instance of [ProductListParams]. */
         fun builder() = Builder()
     }
 

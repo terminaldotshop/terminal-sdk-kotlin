@@ -36,6 +36,7 @@ private constructor(
 
         fun none(): CardCollectParams = builder().build()
 
+        /** Returns a mutable builder for constructing an instance of [CardCollectParams]. */
         fun builder() = Builder()
     }
 

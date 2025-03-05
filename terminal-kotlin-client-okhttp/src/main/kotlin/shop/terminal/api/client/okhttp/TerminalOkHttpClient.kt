@@ -17,6 +17,7 @@ class TerminalOkHttpClient private constructor() {
 
     companion object {
 
+        /** Returns a mutable builder for constructing an instance of [TerminalOkHttpClient]. */
         fun builder() = Builder()
 
         fun fromEnv(): TerminalClient = builder().fromEnv().build()

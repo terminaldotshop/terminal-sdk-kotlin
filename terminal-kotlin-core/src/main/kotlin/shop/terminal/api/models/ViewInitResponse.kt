@@ -50,6 +50,14 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [ViewInitResponse].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .data()
+         * ```
+         */
         fun builder() = Builder()
     }
 
@@ -200,6 +208,22 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Data].
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .addresses()
+             * .apps()
+             * .cards()
+             * .cart()
+             * .orders()
+             * .products()
+             * .profile()
+             * .subscriptions()
+             * .tokens()
+             * ```
+             */
             fun builder() = Builder()
         }
 

@@ -122,6 +122,18 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [Subscription].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .id()
+         * .addressId()
+         * .cardId()
+         * .productVariantId()
+         * .quantity()
+         * ```
+         */
         fun builder() = Builder()
     }
 
@@ -401,6 +413,14 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Fixed].
+                 *
+                 * The following fields are required:
+                 * ```kotlin
+                 * .type()
+                 * ```
+                 */
                 fun builder() = Builder()
             }
 
@@ -601,6 +621,15 @@ private constructor(
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Weekly].
+                 *
+                 * The following fields are required:
+                 * ```kotlin
+                 * .interval()
+                 * .type()
+                 * ```
+                 */
                 fun builder() = Builder()
             }
 
