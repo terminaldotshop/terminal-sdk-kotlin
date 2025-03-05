@@ -50,6 +50,14 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [Profile].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .user()
+         * ```
+         */
         fun builder() = Builder()
     }
 
@@ -172,6 +180,18 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [User].
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .id()
+             * .email()
+             * .fingerprint()
+             * .name()
+             * .stripeCustomerId()
+             * ```
+             */
             fun builder() = Builder()
         }
 

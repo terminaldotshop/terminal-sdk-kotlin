@@ -192,6 +192,18 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Body].
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .city()
+             * .country()
+             * .name()
+             * .street1()
+             * .zip()
+             * ```
+             */
             fun builder() = Builder()
         }
 
@@ -323,6 +335,18 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [AddressCreateParams].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .city()
+         * .country()
+         * .name()
+         * .street1()
+         * .zip()
+         * ```
+         */
         fun builder() = Builder()
     }
 

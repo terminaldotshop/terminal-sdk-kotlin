@@ -32,6 +32,7 @@ private constructor(
 
         fun none(): ViewInitParams = builder().build()
 
+        /** Returns a mutable builder for constructing an instance of [ViewInitParams]. */
         fun builder() = Builder()
     }
 

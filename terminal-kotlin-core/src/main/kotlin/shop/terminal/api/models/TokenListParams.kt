@@ -29,6 +29,7 @@ private constructor(
 
         fun none(): TokenListParams = builder().build()
 
+        /** Returns a mutable builder for constructing an instance of [TokenListParams]. */
         fun builder() = Builder()
     }
 

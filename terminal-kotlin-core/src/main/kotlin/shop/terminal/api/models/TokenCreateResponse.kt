@@ -47,6 +47,14 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [TokenCreateResponse].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .data()
+         * ```
+         */
         fun builder() = Builder()
     }
 
@@ -138,6 +146,15 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Data].
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .id()
+             * .token()
+             * ```
+             */
             fun builder() = Builder()
         }
 

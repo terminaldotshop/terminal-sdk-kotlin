@@ -78,6 +78,17 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [Card].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .id()
+         * .brand()
+         * .expiration()
+         * .last4()
+         * ```
+         */
         fun builder() = Builder()
     }
 
@@ -196,6 +207,15 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Expiration].
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .month()
+             * .year()
+             * ```
+             */
             fun builder() = Builder()
         }
 

@@ -49,6 +49,14 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [CartConvertResponse].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .data()
+         * ```
+         */
         fun builder() = Builder()
     }
 

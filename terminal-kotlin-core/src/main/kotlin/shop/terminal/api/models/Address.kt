@@ -122,6 +122,19 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [Address].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .id()
+         * .city()
+         * .country()
+         * .name()
+         * .street1()
+         * .zip()
+         * ```
+         */
         fun builder() = Builder()
     }
 

@@ -49,6 +49,14 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [CardCollectResponse].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .data()
+         * ```
+         */
         fun builder() = Builder()
     }
 
@@ -133,6 +141,14 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Data].
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .url()
+             * ```
+             */
             fun builder() = Builder()
         }
 
