@@ -12,6 +12,7 @@ import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
+import shop.terminal.api.core.checkKnown
 import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
@@ -237,12 +238,8 @@ private constructor(
 
             fun addAddress(address: Address) = apply {
                 addresses =
-                    (addresses ?: JsonField.of(mutableListOf())).apply {
-                        (asKnown()
-                                ?: throw IllegalStateException(
-                                    "Field was set to non-list type: ${javaClass.simpleName}"
-                                ))
-                            .add(address)
+                    (addresses ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("addresses", it).add(address)
                     }
             }
 
@@ -254,13 +251,7 @@ private constructor(
 
             fun addApp(app: App) = apply {
                 apps =
-                    (apps ?: JsonField.of(mutableListOf())).apply {
-                        (asKnown()
-                                ?: throw IllegalStateException(
-                                    "Field was set to non-list type: ${javaClass.simpleName}"
-                                ))
-                            .add(app)
-                    }
+                    (apps ?: JsonField.of(mutableListOf())).also { checkKnown("apps", it).add(app) }
             }
 
             fun cards(cards: List<Card>) = cards(JsonField.of(cards))
@@ -271,12 +262,8 @@ private constructor(
 
             fun addCard(card: Card) = apply {
                 cards =
-                    (cards ?: JsonField.of(mutableListOf())).apply {
-                        (asKnown()
-                                ?: throw IllegalStateException(
-                                    "Field was set to non-list type: ${javaClass.simpleName}"
-                                ))
-                            .add(card)
+                    (cards ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("cards", it).add(card)
                     }
             }
 
@@ -294,12 +281,8 @@ private constructor(
 
             fun addOrder(order: Order) = apply {
                 orders =
-                    (orders ?: JsonField.of(mutableListOf())).apply {
-                        (asKnown()
-                                ?: throw IllegalStateException(
-                                    "Field was set to non-list type: ${javaClass.simpleName}"
-                                ))
-                            .add(order)
+                    (orders ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("orders", it).add(order)
                     }
             }
 
@@ -311,12 +294,8 @@ private constructor(
 
             fun addProduct(product: Product) = apply {
                 products =
-                    (products ?: JsonField.of(mutableListOf())).apply {
-                        (asKnown()
-                                ?: throw IllegalStateException(
-                                    "Field was set to non-list type: ${javaClass.simpleName}"
-                                ))
-                            .add(product)
+                    (products ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("products", it).add(product)
                     }
             }
 
@@ -335,12 +314,8 @@ private constructor(
 
             fun addSubscription(subscription: Subscription) = apply {
                 subscriptions =
-                    (subscriptions ?: JsonField.of(mutableListOf())).apply {
-                        (asKnown()
-                                ?: throw IllegalStateException(
-                                    "Field was set to non-list type: ${javaClass.simpleName}"
-                                ))
-                            .add(subscription)
+                    (subscriptions ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("subscriptions", it).add(subscription)
                     }
             }
 
@@ -352,12 +327,8 @@ private constructor(
 
             fun addToken(token: Token) = apply {
                 tokens =
-                    (tokens ?: JsonField.of(mutableListOf())).apply {
-                        (asKnown()
-                                ?: throw IllegalStateException(
-                                    "Field was set to non-list type: ${javaClass.simpleName}"
-                                ))
-                            .add(token)
+                    (tokens ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("tokens", it).add(token)
                     }
             }
 
