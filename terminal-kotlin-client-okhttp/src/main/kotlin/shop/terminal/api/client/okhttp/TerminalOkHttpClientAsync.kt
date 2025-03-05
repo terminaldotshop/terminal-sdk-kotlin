@@ -17,6 +17,9 @@ class TerminalOkHttpClientAsync private constructor() {
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [TerminalOkHttpClientAsync].
+         */
         fun builder() = Builder()
 
         fun fromEnv(): TerminalClientAsync = builder().fromEnv().build()
