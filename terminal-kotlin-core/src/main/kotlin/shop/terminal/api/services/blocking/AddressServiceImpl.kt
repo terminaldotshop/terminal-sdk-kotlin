@@ -11,8 +11,8 @@ import shop.terminal.api.core.http.HttpMethod
 import shop.terminal.api.core.http.HttpRequest
 import shop.terminal.api.core.http.HttpResponse.Handler
 import shop.terminal.api.core.http.HttpResponseFor
+import shop.terminal.api.core.http.json
 import shop.terminal.api.core.http.parseable
-import shop.terminal.api.core.json
 import shop.terminal.api.core.prepare
 import shop.terminal.api.errors.TerminalError
 import shop.terminal.api.models.AddressCreateParams
