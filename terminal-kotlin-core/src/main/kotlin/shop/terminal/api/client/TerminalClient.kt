@@ -38,6 +38,11 @@ interface TerminalClient {
      */
     fun async(): TerminalClientAsync
 
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
     fun product(): ProductService
 
     fun profile(): ProfileService
@@ -72,4 +77,30 @@ interface TerminalClient {
      * method.
      */
     fun close()
+
+    /** A view of [TerminalClient] that provides access to raw HTTP responses for each method. */
+    interface WithRawResponse {
+
+        fun product(): ProductService.WithRawResponse
+
+        fun profile(): ProfileService.WithRawResponse
+
+        fun address(): AddressService.WithRawResponse
+
+        fun card(): CardService.WithRawResponse
+
+        fun cart(): CartService.WithRawResponse
+
+        fun order(): OrderService.WithRawResponse
+
+        fun subscription(): SubscriptionService.WithRawResponse
+
+        fun token(): TokenService.WithRawResponse
+
+        fun app(): AppService.WithRawResponse
+
+        fun email(): EmailService.WithRawResponse
+
+        fun view(): ViewService.WithRawResponse
+    }
 }

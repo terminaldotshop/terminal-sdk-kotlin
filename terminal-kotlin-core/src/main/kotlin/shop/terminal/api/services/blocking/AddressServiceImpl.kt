@@ -10,6 +10,8 @@ import shop.terminal.api.core.handlers.withErrorHandler
 import shop.terminal.api.core.http.HttpMethod
 import shop.terminal.api.core.http.HttpRequest
 import shop.terminal.api.core.http.HttpResponse.Handler
+import shop.terminal.api.core.http.HttpResponseFor
+import shop.terminal.api.core.http.parseable
 import shop.terminal.api.core.json
 import shop.terminal.api.core.prepare
 import shop.terminal.api.errors.TerminalError
@@ -23,82 +25,119 @@ import shop.terminal.api.models.AddressListResponse
 class AddressServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     AddressService {
 
-    private val errorHandler: Handler<TerminalError> = errorHandler(clientOptions.jsonMapper)
+    private val withRawResponse: AddressService.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
-    private val createHandler: Handler<AddressCreateResponse> =
-        jsonHandler<AddressCreateResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+    override fun withRawResponse(): AddressService.WithRawResponse = withRawResponse
 
-    /** Create and add a shipping address to the current user. */
     override fun create(
         params: AddressCreateParams,
         requestOptions: RequestOptions,
-    ): AddressCreateResponse {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.POST)
-                .addPathSegments("address")
-                .body(json(clientOptions.jsonMapper, params._body()))
-                .build()
-                .prepare(clientOptions, params)
-        val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-        val response = clientOptions.httpClient.execute(request, requestOptions)
-        return response
-            .use { createHandler.handle(it) }
-            .also {
-                if (requestOptions.responseValidation!!) {
-                    it.validate()
-                }
-            }
-    }
+    ): AddressCreateResponse =
+        // post /address
+        withRawResponse().create(params, requestOptions).parse()
 
-    private val listHandler: Handler<AddressListResponse> =
-        jsonHandler<AddressListResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
-
-    /** Get the shipping addresses associated with the current user. */
     override fun list(
         params: AddressListParams,
         requestOptions: RequestOptions,
-    ): AddressListResponse {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("address")
-                .build()
-                .prepare(clientOptions, params)
-        val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-        val response = clientOptions.httpClient.execute(request, requestOptions)
-        return response
-            .use { listHandler.handle(it) }
-            .also {
-                if (requestOptions.responseValidation!!) {
-                    it.validate()
-                }
-            }
-    }
+    ): AddressListResponse =
+        // get /address
+        withRawResponse().list(params, requestOptions).parse()
 
-    private val deleteHandler: Handler<AddressDeleteResponse> =
-        jsonHandler<AddressDeleteResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
-
-    /** Delete a shipping address from the current user. */
     override fun delete(
         params: AddressDeleteParams,
         requestOptions: RequestOptions,
-    ): AddressDeleteResponse {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.DELETE)
-                .addPathSegments("address", params.getPathParam(0))
-                .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
-                .build()
-                .prepare(clientOptions, params)
-        val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-        val response = clientOptions.httpClient.execute(request, requestOptions)
-        return response
-            .use { deleteHandler.handle(it) }
-            .also {
-                if (requestOptions.responseValidation!!) {
-                    it.validate()
-                }
+    ): AddressDeleteResponse =
+        // delete /address/{id}
+        withRawResponse().delete(params, requestOptions).parse()
+
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        AddressService.WithRawResponse {
+
+        private val errorHandler: Handler<TerminalError> = errorHandler(clientOptions.jsonMapper)
+
+        private val createHandler: Handler<AddressCreateResponse> =
+            jsonHandler<AddressCreateResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
+
+        override fun create(
+            params: AddressCreateParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<AddressCreateResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments("address")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { createHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
             }
+        }
+
+        private val listHandler: Handler<AddressListResponse> =
+            jsonHandler<AddressListResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
+
+        override fun list(
+            params: AddressListParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<AddressListResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("address")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { listHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val deleteHandler: Handler<AddressDeleteResponse> =
+            jsonHandler<AddressDeleteResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
+
+        override fun delete(
+            params: AddressDeleteParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<AddressDeleteResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.DELETE)
+                    .addPathSegments("address", params.getPathParam(0))
+                    .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { deleteHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
     }
 }

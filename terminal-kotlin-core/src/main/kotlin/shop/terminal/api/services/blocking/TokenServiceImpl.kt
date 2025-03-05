@@ -10,6 +10,8 @@ import shop.terminal.api.core.handlers.withErrorHandler
 import shop.terminal.api.core.http.HttpMethod
 import shop.terminal.api.core.http.HttpRequest
 import shop.terminal.api.core.http.HttpResponse.Handler
+import shop.terminal.api.core.http.HttpResponseFor
+import shop.terminal.api.core.http.parseable
 import shop.terminal.api.core.json
 import shop.terminal.api.core.prepare
 import shop.terminal.api.errors.TerminalError
@@ -25,101 +27,145 @@ import shop.terminal.api.models.TokenListResponse
 class TokenServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     TokenService {
 
-    private val errorHandler: Handler<TerminalError> = errorHandler(clientOptions.jsonMapper)
+    private val withRawResponse: TokenService.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
-    private val createHandler: Handler<TokenCreateResponse> =
-        jsonHandler<TokenCreateResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+    override fun withRawResponse(): TokenService.WithRawResponse = withRawResponse
 
-    /** Create a personal access token. */
     override fun create(
         params: TokenCreateParams,
         requestOptions: RequestOptions,
-    ): TokenCreateResponse {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.POST)
-                .addPathSegments("token")
-                .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
-                .build()
-                .prepare(clientOptions, params)
-        val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-        val response = clientOptions.httpClient.execute(request, requestOptions)
-        return response
-            .use { createHandler.handle(it) }
-            .also {
-                if (requestOptions.responseValidation!!) {
-                    it.validate()
-                }
-            }
-    }
+    ): TokenCreateResponse =
+        // post /token
+        withRawResponse().create(params, requestOptions).parse()
 
-    private val listHandler: Handler<TokenListResponse> =
-        jsonHandler<TokenListResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+    override fun list(params: TokenListParams, requestOptions: RequestOptions): TokenListResponse =
+        // get /token
+        withRawResponse().list(params, requestOptions).parse()
 
-    /** List the current user's personal access tokens. */
-    override fun list(params: TokenListParams, requestOptions: RequestOptions): TokenListResponse {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("token")
-                .build()
-                .prepare(clientOptions, params)
-        val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-        val response = clientOptions.httpClient.execute(request, requestOptions)
-        return response
-            .use { listHandler.handle(it) }
-            .also {
-                if (requestOptions.responseValidation!!) {
-                    it.validate()
-                }
-            }
-    }
-
-    private val deleteHandler: Handler<TokenDeleteResponse> =
-        jsonHandler<TokenDeleteResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
-
-    /** Delete the personal access token with the given ID. */
     override fun delete(
         params: TokenDeleteParams,
         requestOptions: RequestOptions,
-    ): TokenDeleteResponse {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.DELETE)
-                .addPathSegments("token", params.getPathParam(0))
-                .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
-                .build()
-                .prepare(clientOptions, params)
-        val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-        val response = clientOptions.httpClient.execute(request, requestOptions)
-        return response
-            .use { deleteHandler.handle(it) }
-            .also {
-                if (requestOptions.responseValidation!!) {
-                    it.validate()
-                }
-            }
-    }
+    ): TokenDeleteResponse =
+        // delete /token/{id}
+        withRawResponse().delete(params, requestOptions).parse()
 
-    private val getHandler: Handler<TokenGetResponse> =
-        jsonHandler<TokenGetResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+    override fun get(params: TokenGetParams, requestOptions: RequestOptions): TokenGetResponse =
+        // get /token/{id}
+        withRawResponse().get(params, requestOptions).parse()
 
-    /** Get the personal access token with the given ID. */
-    override fun get(params: TokenGetParams, requestOptions: RequestOptions): TokenGetResponse {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("token", params.getPathParam(0))
-                .build()
-                .prepare(clientOptions, params)
-        val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-        val response = clientOptions.httpClient.execute(request, requestOptions)
-        return response
-            .use { getHandler.handle(it) }
-            .also {
-                if (requestOptions.responseValidation!!) {
-                    it.validate()
-                }
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        TokenService.WithRawResponse {
+
+        private val errorHandler: Handler<TerminalError> = errorHandler(clientOptions.jsonMapper)
+
+        private val createHandler: Handler<TokenCreateResponse> =
+            jsonHandler<TokenCreateResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
+
+        override fun create(
+            params: TokenCreateParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<TokenCreateResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments("token")
+                    .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { createHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
             }
+        }
+
+        private val listHandler: Handler<TokenListResponse> =
+            jsonHandler<TokenListResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+        override fun list(
+            params: TokenListParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<TokenListResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("token")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { listHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val deleteHandler: Handler<TokenDeleteResponse> =
+            jsonHandler<TokenDeleteResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
+
+        override fun delete(
+            params: TokenDeleteParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<TokenDeleteResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.DELETE)
+                    .addPathSegments("token", params.getPathParam(0))
+                    .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { deleteHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val getHandler: Handler<TokenGetResponse> =
+            jsonHandler<TokenGetResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+        override fun get(
+            params: TokenGetParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<TokenGetResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("token", params.getPathParam(0))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { getHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
     }
 }
