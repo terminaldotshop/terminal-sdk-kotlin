@@ -9,6 +9,7 @@ import java.time.Duration
 import shop.terminal.api.client.TerminalClientAsync
 import shop.terminal.api.client.TerminalClientAsyncImpl
 import shop.terminal.api.core.ClientOptions
+import shop.terminal.api.core.Timeout
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 
@@ -26,8 +27,7 @@ class TerminalOkHttpClientAsync private constructor() {
 
         private var clientOptions: ClientOptions.Builder = ClientOptions.builder()
         private var baseUrl: String = ClientOptions.PRODUCTION_URL
-        // The default timeout for the client is 1 minute.
-        private var timeout: Duration = Duration.ofSeconds(60)
+        private var timeout: Timeout = Timeout.default()
         private var proxy: Proxy? = null
 
         fun dev() = apply { baseUrl(ClientOptions.DEV_URL) }
@@ -121,7 +121,19 @@ class TerminalOkHttpClientAsync private constructor() {
             clientOptions.removeAllQueryParams(keys)
         }
 
-        fun timeout(timeout: Duration) = apply { this.timeout = timeout }
+        fun timeout(timeout: Timeout) = apply {
+            clientOptions.timeout(timeout)
+            this.timeout = timeout
+        }
+
+        /**
+         * Sets the maximum time allowed for a complete HTTP call, not including retries.
+         *
+         * See [Timeout.request] for more details.
+         *
+         * For fine-grained control, pass a [Timeout] object.
+         */
+        fun timeout(timeout: Duration) = timeout(Timeout.builder().request(timeout).build())
 
         fun maxRetries(maxRetries: Int) = apply { clientOptions.maxRetries(maxRetries) }
 
