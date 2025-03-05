@@ -40,6 +40,7 @@ private constructor(
 
         fun none(): SubscriptionCreateParams = builder().build()
 
+        /** Returns a mutable builder for constructing an instance of [SubscriptionCreateParams]. */
         fun builder() = Builder()
     }
 

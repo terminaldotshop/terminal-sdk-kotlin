@@ -40,6 +40,7 @@ private constructor(
 
         fun none(): AppCreateParams = builder().build()
 
+        /** Returns a mutable builder for constructing an instance of [AppCreateParams]. */
         fun builder() = Builder()
     }
 

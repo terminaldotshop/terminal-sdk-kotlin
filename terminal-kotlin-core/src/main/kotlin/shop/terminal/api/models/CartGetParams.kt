@@ -29,6 +29,7 @@ private constructor(
 
         fun none(): CartGetParams = builder().build()
 
+        /** Returns a mutable builder for constructing an instance of [CartGetParams]. */
         fun builder() = Builder()
     }
 

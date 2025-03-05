@@ -99,6 +99,18 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [Order].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .id()
+         * .amount()
+         * .items()
+         * .shipping()
+         * .tracking()
+         * ```
+         */
         fun builder() = Builder()
     }
 
@@ -245,6 +257,15 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Amount].
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .shipping()
+             * .subtotal()
+             * ```
+             */
             fun builder() = Builder()
         }
 
@@ -396,6 +417,16 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Item].
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .id()
+             * .amount()
+             * .quantity()
+             * ```
+             */
             fun builder() = Builder()
         }
 
@@ -606,6 +637,18 @@ private constructor(
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Shipping].
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .city()
+             * .country()
+             * .name()
+             * .street1()
+             * .zip()
+             * ```
+             */
             fun builder() = Builder()
         }
 
@@ -788,6 +831,7 @@ private constructor(
 
         companion object {
 
+            /** Returns a mutable builder for constructing an instance of [Tracking]. */
             fun builder() = Builder()
         }
 

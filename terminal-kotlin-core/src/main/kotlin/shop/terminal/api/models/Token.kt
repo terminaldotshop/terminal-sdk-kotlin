@@ -71,6 +71,16 @@ private constructor(
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [Token].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .id()
+         * .token()
+         * .created()
+         * ```
+         */
         fun builder() = Builder()
     }
 
