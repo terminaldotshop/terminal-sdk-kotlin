@@ -40,6 +40,10 @@ class TerminalClientImpl(private val clientOptions: ClientOptions) : TerminalCli
     // Pass the original clientOptions so that this client sets its own User-Agent.
     private val async: TerminalClientAsync by lazy { TerminalClientAsyncImpl(clientOptions) }
 
+    private val withRawResponse: TerminalClient.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
+
     private val product: ProductService by lazy { ProductServiceImpl(clientOptionsWithUserAgent) }
 
     private val profile: ProfileService by lazy { ProfileServiceImpl(clientOptionsWithUserAgent) }
@@ -66,6 +70,8 @@ class TerminalClientImpl(private val clientOptions: ClientOptions) : TerminalCli
 
     override fun async(): TerminalClientAsync = async
 
+    override fun withRawResponse(): TerminalClient.WithRawResponse = withRawResponse
+
     override fun product(): ProductService = product
 
     override fun profile(): ProfileService = profile
@@ -89,4 +95,74 @@ class TerminalClientImpl(private val clientOptions: ClientOptions) : TerminalCli
     override fun view(): ViewService = view
 
     override fun close() = clientOptions.httpClient.close()
+
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        TerminalClient.WithRawResponse {
+
+        private val product: ProductService.WithRawResponse by lazy {
+            ProductServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val profile: ProfileService.WithRawResponse by lazy {
+            ProfileServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val address: AddressService.WithRawResponse by lazy {
+            AddressServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val card: CardService.WithRawResponse by lazy {
+            CardServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val cart: CartService.WithRawResponse by lazy {
+            CartServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val order: OrderService.WithRawResponse by lazy {
+            OrderServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val subscription: SubscriptionService.WithRawResponse by lazy {
+            SubscriptionServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val token: TokenService.WithRawResponse by lazy {
+            TokenServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val app: AppService.WithRawResponse by lazy {
+            AppServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val email: EmailService.WithRawResponse by lazy {
+            EmailServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val view: ViewService.WithRawResponse by lazy {
+            ViewServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        override fun product(): ProductService.WithRawResponse = product
+
+        override fun profile(): ProfileService.WithRawResponse = profile
+
+        override fun address(): AddressService.WithRawResponse = address
+
+        override fun card(): CardService.WithRawResponse = card
+
+        override fun cart(): CartService.WithRawResponse = cart
+
+        override fun order(): OrderService.WithRawResponse = order
+
+        override fun subscription(): SubscriptionService.WithRawResponse = subscription
+
+        override fun token(): TokenService.WithRawResponse = token
+
+        override fun app(): AppService.WithRawResponse = app
+
+        override fun email(): EmailService.WithRawResponse = email
+
+        override fun view(): ViewService.WithRawResponse = view
+    }
 }
