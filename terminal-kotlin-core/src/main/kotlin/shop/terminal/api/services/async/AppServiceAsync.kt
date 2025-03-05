@@ -2,7 +2,9 @@
 
 package shop.terminal.api.services.async
 
+import com.google.errorprone.annotations.MustBeClosed
 import shop.terminal.api.core.RequestOptions
+import shop.terminal.api.core.http.HttpResponseFor
 import shop.terminal.api.models.AppCreateParams
 import shop.terminal.api.models.AppCreateResponse
 import shop.terminal.api.models.AppDeleteParams
@@ -13,6 +15,11 @@ import shop.terminal.api.models.AppListParams
 import shop.terminal.api.models.AppListResponse
 
 interface AppServiceAsync {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
 
     /** Create an app. */
     suspend fun create(
@@ -45,4 +52,64 @@ interface AppServiceAsync {
         params: AppGetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AppGetResponse
+
+    /** A view of [AppServiceAsync] that provides access to raw HTTP responses for each method. */
+    interface WithRawResponse {
+
+        /**
+         * Returns a raw HTTP response for `post /app`, but is otherwise the same as
+         * [AppServiceAsync.create].
+         */
+        @MustBeClosed
+        suspend fun create(
+            params: AppCreateParams = AppCreateParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<AppCreateResponse>
+
+        /**
+         * Returns a raw HTTP response for `post /app`, but is otherwise the same as
+         * [AppServiceAsync.create].
+         */
+        @MustBeClosed
+        suspend fun create(requestOptions: RequestOptions): HttpResponseFor<AppCreateResponse> =
+            create(AppCreateParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get /app`, but is otherwise the same as
+         * [AppServiceAsync.list].
+         */
+        @MustBeClosed
+        suspend fun list(
+            params: AppListParams = AppListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<AppListResponse>
+
+        /**
+         * Returns a raw HTTP response for `get /app`, but is otherwise the same as
+         * [AppServiceAsync.list].
+         */
+        @MustBeClosed
+        suspend fun list(requestOptions: RequestOptions): HttpResponseFor<AppListResponse> =
+            list(AppListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `delete /app/{id}`, but is otherwise the same as
+         * [AppServiceAsync.delete].
+         */
+        @MustBeClosed
+        suspend fun delete(
+            params: AppDeleteParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<AppDeleteResponse>
+
+        /**
+         * Returns a raw HTTP response for `get /app/{id}`, but is otherwise the same as
+         * [AppServiceAsync.get].
+         */
+        @MustBeClosed
+        suspend fun get(
+            params: AppGetParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<AppGetResponse>
+    }
 }
