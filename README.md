@@ -146,6 +146,32 @@ val product: ProductListResponse = client.product().list()
 
 The asynchronous client supports the same options as the synchronous one, except most methods are [suspending](https://kotlinlang.org/docs/coroutines-guide.html).
 
+## Raw responses
+
+The SDK defines methods that deserialize responses into instances of Kotlin classes. However, these methods don't provide access to the response headers, status code, or the raw response body.
+
+To access this data, prefix any HTTP method call on a client or service with `withRawResponse()`:
+
+```kotlin
+import shop.terminal.api.core.http.Headers
+import shop.terminal.api.core.http.HttpResponseFor
+import shop.terminal.api.models.ProductListParams
+import shop.terminal.api.models.ProductListResponse
+
+val product: HttpResponseFor<ProductListResponse> = client.product().withRawResponse().list()
+
+val statusCode: Int = product.statusCode()
+val headers: Headers = product.headers()
+```
+
+You can still deserialize the response into an instance of a Kotlin class if needed:
+
+```kotlin
+import shop.terminal.api.models.ProductListResponse
+
+val parsedProduct: ProductListResponse = product.parse()
+```
+
 ## Error handling
 
 The SDK throws custom unchecked exception types:
