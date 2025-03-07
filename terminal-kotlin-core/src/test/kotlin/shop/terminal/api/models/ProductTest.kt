@@ -4,7 +4,6 @@ package shop.terminal.api.models
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import shop.terminal.api.core.JsonValue
 
 class ProductTest {
 
@@ -16,7 +15,6 @@ class ProductTest {
                 .description(
                     "The interpolation of Caturra and Castillo varietals from Las Cochitas creates this refreshing citrusy and complex coffee."
                 )
-                .addFilter(Product.Filter.EU)
                 .name("[object Object]")
                 .addVariant(
                     ProductVariant.builder()
@@ -29,7 +27,11 @@ class ProductTest {
                 .subscription(Product.Subscription.ALLOWED)
                 .tags(
                     Product.Tags.builder()
-                        .putAdditionalProperty("featured", JsonValue.from("true"))
+                        .app("app")
+                        .color("color")
+                        .featured(true)
+                        .marketEu(true)
+                        .marketNa(true)
                         .build()
                 )
                 .build()
@@ -39,7 +41,6 @@ class ProductTest {
             .isEqualTo(
                 "The interpolation of Caturra and Castillo varietals from Las Cochitas creates this refreshing citrusy and complex coffee."
             )
-        assertThat(product.filters()).containsExactly(Product.Filter.EU)
         assertThat(product.name()).isEqualTo("[object Object]")
         assertThat(product.variants())
             .containsExactly(
@@ -54,7 +55,11 @@ class ProductTest {
         assertThat(product.tags())
             .isEqualTo(
                 Product.Tags.builder()
-                    .putAdditionalProperty("featured", JsonValue.from("true"))
+                    .app("app")
+                    .color("color")
+                    .featured(true)
+                    .marketEu(true)
+                    .marketNa(true)
                     .build()
             )
     }

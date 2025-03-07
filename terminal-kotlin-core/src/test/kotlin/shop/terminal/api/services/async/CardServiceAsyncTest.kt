@@ -8,6 +8,7 @@ import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClientAsync
 import shop.terminal.api.models.CardCreateParams
 import shop.terminal.api.models.CardDeleteParams
+import shop.terminal.api.models.CardGetParams
 
 @ExtendWith(TestServerExtension::class)
 class CardServiceAsyncTest {
@@ -72,5 +73,22 @@ class CardServiceAsyncTest {
         val response = cardServiceAsync.collect()
 
         response.validate()
+    }
+
+    @Test
+    suspend fun get() {
+        val client =
+            TerminalOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val cardServiceAsync = client.card()
+
+        val card =
+            cardServiceAsync.get(
+                CardGetParams.builder().id("crd_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
+            )
+
+        card.validate()
     }
 }

@@ -9,6 +9,7 @@ import shop.terminal.api.client.okhttp.TerminalOkHttpClient
 import shop.terminal.api.models.Subscription
 import shop.terminal.api.models.SubscriptionCreateParams
 import shop.terminal.api.models.SubscriptionDeleteParams
+import shop.terminal.api.models.SubscriptionGetParams
 
 @ExtendWith(TestServerExtension::class)
 class SubscriptionServiceTest {
@@ -73,6 +74,23 @@ class SubscriptionServiceTest {
         val subscription =
             subscriptionService.delete(
                 SubscriptionDeleteParams.builder().id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
+            )
+
+        subscription.validate()
+    }
+
+    @Test
+    fun get() {
+        val client =
+            TerminalOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val subscriptionService = client.subscription()
+
+        val subscription =
+            subscriptionService.get(
+                SubscriptionGetParams.builder().id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
             )
 
         subscription.validate()
