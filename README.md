@@ -107,9 +107,9 @@ See [Undocumented request params](#undocumented-request-params) for how to send 
 When receiving a response, the Terminal Kotlin SDK will deserialize it into instances of the typed model classes. In rare cases, the API may return a response property that doesn't match the expected Kotlin type. If you directly access the mistaken property, the SDK will throw an unchecked `TerminalInvalidDataException` at runtime. If you would prefer to check in advance that that response is completely well-typed, call `.validate()` on the returned model.
 
 ```kotlin
-import shop.terminal.api.models.SubscriptionCreateResponse
+import shop.terminal.api.models.ProductListResponse
 
-val subscription: SubscriptionCreateResponse = client.subscription().create().validate()
+val product: ProductListResponse = client.product().list().validate()
 ```
 
 ### Response properties as JSON
@@ -240,15 +240,15 @@ This library is typed for convenient access to the documented API. If you need t
 
 ### Undocumented request params
 
-In [Example: creating a resource](#example-creating-a-resource) above, we used the `SubscriptionCreateParams.builder()` to pass to the `create` method of the `subscription` service.
+In [Example: creating a resource](#example-creating-a-resource) above, we used the `ProductListParams.builder()` to pass to the `list` method of the `product` service.
 
 Sometimes, the API may support other properties that are not yet supported in the Kotlin SDK types. In that case, you can attach them using raw setters:
 
 ```kotlin
 import shop.terminal.api.core.JsonValue
-import shop.terminal.api.models.SubscriptionCreateParams
+import shop.terminal.api.models.ProductListParams
 
-val params: SubscriptionCreateParams = SubscriptionCreateParams.builder()
+val params: ProductListParams = ProductListParams.builder()
     .putAdditionalHeader("Secret-Header", "42")
     .putAdditionalQueryParam("secret_query_param", "42")
     .putAdditionalBodyProperty("secretProperty", JsonValue.from("42"))

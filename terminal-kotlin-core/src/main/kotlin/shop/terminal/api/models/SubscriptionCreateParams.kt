@@ -288,11 +288,10 @@ private constructor(
             fun schedule(schedule: JsonField<Schedule>) = apply { this.schedule = schedule }
 
             /** Schedule of the subscription. */
-            fun schedule(type: Schedule.Type) = schedule(Schedule.ofType(type))
+            fun schedule(fixed: Schedule.Fixed) = schedule(Schedule.ofFixed(fixed))
 
             /** Schedule of the subscription. */
-            fun schedule(unionMember1: Schedule.UnionMember1) =
-                schedule(Schedule.ofUnionMember1(unionMember1))
+            fun schedule(weekly: Schedule.Weekly) = schedule(Schedule.ofWeekly(weekly))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -419,10 +418,10 @@ private constructor(
         fun schedule(schedule: JsonField<Schedule>) = apply { body.schedule(schedule) }
 
         /** Schedule of the subscription. */
-        fun schedule(type: Schedule.Type) = apply { body.schedule(type) }
+        fun schedule(fixed: Schedule.Fixed) = apply { body.schedule(fixed) }
 
         /** Schedule of the subscription. */
-        fun schedule(unionMember1: Schedule.UnionMember1) = apply { body.schedule(unionMember1) }
+        fun schedule(weekly: Schedule.Weekly) = apply { body.schedule(weekly) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -667,29 +666,29 @@ private constructor(
     @JsonSerialize(using = Schedule.Serializer::class)
     class Schedule
     private constructor(
-        private val type: Type? = null,
-        private val unionMember1: UnionMember1? = null,
+        private val fixed: Fixed? = null,
+        private val weekly: Weekly? = null,
         private val _json: JsonValue? = null,
     ) {
 
-        fun type(): Type? = type
+        fun fixed(): Fixed? = fixed
 
-        fun unionMember1(): UnionMember1? = unionMember1
+        fun weekly(): Weekly? = weekly
 
-        fun isType(): Boolean = type != null
+        fun isFixed(): Boolean = fixed != null
 
-        fun isUnionMember1(): Boolean = unionMember1 != null
+        fun isWeekly(): Boolean = weekly != null
 
-        fun asType(): Type = type.getOrThrow("type")
+        fun asFixed(): Fixed = fixed.getOrThrow("fixed")
 
-        fun asUnionMember1(): UnionMember1 = unionMember1.getOrThrow("unionMember1")
+        fun asWeekly(): Weekly = weekly.getOrThrow("weekly")
 
         fun _json(): JsonValue? = _json
 
         fun <T> accept(visitor: Visitor<T>): T {
             return when {
-                type != null -> visitor.visitType(type)
-                unionMember1 != null -> visitor.visitUnionMember1(unionMember1)
+                fixed != null -> visitor.visitFixed(fixed)
+                weekly != null -> visitor.visitWeekly(weekly)
                 else -> visitor.unknown(_json)
             }
         }
@@ -703,12 +702,12 @@ private constructor(
 
             accept(
                 object : Visitor<Unit> {
-                    override fun visitType(type: Type) {
-                        type.validate()
+                    override fun visitFixed(fixed: Fixed) {
+                        fixed.validate()
                     }
 
-                    override fun visitUnionMember1(unionMember1: UnionMember1) {
-                        unionMember1.validate()
+                    override fun visitWeekly(weekly: Weekly) {
+                        weekly.validate()
                     }
                 }
             )
@@ -720,24 +719,24 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Schedule && type == other.type && unionMember1 == other.unionMember1 /* spotless:on */
+            return /* spotless:off */ other is Schedule && fixed == other.fixed && weekly == other.weekly /* spotless:on */
         }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(type, unionMember1) /* spotless:on */
+        override fun hashCode(): Int = /* spotless:off */ Objects.hash(fixed, weekly) /* spotless:on */
 
         override fun toString(): String =
             when {
-                type != null -> "Schedule{type=$type}"
-                unionMember1 != null -> "Schedule{unionMember1=$unionMember1}"
+                fixed != null -> "Schedule{fixed=$fixed}"
+                weekly != null -> "Schedule{weekly=$weekly}"
                 _json != null -> "Schedule{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Schedule")
             }
 
         companion object {
 
-            fun ofType(type: Type) = Schedule(type = type)
+            fun ofFixed(fixed: Fixed) = Schedule(fixed = fixed)
 
-            fun ofUnionMember1(unionMember1: UnionMember1) = Schedule(unionMember1 = unionMember1)
+            fun ofWeekly(weekly: Weekly) = Schedule(weekly = weekly)
         }
 
         /**
@@ -745,9 +744,9 @@ private constructor(
          */
         interface Visitor<out T> {
 
-            fun visitType(type: Type): T
+            fun visitFixed(fixed: Fixed): T
 
-            fun visitUnionMember1(unionMember1: UnionMember1): T
+            fun visitWeekly(weekly: Weekly): T
 
             /**
              * Maps an unknown variant of [Schedule] to a value of type [T].
@@ -769,13 +768,13 @@ private constructor(
             override fun ObjectCodec.deserialize(node: JsonNode): Schedule {
                 val json = JsonValue.fromJsonNode(node)
 
-                tryDeserialize(node, jacksonTypeRef<Type>()) { it.validate() }
+                tryDeserialize(node, jacksonTypeRef<Fixed>()) { it.validate() }
                     ?.let {
-                        return Schedule(type = it, _json = json)
+                        return Schedule(fixed = it, _json = json)
                     }
-                tryDeserialize(node, jacksonTypeRef<UnionMember1>()) { it.validate() }
+                tryDeserialize(node, jacksonTypeRef<Weekly>()) { it.validate() }
                     ?.let {
-                        return Schedule(unionMember1 = it, _json = json)
+                        return Schedule(weekly = it, _json = json)
                     }
 
                 return Schedule(_json = json)
@@ -790,8 +789,8 @@ private constructor(
                 provider: SerializerProvider
             ) {
                 when {
-                    value.type != null -> generator.writeObject(value.type)
-                    value.unionMember1 != null -> generator.writeObject(value.unionMember1)
+                    value.fixed != null -> generator.writeObject(value.fixed)
+                    value.weekly != null -> generator.writeObject(value.weekly)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid Schedule")
                 }
@@ -799,19 +798,19 @@ private constructor(
         }
 
         @NoAutoDetect
-        class Type
+        class Fixed
         @JsonCreator
         private constructor(
             @JsonProperty("type")
             @ExcludeMissing
-            private val type: JsonField<InnerType> = JsonMissing.of(),
+            private val type: JsonField<Type> = JsonMissing.of(),
             @JsonAnySetter
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            fun type(): InnerType = type.getRequired("type")
+            fun type(): Type = type.getRequired("type")
 
-            @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<InnerType> = type
+            @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -819,7 +818,7 @@ private constructor(
 
             private var validated: Boolean = false
 
-            fun validate(): Type = apply {
+            fun validate(): Fixed = apply {
                 if (validated) {
                     return@apply
                 }
@@ -835,20 +834,20 @@ private constructor(
                 fun builder() = Builder()
             }
 
-            /** A builder for [Type]. */
+            /** A builder for [Fixed]. */
             class Builder internal constructor() {
 
-                private var type: JsonField<InnerType>? = null
+                private var type: JsonField<Type>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-                internal fun from(type: Type) = apply {
-                    this.type = type.type
-                    additionalProperties = type.additionalProperties.toMutableMap()
+                internal fun from(fixed: Fixed) = apply {
+                    type = fixed.type
+                    additionalProperties = fixed.additionalProperties.toMutableMap()
                 }
 
-                fun type(type: InnerType) = type(JsonField.of(type))
+                fun type(type: Type) = type(JsonField.of(type))
 
-                fun type(type: JsonField<InnerType>) = apply { this.type = type }
+                fun type(type: JsonField<Type>) = apply { this.type = type }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -872,11 +871,11 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
-                fun build(): Type =
-                    Type(checkRequired("type", type), additionalProperties.toImmutable())
+                fun build(): Fixed =
+                    Fixed(checkRequired("type", type), additionalProperties.toImmutable())
             }
 
-            class InnerType
+            class Type
             @JsonCreator
             private constructor(
                 private val value: JsonField<String>,
@@ -896,18 +895,18 @@ private constructor(
 
                     val FIXED = of("fixed")
 
-                    fun of(value: String) = InnerType(JsonField.of(value))
+                    fun of(value: String) = Type(JsonField.of(value))
                 }
 
-                /** An enum containing [InnerType]'s known values. */
+                /** An enum containing [Type]'s known values. */
                 enum class Known {
                     FIXED,
                 }
 
                 /**
-                 * An enum containing [InnerType]'s known values, as well as an [_UNKNOWN] member.
+                 * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
                  *
-                 * An instance of [InnerType] can contain an unknown value in a couple of cases:
+                 * An instance of [Type] can contain an unknown value in a couple of cases:
                  * - It was deserialized from data that doesn't match any known member. For example,
                  *   if the SDK is on an older version than the API, then the API may respond with
                  *   new members that the SDK is unaware of.
@@ -916,8 +915,7 @@ private constructor(
                 enum class Value {
                     FIXED,
                     /**
-                     * An enum member indicating that [InnerType] was instantiated with an unknown
-                     * value.
+                     * An enum member indicating that [Type] was instantiated with an unknown value.
                      */
                     _UNKNOWN,
                 }
@@ -947,7 +945,7 @@ private constructor(
                 fun known(): Known =
                     when (this) {
                         FIXED -> Known.FIXED
-                        else -> throw TerminalInvalidDataException("Unknown InnerType: $value")
+                        else -> throw TerminalInvalidDataException("Unknown Type: $value")
                     }
 
                 fun asString(): String = _value().asStringOrThrow()
@@ -957,7 +955,7 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is InnerType && value == other.value /* spotless:on */
+                    return /* spotless:off */ other is Type && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -970,7 +968,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Type && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is Fixed && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
@@ -979,11 +977,12 @@ private constructor(
 
             override fun hashCode(): Int = hashCode
 
-            override fun toString() = "Type{type=$type, additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "Fixed{type=$type, additionalProperties=$additionalProperties}"
         }
 
         @NoAutoDetect
-        class UnionMember1
+        class Weekly
         @JsonCreator
         private constructor(
             @JsonProperty("interval")
@@ -1010,7 +1009,7 @@ private constructor(
 
             private var validated: Boolean = false
 
-            fun validate(): UnionMember1 = apply {
+            fun validate(): Weekly = apply {
                 if (validated) {
                     return@apply
                 }
@@ -1027,17 +1026,17 @@ private constructor(
                 fun builder() = Builder()
             }
 
-            /** A builder for [UnionMember1]. */
+            /** A builder for [Weekly]. */
             class Builder internal constructor() {
 
                 private var interval: JsonField<Long>? = null
                 private var type: JsonField<Type>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-                internal fun from(unionMember1: UnionMember1) = apply {
-                    interval = unionMember1.interval
-                    type = unionMember1.type
-                    additionalProperties = unionMember1.additionalProperties.toMutableMap()
+                internal fun from(weekly: Weekly) = apply {
+                    interval = weekly.interval
+                    type = weekly.type
+                    additionalProperties = weekly.additionalProperties.toMutableMap()
                 }
 
                 fun interval(interval: Long) = interval(JsonField.of(interval))
@@ -1070,8 +1069,8 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
-                fun build(): UnionMember1 =
-                    UnionMember1(
+                fun build(): Weekly =
+                    Weekly(
                         checkRequired("interval", interval),
                         checkRequired("type", type),
                         additionalProperties.toImmutable(),
@@ -1171,7 +1170,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is UnionMember1 && interval == other.interval && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is Weekly && interval == other.interval && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
@@ -1181,7 +1180,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "UnionMember1{interval=$interval, type=$type, additionalProperties=$additionalProperties}"
+                "Weekly{interval=$interval, type=$type, additionalProperties=$additionalProperties}"
         }
     }
 
