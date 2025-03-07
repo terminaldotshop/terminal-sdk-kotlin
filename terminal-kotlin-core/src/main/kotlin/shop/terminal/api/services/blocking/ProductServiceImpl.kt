@@ -14,6 +14,8 @@ import shop.terminal.api.core.http.HttpResponseFor
 import shop.terminal.api.core.http.parseable
 import shop.terminal.api.core.prepare
 import shop.terminal.api.errors.TerminalError
+import shop.terminal.api.models.ProductGetParams
+import shop.terminal.api.models.ProductGetResponse
 import shop.terminal.api.models.ProductListParams
 import shop.terminal.api.models.ProductListResponse
 
@@ -32,6 +34,10 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
     ): ProductListResponse =
         // get /product
         withRawResponse().list(params, requestOptions).parse()
+
+    override fun get(params: ProductGetParams, requestOptions: RequestOptions): ProductGetResponse =
+        // get /product/{id}
+        withRawResponse().get(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         ProductService.WithRawResponse {
@@ -57,6 +63,32 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
             return response.parseable {
                 response
                     .use { listHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val getHandler: Handler<ProductGetResponse> =
+            jsonHandler<ProductGetResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+        override fun get(
+            params: ProductGetParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<ProductGetResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("product", params.getPathParam(0))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { getHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()

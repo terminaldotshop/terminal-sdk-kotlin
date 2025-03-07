@@ -19,13 +19,9 @@ interface ProfileService {
 
     /** Update the current user's profile. */
     fun update(
-        params: ProfileUpdateParams = ProfileUpdateParams.none(),
+        params: ProfileUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ProfileUpdateResponse
-
-    /** Update the current user's profile. */
-    fun update(requestOptions: RequestOptions): ProfileUpdateResponse =
-        update(ProfileUpdateParams.none(), requestOptions)
 
     /** Get the current user's profile. */
     fun me(
@@ -46,17 +42,9 @@ interface ProfileService {
          */
         @MustBeClosed
         fun update(
-            params: ProfileUpdateParams = ProfileUpdateParams.none(),
+            params: ProfileUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ProfileUpdateResponse>
-
-        /**
-         * Returns a raw HTTP response for `put /profile`, but is otherwise the same as
-         * [ProfileService.update].
-         */
-        @MustBeClosed
-        fun update(requestOptions: RequestOptions): HttpResponseFor<ProfileUpdateResponse> =
-            update(ProfileUpdateParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /profile`, but is otherwise the same as

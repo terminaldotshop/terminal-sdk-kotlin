@@ -21,6 +21,8 @@ import shop.terminal.api.models.CardCreateParams
 import shop.terminal.api.models.CardCreateResponse
 import shop.terminal.api.models.CardDeleteParams
 import shop.terminal.api.models.CardDeleteResponse
+import shop.terminal.api.models.CardGetParams
+import shop.terminal.api.models.CardGetResponse
 import shop.terminal.api.models.CardListParams
 import shop.terminal.api.models.CardListResponse
 
@@ -60,6 +62,13 @@ class CardServiceAsyncImpl internal constructor(private val clientOptions: Clien
     ): CardCollectResponse =
         // post /card/collect
         withRawResponse().collect(params, requestOptions).parse()
+
+    override suspend fun get(
+        params: CardGetParams,
+        requestOptions: RequestOptions,
+    ): CardGetResponse =
+        // get /card/{id}
+        withRawResponse().get(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         CardServiceAsync.WithRawResponse {
@@ -166,6 +175,32 @@ class CardServiceAsyncImpl internal constructor(private val clientOptions: Clien
             return response.parseable {
                 response
                     .use { collectHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val getHandler: Handler<CardGetResponse> =
+            jsonHandler<CardGetResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+        override suspend fun get(
+            params: CardGetParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<CardGetResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("card", params.getPathParam(0))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { getHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()

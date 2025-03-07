@@ -19,6 +19,8 @@ import shop.terminal.api.models.SubscriptionCreateParams
 import shop.terminal.api.models.SubscriptionCreateResponse
 import shop.terminal.api.models.SubscriptionDeleteParams
 import shop.terminal.api.models.SubscriptionDeleteResponse
+import shop.terminal.api.models.SubscriptionGetParams
+import shop.terminal.api.models.SubscriptionGetResponse
 import shop.terminal.api.models.SubscriptionListParams
 import shop.terminal.api.models.SubscriptionListResponse
 
@@ -51,6 +53,13 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
     ): SubscriptionDeleteResponse =
         // delete /subscription/{id}
         withRawResponse().delete(params, requestOptions).parse()
+
+    override fun get(
+        params: SubscriptionGetParams,
+        requestOptions: RequestOptions,
+    ): SubscriptionGetResponse =
+        // get /subscription/{id}
+        withRawResponse().get(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         SubscriptionService.WithRawResponse {
@@ -132,6 +141,33 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
             return response.parseable {
                 response
                     .use { deleteHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val getHandler: Handler<SubscriptionGetResponse> =
+            jsonHandler<SubscriptionGetResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
+
+        override fun get(
+            params: SubscriptionGetParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<SubscriptionGetResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("subscription", params.getPathParam(0))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { getHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()
