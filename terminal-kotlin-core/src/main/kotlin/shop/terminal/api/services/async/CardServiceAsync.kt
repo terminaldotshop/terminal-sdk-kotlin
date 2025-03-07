@@ -11,6 +11,8 @@ import shop.terminal.api.models.CardCreateParams
 import shop.terminal.api.models.CardCreateResponse
 import shop.terminal.api.models.CardDeleteParams
 import shop.terminal.api.models.CardDeleteResponse
+import shop.terminal.api.models.CardGetParams
+import shop.terminal.api.models.CardGetResponse
 import shop.terminal.api.models.CardListParams
 import shop.terminal.api.models.CardListResponse
 
@@ -52,6 +54,12 @@ interface CardServiceAsync {
     /** Create a temporary URL for collecting credit card information for the current user. */
     suspend fun collect(requestOptions: RequestOptions): CardCollectResponse =
         collect(CardCollectParams.none(), requestOptions)
+
+    /** Get a credit card by ID associated with the current user. */
+    suspend fun get(
+        params: CardGetParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CardGetResponse
 
     /** A view of [CardServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -111,5 +119,15 @@ interface CardServiceAsync {
         @MustBeClosed
         suspend fun collect(requestOptions: RequestOptions): HttpResponseFor<CardCollectResponse> =
             collect(CardCollectParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get /card/{id}`, but is otherwise the same as
+         * [CardServiceAsync.get].
+         */
+        @MustBeClosed
+        suspend fun get(
+            params: CardGetParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CardGetResponse>
     }
 }

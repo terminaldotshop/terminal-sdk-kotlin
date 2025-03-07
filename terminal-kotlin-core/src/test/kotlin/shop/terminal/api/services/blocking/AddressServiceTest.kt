@@ -8,6 +8,7 @@ import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
 import shop.terminal.api.models.AddressCreateParams
 import shop.terminal.api.models.AddressDeleteParams
+import shop.terminal.api.models.AddressGetParams
 
 @ExtendWith(TestServerExtension::class)
 class AddressServiceTest {
@@ -64,6 +65,23 @@ class AddressServiceTest {
         val address =
             addressService.delete(
                 AddressDeleteParams.builder().id("shp_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
+            )
+
+        address.validate()
+    }
+
+    @Test
+    fun get() {
+        val client =
+            TerminalOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val addressService = client.address()
+
+        val address =
+            addressService.get(
+                AddressGetParams.builder().id("shp_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
             )
 
         address.validate()

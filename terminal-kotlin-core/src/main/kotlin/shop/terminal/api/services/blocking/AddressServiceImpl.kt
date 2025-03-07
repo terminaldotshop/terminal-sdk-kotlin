@@ -19,6 +19,8 @@ import shop.terminal.api.models.AddressCreateParams
 import shop.terminal.api.models.AddressCreateResponse
 import shop.terminal.api.models.AddressDeleteParams
 import shop.terminal.api.models.AddressDeleteResponse
+import shop.terminal.api.models.AddressGetParams
+import shop.terminal.api.models.AddressGetResponse
 import shop.terminal.api.models.AddressListParams
 import shop.terminal.api.models.AddressListResponse
 
@@ -51,6 +53,10 @@ class AddressServiceImpl internal constructor(private val clientOptions: ClientO
     ): AddressDeleteResponse =
         // delete /address/{id}
         withRawResponse().delete(params, requestOptions).parse()
+
+    override fun get(params: AddressGetParams, requestOptions: RequestOptions): AddressGetResponse =
+        // get /address/{id}
+        withRawResponse().get(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         AddressService.WithRawResponse {
@@ -132,6 +138,32 @@ class AddressServiceImpl internal constructor(private val clientOptions: ClientO
             return response.parseable {
                 response
                     .use { deleteHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val getHandler: Handler<AddressGetResponse> =
+            jsonHandler<AddressGetResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+        override fun get(
+            params: AddressGetParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<AddressGetResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("address", params.getPathParam(0))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { getHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()

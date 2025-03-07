@@ -2,45 +2,189 @@
 
 package shop.terminal.api.models
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter
+import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Objects
+import shop.terminal.api.core.ExcludeMissing
+import shop.terminal.api.core.JsonField
+import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.Params
+import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 import shop.terminal.api.core.immutableEmptyMap
+import shop.terminal.api.core.toImmutable
 
 /** Create an app. */
 class AppCreateParams
 private constructor(
-    private val app: App?,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** A Terminal App used for configuring an OAuth 2.0 client. */
-    fun app(): App? = app
+    fun name(): String = body.name()
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> =
-        app?._additionalProperties() ?: immutableEmptyMap()
+    fun redirectUri(): String = body.redirectUri()
+
+    fun _name(): JsonField<String> = body._name()
+
+    fun _redirectUri(): JsonField<String> = body._redirectUri()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    internal fun _body(): App? = app
+    internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
+    /** Basic app information. */
+    @NoAutoDetect
+    class Body
+    @JsonCreator
+    private constructor(
+        @JsonProperty("name")
+        @ExcludeMissing
+        private val name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("redirectURI")
+        @ExcludeMissing
+        private val redirectUri: JsonField<String> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    ) {
+
+        fun name(): String = name.getRequired("name")
+
+        fun redirectUri(): String = redirectUri.getRequired("redirectURI")
+
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+        @JsonProperty("redirectURI")
+        @ExcludeMissing
+        fun _redirectUri(): JsonField<String> = redirectUri
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        private var validated: Boolean = false
+
+        fun validate(): Body = apply {
+            if (validated) {
+                return@apply
+            }
+
+            name()
+            redirectUri()
+            validated = true
+        }
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [Body].
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .name()
+             * .redirectUri()
+             * ```
+             */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [Body]. */
+        class Builder internal constructor() {
+
+            private var name: JsonField<String>? = null
+            private var redirectUri: JsonField<String>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(body: Body) = apply {
+                name = body.name
+                redirectUri = body.redirectUri
+                additionalProperties = body.additionalProperties.toMutableMap()
+            }
+
+            fun name(name: String) = name(JsonField.of(name))
+
+            fun name(name: JsonField<String>) = apply { this.name = name }
+
+            fun redirectUri(redirectUri: String) = redirectUri(JsonField.of(redirectUri))
+
+            fun redirectUri(redirectUri: JsonField<String>) = apply {
+                this.redirectUri = redirectUri
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            fun build(): Body =
+                Body(
+                    checkRequired("name", name),
+                    checkRequired("redirectUri", redirectUri),
+                    additionalProperties.toImmutable(),
+                )
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Body && name == other.name && redirectUri == other.redirectUri && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(name, redirectUri, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Body{name=$name, redirectUri=$redirectUri, additionalProperties=$additionalProperties}"
+    }
+
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
-        fun none(): AppCreateParams = builder().build()
-
-        /** Returns a mutable builder for constructing an instance of [AppCreateParams]. */
+        /**
+         * Returns a mutable builder for constructing an instance of [AppCreateParams].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .name()
+         * .redirectUri()
+         * ```
+         */
         fun builder() = Builder()
     }
 
@@ -48,18 +192,42 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var app: App? = null
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(appCreateParams: AppCreateParams) = apply {
-            app = appCreateParams.app
+            body = appCreateParams.body.toBuilder()
             additionalHeaders = appCreateParams.additionalHeaders.toBuilder()
             additionalQueryParams = appCreateParams.additionalQueryParams.toBuilder()
         }
 
-        /** A Terminal App used for configuring an OAuth 2.0 client. */
-        fun app(app: App?) = apply { this.app = app }
+        fun name(name: String) = apply { body.name(name) }
+
+        fun name(name: JsonField<String>) = apply { body.name(name) }
+
+        fun redirectUri(redirectUri: String) = apply { body.redirectUri(redirectUri) }
+
+        fun redirectUri(redirectUri: JsonField<String>) = apply { body.redirectUri(redirectUri) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -160,7 +328,7 @@ private constructor(
         }
 
         fun build(): AppCreateParams =
-            AppCreateParams(app, additionalHeaders.build(), additionalQueryParams.build())
+            AppCreateParams(body.build(), additionalHeaders.build(), additionalQueryParams.build())
     }
 
     override fun equals(other: Any?): Boolean {
@@ -168,11 +336,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is AppCreateParams && app == other.app && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is AppCreateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(app, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "AppCreateParams{app=$app, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "AppCreateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
