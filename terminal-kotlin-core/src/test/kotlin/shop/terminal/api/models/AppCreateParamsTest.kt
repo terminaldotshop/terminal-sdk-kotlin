@@ -2,6 +2,7 @@
 
 package shop.terminal.api.models
 
+import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -10,14 +11,8 @@ class AppCreateParamsTest {
     @Test
     fun create() {
         AppCreateParams.builder()
-            .app(
-                App.builder()
-                    .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                    .name("Example App")
-                    .redirectUri("https://example.com/callback")
-                    .secret("sec_******XXXX")
-                    .build()
-            )
+            .name("Example App")
+            .redirectUri("https://example.com/callback")
             .build()
     }
 
@@ -25,33 +20,29 @@ class AppCreateParamsTest {
     fun body() {
         val params =
             AppCreateParams.builder()
-                .app(
-                    App.builder()
-                        .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                        .name("Example App")
-                        .redirectUri("https://example.com/callback")
-                        .secret("sec_******XXXX")
-                        .build()
-                )
+                .name("Example App")
+                .redirectUri("https://example.com/callback")
                 .build()
 
         val body = params._body()
 
-        assertThat(body)
-            .isEqualTo(
-                App.builder()
-                    .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                    .name("Example App")
-                    .redirectUri("https://example.com/callback")
-                    .secret("sec_******XXXX")
-                    .build()
-            )
+        assertNotNull(body)
+        assertThat(body.name()).isEqualTo("Example App")
+        assertThat(body.redirectUri()).isEqualTo("https://example.com/callback")
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = AppCreateParams.builder().build()
+        val params =
+            AppCreateParams.builder()
+                .name("Example App")
+                .redirectUri("https://example.com/callback")
+                .build()
 
         val body = params._body()
+
+        assertNotNull(body)
+        assertThat(body.name()).isEqualTo("Example App")
+        assertThat(body.redirectUri()).isEqualTo("https://example.com/callback")
     }
 }

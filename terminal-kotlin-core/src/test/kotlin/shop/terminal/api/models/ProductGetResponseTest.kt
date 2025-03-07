@@ -5,13 +5,13 @@ package shop.terminal.api.models
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ProductListResponseTest {
+class ProductGetResponseTest {
 
     @Test
-    fun createProductListResponse() {
-        val productListResponse =
-            ProductListResponse.builder()
-                .addData(
+    fun createProductGetResponse() {
+        val productGetResponse =
+            ProductGetResponse.builder()
+                .data(
                     Product.builder()
                         .id("prd_XXXXXXXXXXXXXXXXXXXXXXXXX")
                         .description(
@@ -39,9 +39,9 @@ class ProductListResponseTest {
                         .build()
                 )
                 .build()
-        assertThat(productListResponse).isNotNull
-        assertThat(productListResponse.data())
-            .containsExactly(
+        assertThat(productGetResponse).isNotNull
+        assertThat(productGetResponse.data())
+            .isEqualTo(
                 Product.builder()
                     .id("prd_XXXXXXXXXXXXXXXXXXXXXXXXX")
                     .description(

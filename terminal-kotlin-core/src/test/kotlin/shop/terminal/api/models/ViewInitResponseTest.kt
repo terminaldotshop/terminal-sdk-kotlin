@@ -4,7 +4,6 @@ package shop.terminal.api.models
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import shop.terminal.api.core.JsonValue
 
 class ViewInitResponseTest {
 
@@ -114,7 +113,6 @@ class ViewInitResponseTest {
                                 .description(
                                     "The interpolation of Caturra and Castillo varietals from Las Cochitas creates this refreshing citrusy and complex coffee."
                                 )
-                                .addFilter(Product.Filter.EU)
                                 .name("[object Object]")
                                 .addVariant(
                                     ProductVariant.builder()
@@ -127,7 +125,11 @@ class ViewInitResponseTest {
                                 .subscription(Product.Subscription.ALLOWED)
                                 .tags(
                                     Product.Tags.builder()
-                                        .putAdditionalProperty("featured", JsonValue.from("true"))
+                                        .app("app")
+                                        .color("color")
+                                        .featured(true)
+                                        .marketEu(true)
+                                        .marketNa(true)
                                         .build()
                                 )
                                 .build()
@@ -269,7 +271,6 @@ class ViewInitResponseTest {
                             .description(
                                 "The interpolation of Caturra and Castillo varietals from Las Cochitas creates this refreshing citrusy and complex coffee."
                             )
-                            .addFilter(Product.Filter.EU)
                             .name("[object Object]")
                             .addVariant(
                                 ProductVariant.builder()
@@ -282,7 +283,11 @@ class ViewInitResponseTest {
                             .subscription(Product.Subscription.ALLOWED)
                             .tags(
                                 Product.Tags.builder()
-                                    .putAdditionalProperty("featured", JsonValue.from("true"))
+                                    .app("app")
+                                    .color("color")
+                                    .featured(true)
+                                    .marketEu(true)
+                                    .marketNa(true)
                                     .build()
                             )
                             .build()
