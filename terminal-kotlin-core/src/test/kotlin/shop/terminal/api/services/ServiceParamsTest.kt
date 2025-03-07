@@ -2,7 +2,6 @@
 
 package shop.terminal.api.services
 
-import com.fasterxml.jackson.databind.json.JsonMapper
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
 import com.github.tomakehurst.wiremock.client.WireMock.get
@@ -17,9 +16,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import shop.terminal.api.client.TerminalClient
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
-import shop.terminal.api.core.JsonValue
-import shop.terminal.api.core.jsonMapper
-import shop.terminal.api.models.Product
 import shop.terminal.api.models.ProductListParams
 import shop.terminal.api.models.ProductListResponse
 import shop.terminal.api.models.ProductVariant
@@ -27,9 +23,7 @@ import shop.terminal.api.models.SubscriptionCreateParams
 import shop.terminal.api.models.SubscriptionCreateResponse
 
 @WireMockTest
-class ServiceParamsTest {
-
-    private val JSON_MAPPER: JsonMapper = jsonMapper()
+internal class ServiceParamsTest {
 
     private lateinit var client: TerminalClient
 
@@ -37,65 +31,28 @@ class ServiceParamsTest {
     fun beforeEach(wmRuntimeInfo: WireMockRuntimeInfo) {
         client =
             TerminalOkHttpClient.builder()
+                .baseUrl(wmRuntimeInfo.httpBaseUrl)
                 .bearerToken("My Bearer Token")
-                .baseUrl(wmRuntimeInfo.getHttpBaseUrl())
                 .build()
     }
 
     @Test
-    fun productsListWithAdditionalParams() {
-        val additionalHeaders = mutableMapOf<String, List<String>>()
+    fun list() {
+        val productService = client.product()
+        stubFor(get(anyUrl()).willReturn(ok("{}")))
 
-        additionalHeaders.put("x-test-header", listOf("abc1234"))
-
-        val additionalQueryParams = mutableMapOf<String, List<String>>()
-
-        additionalQueryParams.put("test_query_param", listOf("def567"))
-
-        val params =
+        productService.list(
             ProductListParams.builder()
-                .additionalHeaders(additionalHeaders)
-                .additionalQueryParams(additionalQueryParams)
+                .putAdditionalHeader("Secret-Header", "42")
+                .putAdditionalQueryParam("secret_query_param", "42")
                 .build()
-
-        val apiResponse =
-            ProductListResponse.builder()
-                .addData(
-                    Product.builder()
-                        .id("prd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                        .description(
-                            "The interpolation of Caturra and Castillo varietals from Las Cochitas creates this refreshing citrusy and complex coffee."
-                        )
-                        .addFilter(Product.Filter.EU)
-                        .name("[object Object]")
-                        .addVariant(
-                            ProductVariant.builder()
-                                .id("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                                .name("12oz")
-                                .price(2200L)
-                                .build()
-                        )
-                        .order(100L)
-                        .subscription(Product.Subscription.ALLOWED)
-                        .tags(
-                            Product.Tags.builder()
-                                .putAdditionalProperty("featured", JsonValue.from("true"))
-                                .build()
-                        )
-                        .build()
-                )
-                .build()
-
-        stubFor(
-            get(anyUrl())
-                .withHeader("x-test-header", equalTo("abc1234"))
-                .withQueryParam("test_query_param", equalTo("def567"))
-                .willReturn(ok(JSON_MAPPER.writeValueAsString(apiResponse)))
         )
 
-        client.product().list(params)
-
-        verify(getRequestedFor(anyUrl()))
+        verify(
+            getRequestedFor(anyUrl())
+                .withHeader("Secret-Header", equalTo("42"))
+                .withQueryParam("secret_query_param", equalTo("42"))
+        )
     }
 
     @Test
