@@ -31,7 +31,7 @@ interface OrderService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): OrderListResponse
 
-    /** List the orders associated with the current user. */
+    /** @see [list] */
     fun list(requestOptions: RequestOptions): OrderListResponse =
         list(OrderListParams.none(), requestOptions)
 
@@ -64,10 +64,7 @@ interface OrderService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<OrderListResponse>
 
-        /**
-         * Returns a raw HTTP response for `get /order`, but is otherwise the same as
-         * [OrderService.list].
-         */
+        /** @see [list] */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<OrderListResponse> =
             list(OrderListParams.none(), requestOptions)

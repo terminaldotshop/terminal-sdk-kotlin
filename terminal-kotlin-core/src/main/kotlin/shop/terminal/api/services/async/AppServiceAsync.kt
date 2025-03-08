@@ -33,7 +33,7 @@ interface AppServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AppListResponse
 
-    /** List the current user's registered apps. */
+    /** @see [list] */
     suspend fun list(requestOptions: RequestOptions): AppListResponse =
         list(AppListParams.none(), requestOptions)
 
@@ -72,10 +72,7 @@ interface AppServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<AppListResponse>
 
-        /**
-         * Returns a raw HTTP response for `get /app`, but is otherwise the same as
-         * [AppServiceAsync.list].
-         */
+        /** @see [list] */
         @MustBeClosed
         suspend fun list(requestOptions: RequestOptions): HttpResponseFor<AppListResponse> =
             list(AppListParams.none(), requestOptions)

@@ -23,7 +23,7 @@ interface ProductService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ProductListResponse
 
-    /** List all products for sale in the Terminal shop. */
+    /** @see [list] */
     fun list(requestOptions: RequestOptions): ProductListResponse =
         list(ProductListParams.none(), requestOptions)
 
@@ -46,10 +46,7 @@ interface ProductService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ProductListResponse>
 
-        /**
-         * Returns a raw HTTP response for `get /product`, but is otherwise the same as
-         * [ProductService.list].
-         */
+        /** @see [list] */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<ProductListResponse> =
             list(ProductListParams.none(), requestOptions)
