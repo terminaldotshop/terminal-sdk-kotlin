@@ -27,7 +27,7 @@ interface SubscriptionServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionCreateResponse
 
-    /** Create a subscription for the current user. */
+    /** @see [create] */
     suspend fun create(requestOptions: RequestOptions): SubscriptionCreateResponse =
         create(SubscriptionCreateParams.none(), requestOptions)
 
@@ -37,7 +37,7 @@ interface SubscriptionServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionListResponse
 
-    /** List the subscriptions associated with the current user. */
+    /** @see [list] */
     suspend fun list(requestOptions: RequestOptions): SubscriptionListResponse =
         list(SubscriptionListParams.none(), requestOptions)
 
@@ -69,10 +69,7 @@ interface SubscriptionServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<SubscriptionCreateResponse>
 
-        /**
-         * Returns a raw HTTP response for `post /subscription`, but is otherwise the same as
-         * [SubscriptionServiceAsync.create].
-         */
+        /** @see [create] */
         @MustBeClosed
         suspend fun create(
             requestOptions: RequestOptions
@@ -89,10 +86,7 @@ interface SubscriptionServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<SubscriptionListResponse>
 
-        /**
-         * Returns a raw HTTP response for `get /subscription`, but is otherwise the same as
-         * [SubscriptionServiceAsync.list].
-         */
+        /** @see [list] */
         @MustBeClosed
         suspend fun list(
             requestOptions: RequestOptions

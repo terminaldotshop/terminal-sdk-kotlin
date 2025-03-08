@@ -23,7 +23,7 @@ interface ProductServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ProductListResponse
 
-    /** List all products for sale in the Terminal shop. */
+    /** @see [list] */
     suspend fun list(requestOptions: RequestOptions): ProductListResponse =
         list(ProductListParams.none(), requestOptions)
 
@@ -48,10 +48,7 @@ interface ProductServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ProductListResponse>
 
-        /**
-         * Returns a raw HTTP response for `get /product`, but is otherwise the same as
-         * [ProductServiceAsync.list].
-         */
+        /** @see [list] */
         @MustBeClosed
         suspend fun list(requestOptions: RequestOptions): HttpResponseFor<ProductListResponse> =
             list(ProductListParams.none(), requestOptions)

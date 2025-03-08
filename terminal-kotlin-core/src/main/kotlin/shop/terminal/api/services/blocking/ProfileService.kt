@@ -29,7 +29,7 @@ interface ProfileService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ProfileMeResponse
 
-    /** Get the current user's profile. */
+    /** @see [me] */
     fun me(requestOptions: RequestOptions): ProfileMeResponse =
         me(ProfileMeParams.none(), requestOptions)
 
@@ -56,10 +56,7 @@ interface ProfileService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ProfileMeResponse>
 
-        /**
-         * Returns a raw HTTP response for `get /profile`, but is otherwise the same as
-         * [ProfileService.me].
-         */
+        /** @see [me] */
         @MustBeClosed
         fun me(requestOptions: RequestOptions): HttpResponseFor<ProfileMeResponse> =
             me(ProfileMeParams.none(), requestOptions)

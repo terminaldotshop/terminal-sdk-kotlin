@@ -33,7 +33,7 @@ interface AppService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AppListResponse
 
-    /** List the current user's registered apps. */
+    /** @see [list] */
     fun list(requestOptions: RequestOptions): AppListResponse =
         list(AppListParams.none(), requestOptions)
 
@@ -72,10 +72,7 @@ interface AppService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<AppListResponse>
 
-        /**
-         * Returns a raw HTTP response for `get /app`, but is otherwise the same as
-         * [AppService.list].
-         */
+        /** @see [list] */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<AppListResponse> =
             list(AppListParams.none(), requestOptions)

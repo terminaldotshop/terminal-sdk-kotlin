@@ -33,7 +33,7 @@ interface AddressServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AddressListResponse
 
-    /** Get the shipping addresses associated with the current user. */
+    /** @see [list] */
     suspend fun list(requestOptions: RequestOptions): AddressListResponse =
         list(AddressListParams.none(), requestOptions)
 
@@ -74,10 +74,7 @@ interface AddressServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<AddressListResponse>
 
-        /**
-         * Returns a raw HTTP response for `get /address`, but is otherwise the same as
-         * [AddressServiceAsync.list].
-         */
+        /** @see [list] */
         @MustBeClosed
         suspend fun list(requestOptions: RequestOptions): HttpResponseFor<AddressListResponse> =
             list(AddressListParams.none(), requestOptions)
