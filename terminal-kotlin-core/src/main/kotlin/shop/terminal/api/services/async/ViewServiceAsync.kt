@@ -24,10 +24,7 @@ interface ViewServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ViewInitResponse
 
-    /**
-     * Get initial app data, including user, products, cart, addresses, cards, subscriptions, and
-     * orders.
-     */
+    /** @see [init] */
     suspend fun init(requestOptions: RequestOptions): ViewInitResponse =
         init(ViewInitParams.none(), requestOptions)
 
@@ -44,10 +41,7 @@ interface ViewServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ViewInitResponse>
 
-        /**
-         * Returns a raw HTTP response for `get /view/init`, but is otherwise the same as
-         * [ViewServiceAsync.init].
-         */
+        /** @see [init] */
         @MustBeClosed
         suspend fun init(requestOptions: RequestOptions): HttpResponseFor<ViewInitResponse> =
             init(ViewInitParams.none(), requestOptions)

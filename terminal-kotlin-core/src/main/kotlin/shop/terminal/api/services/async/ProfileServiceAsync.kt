@@ -29,7 +29,7 @@ interface ProfileServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ProfileMeResponse
 
-    /** Get the current user's profile. */
+    /** @see [me] */
     suspend fun me(requestOptions: RequestOptions): ProfileMeResponse =
         me(ProfileMeParams.none(), requestOptions)
 
@@ -58,10 +58,7 @@ interface ProfileServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ProfileMeResponse>
 
-        /**
-         * Returns a raw HTTP response for `get /profile`, but is otherwise the same as
-         * [ProfileServiceAsync.me].
-         */
+        /** @see [me] */
         @MustBeClosed
         suspend fun me(requestOptions: RequestOptions): HttpResponseFor<ProfileMeResponse> =
             me(ProfileMeParams.none(), requestOptions)

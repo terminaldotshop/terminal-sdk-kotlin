@@ -35,7 +35,7 @@ interface CardServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CardListResponse
 
-    /** List the credit cards associated with the current user. */
+    /** @see [list] */
     suspend fun list(requestOptions: RequestOptions): CardListResponse =
         list(CardListParams.none(), requestOptions)
 
@@ -51,7 +51,7 @@ interface CardServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CardCollectResponse
 
-    /** Create a temporary URL for collecting credit card information for the current user. */
+    /** @see [collect] */
     suspend fun collect(requestOptions: RequestOptions): CardCollectResponse =
         collect(CardCollectParams.none(), requestOptions)
 
@@ -84,10 +84,7 @@ interface CardServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CardListResponse>
 
-        /**
-         * Returns a raw HTTP response for `get /card`, but is otherwise the same as
-         * [CardServiceAsync.list].
-         */
+        /** @see [list] */
         @MustBeClosed
         suspend fun list(requestOptions: RequestOptions): HttpResponseFor<CardListResponse> =
             list(CardListParams.none(), requestOptions)
@@ -112,10 +109,7 @@ interface CardServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CardCollectResponse>
 
-        /**
-         * Returns a raw HTTP response for `post /card/collect`, but is otherwise the same as
-         * [CardServiceAsync.collect].
-         */
+        /** @see [collect] */
         @MustBeClosed
         suspend fun collect(requestOptions: RequestOptions): HttpResponseFor<CardCollectResponse> =
             collect(CardCollectParams.none(), requestOptions)

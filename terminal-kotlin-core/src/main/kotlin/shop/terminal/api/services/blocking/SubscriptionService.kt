@@ -27,7 +27,7 @@ interface SubscriptionService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionCreateResponse
 
-    /** Create a subscription for the current user. */
+    /** @see [create] */
     fun create(requestOptions: RequestOptions): SubscriptionCreateResponse =
         create(SubscriptionCreateParams.none(), requestOptions)
 
@@ -37,7 +37,7 @@ interface SubscriptionService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionListResponse
 
-    /** List the subscriptions associated with the current user. */
+    /** @see [list] */
     fun list(requestOptions: RequestOptions): SubscriptionListResponse =
         list(SubscriptionListParams.none(), requestOptions)
 
@@ -68,10 +68,7 @@ interface SubscriptionService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<SubscriptionCreateResponse>
 
-        /**
-         * Returns a raw HTTP response for `post /subscription`, but is otherwise the same as
-         * [SubscriptionService.create].
-         */
+        /** @see [create] */
         @MustBeClosed
         fun create(requestOptions: RequestOptions): HttpResponseFor<SubscriptionCreateResponse> =
             create(SubscriptionCreateParams.none(), requestOptions)
@@ -86,10 +83,7 @@ interface SubscriptionService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<SubscriptionListResponse>
 
-        /**
-         * Returns a raw HTTP response for `get /subscription`, but is otherwise the same as
-         * [SubscriptionService.list].
-         */
+        /** @see [list] */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<SubscriptionListResponse> =
             list(SubscriptionListParams.none(), requestOptions)
