@@ -29,7 +29,7 @@ interface CartService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CartConvertResponse
 
-    /** Convert the current user's cart to an order. */
+    /** @see [convert] */
     fun convert(requestOptions: RequestOptions): CartConvertResponse =
         convert(CartConvertParams.none(), requestOptions)
 
@@ -39,7 +39,7 @@ interface CartService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CartGetResponse
 
-    /** Get the current user's cart. */
+    /** @see [get] */
     fun get(requestOptions: RequestOptions): CartGetResponse =
         get(CartGetParams.none(), requestOptions)
 
@@ -74,10 +74,7 @@ interface CartService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CartConvertResponse>
 
-        /**
-         * Returns a raw HTTP response for `post /cart/convert`, but is otherwise the same as
-         * [CartService.convert].
-         */
+        /** @see [convert] */
         @MustBeClosed
         fun convert(requestOptions: RequestOptions): HttpResponseFor<CartConvertResponse> =
             convert(CartConvertParams.none(), requestOptions)
@@ -92,10 +89,7 @@ interface CartService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CartGetResponse>
 
-        /**
-         * Returns a raw HTTP response for `get /cart`, but is otherwise the same as
-         * [CartService.get].
-         */
+        /** @see [get] */
         @MustBeClosed
         fun get(requestOptions: RequestOptions): HttpResponseFor<CartGetResponse> =
             get(CartGetParams.none(), requestOptions)

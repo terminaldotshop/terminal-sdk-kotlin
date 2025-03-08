@@ -27,7 +27,7 @@ interface TokenService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): TokenCreateResponse
 
-    /** Create a personal access token. */
+    /** @see [create] */
     fun create(requestOptions: RequestOptions): TokenCreateResponse =
         create(TokenCreateParams.none(), requestOptions)
 
@@ -37,7 +37,7 @@ interface TokenService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): TokenListResponse
 
-    /** List the current user's personal access tokens. */
+    /** @see [list] */
     fun list(requestOptions: RequestOptions): TokenListResponse =
         list(TokenListParams.none(), requestOptions)
 
@@ -66,10 +66,7 @@ interface TokenService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<TokenCreateResponse>
 
-        /**
-         * Returns a raw HTTP response for `post /token`, but is otherwise the same as
-         * [TokenService.create].
-         */
+        /** @see [create] */
         @MustBeClosed
         fun create(requestOptions: RequestOptions): HttpResponseFor<TokenCreateResponse> =
             create(TokenCreateParams.none(), requestOptions)
@@ -84,10 +81,7 @@ interface TokenService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<TokenListResponse>
 
-        /**
-         * Returns a raw HTTP response for `get /token`, but is otherwise the same as
-         * [TokenService.list].
-         */
+        /** @see [list] */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<TokenListResponse> =
             list(TokenListParams.none(), requestOptions)

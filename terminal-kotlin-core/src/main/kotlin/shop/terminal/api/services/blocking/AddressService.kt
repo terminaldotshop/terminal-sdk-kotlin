@@ -33,7 +33,7 @@ interface AddressService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AddressListResponse
 
-    /** Get the shipping addresses associated with the current user. */
+    /** @see [list] */
     fun list(requestOptions: RequestOptions): AddressListResponse =
         list(AddressListParams.none(), requestOptions)
 
@@ -72,10 +72,7 @@ interface AddressService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<AddressListResponse>
 
-        /**
-         * Returns a raw HTTP response for `get /address`, but is otherwise the same as
-         * [AddressService.list].
-         */
+        /** @see [list] */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<AddressListResponse> =
             list(AddressListParams.none(), requestOptions)
