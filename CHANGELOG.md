@@ -1,5 +1,73 @@
 # Changelog
 
+## 1.0.0 (2025-03-10)
+
+Full Changelog: [v0.1.0-alpha.7...v1.0.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v0.1.0-alpha.7...v1.0.0)
+
+### ⚠ BREAKING CHANGES
+
+* **client:** refactor multipart formdata impl ([#93](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/93))
+
+### Features
+
+* **api:** manual updates ([#66](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/66)) ([7183993](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/71839934cc4426ee1a9d4fd349d011ffb610f6d2))
+* **api:** manual updates ([#80](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/80)) ([f3449f2](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/f3449f2e27d97f8e11c779d9460f73c24e40077e))
+* **api:** manual updates ([#83](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/83)) ([19e0a12](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/19e0a122c5ddba31a33097968cd82f6f630bdd4b))
+* **api:** manual updates ([#88](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/88)) ([b4c9ac5](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/b4c9ac537abb6961ca00d8b97489f585ee1970e6))
+* **api:** manual updates ([#89](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/89)) ([651a89c](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/651a89ce271c613e8923b9431ef814b73b4c1cf2))
+* **api:** manual updates ([#98](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/98)) ([cef7902](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/cef790262610535f3a73d70578e767a09948f83d))
+* **client:** allow omitting params object when none required ([#81](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/81)) ([ad3463f](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/ad3463f54350daab6aec152b76f59306b9f2d5e2))
+* **client:** detect binary incompatible jackson versions ([#97](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/97)) ([397a2a4](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/397a2a4f859e5a9a7a39ce4050f1a164054d481e))
+* **client:** support `JsonField#asX()` for known values ([#71](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/71)) ([b0251b5](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/b0251b52a2f0b69a2db96cf3e27d1b345aa68118))
+* **client:** support raw response access ([#92](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/92)) ([8151f46](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/8151f46ed85709e628bee7322ba0c2af09fef34e))
+* **client:** update enum `asX` methods ([#70](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/70)) ([99b5884](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/99b5884a33e3bc0018b5f8c6eec5586696851d56))
+* generate and publish docs ([#101](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/101)) ([399ccf9](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/399ccf929ed5b0e63f9ce3ea0ac5ed19aadfd500))
+
+
+### Bug Fixes
+
+* **client:** mark some request bodies as optional ([#77](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/77)) ([6c247f7](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/6c247f7b533883a627a8eba5e23f326373c63158))
+* conflict ([1484d67](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/1484d672e7a7b8e880a2dc95641be4b6f616812e))
+
+
+### Chores
+
+* **client:** refactor multipart formdata impl ([#93](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/93)) ([f8b27ac](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/f8b27ac0b05f40d3dd7d622f1e5eedaf79f38919))
+* **client:** remove checked exception related code ([#75](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/75)) ([1633c51](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/1633c51068e6e650cdca527e16b7145df7b89b89))
+* **client:** use deep identity methods for primitive array types ([#85](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/85)) ([2548c5b](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/2548c5b8a79a0814b917309513957729b71ffd89))
+* **docs:** add faq to readme ([#76](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/76)) ([2dbe14b](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/2dbe14be2cc2e71ce536136ce0d0b456a361c0c5))
+* **docs:** reorganize readme ([#72](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/72)) ([2047f7d](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/2047f7d40464bb96dd47be0e629bce871427150f))
+* **internal:** add `.kotlin` to `.gitignore` ([#102](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/102)) ([4088b38](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/4088b38f6c154b0328264e275ea7f362ffee1499))
+* **internal:** add async service tests ([#84](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/84)) ([55760a5](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/55760a519d461b6510d124ff7801ebdb8178104c))
+* **internal:** codegen related update ([#103](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/103)) ([3dd86bb](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/3dd86bb5ca552e8075ba91027702b14ada6cf58a))
+* **internal:** codegen related update ([#73](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/73)) ([a16c2ac](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/a16c2ac5827b321dfb007ca99a9384e20f6e47ee))
+* **internal:** codegen related update ([#74](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/74)) ([d7d6622](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/d7d66220f3c6aa7956e5f1fdcb59050980118293))
+* **internal:** codegen related update ([#91](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/91)) ([f3ddfc2](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/f3ddfc28fa35fb0f5b34aa37b56d96b49373eda6))
+* **internal:** codegen related update ([#96](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/96)) ([33d6603](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/33d6603be6e04442db309ae4558786c82654dec7))
+* **internal:** improve sync service tests ([55760a5](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/55760a519d461b6510d124ff7801ebdb8178104c))
+* **internal:** make body class constructors private ([a71e847](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/a71e8475b6bb47eb4cab783755515a1c53854f6a))
+* **internal:** make body classes for multipart requests ([a71e847](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/a71e8475b6bb47eb4cab783755515a1c53854f6a))
+* **internal:** misc formatting changes ([a71e847](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/a71e8475b6bb47eb4cab783755515a1c53854f6a))
+* **internal:** optimize build and test perf ([d95fd24](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/d95fd24c5f1a7cca489191892aa5e3d73fe88ac8))
+* **internal:** refactor `ErrorHandlingTest` ([#90](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/90)) ([9a56543](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/9a56543bdcbde45ef84968e10e5b2f1dd881c3ae))
+* **internal:** refactor `ServiceParamsTest` ([#86](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/86)) ([bb5527c](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/bb5527c4076621e22ef6755e4cd545b591c4ecad))
+* **internal:** remove unnecessary non-null asserts in tests ([6c247f7](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/6c247f7b533883a627a8eba5e23f326373c63158))
+* **internal:** rename internal body classes ([a71e847](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/a71e8475b6bb47eb4cab783755515a1c53854f6a))
+* **internal:** update formatter ([#68](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/68)) ([d95fd24](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/d95fd24c5f1a7cca489191892aa5e3d73fe88ac8))
+* **internal:** update some formatting in `Values.kt` ([b0251b5](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/b0251b52a2f0b69a2db96cf3e27d1b345aa68118))
+* **internal:** use `assertNotNull` in tests for type narrowing ([6c247f7](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/6c247f7b533883a627a8eba5e23f326373c63158))
+* **internal:** use better test example values ([#69](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/69)) ([a71e847](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/a71e8475b6bb47eb4cab783755515a1c53854f6a))
+
+
+### Documentation
+
+* add immutability explanation to readme ([#78](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/78)) ([b327323](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/b3273236c6c1488d823f6405741a70263a12f1ef))
+* add raw response readme documentation ([#94](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/94)) ([df8743e](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/df8743e38e4eb6f758beb60ebc9811c07c872b96))
+* add source file links to readme ([#79](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/79)) ([344dded](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/344ddedbb7a2cd76de2cb7edfeda55dcef8e37ed))
+* note required fields in `builder` javadoc ([#95](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/95)) ([e1ae0c2](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/e1ae0c279ccfc65adb8dd8eb7f5bd86b076f2a0d))
+* readme parameter tweaks ([55760a5](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/55760a519d461b6510d124ff7801ebdb8178104c))
+* update URLs from stainlessapi.com to stainless.com ([#87](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/87)) ([74a5c1a](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/74a5c1a9312c62b9bd1c39254fa15c6e57ff31f2))
+
 ## 0.1.0-alpha.7 (2025-02-16)
 
 Full Changelog: [v0.1.0-alpha.6...v0.1.0-alpha.7](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v0.1.0-alpha.6...v0.1.0-alpha.7)

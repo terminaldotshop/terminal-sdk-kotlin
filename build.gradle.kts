@@ -8,7 +8,7 @@ repositories {
 
 allprojects {
     group = "shop.terminal.api"
-    version = "0.1.0-alpha.7" // x-release-please-version
+    version = "1.0.0" // x-release-please-version
 }
 
 subprojects {
