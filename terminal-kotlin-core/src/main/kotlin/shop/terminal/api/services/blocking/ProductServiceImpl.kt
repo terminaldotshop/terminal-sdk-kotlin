@@ -14,10 +14,10 @@ import shop.terminal.api.core.http.HttpResponseFor
 import shop.terminal.api.core.http.parseable
 import shop.terminal.api.core.prepare
 import shop.terminal.api.errors.TerminalError
-import shop.terminal.api.models.ProductGetParams
-import shop.terminal.api.models.ProductGetResponse
-import shop.terminal.api.models.ProductListParams
-import shop.terminal.api.models.ProductListResponse
+import shop.terminal.api.models.product.ProductGetParams
+import shop.terminal.api.models.product.ProductGetResponse
+import shop.terminal.api.models.product.ProductListParams
+import shop.terminal.api.models.product.ProductListResponse
 
 class ProductServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     ProductService {

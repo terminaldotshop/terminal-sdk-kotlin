@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClientAsync
-import shop.terminal.api.models.EmailCreateParams
+import shop.terminal.api.models.email.EmailCreateParams
 
 @ExtendWith(TestServerExtension::class)
 class EmailServiceAsyncTest {

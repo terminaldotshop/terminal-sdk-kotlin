@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
-import shop.terminal.api.models.ProductGetParams
+import shop.terminal.api.models.product.ProductGetParams
 
 @ExtendWith(TestServerExtension::class)
 class ProductServiceTest {

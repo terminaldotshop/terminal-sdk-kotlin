@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
-import shop.terminal.api.models.CartSetAddressParams
-import shop.terminal.api.models.CartSetCardParams
-import shop.terminal.api.models.CartSetItemParams
+import shop.terminal.api.models.cart.CartSetAddressParams
+import shop.terminal.api.models.cart.CartSetCardParams
+import shop.terminal.api.models.cart.CartSetItemParams
 
 @ExtendWith(TestServerExtension::class)
 class CartServiceTest {

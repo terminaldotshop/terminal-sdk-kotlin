@@ -46,8 +46,8 @@ This library requires Java 8 or later.
 ```kotlin
 import shop.terminal.api.client.TerminalClient
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
-import shop.terminal.api.models.ProductListParams
-import shop.terminal.api.models.ProductListResponse
+import shop.terminal.api.models.product.ProductListParams
+import shop.terminal.api.models.product.ProductListResponse
 
 // Configures using the `TERMINAL_BEARER_TOKEN` environment variable
 val client: TerminalClient = TerminalOkHttpClient.fromEnv()
@@ -122,8 +122,8 @@ The default client is synchronous. To switch to asynchronous execution, call the
 ```kotlin
 import shop.terminal.api.client.TerminalClient
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
-import shop.terminal.api.models.ProductListParams
-import shop.terminal.api.models.ProductListResponse
+import shop.terminal.api.models.product.ProductListParams
+import shop.terminal.api.models.product.ProductListResponse
 
 // Configures using the `TERMINAL_BEARER_TOKEN` environment variable
 val client: TerminalClient = TerminalOkHttpClient.fromEnv()
@@ -136,8 +136,8 @@ Or create an asynchronous client from the beginning:
 ```kotlin
 import shop.terminal.api.client.TerminalClientAsync
 import shop.terminal.api.client.okhttp.TerminalOkHttpClientAsync
-import shop.terminal.api.models.ProductListParams
-import shop.terminal.api.models.ProductListResponse
+import shop.terminal.api.models.product.ProductListParams
+import shop.terminal.api.models.product.ProductListResponse
 
 // Configures using the `TERMINAL_BEARER_TOKEN` environment variable
 val client: TerminalClientAsync = TerminalOkHttpClientAsync.fromEnv()
@@ -156,8 +156,8 @@ To access this data, prefix any HTTP method call on a client or service with `wi
 ```kotlin
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.HttpResponseFor
-import shop.terminal.api.models.ProductListParams
-import shop.terminal.api.models.ProductListResponse
+import shop.terminal.api.models.product.ProductListParams
+import shop.terminal.api.models.product.ProductListResponse
 
 val product: HttpResponseFor<ProductListResponse> = client.product().withRawResponse().list()
 
@@ -168,7 +168,7 @@ val headers: Headers = product.headers()
 You can still deserialize the response into an instance of a Kotlin class if needed:
 
 ```kotlin
-import shop.terminal.api.models.ProductListResponse
+import shop.terminal.api.models.product.ProductListResponse
 
 val parsedProduct: ProductListResponse = product.parse()
 ```
@@ -247,8 +247,8 @@ Requests time out after 1 minute by default.
 To set a custom timeout, configure the method call using the `timeout` method:
 
 ```kotlin
-import shop.terminal.api.models.ProductListParams
-import shop.terminal.api.models.ProductListResponse
+import shop.terminal.api.models.product.ProductListParams
+import shop.terminal.api.models.product.ProductListResponse
 
 val product: ProductListResponse = client.product().list(RequestOptions.builder().timeout(Duration.ofSeconds(30)).build())
 ```
@@ -310,7 +310,7 @@ To set undocumented parameters, call the `putAdditionalHeader`, `putAdditionalQu
 
 ```kotlin
 import shop.terminal.api.core.JsonValue
-import shop.terminal.api.models.ProductListParams
+import shop.terminal.api.models.product.ProductListParams
 
 val params: ProductListParams = ProductListParams.builder()
     .putAdditionalHeader("Secret-Header", "42")
@@ -324,7 +324,7 @@ These can be accessed on the built object later using the `_additionalHeaders()`
 To set a documented parameter or property to an undocumented or not yet supported _value_, pass a [`JsonValue`](terminal-kotlin-core/src/main/kotlin/shop/terminal/api/core/Values.kt) object to its setter:
 
 ```kotlin
-import shop.terminal.api.models.ProductListParams
+import shop.terminal.api.models.product.ProductListParams
 
 val params: ProductListParams = ProductListParams.builder().build()
 ```
@@ -416,7 +416,7 @@ By default, the SDK will not throw an exception in this case. It will throw [`Te
 If you would prefer to check that the response is completely well-typed upfront, then either call `validate()`:
 
 ```kotlin
-import shop.terminal.api.models.ProductListResponse
+import shop.terminal.api.models.product.ProductListResponse
 
 val product: ProductListResponse = client.product().list(params).validate()
 ```
@@ -424,8 +424,8 @@ val product: ProductListResponse = client.product().list(params).validate()
 Or configure the method call to validate the response using the `responseValidation` method:
 
 ```kotlin
-import shop.terminal.api.models.ProductListParams
-import shop.terminal.api.models.ProductListResponse
+import shop.terminal.api.models.product.ProductListParams
+import shop.terminal.api.models.product.ProductListResponse
 
 val product: ProductListResponse = client.product().list(RequestOptions.builder().responseValidation(true).build())
 ```

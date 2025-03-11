@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClientAsync
-import shop.terminal.api.models.TokenDeleteParams
-import shop.terminal.api.models.TokenGetParams
+import shop.terminal.api.models.token.TokenDeleteParams
+import shop.terminal.api.models.token.TokenGetParams
 
 @ExtendWith(TestServerExtension::class)
 class TokenServiceAsyncTest {

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
-import shop.terminal.api.models.ProfileUpdateParams
+import shop.terminal.api.models.profile.ProfileUpdateParams
 
 @ExtendWith(TestServerExtension::class)
 class ProfileServiceTest {

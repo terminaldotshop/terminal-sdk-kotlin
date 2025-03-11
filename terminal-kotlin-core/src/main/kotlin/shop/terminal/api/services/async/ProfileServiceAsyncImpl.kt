@@ -15,10 +15,10 @@ import shop.terminal.api.core.http.json
 import shop.terminal.api.core.http.parseable
 import shop.terminal.api.core.prepareAsync
 import shop.terminal.api.errors.TerminalError
-import shop.terminal.api.models.ProfileMeParams
-import shop.terminal.api.models.ProfileMeResponse
-import shop.terminal.api.models.ProfileUpdateParams
-import shop.terminal.api.models.ProfileUpdateResponse
+import shop.terminal.api.models.profile.ProfileMeParams
+import shop.terminal.api.models.profile.ProfileMeResponse
+import shop.terminal.api.models.profile.ProfileUpdateParams
+import shop.terminal.api.models.profile.ProfileUpdateResponse
 
 class ProfileServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     ProfileServiceAsync {

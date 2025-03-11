@@ -15,12 +15,12 @@ import shop.terminal.api.core.http.json
 import shop.terminal.api.core.http.parseable
 import shop.terminal.api.core.prepareAsync
 import shop.terminal.api.errors.TerminalError
-import shop.terminal.api.models.OrderCreateParams
-import shop.terminal.api.models.OrderCreateResponse
-import shop.terminal.api.models.OrderGetParams
-import shop.terminal.api.models.OrderGetResponse
-import shop.terminal.api.models.OrderListParams
-import shop.terminal.api.models.OrderListResponse
+import shop.terminal.api.models.order.OrderCreateParams
+import shop.terminal.api.models.order.OrderCreateResponse
+import shop.terminal.api.models.order.OrderGetParams
+import shop.terminal.api.models.order.OrderGetResponse
+import shop.terminal.api.models.order.OrderListParams
+import shop.terminal.api.models.order.OrderListResponse
 
 class OrderServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     OrderServiceAsync {

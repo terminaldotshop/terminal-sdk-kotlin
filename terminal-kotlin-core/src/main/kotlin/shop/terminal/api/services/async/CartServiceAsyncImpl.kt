@@ -15,16 +15,16 @@ import shop.terminal.api.core.http.json
 import shop.terminal.api.core.http.parseable
 import shop.terminal.api.core.prepareAsync
 import shop.terminal.api.errors.TerminalError
-import shop.terminal.api.models.CartConvertParams
-import shop.terminal.api.models.CartConvertResponse
-import shop.terminal.api.models.CartGetParams
-import shop.terminal.api.models.CartGetResponse
-import shop.terminal.api.models.CartSetAddressParams
-import shop.terminal.api.models.CartSetAddressResponse
-import shop.terminal.api.models.CartSetCardParams
-import shop.terminal.api.models.CartSetCardResponse
-import shop.terminal.api.models.CartSetItemParams
-import shop.terminal.api.models.CartSetItemResponse
+import shop.terminal.api.models.cart.CartConvertParams
+import shop.terminal.api.models.cart.CartConvertResponse
+import shop.terminal.api.models.cart.CartGetParams
+import shop.terminal.api.models.cart.CartGetResponse
+import shop.terminal.api.models.cart.CartSetAddressParams
+import shop.terminal.api.models.cart.CartSetAddressResponse
+import shop.terminal.api.models.cart.CartSetCardParams
+import shop.terminal.api.models.cart.CartSetCardResponse
+import shop.terminal.api.models.cart.CartSetItemParams
+import shop.terminal.api.models.cart.CartSetItemResponse
 
 class CartServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     CartServiceAsync {

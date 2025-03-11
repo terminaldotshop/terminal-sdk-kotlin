@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClientAsync
-import shop.terminal.api.models.AddressCreateParams
-import shop.terminal.api.models.AddressDeleteParams
-import shop.terminal.api.models.AddressGetParams
+import shop.terminal.api.models.address.AddressCreateParams
+import shop.terminal.api.models.address.AddressDeleteParams
+import shop.terminal.api.models.address.AddressGetParams
 
 @ExtendWith(TestServerExtension::class)
 class AddressServiceAsyncTest {
