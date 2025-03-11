@@ -13,22 +13,23 @@ import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.Params
+import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
-/** Convert the current user's cart to an order. */
-class CartConvertParams
+/** Apply a gift card to the current user's cart. */
+class CartRedeemGiftCardParams
 private constructor(
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun recipientEmail(): String? = body.recipientEmail()
+    fun giftCardId(): String = body.giftCardId()
 
-    fun _recipientEmail(): JsonField<String> = body._recipientEmail()
+    fun _giftCardId(): JsonField<String> = body._giftCardId()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -46,18 +47,18 @@ private constructor(
     class Body
     @JsonCreator
     private constructor(
-        @JsonProperty("recipientEmail")
+        @JsonProperty("giftCardID")
         @ExcludeMissing
-        private val recipientEmail: JsonField<String> = JsonMissing.of(),
+        private val giftCardId: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        fun recipientEmail(): String? = recipientEmail.getNullable("recipientEmail")
+        fun giftCardId(): String = giftCardId.getRequired("giftCardID")
 
-        @JsonProperty("recipientEmail")
+        @JsonProperty("giftCardID")
         @ExcludeMissing
-        fun _recipientEmail(): JsonField<String> = recipientEmail
+        fun _giftCardId(): JsonField<String> = giftCardId
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -70,7 +71,7 @@ private constructor(
                 return@apply
             }
 
-            recipientEmail()
+            giftCardId()
             validated = true
         }
 
@@ -78,27 +79,31 @@ private constructor(
 
         companion object {
 
-            /** Returns a mutable builder for constructing an instance of [Body]. */
+            /**
+             * Returns a mutable builder for constructing an instance of [Body].
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .giftCardId()
+             * ```
+             */
             fun builder() = Builder()
         }
 
         /** A builder for [Body]. */
         class Builder internal constructor() {
 
-            private var recipientEmail: JsonField<String> = JsonMissing.of()
+            private var giftCardId: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(body: Body) = apply {
-                recipientEmail = body.recipientEmail
+                giftCardId = body.giftCardId
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
-            fun recipientEmail(recipientEmail: String) =
-                recipientEmail(JsonField.of(recipientEmail))
+            fun giftCardId(giftCardId: String) = giftCardId(JsonField.of(giftCardId))
 
-            fun recipientEmail(recipientEmail: JsonField<String>) = apply {
-                this.recipientEmail = recipientEmail
-            }
+            fun giftCardId(giftCardId: JsonField<String>) = apply { this.giftCardId = giftCardId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -119,7 +124,8 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
-            fun build(): Body = Body(recipientEmail, additionalProperties.toImmutable())
+            fun build(): Body =
+                Body(checkRequired("giftCardId", giftCardId), additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
@@ -127,30 +133,35 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && recipientEmail == other.recipientEmail && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && giftCardId == other.giftCardId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(recipientEmail, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(giftCardId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{recipientEmail=$recipientEmail, additionalProperties=$additionalProperties}"
+            "Body{giftCardId=$giftCardId, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
-        fun none(): CartConvertParams = builder().build()
-
-        /** Returns a mutable builder for constructing an instance of [CartConvertParams]. */
+        /**
+         * Returns a mutable builder for constructing an instance of [CartRedeemGiftCardParams].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .giftCardId()
+         * ```
+         */
         fun builder() = Builder()
     }
 
-    /** A builder for [CartConvertParams]. */
+    /** A builder for [CartRedeemGiftCardParams]. */
     @NoAutoDetect
     class Builder internal constructor() {
 
@@ -158,17 +169,15 @@ private constructor(
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
-        internal fun from(cartConvertParams: CartConvertParams) = apply {
-            body = cartConvertParams.body.toBuilder()
-            additionalHeaders = cartConvertParams.additionalHeaders.toBuilder()
-            additionalQueryParams = cartConvertParams.additionalQueryParams.toBuilder()
+        internal fun from(cartRedeemGiftCardParams: CartRedeemGiftCardParams) = apply {
+            body = cartRedeemGiftCardParams.body.toBuilder()
+            additionalHeaders = cartRedeemGiftCardParams.additionalHeaders.toBuilder()
+            additionalQueryParams = cartRedeemGiftCardParams.additionalQueryParams.toBuilder()
         }
 
-        fun recipientEmail(recipientEmail: String) = apply { body.recipientEmail(recipientEmail) }
+        fun giftCardId(giftCardId: String) = apply { body.giftCardId(giftCardId) }
 
-        fun recipientEmail(recipientEmail: JsonField<String>) = apply {
-            body.recipientEmail(recipientEmail)
-        }
+        fun giftCardId(giftCardId: JsonField<String>) = apply { body.giftCardId(giftCardId) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -287,8 +296,8 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun build(): CartConvertParams =
-            CartConvertParams(
+        fun build(): CartRedeemGiftCardParams =
+            CartRedeemGiftCardParams(
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -300,11 +309,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CartConvertParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is CartRedeemGiftCardParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
     override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "CartConvertParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "CartRedeemGiftCardParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
