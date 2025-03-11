@@ -5,14 +5,14 @@ package shop.terminal.api.services.async
 import com.google.errorprone.annotations.MustBeClosed
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.http.HttpResponseFor
-import shop.terminal.api.models.AppCreateParams
-import shop.terminal.api.models.AppCreateResponse
-import shop.terminal.api.models.AppDeleteParams
-import shop.terminal.api.models.AppDeleteResponse
-import shop.terminal.api.models.AppGetParams
-import shop.terminal.api.models.AppGetResponse
-import shop.terminal.api.models.AppListParams
-import shop.terminal.api.models.AppListResponse
+import shop.terminal.api.models.app.AppCreateParams
+import shop.terminal.api.models.app.AppCreateResponse
+import shop.terminal.api.models.app.AppDeleteParams
+import shop.terminal.api.models.app.AppDeleteResponse
+import shop.terminal.api.models.app.AppGetParams
+import shop.terminal.api.models.app.AppGetResponse
+import shop.terminal.api.models.app.AppListParams
+import shop.terminal.api.models.app.AppListResponse
 
 interface AppServiceAsync {
 

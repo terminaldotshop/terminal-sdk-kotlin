@@ -5,14 +5,14 @@ package shop.terminal.api.services.async
 import com.google.errorprone.annotations.MustBeClosed
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.http.HttpResponseFor
-import shop.terminal.api.models.TokenCreateParams
-import shop.terminal.api.models.TokenCreateResponse
-import shop.terminal.api.models.TokenDeleteParams
-import shop.terminal.api.models.TokenDeleteResponse
-import shop.terminal.api.models.TokenGetParams
-import shop.terminal.api.models.TokenGetResponse
-import shop.terminal.api.models.TokenListParams
-import shop.terminal.api.models.TokenListResponse
+import shop.terminal.api.models.token.TokenCreateParams
+import shop.terminal.api.models.token.TokenCreateResponse
+import shop.terminal.api.models.token.TokenDeleteParams
+import shop.terminal.api.models.token.TokenDeleteResponse
+import shop.terminal.api.models.token.TokenGetParams
+import shop.terminal.api.models.token.TokenGetResponse
+import shop.terminal.api.models.token.TokenListParams
+import shop.terminal.api.models.token.TokenListResponse
 
 interface TokenServiceAsync {
 

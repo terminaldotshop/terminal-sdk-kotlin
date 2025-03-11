@@ -5,8 +5,8 @@ package shop.terminal.api.services.async
 import com.google.errorprone.annotations.MustBeClosed
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.http.HttpResponseFor
-import shop.terminal.api.models.ViewInitParams
-import shop.terminal.api.models.ViewInitResponse
+import shop.terminal.api.models.view.ViewInitParams
+import shop.terminal.api.models.view.ViewInitResponse
 
 interface ViewServiceAsync {
 

@@ -5,14 +5,14 @@ package shop.terminal.api.services.blocking
 import com.google.errorprone.annotations.MustBeClosed
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.http.HttpResponseFor
-import shop.terminal.api.models.SubscriptionCreateParams
-import shop.terminal.api.models.SubscriptionCreateResponse
-import shop.terminal.api.models.SubscriptionDeleteParams
-import shop.terminal.api.models.SubscriptionDeleteResponse
-import shop.terminal.api.models.SubscriptionGetParams
-import shop.terminal.api.models.SubscriptionGetResponse
-import shop.terminal.api.models.SubscriptionListParams
-import shop.terminal.api.models.SubscriptionListResponse
+import shop.terminal.api.models.subscription.SubscriptionCreateParams
+import shop.terminal.api.models.subscription.SubscriptionCreateResponse
+import shop.terminal.api.models.subscription.SubscriptionDeleteParams
+import shop.terminal.api.models.subscription.SubscriptionDeleteResponse
+import shop.terminal.api.models.subscription.SubscriptionGetParams
+import shop.terminal.api.models.subscription.SubscriptionGetResponse
+import shop.terminal.api.models.subscription.SubscriptionListParams
+import shop.terminal.api.models.subscription.SubscriptionListResponse
 
 interface SubscriptionService {
 

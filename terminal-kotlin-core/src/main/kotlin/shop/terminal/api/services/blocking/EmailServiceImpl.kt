@@ -15,8 +15,8 @@ import shop.terminal.api.core.http.json
 import shop.terminal.api.core.http.parseable
 import shop.terminal.api.core.prepare
 import shop.terminal.api.errors.TerminalError
-import shop.terminal.api.models.EmailCreateParams
-import shop.terminal.api.models.EmailCreateResponse
+import shop.terminal.api.models.email.EmailCreateParams
+import shop.terminal.api.models.email.EmailCreateResponse
 
 class EmailServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     EmailService {

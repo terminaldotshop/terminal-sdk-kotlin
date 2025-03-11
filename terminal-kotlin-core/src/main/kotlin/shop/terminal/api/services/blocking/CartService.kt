@@ -5,16 +5,16 @@ package shop.terminal.api.services.blocking
 import com.google.errorprone.annotations.MustBeClosed
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.http.HttpResponseFor
-import shop.terminal.api.models.CartConvertParams
-import shop.terminal.api.models.CartConvertResponse
-import shop.terminal.api.models.CartGetParams
-import shop.terminal.api.models.CartGetResponse
-import shop.terminal.api.models.CartSetAddressParams
-import shop.terminal.api.models.CartSetAddressResponse
-import shop.terminal.api.models.CartSetCardParams
-import shop.terminal.api.models.CartSetCardResponse
-import shop.terminal.api.models.CartSetItemParams
-import shop.terminal.api.models.CartSetItemResponse
+import shop.terminal.api.models.cart.CartConvertParams
+import shop.terminal.api.models.cart.CartConvertResponse
+import shop.terminal.api.models.cart.CartGetParams
+import shop.terminal.api.models.cart.CartGetResponse
+import shop.terminal.api.models.cart.CartSetAddressParams
+import shop.terminal.api.models.cart.CartSetAddressResponse
+import shop.terminal.api.models.cart.CartSetCardParams
+import shop.terminal.api.models.cart.CartSetCardResponse
+import shop.terminal.api.models.cart.CartSetItemParams
+import shop.terminal.api.models.cart.CartSetItemResponse
 
 interface CartService {
 

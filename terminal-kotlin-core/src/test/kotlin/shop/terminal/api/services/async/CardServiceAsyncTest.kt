@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClientAsync
-import shop.terminal.api.models.CardCreateParams
-import shop.terminal.api.models.CardDeleteParams
-import shop.terminal.api.models.CardGetParams
+import shop.terminal.api.models.card.CardCreateParams
+import shop.terminal.api.models.card.CardDeleteParams
+import shop.terminal.api.models.card.CardGetParams
 
 @ExtendWith(TestServerExtension::class)
 class CardServiceAsyncTest {

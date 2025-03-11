@@ -5,10 +5,10 @@ package shop.terminal.api.services.async
 import com.google.errorprone.annotations.MustBeClosed
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.http.HttpResponseFor
-import shop.terminal.api.models.ProfileMeParams
-import shop.terminal.api.models.ProfileMeResponse
-import shop.terminal.api.models.ProfileUpdateParams
-import shop.terminal.api.models.ProfileUpdateResponse
+import shop.terminal.api.models.profile.ProfileMeParams
+import shop.terminal.api.models.profile.ProfileMeResponse
+import shop.terminal.api.models.profile.ProfileUpdateParams
+import shop.terminal.api.models.profile.ProfileUpdateResponse
 
 interface ProfileServiceAsync {
 
