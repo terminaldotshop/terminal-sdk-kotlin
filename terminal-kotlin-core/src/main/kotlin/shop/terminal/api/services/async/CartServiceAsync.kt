@@ -9,6 +9,10 @@ import shop.terminal.api.models.cart.CartConvertParams
 import shop.terminal.api.models.cart.CartConvertResponse
 import shop.terminal.api.models.cart.CartGetParams
 import shop.terminal.api.models.cart.CartGetResponse
+import shop.terminal.api.models.cart.CartRedeemGiftCardParams
+import shop.terminal.api.models.cart.CartRedeemGiftCardResponse
+import shop.terminal.api.models.cart.CartRemoveGiftCardParams
+import shop.terminal.api.models.cart.CartRemoveGiftCardResponse
 import shop.terminal.api.models.cart.CartSetAddressParams
 import shop.terminal.api.models.cart.CartSetAddressResponse
 import shop.terminal.api.models.cart.CartSetCardParams
@@ -42,6 +46,22 @@ interface CartServiceAsync {
     /** @see [get] */
     suspend fun get(requestOptions: RequestOptions): CartGetResponse =
         get(CartGetParams.none(), requestOptions)
+
+    /** Apply a gift card to the current user's cart. */
+    suspend fun redeemGiftCard(
+        params: CartRedeemGiftCardParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CartRedeemGiftCardResponse
+
+    /** Remove the gift card from the current user's cart. */
+    suspend fun removeGiftCard(
+        params: CartRemoveGiftCardParams = CartRemoveGiftCardParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CartRemoveGiftCardResponse
+
+    /** @see [removeGiftCard] */
+    suspend fun removeGiftCard(requestOptions: RequestOptions): CartRemoveGiftCardResponse =
+        removeGiftCard(CartRemoveGiftCardParams.none(), requestOptions)
 
     /** Set the shipping address for the current user's cart. */
     suspend fun setAddress(
@@ -93,6 +113,33 @@ interface CartServiceAsync {
         @MustBeClosed
         suspend fun get(requestOptions: RequestOptions): HttpResponseFor<CartGetResponse> =
             get(CartGetParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `put /cart/gift-card`, but is otherwise the same as
+         * [CartServiceAsync.redeemGiftCard].
+         */
+        @MustBeClosed
+        suspend fun redeemGiftCard(
+            params: CartRedeemGiftCardParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CartRedeemGiftCardResponse>
+
+        /**
+         * Returns a raw HTTP response for `delete /cart/gift-card`, but is otherwise the same as
+         * [CartServiceAsync.removeGiftCard].
+         */
+        @MustBeClosed
+        suspend fun removeGiftCard(
+            params: CartRemoveGiftCardParams = CartRemoveGiftCardParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CartRemoveGiftCardResponse>
+
+        /** @see [removeGiftCard] */
+        @MustBeClosed
+        suspend fun removeGiftCard(
+            requestOptions: RequestOptions
+        ): HttpResponseFor<CartRemoveGiftCardResponse> =
+            removeGiftCard(CartRemoveGiftCardParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `put /cart/address`, but is otherwise the same as

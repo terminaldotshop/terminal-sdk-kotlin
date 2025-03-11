@@ -354,6 +354,9 @@ private constructor(
         @JsonProperty("market_na")
         @ExcludeMissing
         private val marketNa: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("type")
+        @ExcludeMissing
+        private val type: JsonField<String> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
@@ -368,6 +371,8 @@ private constructor(
 
         fun marketNa(): Boolean? = marketNa.getNullable("market_na")
 
+        fun type(): String? = type.getNullable("type")
+
         @JsonProperty("app") @ExcludeMissing fun _app(): JsonField<String> = app
 
         @JsonProperty("color") @ExcludeMissing fun _color(): JsonField<String> = color
@@ -377,6 +382,8 @@ private constructor(
         @JsonProperty("market_eu") @ExcludeMissing fun _marketEu(): JsonField<Boolean> = marketEu
 
         @JsonProperty("market_na") @ExcludeMissing fun _marketNa(): JsonField<Boolean> = marketNa
+
+        @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<String> = type
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -394,6 +401,7 @@ private constructor(
             featured()
             marketEu()
             marketNa()
+            type()
             validated = true
         }
 
@@ -413,6 +421,7 @@ private constructor(
             private var featured: JsonField<Boolean> = JsonMissing.of()
             private var marketEu: JsonField<Boolean> = JsonMissing.of()
             private var marketNa: JsonField<Boolean> = JsonMissing.of()
+            private var type: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(tags: Tags) = apply {
@@ -421,6 +430,7 @@ private constructor(
                 featured = tags.featured
                 marketEu = tags.marketEu
                 marketNa = tags.marketNa
+                type = tags.type
                 additionalProperties = tags.additionalProperties.toMutableMap()
             }
 
@@ -444,6 +454,10 @@ private constructor(
 
             fun marketNa(marketNa: JsonField<Boolean>) = apply { this.marketNa = marketNa }
 
+            fun type(type: String) = type(JsonField.of(type))
+
+            fun type(type: JsonField<String>) = apply { this.type = type }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -464,7 +478,15 @@ private constructor(
             }
 
             fun build(): Tags =
-                Tags(app, color, featured, marketEu, marketNa, additionalProperties.toImmutable())
+                Tags(
+                    app,
+                    color,
+                    featured,
+                    marketEu,
+                    marketNa,
+                    type,
+                    additionalProperties.toImmutable(),
+                )
         }
 
         override fun equals(other: Any?): Boolean {
@@ -472,17 +494,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Tags && app == other.app && color == other.color && featured == other.featured && marketEu == other.marketEu && marketNa == other.marketNa && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Tags && app == other.app && color == other.color && featured == other.featured && marketEu == other.marketEu && marketNa == other.marketNa && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(app, color, featured, marketEu, marketNa, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(app, color, featured, marketEu, marketNa, type, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Tags{app=$app, color=$color, featured=$featured, marketEu=$marketEu, marketNa=$marketNa, additionalProperties=$additionalProperties}"
+            "Tags{app=$app, color=$color, featured=$featured, marketEu=$marketEu, marketNa=$marketNa, type=$type, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
