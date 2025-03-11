@@ -5,12 +5,12 @@ package shop.terminal.api.services.blocking
 import com.google.errorprone.annotations.MustBeClosed
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.http.HttpResponseFor
-import shop.terminal.api.models.OrderCreateParams
-import shop.terminal.api.models.OrderCreateResponse
-import shop.terminal.api.models.OrderGetParams
-import shop.terminal.api.models.OrderGetResponse
-import shop.terminal.api.models.OrderListParams
-import shop.terminal.api.models.OrderListResponse
+import shop.terminal.api.models.order.OrderCreateParams
+import shop.terminal.api.models.order.OrderCreateResponse
+import shop.terminal.api.models.order.OrderGetParams
+import shop.terminal.api.models.order.OrderGetResponse
+import shop.terminal.api.models.order.OrderListParams
+import shop.terminal.api.models.order.OrderListResponse
 
 interface OrderService {
 

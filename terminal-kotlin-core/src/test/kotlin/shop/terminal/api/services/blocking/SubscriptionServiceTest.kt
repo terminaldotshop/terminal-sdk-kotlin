@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
-import shop.terminal.api.models.Subscription
-import shop.terminal.api.models.SubscriptionCreateParams
-import shop.terminal.api.models.SubscriptionDeleteParams
-import shop.terminal.api.models.SubscriptionGetParams
+import shop.terminal.api.models.subscription.Subscription
+import shop.terminal.api.models.subscription.SubscriptionCreateParams
+import shop.terminal.api.models.subscription.SubscriptionDeleteParams
+import shop.terminal.api.models.subscription.SubscriptionGetParams
 
 @ExtendWith(TestServerExtension::class)
 class SubscriptionServiceTest {

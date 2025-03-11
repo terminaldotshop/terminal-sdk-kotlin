@@ -15,14 +15,14 @@ import shop.terminal.api.core.http.json
 import shop.terminal.api.core.http.parseable
 import shop.terminal.api.core.prepare
 import shop.terminal.api.errors.TerminalError
-import shop.terminal.api.models.TokenCreateParams
-import shop.terminal.api.models.TokenCreateResponse
-import shop.terminal.api.models.TokenDeleteParams
-import shop.terminal.api.models.TokenDeleteResponse
-import shop.terminal.api.models.TokenGetParams
-import shop.terminal.api.models.TokenGetResponse
-import shop.terminal.api.models.TokenListParams
-import shop.terminal.api.models.TokenListResponse
+import shop.terminal.api.models.token.TokenCreateParams
+import shop.terminal.api.models.token.TokenCreateResponse
+import shop.terminal.api.models.token.TokenDeleteParams
+import shop.terminal.api.models.token.TokenDeleteResponse
+import shop.terminal.api.models.token.TokenGetParams
+import shop.terminal.api.models.token.TokenGetResponse
+import shop.terminal.api.models.token.TokenListParams
+import shop.terminal.api.models.token.TokenListResponse
 
 class TokenServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     TokenService {
