@@ -15,16 +15,16 @@ import shop.terminal.api.core.http.json
 import shop.terminal.api.core.http.parseable
 import shop.terminal.api.core.prepareAsync
 import shop.terminal.api.errors.TerminalError
-import shop.terminal.api.models.CardCollectParams
-import shop.terminal.api.models.CardCollectResponse
-import shop.terminal.api.models.CardCreateParams
-import shop.terminal.api.models.CardCreateResponse
-import shop.terminal.api.models.CardDeleteParams
-import shop.terminal.api.models.CardDeleteResponse
-import shop.terminal.api.models.CardGetParams
-import shop.terminal.api.models.CardGetResponse
-import shop.terminal.api.models.CardListParams
-import shop.terminal.api.models.CardListResponse
+import shop.terminal.api.models.card.CardCollectParams
+import shop.terminal.api.models.card.CardCollectResponse
+import shop.terminal.api.models.card.CardCreateParams
+import shop.terminal.api.models.card.CardCreateResponse
+import shop.terminal.api.models.card.CardDeleteParams
+import shop.terminal.api.models.card.CardDeleteResponse
+import shop.terminal.api.models.card.CardGetParams
+import shop.terminal.api.models.card.CardGetResponse
+import shop.terminal.api.models.card.CardListParams
+import shop.terminal.api.models.card.CardListResponse
 
 class CardServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     CardServiceAsync {

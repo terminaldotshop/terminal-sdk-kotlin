@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
-import shop.terminal.api.models.AppCreateParams
-import shop.terminal.api.models.AppDeleteParams
-import shop.terminal.api.models.AppGetParams
+import shop.terminal.api.models.app.AppCreateParams
+import shop.terminal.api.models.app.AppDeleteParams
+import shop.terminal.api.models.app.AppGetParams
 
 @ExtendWith(TestServerExtension::class)
 class AppServiceTest {

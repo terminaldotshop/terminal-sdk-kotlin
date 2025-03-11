@@ -5,10 +5,10 @@ package shop.terminal.api.services.blocking
 import com.google.errorprone.annotations.MustBeClosed
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.http.HttpResponseFor
-import shop.terminal.api.models.ProductGetParams
-import shop.terminal.api.models.ProductGetResponse
-import shop.terminal.api.models.ProductListParams
-import shop.terminal.api.models.ProductListResponse
+import shop.terminal.api.models.product.ProductGetParams
+import shop.terminal.api.models.product.ProductGetResponse
+import shop.terminal.api.models.product.ProductListParams
+import shop.terminal.api.models.product.ProductListResponse
 
 interface ProductService {
 

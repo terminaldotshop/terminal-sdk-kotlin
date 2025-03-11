@@ -14,8 +14,8 @@ import shop.terminal.api.core.http.HttpResponseFor
 import shop.terminal.api.core.http.parseable
 import shop.terminal.api.core.prepareAsync
 import shop.terminal.api.errors.TerminalError
-import shop.terminal.api.models.ViewInitParams
-import shop.terminal.api.models.ViewInitResponse
+import shop.terminal.api.models.view.ViewInitParams
+import shop.terminal.api.models.view.ViewInitResponse
 
 class ViewServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     ViewServiceAsync {

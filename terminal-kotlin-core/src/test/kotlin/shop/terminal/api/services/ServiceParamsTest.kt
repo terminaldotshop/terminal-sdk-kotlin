@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import shop.terminal.api.client.TerminalClient
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
-import shop.terminal.api.models.ProductListParams
+import shop.terminal.api.models.product.ProductListParams
 
 @WireMockTest
 internal class ServiceParamsTest {

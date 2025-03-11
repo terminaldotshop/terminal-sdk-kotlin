@@ -7,8 +7,8 @@ import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClientAsync
 import shop.terminal.api.core.JsonValue
-import shop.terminal.api.models.OrderCreateParams
-import shop.terminal.api.models.OrderGetParams
+import shop.terminal.api.models.order.OrderCreateParams
+import shop.terminal.api.models.order.OrderGetParams
 
 @ExtendWith(TestServerExtension::class)
 class OrderServiceAsyncTest {
