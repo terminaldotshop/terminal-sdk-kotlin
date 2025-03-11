@@ -6,29 +6,30 @@ import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CartConvertParamsTest {
+class CartRedeemGiftCardParamsTest {
 
     @Test
     fun create() {
-        CartConvertParams.builder().recipientEmail("dev@stainless.com").build()
+        CartRedeemGiftCardParams.builder().giftCardId("giftCardID").build()
     }
 
     @Test
     fun body() {
-        val params = CartConvertParams.builder().recipientEmail("dev@stainless.com").build()
+        val params = CartRedeemGiftCardParams.builder().giftCardId("giftCardID").build()
 
         val body = params._body()
 
         assertNotNull(body)
-        assertThat(body.recipientEmail()).isEqualTo("dev@stainless.com")
+        assertThat(body.giftCardId()).isEqualTo("giftCardID")
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = CartConvertParams.builder().build()
+        val params = CartRedeemGiftCardParams.builder().giftCardId("giftCardID").build()
 
         val body = params._body()
 
         assertNotNull(body)
+        assertThat(body.giftCardId()).isEqualTo("giftCardID")
     }
 }

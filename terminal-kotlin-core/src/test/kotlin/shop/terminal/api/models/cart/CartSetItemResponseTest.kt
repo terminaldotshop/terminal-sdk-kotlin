@@ -13,7 +13,14 @@ class CartSetItemResponseTest {
             CartSetItemResponse.builder()
                 .data(
                     Cart.builder()
-                        .amount(Cart.Amount.builder().subtotal(4400L).shipping(800L).build())
+                        .amount(
+                            Cart.Amount.builder()
+                                .subtotal(4400L)
+                                .giftCard(0L)
+                                .shipping(800L)
+                                .total(0L)
+                                .build()
+                        )
                         .addItem(
                             Cart.Item.builder()
                                 .id("itm_XXXXXXXXXXXXXXXXXXXXXXXXX")
@@ -25,6 +32,7 @@ class CartSetItemResponseTest {
                         .subtotal(4400L)
                         .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
                         .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .giftCardId("giftCardID")
                         .shipping(
                             Cart.Shipping.builder()
                                 .service("USPS Ground Advantage")
@@ -38,7 +46,14 @@ class CartSetItemResponseTest {
         assertThat(cartSetItemResponse.data())
             .isEqualTo(
                 Cart.builder()
-                    .amount(Cart.Amount.builder().subtotal(4400L).shipping(800L).build())
+                    .amount(
+                        Cart.Amount.builder()
+                            .subtotal(4400L)
+                            .giftCard(0L)
+                            .shipping(800L)
+                            .total(0L)
+                            .build()
+                    )
                     .addItem(
                         Cart.Item.builder()
                             .id("itm_XXXXXXXXXXXXXXXXXXXXXXXXX")
@@ -50,6 +65,7 @@ class CartSetItemResponseTest {
                     .subtotal(4400L)
                     .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
                     .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .giftCardId("giftCardID")
                     .shipping(
                         Cart.Shipping.builder()
                             .service("USPS Ground Advantage")

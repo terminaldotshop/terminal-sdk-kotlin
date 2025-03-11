@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
+import shop.terminal.api.models.cart.CartConvertParams
+import shop.terminal.api.models.cart.CartRedeemGiftCardParams
 import shop.terminal.api.models.cart.CartSetAddressParams
 import shop.terminal.api.models.cart.CartSetCardParams
 import shop.terminal.api.models.cart.CartSetItemParams
@@ -22,7 +24,10 @@ class CartServiceTest {
                 .build()
         val cartService = client.cart()
 
-        val response = cartService.convert()
+        val response =
+            cartService.convert(
+                CartConvertParams.builder().recipientEmail("dev@stainless.com").build()
+            )
 
         response.validate()
     }
@@ -39,6 +44,37 @@ class CartServiceTest {
         val cart = cartService.get()
 
         cart.validate()
+    }
+
+    @Test
+    fun redeemGiftCard() {
+        val client =
+            TerminalOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val cartService = client.cart()
+
+        val response =
+            cartService.redeemGiftCard(
+                CartRedeemGiftCardParams.builder().giftCardId("giftCardID").build()
+            )
+
+        response.validate()
+    }
+
+    @Test
+    fun removeGiftCard() {
+        val client =
+            TerminalOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val cartService = client.cart()
+
+        val response = cartService.removeGiftCard()
+
+        response.validate()
     }
 
     @Test
