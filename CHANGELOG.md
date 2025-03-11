@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.1.0 (2025-03-11)
+
+Full Changelog: [v1.0.0...v1.1.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v1.0.0...v1.1.0)
+
+### ⚠ BREAKING CHANGES
+
+* **client:** move classes into subpackages and shorten names ([#108](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/108))
+
+### Features
+
+* **api:** gift cards ([#109](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/109)) ([8332d32](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/8332d32141c4433c6b2771ed265b798f6af0ff0b))
+
+
+### Chores
+
+* **client:** move classes into subpackages and shorten names ([#108](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/108)) ([685c6c7](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/685c6c777f34ad8f3f549bf79b561e913c361c59))
+* **internal:** version bump ([#104](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/104)) ([9455b1d](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/9455b1d231ff5a6fd458343a6c93a295c09ad5d4))
+
+
+### Documentation
+
+* document `JsonValue` construction in readme ([#107](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/107)) ([0f9b722](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/0f9b722cc51bf8072107e9e82aedb47050597580))
+* revise readme docs about nested params ([#106](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/106)) ([8790bdd](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/8790bdd50b237ec41bde071f7edd989489f00906))
+
 ## 1.0.0 (2025-03-10)
 
 Full Changelog: [v0.1.0-alpha.7...v1.0.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v0.1.0-alpha.7...v1.0.0)
