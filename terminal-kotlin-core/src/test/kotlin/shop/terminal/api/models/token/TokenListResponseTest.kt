@@ -9,18 +9,24 @@ class TokenListResponseTest {
 
     @Test
     fun createTokenListResponse() {
-      val tokenListResponse = TokenListResponse.builder()
-          .addData(Token.builder()
-              .id("pat_XXXXXXXXXXXXXXXXXXXXXXXXX")
-              .token("trm_test_******XXXX")
-              .created("2024-06-29T19:36:19.000Z")
-              .build())
-          .build()
-      assertThat(tokenListResponse).isNotNull
-      assertThat(tokenListResponse.data()).containsExactly(Token.builder()
-          .id("pat_XXXXXXXXXXXXXXXXXXXXXXXXX")
-          .token("trm_test_******XXXX")
-          .created("2024-06-29T19:36:19.000Z")
-          .build())
+        val tokenListResponse =
+            TokenListResponse.builder()
+                .addData(
+                    Token.builder()
+                        .id("pat_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .token("trm_test_******XXXX")
+                        .created("2024-06-29T19:36:19.000Z")
+                        .build()
+                )
+                .build()
+        assertThat(tokenListResponse).isNotNull
+        assertThat(tokenListResponse.data())
+            .containsExactly(
+                Token.builder()
+                    .id("pat_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .token("trm_test_******XXXX")
+                    .created("2024-06-29T19:36:19.000Z")
+                    .build()
+            )
     }
 }

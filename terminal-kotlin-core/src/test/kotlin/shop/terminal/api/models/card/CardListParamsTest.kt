@@ -8,6 +8,6 @@ class CardListParamsTest {
 
     @Test
     fun create() {
-      CardListParams.builder().build()
+        CardListParams.builder().build()
     }
 }
