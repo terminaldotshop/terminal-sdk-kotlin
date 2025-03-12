@@ -9,10 +9,9 @@ class TokenDeleteResponseTest {
 
     @Test
     fun createTokenDeleteResponse() {
-      val tokenDeleteResponse = TokenDeleteResponse.builder()
-          .data(TokenDeleteResponse.Data.OK)
-          .build()
-      assertThat(tokenDeleteResponse).isNotNull
-      assertThat(tokenDeleteResponse.data()).isEqualTo(TokenDeleteResponse.Data.OK)
+        val tokenDeleteResponse =
+            TokenDeleteResponse.builder().data(TokenDeleteResponse.Data.OK).build()
+        assertThat(tokenDeleteResponse).isNotNull
+        assertThat(tokenDeleteResponse.data()).isEqualTo(TokenDeleteResponse.Data.OK)
     }
 }
