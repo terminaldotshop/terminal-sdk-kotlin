@@ -9,16 +9,20 @@ class AddressGetParamsTest {
 
     @Test
     fun create() {
-        AddressGetParams.builder().id("shp_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
+      AddressGetParams.builder()
+          .id("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+          .build()
     }
 
     @Test
     fun getPathParam() {
-        val params = AddressGetParams.builder().id("shp_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
-        assertThat(params).isNotNull
-        // path param "id"
-        assertThat(params.getPathParam(0)).isEqualTo("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+      val params = AddressGetParams.builder()
+          .id("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+          .build()
+      assertThat(params).isNotNull
+      // path param "id"
+      assertThat(params.getPathParam(0)).isEqualTo("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+      // out-of-bound path param
+      assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

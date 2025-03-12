@@ -9,9 +9,10 @@ class AddressDeleteResponseTest {
 
     @Test
     fun createAddressDeleteResponse() {
-        val addressDeleteResponse =
-            AddressDeleteResponse.builder().data(AddressDeleteResponse.Data.OK).build()
-        assertThat(addressDeleteResponse).isNotNull
-        assertThat(addressDeleteResponse.data()).isEqualTo(AddressDeleteResponse.Data.OK)
+      val addressDeleteResponse = AddressDeleteResponse.builder()
+          .data(AddressDeleteResponse.Data.OK)
+          .build()
+      assertThat(addressDeleteResponse).isNotNull
+      assertThat(addressDeleteResponse.data()).isEqualTo(AddressDeleteResponse.Data.OK)
     }
 }

@@ -11,17 +11,18 @@ import shop.terminal.api.models.email.EmailCreateResponse
 interface EmailService {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     * Returns a view of this service that provides access to raw HTTP responses for
+     * each method.
      */
     fun withRawResponse(): WithRawResponse
 
     /** Subscribe to email updates from Terminal. */
-    fun create(
-        params: EmailCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): EmailCreateResponse
+    fun create(params: EmailCreateParams, requestOptions: RequestOptions = RequestOptions.none()): EmailCreateResponse
 
-    /** A view of [EmailService] that provides access to raw HTTP responses for each method. */
+    /**
+     * A view of [EmailService] that provides access to raw HTTP responses for each
+     * method.
+     */
     interface WithRawResponse {
 
         /**
@@ -29,9 +30,6 @@ interface EmailService {
          * [EmailService.create].
          */
         @MustBeClosed
-        fun create(
-            params: EmailCreateParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<EmailCreateResponse>
+        fun create(params: EmailCreateParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<EmailCreateResponse>
     }
 }

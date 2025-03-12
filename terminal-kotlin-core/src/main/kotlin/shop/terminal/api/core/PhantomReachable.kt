@@ -2,8 +2,8 @@
 
 package shop.terminal.api.core
 
-import java.lang.reflect.InvocationTargetException
 import shop.terminal.api.errors.TerminalException
+import java.lang.reflect.InvocationTargetException
 
 /**
  * Closes [closeable] when [observed] becomes only phantom reachable.
