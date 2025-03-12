@@ -24,16 +24,18 @@ import shop.terminal.api.models.app.AppGetResponse
 import shop.terminal.api.models.app.AppListParams
 import shop.terminal.api.models.app.AppListResponse
 
-class AppServiceImpl internal constructor(
-    private val clientOptions: ClientOptions,
+class AppServiceImpl internal constructor(private val clientOptions: ClientOptions) : AppService {
 
-) : AppService {
-
-    private val withRawResponse: AppService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
+    private val withRawResponse: AppService.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
     override fun withRawResponse(): AppService.WithRawResponse = withRawResponse
 
-    override fun create(params: AppCreateParams, requestOptions: RequestOptions): AppCreateResponse =
+    override fun create(
+        params: AppCreateParams,
+        requestOptions: RequestOptions,
+    ): AppCreateResponse =
         // post /app
         withRawResponse().create(params, requestOptions).parse()
 
@@ -41,7 +43,10 @@ class AppServiceImpl internal constructor(
         // get /app
         withRawResponse().list(params, requestOptions).parse()
 
-    override fun delete(params: AppDeleteParams, requestOptions: RequestOptions): AppDeleteResponse =
+    override fun delete(
+        params: AppDeleteParams,
+        requestOptions: RequestOptions,
+    ): AppDeleteResponse =
         // delete /app/{id}
         withRawResponse().delete(params, requestOptions).parse()
 
@@ -49,113 +54,115 @@ class AppServiceImpl internal constructor(
         // get /app/{id}
         withRawResponse().get(params, requestOptions).parse()
 
-    class WithRawResponseImpl internal constructor(
-        private val clientOptions: ClientOptions,
-
-    ) : AppService.WithRawResponse {
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        AppService.WithRawResponse {
 
         private val errorHandler: Handler<TerminalError> = errorHandler(clientOptions.jsonMapper)
 
-        private val createHandler: Handler<AppCreateResponse> = jsonHandler<AppCreateResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val createHandler: Handler<AppCreateResponse> =
+            jsonHandler<AppCreateResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun create(params: AppCreateParams, requestOptions: RequestOptions): HttpResponseFor<AppCreateResponse> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.POST)
-            .addPathSegments("app")
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  createHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun create(
+            params: AppCreateParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<AppCreateResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments("app")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { createHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val listHandler: Handler<AppListResponse> = jsonHandler<AppListResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val listHandler: Handler<AppListResponse> =
+            jsonHandler<AppListResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun list(params: AppListParams, requestOptions: RequestOptions): HttpResponseFor<AppListResponse> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .addPathSegments("app")
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  listHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun list(
+            params: AppListParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<AppListResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("app")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { listHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val deleteHandler: Handler<AppDeleteResponse> = jsonHandler<AppDeleteResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val deleteHandler: Handler<AppDeleteResponse> =
+            jsonHandler<AppDeleteResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun delete(params: AppDeleteParams, requestOptions: RequestOptions): HttpResponseFor<AppDeleteResponse> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.DELETE)
-            .addPathSegments("app", params.getPathParam(0))
-            .apply { params._body()?.let{ body(json(clientOptions.jsonMapper, it)) } }
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  deleteHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun delete(
+            params: AppDeleteParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<AppDeleteResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.DELETE)
+                    .addPathSegments("app", params.getPathParam(0))
+                    .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { deleteHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val getHandler: Handler<AppGetResponse> = jsonHandler<AppGetResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val getHandler: Handler<AppGetResponse> =
+            jsonHandler<AppGetResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun get(params: AppGetParams, requestOptions: RequestOptions): HttpResponseFor<AppGetResponse> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .addPathSegments("app", params.getPathParam(0))
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  getHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun get(
+            params: AppGetParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<AppGetResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("app", params.getPathParam(0))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { getHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
     }
 }

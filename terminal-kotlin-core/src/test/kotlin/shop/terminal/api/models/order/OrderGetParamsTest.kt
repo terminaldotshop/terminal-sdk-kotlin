@@ -9,20 +9,16 @@ class OrderGetParamsTest {
 
     @Test
     fun create() {
-      OrderGetParams.builder()
-          .id("ord_XXXXXXXXXXXXXXXXXXXXXXXXX")
-          .build()
+        OrderGetParams.builder().id("ord_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
     }
 
     @Test
     fun getPathParam() {
-      val params = OrderGetParams.builder()
-          .id("ord_XXXXXXXXXXXXXXXXXXXXXXXXX")
-          .build()
-      assertThat(params).isNotNull
-      // path param "id"
-      assertThat(params.getPathParam(0)).isEqualTo("ord_XXXXXXXXXXXXXXXXXXXXXXXXX")
-      // out-of-bound path param
-      assertThat(params.getPathParam(1)).isEqualTo("")
+        val params = OrderGetParams.builder().id("ord_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
+        assertThat(params).isNotNull
+        // path param "id"
+        assertThat(params.getPathParam(0)).isEqualTo("ord_XXXXXXXXXXXXXXXXXXXXXXXXX")
+        // out-of-bound path param
+        assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }
