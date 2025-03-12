@@ -17,19 +17,20 @@ import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
 @NoAutoDetect
-class SubscriptionGetResponse @JsonCreator private constructor(
-    @JsonProperty("data") @ExcludeMissing private val data: JsonField<Subscription> = JsonMissing.of(),
+class SubscriptionGetResponse
+@JsonCreator
+private constructor(
+    @JsonProperty("data")
+    @ExcludeMissing
+    private val data: JsonField<Subscription> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-
 ) {
 
     /** Subscription to a Terminal shop product. */
     fun data(): Subscription = data.getRequired("data")
 
     /** Subscription to a Terminal shop product. */
-    @JsonProperty("data")
-    @ExcludeMissing
-    fun _data(): JsonField<Subscription> = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Subscription> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -37,26 +38,23 @@ class SubscriptionGetResponse @JsonCreator private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): SubscriptionGetResponse =
-        apply {
-            if (validated) {
-              return@apply
-            }
-
-            data().validate()
-            validated = true
+    fun validate(): SubscriptionGetResponse = apply {
+        if (validated) {
+            return@apply
         }
+
+        data().validate()
+        validated = true
+    }
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of
-         * [SubscriptionGetResponse].
+         * Returns a mutable builder for constructing an instance of [SubscriptionGetResponse].
          *
          * The following fields are required:
-         *
          * ```kotlin
          * .data()
          * ```
@@ -70,61 +68,46 @@ class SubscriptionGetResponse @JsonCreator private constructor(
         private var data: JsonField<Subscription>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-        internal fun from(subscriptionGetResponse: SubscriptionGetResponse) =
-            apply {
-                data = subscriptionGetResponse.data
-                additionalProperties = subscriptionGetResponse.additionalProperties.toMutableMap()
-            }
+        internal fun from(subscriptionGetResponse: SubscriptionGetResponse) = apply {
+            data = subscriptionGetResponse.data
+            additionalProperties = subscriptionGetResponse.additionalProperties.toMutableMap()
+        }
 
         /** Subscription to a Terminal shop product. */
         fun data(data: Subscription) = data(JsonField.of(data))
 
         /** Subscription to a Terminal shop product. */
-        fun data(data: JsonField<Subscription>) =
-            apply {
-                this.data = data
-            }
+        fun data(data: JsonField<Subscription>) = apply { this.data = data }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            putAllAdditionalProperties(additionalProperties)
+        }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) =
-            apply {
-                additionalProperties.put(key, value)
-            }
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            additionalProperties.put(key, value)
+        }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
 
-        fun removeAdditionalProperty(key: String) =
-            apply {
-                additionalProperties.remove(key)
-            }
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) =
-            apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
 
         fun build(): SubscriptionGetResponse =
-            SubscriptionGetResponse(
-              checkRequired(
-                "data", data
-              ), additionalProperties.toImmutable()
-            )
+            SubscriptionGetResponse(checkRequired("data", data), additionalProperties.toImmutable())
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return /* spotless:off */ other is SubscriptionGetResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is SubscriptionGetResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -133,5 +116,6 @@ class SubscriptionGetResponse @JsonCreator private constructor(
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() = "SubscriptionGetResponse{data=$data, additionalProperties=$additionalProperties}"
+    override fun toString() =
+        "SubscriptionGetResponse{data=$data, additionalProperties=$additionalProperties}"
 }

@@ -8,6 +8,6 @@ class ViewInitParamsTest {
 
     @Test
     fun create() {
-      ViewInitParams.builder().build()
+        ViewInitParams.builder().build()
     }
 }

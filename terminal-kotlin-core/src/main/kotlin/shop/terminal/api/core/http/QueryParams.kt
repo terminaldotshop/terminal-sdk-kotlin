@@ -2,8 +2,7 @@ package shop.terminal.api.core.http
 
 import shop.terminal.api.core.toImmutable
 
-class QueryParams
-private constructor(private val map: Map<String, List<String>>, val size: Int) {
+class QueryParams private constructor(private val map: Map<String, List<String>>, val size: Int) {
 
     fun isEmpty(): Boolean = map.isEmpty()
 
@@ -66,10 +65,7 @@ private constructor(private val map: Map<String, List<String>>, val size: Int) {
         }
 
         fun build() =
-            QueryParams(
-                map.mapValues { (_, values) -> values.toImmutable() }.toImmutable(),
-                size
-            )
+            QueryParams(map.mapValues { (_, values) -> values.toImmutable() }.toImmutable(), size)
     }
 
     override fun hashCode(): Int = map.hashCode()

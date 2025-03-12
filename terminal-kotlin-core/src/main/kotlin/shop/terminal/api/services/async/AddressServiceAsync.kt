@@ -17,29 +17,40 @@ import shop.terminal.api.models.address.AddressListResponse
 interface AddressServiceAsync {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for
-     * each method.
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
 
     /** Create and add a shipping address to the current user. */
-    suspend fun create(params: AddressCreateParams, requestOptions: RequestOptions = RequestOptions.none()): AddressCreateResponse
+    suspend fun create(
+        params: AddressCreateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): AddressCreateResponse
 
     /** Get the shipping addresses associated with the current user. */
-    suspend fun list(params: AddressListParams = AddressListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): AddressListResponse
+    suspend fun list(
+        params: AddressListParams = AddressListParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): AddressListResponse
 
     /** @see [list] */
-    suspend fun list(requestOptions: RequestOptions): AddressListResponse = list(AddressListParams.none(), requestOptions)
+    suspend fun list(requestOptions: RequestOptions): AddressListResponse =
+        list(AddressListParams.none(), requestOptions)
 
     /** Delete a shipping address from the current user. */
-    suspend fun delete(params: AddressDeleteParams, requestOptions: RequestOptions = RequestOptions.none()): AddressDeleteResponse
+    suspend fun delete(
+        params: AddressDeleteParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): AddressDeleteResponse
 
     /** Get the shipping address with the given ID. */
-    suspend fun get(params: AddressGetParams, requestOptions: RequestOptions = RequestOptions.none()): AddressGetResponse
+    suspend fun get(
+        params: AddressGetParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): AddressGetResponse
 
     /**
-     * A view of [AddressServiceAsync] that provides access to raw HTTP responses for
-     * each method.
+     * A view of [AddressServiceAsync] that provides access to raw HTTP responses for each method.
      */
     interface WithRawResponse {
 
@@ -48,31 +59,44 @@ interface AddressServiceAsync {
          * [AddressServiceAsync.create].
          */
         @MustBeClosed
-        suspend fun create(params: AddressCreateParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<AddressCreateResponse>
+        suspend fun create(
+            params: AddressCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<AddressCreateResponse>
 
         /**
          * Returns a raw HTTP response for `get /address`, but is otherwise the same as
          * [AddressServiceAsync.list].
          */
         @MustBeClosed
-        suspend fun list(params: AddressListParams = AddressListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<AddressListResponse>
+        suspend fun list(
+            params: AddressListParams = AddressListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<AddressListResponse>
 
         /** @see [list] */
         @MustBeClosed
-        suspend fun list(requestOptions: RequestOptions): HttpResponseFor<AddressListResponse> = list(AddressListParams.none(), requestOptions)
+        suspend fun list(requestOptions: RequestOptions): HttpResponseFor<AddressListResponse> =
+            list(AddressListParams.none(), requestOptions)
 
         /**
-         * Returns a raw HTTP response for `delete /address/{id}`, but is otherwise the
-         * same as [AddressServiceAsync.delete].
+         * Returns a raw HTTP response for `delete /address/{id}`, but is otherwise the same as
+         * [AddressServiceAsync.delete].
          */
         @MustBeClosed
-        suspend fun delete(params: AddressDeleteParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<AddressDeleteResponse>
+        suspend fun delete(
+            params: AddressDeleteParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<AddressDeleteResponse>
 
         /**
-         * Returns a raw HTTP response for `get /address/{id}`, but is otherwise the same
-         * as [AddressServiceAsync.get].
+         * Returns a raw HTTP response for `get /address/{id}`, but is otherwise the same as
+         * [AddressServiceAsync.get].
          */
         @MustBeClosed
-        suspend fun get(params: AddressGetParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<AddressGetResponse>
+        suspend fun get(
+            params: AddressGetParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<AddressGetResponse>
     }
 }
