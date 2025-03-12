@@ -16,9 +16,9 @@ import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonMapperBuilder
-import java.io.InputStream
 import shop.terminal.api.errors.TerminalException
 import shop.terminal.api.errors.TerminalInvalidDataException
+import java.io.InputStream
 
 fun jsonMapper(): JsonMapper =
     jacksonMapperBuilder()

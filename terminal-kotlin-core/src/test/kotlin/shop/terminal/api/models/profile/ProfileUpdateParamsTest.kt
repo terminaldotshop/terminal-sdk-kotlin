@@ -10,30 +10,37 @@ class ProfileUpdateParamsTest {
 
     @Test
     fun create() {
-        ProfileUpdateParams.builder().email("john@example.com").name("John Doe").build()
+      ProfileUpdateParams.builder()
+          .email("john@example.com")
+          .name("John Doe")
+          .build()
     }
 
     @Test
     fun body() {
-        val params =
-            ProfileUpdateParams.builder().email("john@example.com").name("John Doe").build()
+      val params = ProfileUpdateParams.builder()
+          .email("john@example.com")
+          .name("John Doe")
+          .build()
 
-        val body = params._body()
+      val body = params._body()
 
-        assertNotNull(body)
-        assertThat(body.email()).isEqualTo("john@example.com")
-        assertThat(body.name()).isEqualTo("John Doe")
+      assertNotNull(body)
+      assertThat(body.email()).isEqualTo("john@example.com")
+      assertThat(body.name()).isEqualTo("John Doe")
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params =
-            ProfileUpdateParams.builder().email("john@example.com").name("John Doe").build()
+      val params = ProfileUpdateParams.builder()
+          .email("john@example.com")
+          .name("John Doe")
+          .build()
 
-        val body = params._body()
+      val body = params._body()
 
-        assertNotNull(body)
-        assertThat(body.email()).isEqualTo("john@example.com")
-        assertThat(body.name()).isEqualTo("John Doe")
+      assertNotNull(body)
+      assertThat(body.email()).isEqualTo("john@example.com")
+      assertThat(body.name()).isEqualTo("John Doe")
     }
 }

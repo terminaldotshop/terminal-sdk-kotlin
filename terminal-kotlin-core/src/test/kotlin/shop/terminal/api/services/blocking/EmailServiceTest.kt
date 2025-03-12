@@ -13,16 +13,16 @@ class EmailServiceTest {
 
     @Test
     fun create() {
-        val client =
-            TerminalOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val emailService = client.email()
+      val client = TerminalOkHttpClient.builder()
+          .baseUrl(TestServerExtension.BASE_URL)
+          .bearerToken("My Bearer Token")
+          .build()
+      val emailService = client.email()
 
-        val email =
-            emailService.create(EmailCreateParams.builder().email("john@example.com").build())
+      val email = emailService.create(EmailCreateParams.builder()
+          .email("john@example.com")
+          .build())
 
-        email.validate()
+      email.validate()
     }
 }

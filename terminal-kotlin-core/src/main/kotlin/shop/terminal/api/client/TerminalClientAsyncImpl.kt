@@ -27,56 +27,41 @@ import shop.terminal.api.services.async.TokenServiceAsyncImpl
 import shop.terminal.api.services.async.ViewServiceAsync
 import shop.terminal.api.services.async.ViewServiceAsyncImpl
 
-class TerminalClientAsyncImpl(private val clientOptions: ClientOptions) : TerminalClientAsync {
+class TerminalClientAsyncImpl(
+    private val clientOptions: ClientOptions,
+
+) : TerminalClientAsync {
 
     private val clientOptionsWithUserAgent =
-        if (clientOptions.headers.names().contains("User-Agent")) clientOptions
-        else
-            clientOptions
-                .toBuilder()
-                .putHeader("User-Agent", "${javaClass.simpleName}/Kotlin ${getPackageVersion()}")
-                .build()
+
+      if (clientOptions.headers.names().contains("User-Agent")) clientOptions
+
+      else clientOptions.toBuilder().putHeader("User-Agent", "${javaClass.simpleName}/Kotlin ${getPackageVersion()}").build()
 
     // Pass the original clientOptions so that this client sets its own User-Agent.
     private val sync: TerminalClient by lazy { TerminalClientImpl(clientOptions) }
 
-    private val withRawResponse: TerminalClientAsync.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+    private val withRawResponse: TerminalClientAsync.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
-    private val product: ProductServiceAsync by lazy {
-        ProductServiceAsyncImpl(clientOptionsWithUserAgent)
-    }
+    private val product: ProductServiceAsync by lazy { ProductServiceAsyncImpl(clientOptionsWithUserAgent) }
 
-    private val profile: ProfileServiceAsync by lazy {
-        ProfileServiceAsyncImpl(clientOptionsWithUserAgent)
-    }
+    private val profile: ProfileServiceAsync by lazy { ProfileServiceAsyncImpl(clientOptionsWithUserAgent) }
 
-    private val address: AddressServiceAsync by lazy {
-        AddressServiceAsyncImpl(clientOptionsWithUserAgent)
-    }
+    private val address: AddressServiceAsync by lazy { AddressServiceAsyncImpl(clientOptionsWithUserAgent) }
 
     private val card: CardServiceAsync by lazy { CardServiceAsyncImpl(clientOptionsWithUserAgent) }
 
     private val cart: CartServiceAsync by lazy { CartServiceAsyncImpl(clientOptionsWithUserAgent) }
 
-    private val order: OrderServiceAsync by lazy {
-        OrderServiceAsyncImpl(clientOptionsWithUserAgent)
-    }
+    private val order: OrderServiceAsync by lazy { OrderServiceAsyncImpl(clientOptionsWithUserAgent) }
 
-    private val subscription: SubscriptionServiceAsync by lazy {
-        SubscriptionServiceAsyncImpl(clientOptionsWithUserAgent)
-    }
+    private val subscription: SubscriptionServiceAsync by lazy { SubscriptionServiceAsyncImpl(clientOptionsWithUserAgent) }
 
-    private val token: TokenServiceAsync by lazy {
-        TokenServiceAsyncImpl(clientOptionsWithUserAgent)
-    }
+    private val token: TokenServiceAsync by lazy { TokenServiceAsyncImpl(clientOptionsWithUserAgent) }
 
     private val app: AppServiceAsync by lazy { AppServiceAsyncImpl(clientOptionsWithUserAgent) }
 
-    private val email: EmailServiceAsync by lazy {
-        EmailServiceAsyncImpl(clientOptionsWithUserAgent)
-    }
+    private val email: EmailServiceAsync by lazy { EmailServiceAsyncImpl(clientOptionsWithUserAgent) }
 
     private val view: ViewServiceAsync by lazy { ViewServiceAsyncImpl(clientOptionsWithUserAgent) }
 
@@ -108,52 +93,32 @@ class TerminalClientAsyncImpl(private val clientOptions: ClientOptions) : Termin
 
     override fun close() = clientOptions.httpClient.close()
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        TerminalClientAsync.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
 
-        private val product: ProductServiceAsync.WithRawResponse by lazy {
-            ProductServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+    ) : TerminalClientAsync.WithRawResponse {
 
-        private val profile: ProfileServiceAsync.WithRawResponse by lazy {
-            ProfileServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val product: ProductServiceAsync.WithRawResponse by lazy { ProductServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
 
-        private val address: AddressServiceAsync.WithRawResponse by lazy {
-            AddressServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val profile: ProfileServiceAsync.WithRawResponse by lazy { ProfileServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
 
-        private val card: CardServiceAsync.WithRawResponse by lazy {
-            CardServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val address: AddressServiceAsync.WithRawResponse by lazy { AddressServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
 
-        private val cart: CartServiceAsync.WithRawResponse by lazy {
-            CartServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val card: CardServiceAsync.WithRawResponse by lazy { CardServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
 
-        private val order: OrderServiceAsync.WithRawResponse by lazy {
-            OrderServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val cart: CartServiceAsync.WithRawResponse by lazy { CartServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
 
-        private val subscription: SubscriptionServiceAsync.WithRawResponse by lazy {
-            SubscriptionServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val order: OrderServiceAsync.WithRawResponse by lazy { OrderServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
 
-        private val token: TokenServiceAsync.WithRawResponse by lazy {
-            TokenServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val subscription: SubscriptionServiceAsync.WithRawResponse by lazy { SubscriptionServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
 
-        private val app: AppServiceAsync.WithRawResponse by lazy {
-            AppServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val token: TokenServiceAsync.WithRawResponse by lazy { TokenServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
 
-        private val email: EmailServiceAsync.WithRawResponse by lazy {
-            EmailServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val app: AppServiceAsync.WithRawResponse by lazy { AppServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
 
-        private val view: ViewServiceAsync.WithRawResponse by lazy {
-            ViewServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val email: EmailServiceAsync.WithRawResponse by lazy { EmailServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
+
+        private val view: ViewServiceAsync.WithRawResponse by lazy { ViewServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
 
         override fun product(): ProductServiceAsync.WithRawResponse = product
 
