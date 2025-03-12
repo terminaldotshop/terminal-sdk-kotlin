@@ -19,85 +19,78 @@ import shop.terminal.api.models.product.ProductGetResponse
 import shop.terminal.api.models.product.ProductListParams
 import shop.terminal.api.models.product.ProductListResponse
 
-class ProductServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
-    ProductServiceAsync {
+class ProductServiceAsyncImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: ProductServiceAsync.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : ProductServiceAsync {
+
+    private val withRawResponse: ProductServiceAsync.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     override fun withRawResponse(): ProductServiceAsync.WithRawResponse = withRawResponse
 
-    override suspend fun list(
-        params: ProductListParams,
-        requestOptions: RequestOptions,
-    ): ProductListResponse =
+    override suspend fun list(params: ProductListParams, requestOptions: RequestOptions): ProductListResponse =
         // get /product
         withRawResponse().list(params, requestOptions).parse()
 
-    override suspend fun get(
-        params: ProductGetParams,
-        requestOptions: RequestOptions,
-    ): ProductGetResponse =
+    override suspend fun get(params: ProductGetParams, requestOptions: RequestOptions): ProductGetResponse =
         // get /product/{id}
         withRawResponse().get(params, requestOptions).parse()
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        ProductServiceAsync.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
+
+    ) : ProductServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<TerminalError> = errorHandler(clientOptions.jsonMapper)
 
-        private val listHandler: Handler<ProductListResponse> =
-            jsonHandler<ProductListResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val listHandler: Handler<ProductListResponse> = jsonHandler<ProductListResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override suspend fun list(
-            params: ProductListParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<ProductListResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .addPathSegments("product")
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
-            return response.parseable {
-                response
-                    .use { listHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
+        override suspend fun list(params: ProductListParams, requestOptions: RequestOptions): HttpResponseFor<ProductListResponse> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.GET)
+            .addPathSegments("product")
+            .build()
+            .prepareAsync(clientOptions, params)
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.executeAsync(
+            request, requestOptions
+          )
+          return response.parseable {
+              response.use {
+                  listHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          }
         }
 
-        private val getHandler: Handler<ProductGetResponse> =
-            jsonHandler<ProductGetResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val getHandler: Handler<ProductGetResponse> = jsonHandler<ProductGetResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override suspend fun get(
-            params: ProductGetParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<ProductGetResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .addPathSegments("product", params.getPathParam(0))
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
-            return response.parseable {
-                response
-                    .use { getHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
+        override suspend fun get(params: ProductGetParams, requestOptions: RequestOptions): HttpResponseFor<ProductGetResponse> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.GET)
+            .addPathSegments("product", params.getPathParam(0))
+            .build()
+            .prepareAsync(clientOptions, params)
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.executeAsync(
+            request, requestOptions
+          )
+          return response.parseable {
+              response.use {
+                  getHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          }
         }
     }
 }

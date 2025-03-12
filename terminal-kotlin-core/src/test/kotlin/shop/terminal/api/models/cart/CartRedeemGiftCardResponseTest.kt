@@ -9,24 +9,18 @@ class CartRedeemGiftCardResponseTest {
 
     @Test
     fun createCartRedeemGiftCardResponse() {
-        val cartRedeemGiftCardResponse =
-            CartRedeemGiftCardResponse.builder()
-                .data(
-                    CartRedeemGiftCardResponse.Data.builder()
-                        .appliedAmount(0L)
-                        .giftCardId("giftCardID")
-                        .remainingBalance(0L)
-                        .build()
-                )
-                .build()
-        assertThat(cartRedeemGiftCardResponse).isNotNull
-        assertThat(cartRedeemGiftCardResponse.data())
-            .isEqualTo(
-                CartRedeemGiftCardResponse.Data.builder()
-                    .appliedAmount(0L)
-                    .giftCardId("giftCardID")
-                    .remainingBalance(0L)
-                    .build()
-            )
+      val cartRedeemGiftCardResponse = CartRedeemGiftCardResponse.builder()
+          .data(CartRedeemGiftCardResponse.Data.builder()
+              .appliedAmount(0L)
+              .giftCardId("giftCardID")
+              .remainingBalance(0L)
+              .build())
+          .build()
+      assertThat(cartRedeemGiftCardResponse).isNotNull
+      assertThat(cartRedeemGiftCardResponse.data()).isEqualTo(CartRedeemGiftCardResponse.Data.builder()
+          .appliedAmount(0L)
+          .giftCardId("giftCardID")
+          .remainingBalance(0L)
+          .build())
     }
 }
