@@ -10,26 +10,32 @@ class EmailCreateParamsTest {
 
     @Test
     fun create() {
-        EmailCreateParams.builder().email("john@example.com").build()
+      EmailCreateParams.builder()
+          .email("john@example.com")
+          .build()
     }
 
     @Test
     fun body() {
-        val params = EmailCreateParams.builder().email("john@example.com").build()
+      val params = EmailCreateParams.builder()
+          .email("john@example.com")
+          .build()
 
-        val body = params._body()
+      val body = params._body()
 
-        assertNotNull(body)
-        assertThat(body.email()).isEqualTo("john@example.com")
+      assertNotNull(body)
+      assertThat(body.email()).isEqualTo("john@example.com")
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = EmailCreateParams.builder().email("john@example.com").build()
+      val params = EmailCreateParams.builder()
+          .email("john@example.com")
+          .build()
 
-        val body = params._body()
+      val body = params._body()
 
-        assertNotNull(body)
-        assertThat(body.email()).isEqualTo("john@example.com")
+      assertNotNull(body)
+      assertThat(body.email()).isEqualTo("john@example.com")
     }
 }

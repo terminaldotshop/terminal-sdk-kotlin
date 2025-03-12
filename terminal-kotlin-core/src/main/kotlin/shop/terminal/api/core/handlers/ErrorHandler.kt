@@ -3,8 +3,6 @@
 package shop.terminal.api.core.handlers
 
 import com.fasterxml.jackson.databind.json.JsonMapper
-import java.io.ByteArrayInputStream
-import java.io.InputStream
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.HttpResponse
 import shop.terminal.api.core.http.HttpResponse.Handler
@@ -14,9 +12,12 @@ import shop.terminal.api.errors.NotFoundException
 import shop.terminal.api.errors.PermissionDeniedException
 import shop.terminal.api.errors.RateLimitException
 import shop.terminal.api.errors.TerminalError
+import shop.terminal.api.errors.TerminalException
 import shop.terminal.api.errors.UnauthorizedException
 import shop.terminal.api.errors.UnexpectedStatusCodeException
 import shop.terminal.api.errors.UnprocessableEntityException
+import java.io.ByteArrayInputStream
+import java.io.InputStream
 
 internal fun errorHandler(jsonMapper: JsonMapper): Handler<TerminalError> {
     val handler = jsonHandler<TerminalError>(jsonMapper)

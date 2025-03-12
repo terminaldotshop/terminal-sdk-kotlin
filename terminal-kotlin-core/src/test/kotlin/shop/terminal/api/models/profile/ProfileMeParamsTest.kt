@@ -8,6 +8,6 @@ class ProfileMeParamsTest {
 
     @Test
     fun create() {
-        ProfileMeParams.builder().build()
+      ProfileMeParams.builder().build()
     }
 }
