@@ -8,6 +8,6 @@ class SubscriptionListParamsTest {
 
     @Test
     fun create() {
-      SubscriptionListParams.builder().build()
+        SubscriptionListParams.builder().build()
     }
 }

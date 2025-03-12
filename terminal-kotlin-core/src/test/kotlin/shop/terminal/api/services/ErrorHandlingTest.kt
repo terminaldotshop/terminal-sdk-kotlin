@@ -28,16 +28,16 @@ import shop.terminal.api.errors.TerminalException
 import shop.terminal.api.errors.UnauthorizedException
 import shop.terminal.api.errors.UnexpectedStatusCodeException
 import shop.terminal.api.errors.UnprocessableEntityException
-import shop.terminal.api.models.product.ProductListParams
 
 @WireMockTest
 class ErrorHandlingTest {
 
     companion object {
 
-        private val ERROR: TerminalError = TerminalError.builder()
-            .putAdditionalProperty("errorProperty", JsonValue.from("42"))
-            .build()
+        private val ERROR: TerminalError =
+            TerminalError.builder()
+                .putAdditionalProperty("errorProperty", JsonValue.from("42"))
+                .build()
 
         private val ERROR_JSON: ByteArray = jsonMapper().writeValueAsBytes(ERROR)
 
@@ -52,204 +52,144 @@ class ErrorHandlingTest {
 
     @BeforeEach
     fun beforeEach(wmRuntimeInfo: WireMockRuntimeInfo) {
-      client = TerminalOkHttpClient.builder()
-          .baseUrl(wmRuntimeInfo.httpBaseUrl)
-          .bearerToken("My Bearer Token")
-          .build()
+        client =
+            TerminalOkHttpClient.builder()
+                .baseUrl(wmRuntimeInfo.httpBaseUrl)
+                .bearerToken("My Bearer Token")
+                .build()
     }
 
     @Test
     fun productList400() {
-      val productService = client.product()
-      stubFor(
-          get(anyUrl()).willReturn(
-              status(400)
-                  .withHeader(HEADER_NAME, HEADER_VALUE)
-                  .withBody(ERROR_JSON)
-          )
-      )
+        val productService = client.product()
+        stubFor(
+            get(anyUrl())
+                .willReturn(status(400).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON))
+        )
 
-      val e = assertThrows<BadRequestException> {
-          productService.list()
-      }
+        val e = assertThrows<BadRequestException> { productService.list() }
 
-      assertThat(e.statusCode()).isEqualTo(400)
-      assertThat(e.error()).isEqualTo(ERROR)
-      assertThat(e.headers().toMap()).contains(
-                        entry(HEADER_NAME, listOf(HEADER_VALUE))
-                    )
+        assertThat(e.statusCode()).isEqualTo(400)
+        assertThat(e.error()).isEqualTo(ERROR)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
     }
 
     @Test
     fun productList401() {
-      val productService = client.product()
-      stubFor(
-          get(anyUrl()).willReturn(
-              status(401)
-                  .withHeader(HEADER_NAME, HEADER_VALUE)
-                  .withBody(ERROR_JSON)
-          )
-      )
+        val productService = client.product()
+        stubFor(
+            get(anyUrl())
+                .willReturn(status(401).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON))
+        )
 
-      val e = assertThrows<UnauthorizedException> {
-          productService.list()
-      }
+        val e = assertThrows<UnauthorizedException> { productService.list() }
 
-      assertThat(e.statusCode()).isEqualTo(401)
-      assertThat(e.error()).isEqualTo(ERROR)
-      assertThat(e.headers().toMap()).contains(
-                        entry(HEADER_NAME, listOf(HEADER_VALUE))
-                    )
+        assertThat(e.statusCode()).isEqualTo(401)
+        assertThat(e.error()).isEqualTo(ERROR)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
     }
 
     @Test
     fun productList403() {
-      val productService = client.product()
-      stubFor(
-          get(anyUrl()).willReturn(
-              status(403)
-                  .withHeader(HEADER_NAME, HEADER_VALUE)
-                  .withBody(ERROR_JSON)
-          )
-      )
+        val productService = client.product()
+        stubFor(
+            get(anyUrl())
+                .willReturn(status(403).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON))
+        )
 
-      val e = assertThrows<PermissionDeniedException> {
-          productService.list()
-      }
+        val e = assertThrows<PermissionDeniedException> { productService.list() }
 
-      assertThat(e.statusCode()).isEqualTo(403)
-      assertThat(e.error()).isEqualTo(ERROR)
-      assertThat(e.headers().toMap()).contains(
-                        entry(HEADER_NAME, listOf(HEADER_VALUE))
-                    )
+        assertThat(e.statusCode()).isEqualTo(403)
+        assertThat(e.error()).isEqualTo(ERROR)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
     }
 
     @Test
     fun productList404() {
-      val productService = client.product()
-      stubFor(
-          get(anyUrl()).willReturn(
-              status(404)
-                  .withHeader(HEADER_NAME, HEADER_VALUE)
-                  .withBody(ERROR_JSON)
-          )
-      )
+        val productService = client.product()
+        stubFor(
+            get(anyUrl())
+                .willReturn(status(404).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON))
+        )
 
-      val e = assertThrows<NotFoundException> {
-          productService.list()
-      }
+        val e = assertThrows<NotFoundException> { productService.list() }
 
-      assertThat(e.statusCode()).isEqualTo(404)
-      assertThat(e.error()).isEqualTo(ERROR)
-      assertThat(e.headers().toMap()).contains(
-                        entry(HEADER_NAME, listOf(HEADER_VALUE))
-                    )
+        assertThat(e.statusCode()).isEqualTo(404)
+        assertThat(e.error()).isEqualTo(ERROR)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
     }
 
     @Test
     fun productList422() {
-      val productService = client.product()
-      stubFor(
-          get(anyUrl()).willReturn(
-              status(422)
-                  .withHeader(HEADER_NAME, HEADER_VALUE)
-                  .withBody(ERROR_JSON)
-          )
-      )
+        val productService = client.product()
+        stubFor(
+            get(anyUrl())
+                .willReturn(status(422).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON))
+        )
 
-      val e = assertThrows<UnprocessableEntityException> {
-          productService.list()
-      }
+        val e = assertThrows<UnprocessableEntityException> { productService.list() }
 
-      assertThat(e.statusCode()).isEqualTo(422)
-      assertThat(e.error()).isEqualTo(ERROR)
-      assertThat(e.headers().toMap()).contains(
-                        entry(HEADER_NAME, listOf(HEADER_VALUE))
-                    )
+        assertThat(e.statusCode()).isEqualTo(422)
+        assertThat(e.error()).isEqualTo(ERROR)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
     }
 
     @Test
     fun productList429() {
-      val productService = client.product()
-      stubFor(
-          get(anyUrl()).willReturn(
-              status(429)
-                  .withHeader(HEADER_NAME, HEADER_VALUE)
-                  .withBody(ERROR_JSON)
-          )
-      )
+        val productService = client.product()
+        stubFor(
+            get(anyUrl())
+                .willReturn(status(429).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON))
+        )
 
-      val e = assertThrows<RateLimitException> {
-          productService.list()
-      }
+        val e = assertThrows<RateLimitException> { productService.list() }
 
-      assertThat(e.statusCode()).isEqualTo(429)
-      assertThat(e.error()).isEqualTo(ERROR)
-      assertThat(e.headers().toMap()).contains(
-                        entry(HEADER_NAME, listOf(HEADER_VALUE))
-                    )
+        assertThat(e.statusCode()).isEqualTo(429)
+        assertThat(e.error()).isEqualTo(ERROR)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
     }
 
     @Test
     fun productList500() {
-      val productService = client.product()
-      stubFor(
-          get(anyUrl()).willReturn(
-              status(500)
-                  .withHeader(HEADER_NAME, HEADER_VALUE)
-                  .withBody(ERROR_JSON)
-          )
-      )
+        val productService = client.product()
+        stubFor(
+            get(anyUrl())
+                .willReturn(status(500).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON))
+        )
 
-      val e = assertThrows<InternalServerException> {
-          productService.list()
-      }
+        val e = assertThrows<InternalServerException> { productService.list() }
 
-      assertThat(e.statusCode()).isEqualTo(500)
-      assertThat(e.error()).isEqualTo(ERROR)
-      assertThat(e.headers().toMap()).contains(
-                        entry(HEADER_NAME, listOf(HEADER_VALUE))
-                    )
+        assertThat(e.statusCode()).isEqualTo(500)
+        assertThat(e.error()).isEqualTo(ERROR)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
     }
 
     @Test
     fun productList999() {
-      val productService = client.product()
-      stubFor(
-          get(anyUrl()).willReturn(
-              status(999)
-                  .withHeader(HEADER_NAME, HEADER_VALUE)
-                  .withBody(ERROR_JSON)
-          )
-      )
+        val productService = client.product()
+        stubFor(
+            get(anyUrl())
+                .willReturn(status(999).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON))
+        )
 
-      val e = assertThrows<UnexpectedStatusCodeException> {
-          productService.list()
-      }
+        val e = assertThrows<UnexpectedStatusCodeException> { productService.list() }
 
-      assertThat(e.statusCode()).isEqualTo(999)
-      assertThat(e.error()).isEqualTo(ERROR)
-      assertThat(e.headers().toMap()).contains(
-                        entry(HEADER_NAME, listOf(HEADER_VALUE))
-                    )
+        assertThat(e.statusCode()).isEqualTo(999)
+        assertThat(e.error()).isEqualTo(ERROR)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
     }
 
     @Test
     fun productListInvalidJsonBody() {
-      val productService = client.product()
-      stubFor(
-          get(anyUrl()).willReturn(
-              status(200)
-                  .withHeader(HEADER_NAME, HEADER_VALUE)
-                  .withBody(NOT_JSON)
-          )
-      )
+        val productService = client.product()
+        stubFor(
+            get(anyUrl())
+                .willReturn(status(200).withHeader(HEADER_NAME, HEADER_VALUE).withBody(NOT_JSON))
+        )
 
-      val e = assertThrows<TerminalException> {
-          productService.list()
-      }
+        val e = assertThrows<TerminalException> { productService.list() }
 
-      assertThat(e).hasMessage("Error reading response")
+        assertThat(e).hasMessage("Error reading response")
     }
 
     private fun Headers.toMap(): Map<String, List<String>> =

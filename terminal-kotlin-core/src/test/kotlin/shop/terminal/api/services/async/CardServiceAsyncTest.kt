@@ -6,83 +6,89 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClientAsync
-import shop.terminal.api.models.card.CardCollectParams
 import shop.terminal.api.models.card.CardCreateParams
 import shop.terminal.api.models.card.CardDeleteParams
 import shop.terminal.api.models.card.CardGetParams
-import shop.terminal.api.models.card.CardListParams
 
 @ExtendWith(TestServerExtension::class)
 class CardServiceAsyncTest {
 
     @Test
     suspend fun create() {
-      val client = TerminalOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val cardServiceAsync = client.card()
+        val client =
+            TerminalOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val cardServiceAsync = client.card()
 
-      val card = cardServiceAsync.create(CardCreateParams.builder()
-          .token("tok_1N3T00LkdIwHu7ixt44h1F8k")
-          .build())
+        val card =
+            cardServiceAsync.create(
+                CardCreateParams.builder().token("tok_1N3T00LkdIwHu7ixt44h1F8k").build()
+            )
 
-      card.validate()
+        card.validate()
     }
 
     @Test
     suspend fun list() {
-      val client = TerminalOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val cardServiceAsync = client.card()
+        val client =
+            TerminalOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val cardServiceAsync = client.card()
 
-      val card = cardServiceAsync.list()
+        val card = cardServiceAsync.list()
 
-      card.validate()
+        card.validate()
     }
 
     @Test
     suspend fun delete() {
-      val client = TerminalOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val cardServiceAsync = client.card()
+        val client =
+            TerminalOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val cardServiceAsync = client.card()
 
-      val card = cardServiceAsync.delete(CardDeleteParams.builder()
-          .id("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-          .build())
+        val card =
+            cardServiceAsync.delete(
+                CardDeleteParams.builder().id("crd_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
+            )
 
-      card.validate()
+        card.validate()
     }
 
     @Test
     suspend fun collect() {
-      val client = TerminalOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val cardServiceAsync = client.card()
+        val client =
+            TerminalOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val cardServiceAsync = client.card()
 
-      val response = cardServiceAsync.collect()
+        val response = cardServiceAsync.collect()
 
-      response.validate()
+        response.validate()
     }
 
     @Test
     suspend fun get() {
-      val client = TerminalOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val cardServiceAsync = client.card()
+        val client =
+            TerminalOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val cardServiceAsync = client.card()
 
-      val card = cardServiceAsync.get(CardGetParams.builder()
-          .id("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-          .build())
+        val card =
+            cardServiceAsync.get(
+                CardGetParams.builder().id("crd_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
+            )
 
-      card.validate()
+        card.validate()
     }
 }

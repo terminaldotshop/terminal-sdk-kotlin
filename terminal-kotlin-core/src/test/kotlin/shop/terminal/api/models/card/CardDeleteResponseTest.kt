@@ -9,10 +9,9 @@ class CardDeleteResponseTest {
 
     @Test
     fun createCardDeleteResponse() {
-      val cardDeleteResponse = CardDeleteResponse.builder()
-          .data(CardDeleteResponse.Data.OK)
-          .build()
-      assertThat(cardDeleteResponse).isNotNull
-      assertThat(cardDeleteResponse.data()).isEqualTo(CardDeleteResponse.Data.OK)
+        val cardDeleteResponse =
+            CardDeleteResponse.builder().data(CardDeleteResponse.Data.OK).build()
+        assertThat(cardDeleteResponse).isNotNull
+        assertThat(cardDeleteResponse.data()).isEqualTo(CardDeleteResponse.Data.OK)
     }
 }
