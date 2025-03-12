@@ -8,6 +8,6 @@ class ProductListParamsTest {
 
     @Test
     fun create() {
-        ProductListParams.builder().build()
+      ProductListParams.builder().build()
     }
 }

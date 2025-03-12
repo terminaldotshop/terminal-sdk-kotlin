@@ -18,18 +18,19 @@ import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
 @NoAutoDetect
-class AppListResponse
-@JsonCreator
-private constructor(
+class AppListResponse @JsonCreator private constructor(
     @JsonProperty("data") @ExcludeMissing private val data: JsonField<List<App>> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
 ) {
 
     /** List of apps. */
     fun data(): List<App> = data.getRequired("data")
 
     /** List of apps. */
-    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<App>> = data
+    @JsonProperty("data")
+    @ExcludeMissing
+    fun _data(): JsonField<List<App>> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -37,14 +38,15 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): AppListResponse = apply {
-        if (validated) {
-            return@apply
-        }
+    fun validate(): AppListResponse =
+        apply {
+            if (validated) {
+              return@apply
+            }
 
-        data().forEach { it.validate() }
-        validated = true
-    }
+            data().forEach { it.validate() }
+            validated = true
+        }
 
     fun toBuilder() = Builder().from(this)
 
@@ -54,6 +56,7 @@ private constructor(
          * Returns a mutable builder for constructing an instance of [AppListResponse].
          *
          * The following fields are required:
+         *
          * ```kotlin
          * .data()
          * ```
@@ -67,57 +70,69 @@ private constructor(
         private var data: JsonField<MutableList<App>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-        internal fun from(appListResponse: AppListResponse) = apply {
-            data = appListResponse.data.map { it.toMutableList() }
-            additionalProperties = appListResponse.additionalProperties.toMutableMap()
-        }
+        internal fun from(appListResponse: AppListResponse) =
+            apply {
+                data = appListResponse.data.map { it.toMutableList() }
+                additionalProperties = appListResponse.additionalProperties.toMutableMap()
+            }
 
         /** List of apps. */
         fun data(data: List<App>) = data(JsonField.of(data))
 
         /** List of apps. */
-        fun data(data: JsonField<List<App>>) = apply { this.data = data.map { it.toMutableList() } }
+        fun data(data: JsonField<List<App>>) =
+            apply {
+                this.data = data.map { it.toMutableList() }
+            }
 
         /** List of apps. */
-        fun addData(data: App) = apply {
-            this.data =
-                (this.data ?: JsonField.of(mutableListOf())).also {
+        fun addData(data: App) =
+            apply {
+                this.data = (this.data ?: JsonField.of(mutableListOf())).also {
                     checkKnown("data", it).add(data)
                 }
-        }
+            }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.clear()
-            putAllAdditionalProperties(additionalProperties)
-        }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            additionalProperties.put(key, value)
-        }
+        fun putAdditionalProperty(key: String, value: JsonValue) =
+            apply {
+                additionalProperties.put(key, value)
+            }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.putAll(additionalProperties)
-        }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+        fun removeAdditionalProperty(key: String) =
+            apply {
+                additionalProperties.remove(key)
+            }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalProperty)
-        }
+        fun removeAllAdditionalProperties(keys: Set<String>) =
+            apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
         fun build(): AppListResponse =
             AppListResponse(
-                checkRequired("data", data).map { it.toImmutable() },
-                additionalProperties.toImmutable(),
+              checkRequired(
+                "data", data
+              ).map { it.toImmutable() }, additionalProperties.toImmutable()
             )
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return /* spotless:off */ other is AppListResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
+      return /* spotless:off */ other is AppListResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -126,6 +141,5 @@ private constructor(
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() =
-        "AppListResponse{data=$data, additionalProperties=$additionalProperties}"
+    override fun toString() = "AppListResponse{data=$data, additionalProperties=$additionalProperties}"
 }

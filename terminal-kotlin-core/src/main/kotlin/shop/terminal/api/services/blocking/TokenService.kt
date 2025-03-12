@@ -17,43 +17,33 @@ import shop.terminal.api.models.token.TokenListResponse
 interface TokenService {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     * Returns a view of this service that provides access to raw HTTP responses for
+     * each method.
      */
     fun withRawResponse(): WithRawResponse
 
     /** Create a personal access token. */
-    fun create(
-        params: TokenCreateParams = TokenCreateParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): TokenCreateResponse
+    fun create(params: TokenCreateParams = TokenCreateParams.none(), requestOptions: RequestOptions = RequestOptions.none()): TokenCreateResponse
 
     /** @see [create] */
-    fun create(requestOptions: RequestOptions): TokenCreateResponse =
-        create(TokenCreateParams.none(), requestOptions)
+    fun create(requestOptions: RequestOptions): TokenCreateResponse = create(TokenCreateParams.none(), requestOptions)
 
     /** List the current user's personal access tokens. */
-    fun list(
-        params: TokenListParams = TokenListParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): TokenListResponse
+    fun list(params: TokenListParams = TokenListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): TokenListResponse
 
     /** @see [list] */
-    fun list(requestOptions: RequestOptions): TokenListResponse =
-        list(TokenListParams.none(), requestOptions)
+    fun list(requestOptions: RequestOptions): TokenListResponse = list(TokenListParams.none(), requestOptions)
 
     /** Delete the personal access token with the given ID. */
-    fun delete(
-        params: TokenDeleteParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): TokenDeleteResponse
+    fun delete(params: TokenDeleteParams, requestOptions: RequestOptions = RequestOptions.none()): TokenDeleteResponse
 
     /** Get the personal access token with the given ID. */
-    fun get(
-        params: TokenGetParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): TokenGetResponse
+    fun get(params: TokenGetParams, requestOptions: RequestOptions = RequestOptions.none()): TokenGetResponse
 
-    /** A view of [TokenService] that provides access to raw HTTP responses for each method. */
+    /**
+     * A view of [TokenService] that provides access to raw HTTP responses for each
+     * method.
+     */
     interface WithRawResponse {
 
         /**
@@ -61,49 +51,35 @@ interface TokenService {
          * [TokenService.create].
          */
         @MustBeClosed
-        fun create(
-            params: TokenCreateParams = TokenCreateParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TokenCreateResponse>
+        fun create(params: TokenCreateParams = TokenCreateParams.none(), requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<TokenCreateResponse>
 
         /** @see [create] */
         @MustBeClosed
-        fun create(requestOptions: RequestOptions): HttpResponseFor<TokenCreateResponse> =
-            create(TokenCreateParams.none(), requestOptions)
+        fun create(requestOptions: RequestOptions): HttpResponseFor<TokenCreateResponse> = create(TokenCreateParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /token`, but is otherwise the same as
          * [TokenService.list].
          */
         @MustBeClosed
-        fun list(
-            params: TokenListParams = TokenListParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TokenListResponse>
+        fun list(params: TokenListParams = TokenListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<TokenListResponse>
 
         /** @see [list] */
         @MustBeClosed
-        fun list(requestOptions: RequestOptions): HttpResponseFor<TokenListResponse> =
-            list(TokenListParams.none(), requestOptions)
+        fun list(requestOptions: RequestOptions): HttpResponseFor<TokenListResponse> = list(TokenListParams.none(), requestOptions)
 
         /**
-         * Returns a raw HTTP response for `delete /token/{id}`, but is otherwise the same as
-         * [TokenService.delete].
+         * Returns a raw HTTP response for `delete /token/{id}`, but is otherwise the same
+         * as [TokenService.delete].
          */
         @MustBeClosed
-        fun delete(
-            params: TokenDeleteParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TokenDeleteResponse>
+        fun delete(params: TokenDeleteParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<TokenDeleteResponse>
 
         /**
          * Returns a raw HTTP response for `get /token/{id}`, but is otherwise the same as
          * [TokenService.get].
          */
         @MustBeClosed
-        fun get(
-            params: TokenGetParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TokenGetResponse>
+        fun get(params: TokenGetParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<TokenGetResponse>
     }
 }
