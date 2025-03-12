@@ -20,19 +20,16 @@ import shop.terminal.api.models.profile.ProfileMeResponse
 import shop.terminal.api.models.profile.ProfileUpdateParams
 import shop.terminal.api.models.profile.ProfileUpdateResponse
 
-class ProfileServiceImpl internal constructor(private val clientOptions: ClientOptions) :
-    ProfileService {
+class ProfileServiceImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: ProfileService.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : ProfileService {
+
+    private val withRawResponse: ProfileService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     override fun withRawResponse(): ProfileService.WithRawResponse = withRawResponse
 
-    override fun update(
-        params: ProfileUpdateParams,
-        requestOptions: RequestOptions,
-    ): ProfileUpdateResponse =
+    override fun update(params: ProfileUpdateParams, requestOptions: RequestOptions): ProfileUpdateResponse =
         // put /profile
         withRawResponse().update(params, requestOptions).parse()
 
@@ -40,63 +37,62 @@ class ProfileServiceImpl internal constructor(private val clientOptions: ClientO
         // get /profile
         withRawResponse().me(params, requestOptions).parse()
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        ProfileService.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
+
+    ) : ProfileService.WithRawResponse {
 
         private val errorHandler: Handler<TerminalError> = errorHandler(clientOptions.jsonMapper)
 
-        private val updateHandler: Handler<ProfileUpdateResponse> =
-            jsonHandler<ProfileUpdateResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val updateHandler: Handler<ProfileUpdateResponse> = jsonHandler<ProfileUpdateResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun update(
-            params: ProfileUpdateParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<ProfileUpdateResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.PUT)
-                    .addPathSegments("profile")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
-                response
-                    .use { updateHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
+        override fun update(params: ProfileUpdateParams, requestOptions: RequestOptions): HttpResponseFor<ProfileUpdateResponse> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.PUT)
+            .addPathSegments("profile")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(clientOptions, params)
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return response.parseable {
+              response.use {
+                  updateHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          }
         }
 
-        private val meHandler: Handler<ProfileMeResponse> =
-            jsonHandler<ProfileMeResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val meHandler: Handler<ProfileMeResponse> = jsonHandler<ProfileMeResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun me(
-            params: ProfileMeParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<ProfileMeResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .addPathSegments("profile")
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
-                response
-                    .use { meHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
+        override fun me(params: ProfileMeParams, requestOptions: RequestOptions): HttpResponseFor<ProfileMeResponse> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.GET)
+            .addPathSegments("profile")
+            .build()
+            .prepare(clientOptions, params)
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return response.parseable {
+              response.use {
+                  meHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          }
         }
     }
 }

@@ -10,25 +10,29 @@ class CartConvertParamsTest {
 
     @Test
     fun create() {
-        CartConvertParams.builder().recipientEmail("dev@stainless.com").build()
+      CartConvertParams.builder()
+          .recipientEmail("dev@stainless.com")
+          .build()
     }
 
     @Test
     fun body() {
-        val params = CartConvertParams.builder().recipientEmail("dev@stainless.com").build()
+      val params = CartConvertParams.builder()
+          .recipientEmail("dev@stainless.com")
+          .build()
 
-        val body = params._body()
+      val body = params._body()
 
-        assertNotNull(body)
-        assertThat(body.recipientEmail()).isEqualTo("dev@stainless.com")
+      assertNotNull(body)
+      assertThat(body.recipientEmail()).isEqualTo("dev@stainless.com")
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = CartConvertParams.builder().build()
+      val params = CartConvertParams.builder().build()
 
-        val body = params._body()
+      val body = params._body()
 
-        assertNotNull(body)
+      assertNotNull(body)
     }
 }

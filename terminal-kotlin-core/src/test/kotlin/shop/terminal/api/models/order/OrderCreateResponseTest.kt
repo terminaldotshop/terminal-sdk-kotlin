@@ -9,9 +9,10 @@ class OrderCreateResponseTest {
 
     @Test
     fun createOrderCreateResponse() {
-        val orderCreateResponse =
-            OrderCreateResponse.builder().data("ord_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
-        assertThat(orderCreateResponse).isNotNull
-        assertThat(orderCreateResponse.data()).isEqualTo("ord_XXXXXXXXXXXXXXXXXXXXXXXXX")
+      val orderCreateResponse = OrderCreateResponse.builder()
+          .data("ord_XXXXXXXXXXXXXXXXXXXXXXXXX")
+          .build()
+      assertThat(orderCreateResponse).isNotNull
+      assertThat(orderCreateResponse.data()).isEqualTo("ord_XXXXXXXXXXXXXXXXXXXXXXXXX")
     }
 }

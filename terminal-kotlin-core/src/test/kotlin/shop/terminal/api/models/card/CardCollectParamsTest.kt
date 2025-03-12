@@ -8,6 +8,6 @@ class CardCollectParamsTest {
 
     @Test
     fun create() {
-        CardCollectParams.builder().build()
+      CardCollectParams.builder().build()
     }
 }

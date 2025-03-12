@@ -9,9 +9,10 @@ class EmailCreateResponseTest {
 
     @Test
     fun createEmailCreateResponse() {
-        val emailCreateResponse =
-            EmailCreateResponse.builder().data(EmailCreateResponse.Data.OK).build()
-        assertThat(emailCreateResponse).isNotNull
-        assertThat(emailCreateResponse.data()).isEqualTo(EmailCreateResponse.Data.OK)
+      val emailCreateResponse = EmailCreateResponse.builder()
+          .data(EmailCreateResponse.Data.OK)
+          .build()
+      assertThat(emailCreateResponse).isNotNull
+      assertThat(emailCreateResponse.data()).isEqualTo(EmailCreateResponse.Data.OK)
     }
 }

@@ -1,17 +1,17 @@
 package shop.terminal.api.core.http
 
+import shop.terminal.api.client.okhttp.OkHttpClient
+import shop.terminal.api.core.RequestOptions
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import com.github.tomakehurst.wiremock.stubbing.Scenario
-import java.io.InputStream
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import shop.terminal.api.client.okhttp.OkHttpClient
-import shop.terminal.api.core.RequestOptions
+import java.io.InputStream
 
 @WireMockTest
 internal class RetryingHttpClientTest {
@@ -26,12 +26,12 @@ internal class RetryingHttpClientTest {
             object : HttpClient {
                 override fun execute(
                     request: HttpRequest,
-                    requestOptions: RequestOptions,
+                    requestOptions: RequestOptions
                 ): HttpResponse = trackClose(okHttpClient.execute(request, requestOptions))
 
                 override suspend fun executeAsync(
                     request: HttpRequest,
-                    requestOptions: RequestOptions,
+                    requestOptions: RequestOptions
                 ): HttpResponse = trackClose(okHttpClient.executeAsync(request, requestOptions))
 
                 override fun close() = okHttpClient.close()
@@ -70,7 +70,7 @@ internal class RetryingHttpClientTest {
         val response =
             retryingClient.execute(
                 HttpRequest.builder().method(HttpMethod.POST).addPathSegment("something").build(),
-                async,
+                async
             )
 
         assertThat(response.statusCode()).isEqualTo(200)
@@ -96,7 +96,7 @@ internal class RetryingHttpClientTest {
         val response =
             retryingClient.execute(
                 HttpRequest.builder().method(HttpMethod.POST).addPathSegment("something").build(),
-                async,
+                async
             )
 
         assertThat(response.statusCode()).isEqualTo(200)
@@ -139,24 +139,24 @@ internal class RetryingHttpClientTest {
         val response =
             retryingClient.execute(
                 HttpRequest.builder().method(HttpMethod.POST).addPathSegment("something").build(),
-                async,
+                async
             )
 
         assertThat(response.statusCode()).isEqualTo(200)
         verify(
             1,
             postRequestedFor(urlPathEqualTo("/something"))
-                .withHeader("x-stainless-retry-count", equalTo("0")),
+                .withHeader("x-stainless-retry-count", equalTo("0"))
         )
         verify(
             1,
             postRequestedFor(urlPathEqualTo("/something"))
-                .withHeader("x-stainless-retry-count", equalTo("1")),
+                .withHeader("x-stainless-retry-count", equalTo("1"))
         )
         verify(
             1,
             postRequestedFor(urlPathEqualTo("/something"))
-                .withHeader("x-stainless-retry-count", equalTo("2")),
+                .withHeader("x-stainless-retry-count", equalTo("2"))
         )
         assertNoResponseLeaks()
     }
@@ -190,14 +190,14 @@ internal class RetryingHttpClientTest {
                     .addPathSegment("something")
                     .putHeader("x-stainless-retry-count", "42")
                     .build(),
-                async,
+                async
             )
 
         assertThat(response.statusCode()).isEqualTo(200)
         verify(
             2,
             postRequestedFor(urlPathEqualTo("/something"))
-                .withHeader("x-stainless-retry-count", equalTo("42")),
+                .withHeader("x-stainless-retry-count", equalTo("42"))
         )
         assertNoResponseLeaks()
     }
@@ -225,7 +225,7 @@ internal class RetryingHttpClientTest {
         val response =
             retryingClient.execute(
                 HttpRequest.builder().method(HttpMethod.POST).addPathSegment("something").build(),
-                async,
+                async
             )
 
         assertThat(response.statusCode()).isEqualTo(200)
