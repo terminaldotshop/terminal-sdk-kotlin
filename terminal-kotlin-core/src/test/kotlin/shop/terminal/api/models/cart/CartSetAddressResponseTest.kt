@@ -9,10 +9,9 @@ class CartSetAddressResponseTest {
 
     @Test
     fun createCartSetAddressResponse() {
-      val cartSetAddressResponse = CartSetAddressResponse.builder()
-          .data(CartSetAddressResponse.Data.OK)
-          .build()
-      assertThat(cartSetAddressResponse).isNotNull
-      assertThat(cartSetAddressResponse.data()).isEqualTo(CartSetAddressResponse.Data.OK)
+        val cartSetAddressResponse =
+            CartSetAddressResponse.builder().data(CartSetAddressResponse.Data.OK).build()
+        assertThat(cartSetAddressResponse).isNotNull
+        assertThat(cartSetAddressResponse.data()).isEqualTo(CartSetAddressResponse.Data.OK)
     }
 }

@@ -27,10 +27,10 @@ import com.fasterxml.jackson.databind.node.JsonNodeType.POJO
 import com.fasterxml.jackson.databind.node.JsonNodeType.STRING
 import com.fasterxml.jackson.databind.ser.std.NullSerializer
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
-import shop.terminal.api.errors.TerminalInvalidDataException
 import java.io.InputStream
 import java.util.Objects
 import kotlin.reflect.KClass
+import shop.terminal.api.errors.TerminalInvalidDataException
 
 @JsonDeserialize(using = JsonField.Deserializer::class)
 sealed class JsonField<out T : Any> {
@@ -46,8 +46,8 @@ sealed class JsonField<out T : Any> {
         }
 
     /**
-     * If the "known" value (i.e. matching the type that the SDK expects) is returned
-     * by the API then this method will return `null`, otherwise a `JsonValue` is returned.
+     * If the "known" value (i.e. matching the type that the SDK expects) is returned by the API
+     * then this method will return `null`, otherwise a `JsonValue` is returned.
      */
     fun asUnknown(): JsonValue? =
         when (this) {
@@ -76,7 +76,8 @@ sealed class JsonField<out T : Any> {
             else -> null
         }
 
-    fun asStringOrThrow(): String = asString() ?: throw TerminalInvalidDataException("Value is not a string")
+    fun asStringOrThrow(): String =
+        asString() ?: throw TerminalInvalidDataException("Value is not a string")
 
     fun asArray(): List<JsonValue>? =
         when (this) {
@@ -86,7 +87,8 @@ sealed class JsonField<out T : Any> {
                     try {
                         JsonValue.from(it)
                     } catch (e: IllegalArgumentException) {
-                        // The known value is a list, but not all items are convertible to `JsonValue`.
+                        // The known value is a list, but not all items are convertible to
+                        // `JsonValue`.
                         return null
                     }
                 }
@@ -107,7 +109,8 @@ sealed class JsonField<out T : Any> {
                             try {
                                 JsonValue.from(value)
                             } catch (e: IllegalArgumentException) {
-                                // The known value is a map, but not all values are convertible to `JsonValue`.
+                                // The known value is a map, but not all values are convertible to
+                                // `JsonValue`.
                                 return null
                             }
 
@@ -140,7 +143,7 @@ sealed class JsonField<out T : Any> {
         }
 
     internal fun accept(consume: (T) -> Unit) {
-      asKnown()?.let(consume)
+        asKnown()?.let(consume)
     }
 
     fun <R> accept(visitor: Visitor<T, R>): R =
@@ -149,7 +152,7 @@ sealed class JsonField<out T : Any> {
             is JsonValue -> accept(visitor as JsonValue.Visitor<R>)
         }
 
-    interface Visitor<in T, out R>: JsonValue.Visitor<R> {
+    interface Visitor<in T, out R> : JsonValue.Visitor<R> {
         fun visitKnown(value: T): R = visitDefault()
     }
 
@@ -164,8 +167,9 @@ sealed class JsonField<out T : Any> {
     }
 
     /**
-     * This class is a Jackson filter that can be used to exclude missing properties from objects. This filter
-     * should not be used directly and should instead use the @ExcludeMissing annotation.
+     * This class is a Jackson filter that can be used to exclude missing properties from objects.
+     * This filter should not be used directly and should instead use the @ExcludeMissing
+     * annotation.
      */
     class IsMissing {
         override fun equals(other: Any?): Boolean = other is JsonMissing
@@ -190,13 +194,13 @@ sealed class JsonField<out T : Any> {
 }
 
 @JsonDeserialize(using = JsonValue.Deserializer::class)
-sealed class JsonValue: JsonField<Nothing>() {
+sealed class JsonValue : JsonField<Nothing>() {
 
-    inline fun <reified R: Any> convert(): R? = convert(jacksonTypeRef())
+    inline fun <reified R : Any> convert(): R? = convert(jacksonTypeRef())
 
-    fun <R: Any> convert(type: TypeReference<R>): R? = JSON_MAPPER.convertValue(this, type)
+    fun <R : Any> convert(type: TypeReference<R>): R? = JSON_MAPPER.convertValue(this, type)
 
-    fun <R: Any> convert(type: KClass<R>): R? = JSON_MAPPER.convertValue(this, type.java)
+    fun <R : Any> convert(type: KClass<R>): R? = JSON_MAPPER.convertValue(this, type.java)
 
     fun <R> accept(visitor: Visitor<R>): R =
         when (this) {
@@ -211,12 +215,19 @@ sealed class JsonValue: JsonField<Nothing>() {
 
     interface Visitor<out R> {
         fun visitNull(): R = visitDefault()
+
         fun visitMissing(): R = visitDefault()
+
         fun visitBoolean(value: Boolean): R = visitDefault()
+
         fun visitNumber(value: Number): R = visitDefault()
+
         fun visitString(value: String): R = visitDefault()
+
         fun visitArray(values: List<JsonValue>): R = visitDefault()
+
         fun visitObject(values: Map<String, JsonValue>): R = visitDefault()
+
         fun visitDefault(): R {
             throw RuntimeException("Unexpected value")
         }
@@ -240,8 +251,12 @@ sealed class JsonValue: JsonField<Nothing>() {
                 BOOLEAN -> JsonBoolean.of(node.booleanValue())
                 NUMBER -> JsonNumber.of(node.numberValue())
                 STRING -> JsonString.of(node.textValue())
-                ARRAY -> JsonArray.of(node.elements().asSequence().map { fromJsonNode(it) }.toList())
-                OBJECT -> JsonObject.of(node.fields().asSequence().map { it.key to fromJsonNode(it.value) }.toMap())
+                ARRAY ->
+                    JsonArray.of(node.elements().asSequence().map { fromJsonNode(it) }.toList())
+                OBJECT ->
+                    JsonObject.of(
+                        node.fields().asSequence().map { it.key to fromJsonNode(it.value) }.toMap()
+                    )
                 BINARY,
                 POJO,
                 null -> throw IllegalStateException("Unexpected JsonNode type: ${node.nodeType}")
@@ -288,8 +303,12 @@ class JsonMissing : JsonValue() {
         fun of() = INSTANCE
     }
 
-    class Serializer: BaseSerializer<JsonMissing>(JsonMissing::class) {
-        override fun serialize(value: JsonMissing, generator: JsonGenerator, provider: SerializerProvider) {
+    class Serializer : BaseSerializer<JsonMissing>(JsonMissing::class) {
+        override fun serialize(
+            value: JsonMissing,
+            generator: JsonGenerator,
+            provider: SerializerProvider,
+        ) {
             throw RuntimeException("JsonMissing cannot be serialized")
         }
     }
@@ -392,8 +411,7 @@ private constructor(
     override fun toString() = values.toString()
 
     companion object {
-        @JsonCreator
-        fun of(values: List<JsonValue>) = JsonArray(values.toImmutable())
+        @JsonCreator fun of(values: List<JsonValue>) = JsonArray(values.toImmutable())
     }
 }
 
@@ -417,16 +435,12 @@ private constructor(
     override fun toString() = values.toString()
 
     companion object {
-        @JsonCreator
-        fun of(values: Map<String, JsonValue>) = JsonObject(values.toImmutable())
+        @JsonCreator fun of(values: Map<String, JsonValue>) = JsonObject(values.toImmutable())
     }
 }
 
 @JacksonAnnotationsInside
-@JsonInclude(
-    JsonInclude.Include.CUSTOM,
-    valueFilter = JsonField.IsMissing::class,
-)
+@JsonInclude(JsonInclude.Include.CUSTOM, valueFilter = JsonField.IsMissing::class)
 annotation class ExcludeMissing
 
 @JacksonAnnotationsInside
@@ -435,15 +449,12 @@ annotation class ExcludeMissing
     isGetterVisibility = Visibility.NONE,
     setterVisibility = Visibility.NONE,
     creatorVisibility = Visibility.NONE,
-    fieldVisibility = Visibility.NONE)
+    fieldVisibility = Visibility.NONE,
+)
 annotation class NoAutoDetect
 
 class MultipartField<T : Any>
-private constructor(
-    val value: JsonField<T>,
-    val contentType: String,
-    val filename: String?,
-) {
+private constructor(val value: JsonField<T>, val contentType: String, val filename: String?) {
 
     companion object {
 
@@ -481,7 +492,10 @@ private constructor(
             return MultipartField(
                 value,
                 contentType
-                    ?: if (value is KnownValue && (value.value is InputStream || value.value is ByteArray))
+                    ?: if (
+                        value is KnownValue &&
+                            (value.value is InputStream || value.value is ByteArray)
+                    )
                         "application/octet-stream"
                     else "text/plain; charset=utf-8",
                 filename,
