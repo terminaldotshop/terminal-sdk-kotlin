@@ -11,24 +11,24 @@ import shop.terminal.api.models.view.ViewInitResponse
 interface ViewService {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     * Returns a view of this service that provides access to raw HTTP responses for
+     * each method.
      */
     fun withRawResponse(): WithRawResponse
 
     /**
-     * Get initial app data, including user, products, cart, addresses, cards, subscriptions, and
-     * orders.
+     * Get initial app data, including user, products, cart, addresses, cards,
+     * subscriptions, and orders.
      */
-    fun init(
-        params: ViewInitParams = ViewInitParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): ViewInitResponse
+    fun init(params: ViewInitParams = ViewInitParams.none(), requestOptions: RequestOptions = RequestOptions.none()): ViewInitResponse
 
     /** @see [init] */
-    fun init(requestOptions: RequestOptions): ViewInitResponse =
-        init(ViewInitParams.none(), requestOptions)
+    fun init(requestOptions: RequestOptions): ViewInitResponse = init(ViewInitParams.none(), requestOptions)
 
-    /** A view of [ViewService] that provides access to raw HTTP responses for each method. */
+    /**
+     * A view of [ViewService] that provides access to raw HTTP responses for each
+     * method.
+     */
     interface WithRawResponse {
 
         /**
@@ -36,14 +36,10 @@ interface ViewService {
          * [ViewService.init].
          */
         @MustBeClosed
-        fun init(
-            params: ViewInitParams = ViewInitParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<ViewInitResponse>
+        fun init(params: ViewInitParams = ViewInitParams.none(), requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<ViewInitResponse>
 
         /** @see [init] */
         @MustBeClosed
-        fun init(requestOptions: RequestOptions): HttpResponseFor<ViewInitResponse> =
-            init(ViewInitParams.none(), requestOptions)
+        fun init(requestOptions: RequestOptions): HttpResponseFor<ViewInitResponse> = init(ViewInitParams.none(), requestOptions)
     }
 }

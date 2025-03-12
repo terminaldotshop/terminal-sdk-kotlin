@@ -8,6 +8,6 @@ class OrderListParamsTest {
 
     @Test
     fun create() {
-        OrderListParams.builder().build()
+      OrderListParams.builder().build()
     }
 }

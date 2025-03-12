@@ -6,21 +6,21 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
+import shop.terminal.api.models.view.ViewInitParams
 
 @ExtendWith(TestServerExtension::class)
 class ViewServiceTest {
 
     @Test
     fun init() {
-        val client =
-            TerminalOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val viewService = client.view()
+      val client = TerminalOkHttpClient.builder()
+          .baseUrl(TestServerExtension.BASE_URL)
+          .bearerToken("My Bearer Token")
+          .build()
+      val viewService = client.view()
 
-        val response = viewService.init()
+      val response = viewService.init()
 
-        response.validate()
+      response.validate()
     }
 }

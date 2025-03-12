@@ -10,26 +10,32 @@ class CartRedeemGiftCardParamsTest {
 
     @Test
     fun create() {
-        CartRedeemGiftCardParams.builder().giftCardId("giftCardID").build()
+      CartRedeemGiftCardParams.builder()
+          .giftCardId("giftCardID")
+          .build()
     }
 
     @Test
     fun body() {
-        val params = CartRedeemGiftCardParams.builder().giftCardId("giftCardID").build()
+      val params = CartRedeemGiftCardParams.builder()
+          .giftCardId("giftCardID")
+          .build()
 
-        val body = params._body()
+      val body = params._body()
 
-        assertNotNull(body)
-        assertThat(body.giftCardId()).isEqualTo("giftCardID")
+      assertNotNull(body)
+      assertThat(body.giftCardId()).isEqualTo("giftCardID")
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = CartRedeemGiftCardParams.builder().giftCardId("giftCardID").build()
+      val params = CartRedeemGiftCardParams.builder()
+          .giftCardId("giftCardID")
+          .build()
 
-        val body = params._body()
+      val body = params._body()
 
-        assertNotNull(body)
-        assertThat(body.giftCardId()).isEqualTo("giftCardID")
+      assertNotNull(body)
+      assertThat(body.giftCardId()).isEqualTo("giftCardID")
     }
 }
