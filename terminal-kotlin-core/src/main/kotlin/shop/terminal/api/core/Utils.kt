@@ -2,9 +2,9 @@
 
 package shop.terminal.api.core
 
+import shop.terminal.api.errors.TerminalInvalidDataException
 import java.util.Collections
 import java.util.SortedMap
-import shop.terminal.api.errors.TerminalInvalidDataException
 
 internal fun <T : Any> T?.getOrThrow(name: String): T =
     this ?: throw TerminalInvalidDataException("`${name}` is not present")
@@ -24,25 +24,24 @@ internal fun <K : Comparable<K>, V> SortedMap<K, V>.toImmutable(): SortedMap<K, 
 /**
  * Returns whether [this] is equal to [other].
  *
- * This differs from [Object.equals] because it also deeply equates arrays based on their contents,
- * even when there are arrays directly nested within other arrays.
+ * This differs from [Object.equals] because it also deeply equates arrays based on their contents, even when
+ * there are arrays directly nested within other arrays.
  */
-internal infix fun Any?.contentEquals(other: Any?): Boolean =
-    arrayOf(this).contentDeepEquals(arrayOf(other))
+internal infix fun Any?.contentEquals(other: Any?): Boolean = arrayOf(this).contentDeepEquals(arrayOf(other))
 
 /**
  * Returns a hash of the given sequence of [values].
  *
- * This differs from [java.util.Objects.hash] because it also deeply hashes arrays based on their
- * contents, even when there are arrays directly nested within other arrays.
+ * This differs from [java.util.Objects.hash] because it also deeply hashes arrays based on their contents,
+ * even when there are arrays directly nested within other arrays.
  */
 internal fun contentHash(vararg values: Any?): Int = values.contentDeepHashCode()
 
 /**
  * Returns a [String] representation of [this].
  *
- * This differs from [Object.toString] because it also deeply stringifies arrays based on their
- * contents, even when there are arrays directly nested within other arrays.
+ * This differs from [Object.toString] because it also deeply stringifies arrays based on their contents, even
+ * when there are arrays directly nested within other arrays.
  */
 internal fun Any?.contentToString(): String {
     var string = arrayOf(this).contentDeepToString()

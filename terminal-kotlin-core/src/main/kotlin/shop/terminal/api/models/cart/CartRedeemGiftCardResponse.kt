@@ -17,18 +17,19 @@ import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
 @NoAutoDetect
-class CartRedeemGiftCardResponse
-@JsonCreator
-private constructor(
+class CartRedeemGiftCardResponse @JsonCreator private constructor(
     @JsonProperty("data") @ExcludeMissing private val data: JsonField<Data> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
 ) {
 
     /** Gift card redemption result */
     fun data(): Data = data.getRequired("data")
 
     /** Gift card redemption result */
-    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
+    @JsonProperty("data")
+    @ExcludeMissing
+    fun _data(): JsonField<Data> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -36,23 +37,26 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): CartRedeemGiftCardResponse = apply {
-        if (validated) {
-            return@apply
-        }
+    fun validate(): CartRedeemGiftCardResponse =
+        apply {
+            if (validated) {
+              return@apply
+            }
 
-        data().validate()
-        validated = true
-    }
+            data().validate()
+            validated = true
+        }
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [CartRedeemGiftCardResponse].
+         * Returns a mutable builder for constructing an instance of
+         * [CartRedeemGiftCardResponse].
          *
          * The following fields are required:
+         *
          * ```kotlin
          * .data()
          * ```
@@ -66,59 +70,63 @@ private constructor(
         private var data: JsonField<Data>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-        internal fun from(cartRedeemGiftCardResponse: CartRedeemGiftCardResponse) = apply {
-            data = cartRedeemGiftCardResponse.data
-            additionalProperties = cartRedeemGiftCardResponse.additionalProperties.toMutableMap()
-        }
+        internal fun from(cartRedeemGiftCardResponse: CartRedeemGiftCardResponse) =
+            apply {
+                data = cartRedeemGiftCardResponse.data
+                additionalProperties = cartRedeemGiftCardResponse.additionalProperties.toMutableMap()
+            }
 
         /** Gift card redemption result */
         fun data(data: Data) = data(JsonField.of(data))
 
         /** Gift card redemption result */
-        fun data(data: JsonField<Data>) = apply { this.data = data }
+        fun data(data: JsonField<Data>) =
+            apply {
+                this.data = data
+            }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.clear()
-            putAllAdditionalProperties(additionalProperties)
-        }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            additionalProperties.put(key, value)
-        }
+        fun putAdditionalProperty(key: String, value: JsonValue) =
+            apply {
+                additionalProperties.put(key, value)
+            }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.putAll(additionalProperties)
-        }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+        fun removeAdditionalProperty(key: String) =
+            apply {
+                additionalProperties.remove(key)
+            }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalProperty)
-        }
+        fun removeAllAdditionalProperties(keys: Set<String>) =
+            apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
         fun build(): CartRedeemGiftCardResponse =
             CartRedeemGiftCardResponse(
-                checkRequired("data", data),
-                additionalProperties.toImmutable(),
+              checkRequired(
+                "data", data
+              ), additionalProperties.toImmutable()
             )
     }
 
     /** Gift card redemption result */
     @NoAutoDetect
-    class Data
-    @JsonCreator
-    private constructor(
-        @JsonProperty("appliedAmount")
-        @ExcludeMissing
-        private val appliedAmount: JsonField<Long> = JsonMissing.of(),
-        @JsonProperty("giftCardID")
-        @ExcludeMissing
-        private val giftCardId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("remainingBalance")
-        @ExcludeMissing
-        private val remainingBalance: JsonField<Long> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    class Data @JsonCreator private constructor(
+        @JsonProperty("appliedAmount") @ExcludeMissing private val appliedAmount: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("giftCardID") @ExcludeMissing private val giftCardId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("remainingBalance") @ExcludeMissing private val remainingBalance: JsonField<Long> = JsonMissing.of(),
+        @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
     ) {
 
         fun appliedAmount(): Long = appliedAmount.getRequired("appliedAmount")
@@ -145,16 +153,17 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): Data = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): Data =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            appliedAmount()
-            giftCardId()
-            remainingBalance()
-            validated = true
-        }
+                appliedAmount()
+                giftCardId()
+                remainingBalance()
+                validated = true
+            }
 
         fun toBuilder() = Builder().from(this)
 
@@ -164,6 +173,7 @@ private constructor(
              * Returns a mutable builder for constructing an instance of [Data].
              *
              * The following fields are required:
+             *
              * ```kotlin
              * .appliedAmount()
              * .giftCardId()
@@ -181,64 +191,82 @@ private constructor(
             private var remainingBalance: JsonField<Long>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-            internal fun from(data: Data) = apply {
-                appliedAmount = data.appliedAmount
-                giftCardId = data.giftCardId
-                remainingBalance = data.remainingBalance
-                additionalProperties = data.additionalProperties.toMutableMap()
-            }
+            internal fun from(data: Data) =
+                apply {
+                    appliedAmount = data.appliedAmount
+                    giftCardId = data.giftCardId
+                    remainingBalance = data.remainingBalance
+                    additionalProperties = data.additionalProperties.toMutableMap()
+                }
 
             fun appliedAmount(appliedAmount: Long) = appliedAmount(JsonField.of(appliedAmount))
 
-            fun appliedAmount(appliedAmount: JsonField<Long>) = apply {
-                this.appliedAmount = appliedAmount
-            }
+            fun appliedAmount(appliedAmount: JsonField<Long>) =
+                apply {
+                    this.appliedAmount = appliedAmount
+                }
 
             fun giftCardId(giftCardId: String) = giftCardId(JsonField.of(giftCardId))
 
-            fun giftCardId(giftCardId: JsonField<String>) = apply { this.giftCardId = giftCardId }
+            fun giftCardId(giftCardId: JsonField<String>) =
+                apply {
+                    this.giftCardId = giftCardId
+                }
 
-            fun remainingBalance(remainingBalance: Long) =
-                remainingBalance(JsonField.of(remainingBalance))
+            fun remainingBalance(remainingBalance: Long) = remainingBalance(JsonField.of(remainingBalance))
 
-            fun remainingBalance(remainingBalance: JsonField<Long>) = apply {
-                this.remainingBalance = remainingBalance
-            }
+            fun remainingBalance(remainingBalance: JsonField<Long>) =
+                apply {
+                    this.remainingBalance = remainingBalance
+                }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
+            fun putAdditionalProperty(key: String, value: JsonValue) =
+                apply {
+                    additionalProperties.put(key, value)
+                }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
 
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+            fun removeAdditionalProperty(key: String) =
+                apply {
+                    additionalProperties.remove(key)
+                }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+            fun removeAllAdditionalProperties(keys: Set<String>) =
+                apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
             fun build(): Data =
                 Data(
-                    checkRequired("appliedAmount", appliedAmount),
-                    checkRequired("giftCardId", giftCardId),
-                    checkRequired("remainingBalance", remainingBalance),
-                    additionalProperties.toImmutable(),
+                  checkRequired(
+                    "appliedAmount", appliedAmount
+                  ),
+                  checkRequired(
+                    "giftCardId", giftCardId
+                  ),
+                  checkRequired(
+                    "remainingBalance", remainingBalance
+                  ),
+                  additionalProperties.toImmutable(),
                 )
         }
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return /* spotless:off */ other is Data && appliedAmount == other.appliedAmount && giftCardId == other.giftCardId && remainingBalance == other.remainingBalance && additionalProperties == other.additionalProperties /* spotless:on */
+          return /* spotless:off */ other is Data && appliedAmount == other.appliedAmount && giftCardId == other.giftCardId && remainingBalance == other.remainingBalance && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -247,16 +275,15 @@ private constructor(
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() =
-            "Data{appliedAmount=$appliedAmount, giftCardId=$giftCardId, remainingBalance=$remainingBalance, additionalProperties=$additionalProperties}"
+        override fun toString() = "Data{appliedAmount=$appliedAmount, giftCardId=$giftCardId, remainingBalance=$remainingBalance, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return /* spotless:off */ other is CartRedeemGiftCardResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
+      return /* spotless:off */ other is CartRedeemGiftCardResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -265,6 +292,5 @@ private constructor(
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() =
-        "CartRedeemGiftCardResponse{data=$data, additionalProperties=$additionalProperties}"
+    override fun toString() = "CartRedeemGiftCardResponse{data=$data, additionalProperties=$additionalProperties}"
 }
