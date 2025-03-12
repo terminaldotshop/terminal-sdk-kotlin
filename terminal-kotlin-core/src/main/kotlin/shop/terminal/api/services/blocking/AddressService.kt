@@ -17,30 +17,39 @@ import shop.terminal.api.models.address.AddressListResponse
 interface AddressService {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for
-     * each method.
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
 
     /** Create and add a shipping address to the current user. */
-    fun create(params: AddressCreateParams, requestOptions: RequestOptions = RequestOptions.none()): AddressCreateResponse
+    fun create(
+        params: AddressCreateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): AddressCreateResponse
 
     /** Get the shipping addresses associated with the current user. */
-    fun list(params: AddressListParams = AddressListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): AddressListResponse
+    fun list(
+        params: AddressListParams = AddressListParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): AddressListResponse
 
     /** @see [list] */
-    fun list(requestOptions: RequestOptions): AddressListResponse = list(AddressListParams.none(), requestOptions)
+    fun list(requestOptions: RequestOptions): AddressListResponse =
+        list(AddressListParams.none(), requestOptions)
 
     /** Delete a shipping address from the current user. */
-    fun delete(params: AddressDeleteParams, requestOptions: RequestOptions = RequestOptions.none()): AddressDeleteResponse
+    fun delete(
+        params: AddressDeleteParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): AddressDeleteResponse
 
     /** Get the shipping address with the given ID. */
-    fun get(params: AddressGetParams, requestOptions: RequestOptions = RequestOptions.none()): AddressGetResponse
+    fun get(
+        params: AddressGetParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): AddressGetResponse
 
-    /**
-     * A view of [AddressService] that provides access to raw HTTP responses for each
-     * method.
-     */
+    /** A view of [AddressService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
 
         /**
@@ -48,31 +57,44 @@ interface AddressService {
          * [AddressService.create].
          */
         @MustBeClosed
-        fun create(params: AddressCreateParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<AddressCreateResponse>
+        fun create(
+            params: AddressCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<AddressCreateResponse>
 
         /**
          * Returns a raw HTTP response for `get /address`, but is otherwise the same as
          * [AddressService.list].
          */
         @MustBeClosed
-        fun list(params: AddressListParams = AddressListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<AddressListResponse>
+        fun list(
+            params: AddressListParams = AddressListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<AddressListResponse>
 
         /** @see [list] */
         @MustBeClosed
-        fun list(requestOptions: RequestOptions): HttpResponseFor<AddressListResponse> = list(AddressListParams.none(), requestOptions)
+        fun list(requestOptions: RequestOptions): HttpResponseFor<AddressListResponse> =
+            list(AddressListParams.none(), requestOptions)
 
         /**
-         * Returns a raw HTTP response for `delete /address/{id}`, but is otherwise the
-         * same as [AddressService.delete].
+         * Returns a raw HTTP response for `delete /address/{id}`, but is otherwise the same as
+         * [AddressService.delete].
          */
         @MustBeClosed
-        fun delete(params: AddressDeleteParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<AddressDeleteResponse>
+        fun delete(
+            params: AddressDeleteParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<AddressDeleteResponse>
 
         /**
-         * Returns a raw HTTP response for `get /address/{id}`, but is otherwise the same
-         * as [AddressService.get].
+         * Returns a raw HTTP response for `get /address/{id}`, but is otherwise the same as
+         * [AddressService.get].
          */
         @MustBeClosed
-        fun get(params: AddressGetParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<AddressGetResponse>
+        fun get(
+            params: AddressGetParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<AddressGetResponse>
     }
 }

@@ -7,7 +7,6 @@ import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import shop.terminal.api.core.enhanceJacksonException
 import shop.terminal.api.core.http.HttpResponse
 import shop.terminal.api.core.http.HttpResponse.Handler
-import shop.terminal.api.errors.TerminalException
 
 internal inline fun <reified T> jsonHandler(jsonMapper: JsonMapper): Handler<T> =
     object : Handler<T> {

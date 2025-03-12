@@ -9,10 +9,9 @@ class AddressCreateResponseTest {
 
     @Test
     fun createAddressCreateResponse() {
-      val addressCreateResponse = AddressCreateResponse.builder()
-          .data("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
-          .build()
-      assertThat(addressCreateResponse).isNotNull
-      assertThat(addressCreateResponse.data()).isEqualTo("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+        val addressCreateResponse =
+            AddressCreateResponse.builder().data("shp_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
+        assertThat(addressCreateResponse).isNotNull
+        assertThat(addressCreateResponse.data()).isEqualTo("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
     }
 }

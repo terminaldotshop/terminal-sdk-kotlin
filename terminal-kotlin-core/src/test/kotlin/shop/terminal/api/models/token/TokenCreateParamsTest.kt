@@ -8,6 +8,6 @@ class TokenCreateParamsTest {
 
     @Test
     fun create() {
-      TokenCreateParams.builder().build()
+        TokenCreateParams.builder().build()
     }
 }
