@@ -9,20 +9,16 @@ class CardDeleteParamsTest {
 
     @Test
     fun create() {
-      CardDeleteParams.builder()
-          .id("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-          .build()
+        CardDeleteParams.builder().id("crd_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
     }
 
     @Test
     fun getPathParam() {
-      val params = CardDeleteParams.builder()
-          .id("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-          .build()
-      assertThat(params).isNotNull
-      // path param "id"
-      assertThat(params.getPathParam(0)).isEqualTo("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-      // out-of-bound path param
-      assertThat(params.getPathParam(1)).isEqualTo("")
+        val params = CardDeleteParams.builder().id("crd_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
+        assertThat(params).isNotNull
+        // path param "id"
+        assertThat(params.getPathParam(0)).isEqualTo("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+        // out-of-bound path param
+        assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }
