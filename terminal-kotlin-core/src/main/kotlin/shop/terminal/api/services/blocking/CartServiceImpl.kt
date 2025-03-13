@@ -21,10 +21,6 @@ import shop.terminal.api.models.cart.CartConvertParams
 import shop.terminal.api.models.cart.CartConvertResponse
 import shop.terminal.api.models.cart.CartGetParams
 import shop.terminal.api.models.cart.CartGetResponse
-import shop.terminal.api.models.cart.CartRedeemGiftCardParams
-import shop.terminal.api.models.cart.CartRedeemGiftCardResponse
-import shop.terminal.api.models.cart.CartRemoveGiftCardParams
-import shop.terminal.api.models.cart.CartRemoveGiftCardResponse
 import shop.terminal.api.models.cart.CartSetAddressParams
 import shop.terminal.api.models.cart.CartSetAddressResponse
 import shop.terminal.api.models.cart.CartSetCardParams
@@ -54,20 +50,6 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
     override fun get(params: CartGetParams, requestOptions: RequestOptions): CartGetResponse =
         // get /cart
         withRawResponse().get(params, requestOptions).parse()
-
-    override fun redeemGiftCard(
-        params: CartRedeemGiftCardParams,
-        requestOptions: RequestOptions,
-    ): CartRedeemGiftCardResponse =
-        // put /cart/gift-card
-        withRawResponse().redeemGiftCard(params, requestOptions).parse()
-
-    override fun removeGiftCard(
-        params: CartRemoveGiftCardParams,
-        requestOptions: RequestOptions,
-    ): CartRemoveGiftCardResponse =
-        // delete /cart/gift-card
-        withRawResponse().removeGiftCard(params, requestOptions).parse()
 
     override fun setAddress(
         params: CartSetAddressParams,
@@ -134,7 +116,7 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
                     .addPathSegments("cart", "convert")
-                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -168,62 +150,6 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
             return response.parseable {
                 response
                     .use { getHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
-        }
-
-        private val redeemGiftCardHandler: Handler<CartRedeemGiftCardResponse> =
-            jsonHandler<CartRedeemGiftCardResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
-
-        override fun redeemGiftCard(
-            params: CartRedeemGiftCardParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<CartRedeemGiftCardResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.PUT)
-                    .addPathSegments("cart", "gift-card")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
-                response
-                    .use { redeemGiftCardHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
-        }
-
-        private val removeGiftCardHandler: Handler<CartRemoveGiftCardResponse> =
-            jsonHandler<CartRemoveGiftCardResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
-
-        override fun removeGiftCard(
-            params: CartRemoveGiftCardParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<CartRemoveGiftCardResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.DELETE)
-                    .addPathSegments("cart", "gift-card")
-                    .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
-                response
-                    .use { removeGiftCardHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()

@@ -37,9 +37,6 @@ private constructor(
     @JsonProperty("cardID")
     @ExcludeMissing
     private val cardId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("giftCardID")
-    @ExcludeMissing
-    private val giftCardId: JsonField<String> = JsonMissing.of(),
     @JsonProperty("shipping")
     @ExcludeMissing
     private val shipping: JsonField<Shipping> = JsonMissing.of(),
@@ -61,9 +58,6 @@ private constructor(
     /** ID of the card selected on the current user's cart. */
     fun cardId(): String? = cardId.getNullable("cardID")
 
-    /** ID of the gift card applied to the current user's cart. */
-    fun giftCardId(): String? = giftCardId.getNullable("giftCardID")
-
     /** Shipping information for the current user's cart. */
     fun shipping(): Shipping? = shipping.getNullable("shipping")
 
@@ -81,9 +75,6 @@ private constructor(
 
     /** ID of the card selected on the current user's cart. */
     @JsonProperty("cardID") @ExcludeMissing fun _cardId(): JsonField<String> = cardId
-
-    /** ID of the gift card applied to the current user's cart. */
-    @JsonProperty("giftCardID") @ExcludeMissing fun _giftCardId(): JsonField<String> = giftCardId
 
     /** Shipping information for the current user's cart. */
     @JsonProperty("shipping") @ExcludeMissing fun _shipping(): JsonField<Shipping> = shipping
@@ -104,7 +95,6 @@ private constructor(
         subtotal()
         addressId()
         cardId()
-        giftCardId()
         shipping()?.validate()
         validated = true
     }
@@ -134,7 +124,6 @@ private constructor(
         private var subtotal: JsonField<Long>? = null
         private var addressId: JsonField<String> = JsonMissing.of()
         private var cardId: JsonField<String> = JsonMissing.of()
-        private var giftCardId: JsonField<String> = JsonMissing.of()
         private var shipping: JsonField<Shipping> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -144,7 +133,6 @@ private constructor(
             subtotal = cart.subtotal
             addressId = cart.addressId
             cardId = cart.cardId
-            giftCardId = cart.giftCardId
             shipping = cart.shipping
             additionalProperties = cart.additionalProperties.toMutableMap()
         }
@@ -187,12 +175,6 @@ private constructor(
         /** ID of the card selected on the current user's cart. */
         fun cardId(cardId: JsonField<String>) = apply { this.cardId = cardId }
 
-        /** ID of the gift card applied to the current user's cart. */
-        fun giftCardId(giftCardId: String) = giftCardId(JsonField.of(giftCardId))
-
-        /** ID of the gift card applied to the current user's cart. */
-        fun giftCardId(giftCardId: JsonField<String>) = apply { this.giftCardId = giftCardId }
-
         /** Shipping information for the current user's cart. */
         fun shipping(shipping: Shipping) = shipping(JsonField.of(shipping))
 
@@ -225,7 +207,6 @@ private constructor(
                 checkRequired("subtotal", subtotal),
                 addressId,
                 cardId,
-                giftCardId,
                 shipping,
                 additionalProperties.toImmutable(),
             )
@@ -239,9 +220,6 @@ private constructor(
         @JsonProperty("subtotal")
         @ExcludeMissing
         private val subtotal: JsonField<Long> = JsonMissing.of(),
-        @JsonProperty("giftCard")
-        @ExcludeMissing
-        private val giftCard: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("shipping")
         @ExcludeMissing
         private val shipping: JsonField<Long> = JsonMissing.of(),
@@ -255,25 +233,19 @@ private constructor(
         /** Subtotal of the current user's cart, in cents (USD). */
         fun subtotal(): Long = subtotal.getRequired("subtotal")
 
-        /** Amount applied from gift card on the current user's cart, in cents (USD). */
-        fun giftCard(): Long? = giftCard.getNullable("giftCard")
-
         /** Shipping amount of the current user's cart, in cents (USD). */
         fun shipping(): Long? = shipping.getNullable("shipping")
 
-        /** Total amount after gift card applied, in cents (USD). */
+        /** Total amount after any discounts, in cents (USD). */
         fun total(): Long? = total.getNullable("total")
 
         /** Subtotal of the current user's cart, in cents (USD). */
         @JsonProperty("subtotal") @ExcludeMissing fun _subtotal(): JsonField<Long> = subtotal
 
-        /** Amount applied from gift card on the current user's cart, in cents (USD). */
-        @JsonProperty("giftCard") @ExcludeMissing fun _giftCard(): JsonField<Long> = giftCard
-
         /** Shipping amount of the current user's cart, in cents (USD). */
         @JsonProperty("shipping") @ExcludeMissing fun _shipping(): JsonField<Long> = shipping
 
-        /** Total amount after gift card applied, in cents (USD). */
+        /** Total amount after any discounts, in cents (USD). */
         @JsonProperty("total") @ExcludeMissing fun _total(): JsonField<Long> = total
 
         @JsonAnyGetter
@@ -288,7 +260,6 @@ private constructor(
             }
 
             subtotal()
-            giftCard()
             shipping()
             total()
             validated = true
@@ -313,14 +284,12 @@ private constructor(
         class Builder internal constructor() {
 
             private var subtotal: JsonField<Long>? = null
-            private var giftCard: JsonField<Long> = JsonMissing.of()
             private var shipping: JsonField<Long> = JsonMissing.of()
             private var total: JsonField<Long> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(amount: Amount) = apply {
                 subtotal = amount.subtotal
-                giftCard = amount.giftCard
                 shipping = amount.shipping
                 total = amount.total
                 additionalProperties = amount.additionalProperties.toMutableMap()
@@ -332,22 +301,16 @@ private constructor(
             /** Subtotal of the current user's cart, in cents (USD). */
             fun subtotal(subtotal: JsonField<Long>) = apply { this.subtotal = subtotal }
 
-            /** Amount applied from gift card on the current user's cart, in cents (USD). */
-            fun giftCard(giftCard: Long) = giftCard(JsonField.of(giftCard))
-
-            /** Amount applied from gift card on the current user's cart, in cents (USD). */
-            fun giftCard(giftCard: JsonField<Long>) = apply { this.giftCard = giftCard }
-
             /** Shipping amount of the current user's cart, in cents (USD). */
             fun shipping(shipping: Long) = shipping(JsonField.of(shipping))
 
             /** Shipping amount of the current user's cart, in cents (USD). */
             fun shipping(shipping: JsonField<Long>) = apply { this.shipping = shipping }
 
-            /** Total amount after gift card applied, in cents (USD). */
+            /** Total amount after any discounts, in cents (USD). */
             fun total(total: Long) = total(JsonField.of(total))
 
-            /** Total amount after gift card applied, in cents (USD). */
+            /** Total amount after any discounts, in cents (USD). */
             fun total(total: JsonField<Long>) = apply { this.total = total }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -372,7 +335,6 @@ private constructor(
             fun build(): Amount =
                 Amount(
                     checkRequired("subtotal", subtotal),
-                    giftCard,
                     shipping,
                     total,
                     additionalProperties.toImmutable(),
@@ -384,17 +346,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Amount && subtotal == other.subtotal && giftCard == other.giftCard && shipping == other.shipping && total == other.total && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Amount && subtotal == other.subtotal && shipping == other.shipping && total == other.total && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(subtotal, giftCard, shipping, total, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(subtotal, shipping, total, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Amount{subtotal=$subtotal, giftCard=$giftCard, shipping=$shipping, total=$total, additionalProperties=$additionalProperties}"
+            "Amount{subtotal=$subtotal, shipping=$shipping, total=$total, additionalProperties=$additionalProperties}"
     }
 
     /** An item in the current Terminal shop user's cart. */
@@ -690,15 +652,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Cart && amount == other.amount && items == other.items && subtotal == other.subtotal && addressId == other.addressId && cardId == other.cardId && giftCardId == other.giftCardId && shipping == other.shipping && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Cart && amount == other.amount && items == other.items && subtotal == other.subtotal && addressId == other.addressId && cardId == other.cardId && shipping == other.shipping && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(amount, items, subtotal, addressId, cardId, giftCardId, shipping, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(amount, items, subtotal, addressId, cardId, shipping, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Cart{amount=$amount, items=$items, subtotal=$subtotal, addressId=$addressId, cardId=$cardId, giftCardId=$giftCardId, shipping=$shipping, additionalProperties=$additionalProperties}"
+        "Cart{amount=$amount, items=$items, subtotal=$subtotal, addressId=$addressId, cardId=$cardId, shipping=$shipping, additionalProperties=$additionalProperties}"
 }
