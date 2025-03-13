@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Objects
+import shop.terminal.api.core.Enum
 import shop.terminal.api.core.ExcludeMissing
 import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
@@ -16,6 +17,7 @@ import shop.terminal.api.core.checkKnown
 import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
+import shop.terminal.api.errors.TerminalInvalidDataException
 import shop.terminal.api.models.address.Address
 import shop.terminal.api.models.app.App
 import shop.terminal.api.models.card.Card
@@ -134,6 +136,9 @@ private constructor(
         @JsonProperty("profile")
         @ExcludeMissing
         private val profile: JsonField<Profile> = JsonMissing.of(),
+        @JsonProperty("region")
+        @ExcludeMissing
+        private val region: JsonField<Region> = JsonMissing.of(),
         @JsonProperty("subscriptions")
         @ExcludeMissing
         private val subscriptions: JsonField<List<Subscription>> = JsonMissing.of(),
@@ -160,6 +165,8 @@ private constructor(
         /** A Terminal shop user's profile. (We have users, btw.) */
         fun profile(): Profile = profile.getRequired("profile")
 
+        fun region(): Region = region.getRequired("region")
+
         fun subscriptions(): List<Subscription> = subscriptions.getRequired("subscriptions")
 
         fun tokens(): List<Token> = tokens.getRequired("tokens")
@@ -183,6 +190,8 @@ private constructor(
 
         /** A Terminal shop user's profile. (We have users, btw.) */
         @JsonProperty("profile") @ExcludeMissing fun _profile(): JsonField<Profile> = profile
+
+        @JsonProperty("region") @ExcludeMissing fun _region(): JsonField<Region> = region
 
         @JsonProperty("subscriptions")
         @ExcludeMissing
@@ -208,6 +217,7 @@ private constructor(
             orders().forEach { it.validate() }
             products().forEach { it.validate() }
             profile().validate()
+            region()
             subscriptions().forEach { it.validate() }
             tokens().forEach { it.validate() }
             validated = true
@@ -229,6 +239,7 @@ private constructor(
              * .orders()
              * .products()
              * .profile()
+             * .region()
              * .subscriptions()
              * .tokens()
              * ```
@@ -246,6 +257,7 @@ private constructor(
             private var orders: JsonField<MutableList<Order>>? = null
             private var products: JsonField<MutableList<Product>>? = null
             private var profile: JsonField<Profile>? = null
+            private var region: JsonField<Region>? = null
             private var subscriptions: JsonField<MutableList<Subscription>>? = null
             private var tokens: JsonField<MutableList<Token>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -258,6 +270,7 @@ private constructor(
                 orders = data.orders.map { it.toMutableList() }
                 products = data.products.map { it.toMutableList() }
                 profile = data.profile
+                region = data.region
                 subscriptions = data.subscriptions.map { it.toMutableList() }
                 tokens = data.tokens.map { it.toMutableList() }
                 additionalProperties = data.additionalProperties.toMutableMap()
@@ -338,6 +351,10 @@ private constructor(
             /** A Terminal shop user's profile. (We have users, btw.) */
             fun profile(profile: JsonField<Profile>) = apply { this.profile = profile }
 
+            fun region(region: Region) = region(JsonField.of(region))
+
+            fun region(region: JsonField<Region>) = apply { this.region = region }
+
             fun subscriptions(subscriptions: List<Subscription>) =
                 subscriptions(JsonField.of(subscriptions))
 
@@ -393,10 +410,111 @@ private constructor(
                     checkRequired("orders", orders).map { it.toImmutable() },
                     checkRequired("products", products).map { it.toImmutable() },
                     checkRequired("profile", profile),
+                    checkRequired("region", region),
                     checkRequired("subscriptions", subscriptions).map { it.toImmutable() },
                     checkRequired("tokens", tokens).map { it.toImmutable() },
                     additionalProperties.toImmutable(),
                 )
+        }
+
+        class Region @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                val NA = of("na")
+
+                val EU = of("eu")
+
+                fun of(value: String) = Region(JsonField.of(value))
+            }
+
+            /** An enum containing [Region]'s known values. */
+            enum class Known {
+                NA,
+                EU,
+            }
+
+            /**
+             * An enum containing [Region]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [Region] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                NA,
+                EU,
+                /**
+                 * An enum member indicating that [Region] was instantiated with an unknown value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    NA -> Value.NA
+                    EU -> Value.EU
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws TerminalInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    NA -> Known.NA
+                    EU -> Known.EU
+                    else -> throw TerminalInvalidDataException("Unknown Region: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws TerminalInvalidDataException if this class instance's value does not have the
+             *   expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString() ?: throw TerminalInvalidDataException("Value is not a String")
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is Region && value == other.value /* spotless:on */
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
         }
 
         override fun equals(other: Any?): Boolean {
@@ -404,17 +522,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Data && addresses == other.addresses && apps == other.apps && cards == other.cards && cart == other.cart && orders == other.orders && products == other.products && profile == other.profile && subscriptions == other.subscriptions && tokens == other.tokens && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Data && addresses == other.addresses && apps == other.apps && cards == other.cards && cart == other.cart && orders == other.orders && products == other.products && profile == other.profile && region == other.region && subscriptions == other.subscriptions && tokens == other.tokens && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(addresses, apps, cards, cart, orders, products, profile, subscriptions, tokens, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(addresses, apps, cards, cart, orders, products, profile, region, subscriptions, tokens, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Data{addresses=$addresses, apps=$apps, cards=$cards, cart=$cart, orders=$orders, products=$products, profile=$profile, subscriptions=$subscriptions, tokens=$tokens, additionalProperties=$additionalProperties}"
+            "Data{addresses=$addresses, apps=$apps, cards=$cards, cart=$cart, orders=$orders, products=$products, profile=$profile, region=$region, subscriptions=$subscriptions, tokens=$tokens, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
