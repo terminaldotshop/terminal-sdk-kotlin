@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.5.0 (2025-03-13)
+
+Full Changelog: [v1.4.0...v1.5.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v1.4.0...v1.5.0)
+
+### Features
+
+* **api:** region type ([#127](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/127)) ([28f790d](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/28f790d7b52adc33de8f573fa4c05c92b97e949b))
+
+
+### Chores
+
+* **internal:** version bump ([#125](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/125)) ([1e9f4c3](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/1e9f4c3f94fbf5b85869d3103c639317f4ea3445))
+
 ## 1.4.0 (2025-03-13)
 
 Full Changelog: [v1.3.0...v1.4.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v1.3.0...v1.4.0)
