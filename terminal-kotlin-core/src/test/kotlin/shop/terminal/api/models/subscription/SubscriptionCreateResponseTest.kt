@@ -9,9 +9,10 @@ class SubscriptionCreateResponseTest {
 
     @Test
     fun createSubscriptionCreateResponse() {
-        val subscriptionCreateResponse =
-            SubscriptionCreateResponse.builder().data(SubscriptionCreateResponse.Data.OK).build()
-        assertThat(subscriptionCreateResponse).isNotNull
-        assertThat(subscriptionCreateResponse.data()).isEqualTo(SubscriptionCreateResponse.Data.OK)
+      val subscriptionCreateResponse = SubscriptionCreateResponse.builder()
+          .data(SubscriptionCreateResponse.Data.OK)
+          .build()
+      assertThat(subscriptionCreateResponse).isNotNull
+      assertThat(subscriptionCreateResponse.data()).isEqualTo(SubscriptionCreateResponse.Data.OK)
     }
 }

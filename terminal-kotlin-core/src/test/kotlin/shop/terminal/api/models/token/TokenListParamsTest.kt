@@ -8,6 +8,6 @@ class TokenListParamsTest {
 
     @Test
     fun create() {
-        TokenListParams.builder().build()
+      TokenListParams.builder().build()
     }
 }
