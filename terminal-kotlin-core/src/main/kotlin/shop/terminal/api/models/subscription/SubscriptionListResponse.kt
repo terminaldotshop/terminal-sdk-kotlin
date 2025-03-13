@@ -18,19 +18,20 @@ import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
 @NoAutoDetect
-class SubscriptionListResponse @JsonCreator private constructor(
-    @JsonProperty("data") @ExcludeMissing private val data: JsonField<List<Subscription>> = JsonMissing.of(),
+class SubscriptionListResponse
+@JsonCreator
+private constructor(
+    @JsonProperty("data")
+    @ExcludeMissing
+    private val data: JsonField<List<Subscription>> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-
 ) {
 
     /** List of subscriptions. */
     fun data(): List<Subscription> = data.getRequired("data")
 
     /** List of subscriptions. */
-    @JsonProperty("data")
-    @ExcludeMissing
-    fun _data(): JsonField<List<Subscription>> = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<Subscription>> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -38,26 +39,23 @@ class SubscriptionListResponse @JsonCreator private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): SubscriptionListResponse =
-        apply {
-            if (validated) {
-              return@apply
-            }
-
-            data().forEach { it.validate() }
-            validated = true
+    fun validate(): SubscriptionListResponse = apply {
+        if (validated) {
+            return@apply
         }
+
+        data().forEach { it.validate() }
+        validated = true
+    }
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of
-         * [SubscriptionListResponse].
+         * Returns a mutable builder for constructing an instance of [SubscriptionListResponse].
          *
          * The following fields are required:
-         *
          * ```kotlin
          * .data()
          * ```
@@ -71,69 +69,59 @@ class SubscriptionListResponse @JsonCreator private constructor(
         private var data: JsonField<MutableList<Subscription>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-        internal fun from(subscriptionListResponse: SubscriptionListResponse) =
-            apply {
-                data = subscriptionListResponse.data.map { it.toMutableList() }
-                additionalProperties = subscriptionListResponse.additionalProperties.toMutableMap()
-            }
+        internal fun from(subscriptionListResponse: SubscriptionListResponse) = apply {
+            data = subscriptionListResponse.data.map { it.toMutableList() }
+            additionalProperties = subscriptionListResponse.additionalProperties.toMutableMap()
+        }
 
         /** List of subscriptions. */
         fun data(data: List<Subscription>) = data(JsonField.of(data))
 
         /** List of subscriptions. */
-        fun data(data: JsonField<List<Subscription>>) =
-            apply {
-                this.data = data.map { it.toMutableList() }
-            }
+        fun data(data: JsonField<List<Subscription>>) = apply {
+            this.data = data.map { it.toMutableList() }
+        }
 
         /** List of subscriptions. */
-        fun addData(data: Subscription) =
-            apply {
-                this.data = (this.data ?: JsonField.of(mutableListOf())).also {
+        fun addData(data: Subscription) = apply {
+            this.data =
+                (this.data ?: JsonField.of(mutableListOf())).also {
                     checkKnown("data", it).add(data)
                 }
-            }
+        }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            putAllAdditionalProperties(additionalProperties)
+        }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) =
-            apply {
-                additionalProperties.put(key, value)
-            }
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            additionalProperties.put(key, value)
+        }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
 
-        fun removeAdditionalProperty(key: String) =
-            apply {
-                additionalProperties.remove(key)
-            }
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) =
-            apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
 
         fun build(): SubscriptionListResponse =
             SubscriptionListResponse(
-              checkRequired(
-                "data", data
-              ).map { it.toImmutable() }, additionalProperties.toImmutable()
+                checkRequired("data", data).map { it.toImmutable() },
+                additionalProperties.toImmutable(),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return /* spotless:off */ other is SubscriptionListResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is SubscriptionListResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -142,5 +130,6 @@ class SubscriptionListResponse @JsonCreator private constructor(
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() = "SubscriptionListResponse{data=$data, additionalProperties=$additionalProperties}"
+    override fun toString() =
+        "SubscriptionListResponse{data=$data, additionalProperties=$additionalProperties}"
 }

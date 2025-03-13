@@ -17,19 +17,18 @@ import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
 @NoAutoDetect
-class AddressCreateResponse @JsonCreator private constructor(
+class AddressCreateResponse
+@JsonCreator
+private constructor(
     @JsonProperty("data") @ExcludeMissing private val data: JsonField<String> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-
 ) {
 
     /** Shipping address ID. */
     fun data(): String = data.getRequired("data")
 
     /** Shipping address ID. */
-    @JsonProperty("data")
-    @ExcludeMissing
-    fun _data(): JsonField<String> = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<String> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -37,26 +36,23 @@ class AddressCreateResponse @JsonCreator private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): AddressCreateResponse =
-        apply {
-            if (validated) {
-              return@apply
-            }
-
-            data()
-            validated = true
+    fun validate(): AddressCreateResponse = apply {
+        if (validated) {
+            return@apply
         }
+
+        data()
+        validated = true
+    }
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of
-         * [AddressCreateResponse].
+         * Returns a mutable builder for constructing an instance of [AddressCreateResponse].
          *
          * The following fields are required:
-         *
          * ```kotlin
          * .data()
          * ```
@@ -70,61 +66,46 @@ class AddressCreateResponse @JsonCreator private constructor(
         private var data: JsonField<String>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-        internal fun from(addressCreateResponse: AddressCreateResponse) =
-            apply {
-                data = addressCreateResponse.data
-                additionalProperties = addressCreateResponse.additionalProperties.toMutableMap()
-            }
+        internal fun from(addressCreateResponse: AddressCreateResponse) = apply {
+            data = addressCreateResponse.data
+            additionalProperties = addressCreateResponse.additionalProperties.toMutableMap()
+        }
 
         /** Shipping address ID. */
         fun data(data: String) = data(JsonField.of(data))
 
         /** Shipping address ID. */
-        fun data(data: JsonField<String>) =
-            apply {
-                this.data = data
-            }
+        fun data(data: JsonField<String>) = apply { this.data = data }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            putAllAdditionalProperties(additionalProperties)
+        }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) =
-            apply {
-                additionalProperties.put(key, value)
-            }
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            additionalProperties.put(key, value)
+        }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
 
-        fun removeAdditionalProperty(key: String) =
-            apply {
-                additionalProperties.remove(key)
-            }
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) =
-            apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
 
         fun build(): AddressCreateResponse =
-            AddressCreateResponse(
-              checkRequired(
-                "data", data
-              ), additionalProperties.toImmutable()
-            )
+            AddressCreateResponse(checkRequired("data", data), additionalProperties.toImmutable())
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return /* spotless:off */ other is AddressCreateResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is AddressCreateResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -133,5 +114,6 @@ class AddressCreateResponse @JsonCreator private constructor(
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() = "AddressCreateResponse{data=$data, additionalProperties=$additionalProperties}"
+    override fun toString() =
+        "AddressCreateResponse{data=$data, additionalProperties=$additionalProperties}"
 }
