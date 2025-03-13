@@ -18,19 +18,18 @@ import shop.terminal.api.core.toImmutable
 import shop.terminal.api.models.order.Order
 
 @NoAutoDetect
-class CartConvertResponse @JsonCreator private constructor(
+class CartConvertResponse
+@JsonCreator
+private constructor(
     @JsonProperty("data") @ExcludeMissing private val data: JsonField<Order> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-
 ) {
 
     /** An order from the Terminal shop. */
     fun data(): Order = data.getRequired("data")
 
     /** An order from the Terminal shop. */
-    @JsonProperty("data")
-    @ExcludeMissing
-    fun _data(): JsonField<Order> = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Order> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -38,15 +37,14 @@ class CartConvertResponse @JsonCreator private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): CartConvertResponse =
-        apply {
-            if (validated) {
-              return@apply
-            }
-
-            data().validate()
-            validated = true
+    fun validate(): CartConvertResponse = apply {
+        if (validated) {
+            return@apply
         }
+
+        data().validate()
+        validated = true
+    }
 
     fun toBuilder() = Builder().from(this)
 
@@ -56,7 +54,6 @@ class CartConvertResponse @JsonCreator private constructor(
          * Returns a mutable builder for constructing an instance of [CartConvertResponse].
          *
          * The following fields are required:
-         *
          * ```kotlin
          * .data()
          * ```
@@ -70,61 +67,46 @@ class CartConvertResponse @JsonCreator private constructor(
         private var data: JsonField<Order>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-        internal fun from(cartConvertResponse: CartConvertResponse) =
-            apply {
-                data = cartConvertResponse.data
-                additionalProperties = cartConvertResponse.additionalProperties.toMutableMap()
-            }
+        internal fun from(cartConvertResponse: CartConvertResponse) = apply {
+            data = cartConvertResponse.data
+            additionalProperties = cartConvertResponse.additionalProperties.toMutableMap()
+        }
 
         /** An order from the Terminal shop. */
         fun data(data: Order) = data(JsonField.of(data))
 
         /** An order from the Terminal shop. */
-        fun data(data: JsonField<Order>) =
-            apply {
-                this.data = data
-            }
+        fun data(data: JsonField<Order>) = apply { this.data = data }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            putAllAdditionalProperties(additionalProperties)
+        }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) =
-            apply {
-                additionalProperties.put(key, value)
-            }
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            additionalProperties.put(key, value)
+        }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
 
-        fun removeAdditionalProperty(key: String) =
-            apply {
-                additionalProperties.remove(key)
-            }
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) =
-            apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
 
         fun build(): CartConvertResponse =
-            CartConvertResponse(
-              checkRequired(
-                "data", data
-              ), additionalProperties.toImmutable()
-            )
+            CartConvertResponse(checkRequired("data", data), additionalProperties.toImmutable())
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return /* spotless:off */ other is CartConvertResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is CartConvertResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -133,5 +115,6 @@ class CartConvertResponse @JsonCreator private constructor(
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() = "CartConvertResponse{data=$data, additionalProperties=$additionalProperties}"
+    override fun toString() =
+        "CartConvertResponse{data=$data, additionalProperties=$additionalProperties}"
 }

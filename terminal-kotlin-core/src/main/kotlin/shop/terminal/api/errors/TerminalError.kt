@@ -13,9 +13,13 @@ import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
 @NoAutoDetect
-class TerminalError @JsonCreator private constructor(
-    @JsonAnyGetter @ExcludeMissing @JsonAnySetter val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-
+class TerminalError
+@JsonCreator
+private constructor(
+    @JsonAnyGetter
+    @ExcludeMissing
+    @JsonAnySetter
+    val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
 ) {
 
     fun toBuilder() = Builder().from(this)
@@ -31,46 +35,38 @@ class TerminalError @JsonCreator private constructor(
 
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-        internal fun from(terminalError: TerminalError) =
-            apply {
-                additionalProperties = terminalError.additionalProperties.toMutableMap()
-            }
+        internal fun from(terminalError: TerminalError) = apply {
+            additionalProperties = terminalError.additionalProperties.toMutableMap()
+        }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            putAllAdditionalProperties(additionalProperties)
+        }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) =
-            apply {
-                additionalProperties.put(key, value)
-            }
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            additionalProperties.put(key, value)
+        }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
 
-        fun removeAdditionalProperty(key: String) =
-            apply {
-                additionalProperties.remove(key)
-            }
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) =
-            apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
 
         fun build(): TerminalError = TerminalError(additionalProperties.toImmutable())
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return /* spotless:off */ other is TerminalError && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is TerminalError && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     override fun hashCode(): Int = /* spotless:off */ Objects.hash(additionalProperties) /* spotless:on */

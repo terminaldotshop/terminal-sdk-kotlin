@@ -18,50 +18,53 @@ import shop.terminal.api.errors.TerminalError
 import shop.terminal.api.models.email.EmailCreateParams
 import shop.terminal.api.models.email.EmailCreateResponse
 
-class EmailServiceImpl internal constructor(
-    private val clientOptions: ClientOptions,
+class EmailServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    EmailService {
 
-) : EmailService {
-
-    private val withRawResponse: EmailService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
+    private val withRawResponse: EmailService.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
     override fun withRawResponse(): EmailService.WithRawResponse = withRawResponse
 
-    override fun create(params: EmailCreateParams, requestOptions: RequestOptions): EmailCreateResponse =
+    override fun create(
+        params: EmailCreateParams,
+        requestOptions: RequestOptions,
+    ): EmailCreateResponse =
         // post /email
         withRawResponse().create(params, requestOptions).parse()
 
-    class WithRawResponseImpl internal constructor(
-        private val clientOptions: ClientOptions,
-
-    ) : EmailService.WithRawResponse {
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        EmailService.WithRawResponse {
 
         private val errorHandler: Handler<TerminalError> = errorHandler(clientOptions.jsonMapper)
 
-        private val createHandler: Handler<EmailCreateResponse> = jsonHandler<EmailCreateResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val createHandler: Handler<EmailCreateResponse> =
+            jsonHandler<EmailCreateResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
-        override fun create(params: EmailCreateParams, requestOptions: RequestOptions): HttpResponseFor<EmailCreateResponse> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.POST)
-            .addPathSegments("email")
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  createHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun create(
+            params: EmailCreateParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<EmailCreateResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments("email")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { createHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
     }
 }
