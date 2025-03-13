@@ -9,16 +9,20 @@ class AppDeleteParamsTest {
 
     @Test
     fun create() {
-        AppDeleteParams.builder().id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
+      AppDeleteParams.builder()
+          .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
+          .build()
     }
 
     @Test
     fun getPathParam() {
-        val params = AppDeleteParams.builder().id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
-        assertThat(params).isNotNull
-        // path param "id"
-        assertThat(params.getPathParam(0)).isEqualTo("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+      val params = AppDeleteParams.builder()
+          .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
+          .build()
+      assertThat(params).isNotNull
+      // path param "id"
+      assertThat(params.getPathParam(0)).isEqualTo("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
+      // out-of-bound path param
+      assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

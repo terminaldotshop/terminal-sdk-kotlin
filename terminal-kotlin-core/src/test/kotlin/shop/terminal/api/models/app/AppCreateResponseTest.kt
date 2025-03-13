@@ -9,22 +9,16 @@ class AppCreateResponseTest {
 
     @Test
     fun createAppCreateResponse() {
-        val appCreateResponse =
-            AppCreateResponse.builder()
-                .data(
-                    AppCreateResponse.Data.builder()
-                        .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                        .secret("sec_******XXXX")
-                        .build()
-                )
-                .build()
-        assertThat(appCreateResponse).isNotNull
-        assertThat(appCreateResponse.data())
-            .isEqualTo(
-                AppCreateResponse.Data.builder()
-                    .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                    .secret("sec_******XXXX")
-                    .build()
-            )
+      val appCreateResponse = AppCreateResponse.builder()
+          .data(AppCreateResponse.Data.builder()
+              .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
+              .secret("sec_******XXXX")
+              .build())
+          .build()
+      assertThat(appCreateResponse).isNotNull
+      assertThat(appCreateResponse.data()).isEqualTo(AppCreateResponse.Data.builder()
+          .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
+          .secret("sec_******XXXX")
+          .build())
     }
 }

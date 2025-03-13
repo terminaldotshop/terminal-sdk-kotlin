@@ -8,6 +8,6 @@ class AddressListParamsTest {
 
     @Test
     fun create() {
-        AddressListParams.builder().build()
+      AddressListParams.builder().build()
     }
 }

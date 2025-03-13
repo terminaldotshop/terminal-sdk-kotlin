@@ -13,28 +13,23 @@ import shop.terminal.api.models.product.ProductListResponse
 interface ProductServiceAsync {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     * Returns a view of this service that provides access to raw HTTP responses for
+     * each method.
      */
     fun withRawResponse(): WithRawResponse
 
     /** List all products for sale in the Terminal shop. */
-    suspend fun list(
-        params: ProductListParams = ProductListParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): ProductListResponse
+    suspend fun list(params: ProductListParams = ProductListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): ProductListResponse
 
     /** @see [list] */
-    suspend fun list(requestOptions: RequestOptions): ProductListResponse =
-        list(ProductListParams.none(), requestOptions)
+    suspend fun list(requestOptions: RequestOptions): ProductListResponse = list(ProductListParams.none(), requestOptions)
 
     /** Get a product by ID from the Terminal shop. */
-    suspend fun get(
-        params: ProductGetParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): ProductGetResponse
+    suspend fun get(params: ProductGetParams, requestOptions: RequestOptions = RequestOptions.none()): ProductGetResponse
 
     /**
-     * A view of [ProductServiceAsync] that provides access to raw HTTP responses for each method.
+     * A view of [ProductServiceAsync] that provides access to raw HTTP responses for
+     * each method.
      */
     interface WithRawResponse {
 
@@ -43,24 +38,17 @@ interface ProductServiceAsync {
          * [ProductServiceAsync.list].
          */
         @MustBeClosed
-        suspend fun list(
-            params: ProductListParams = ProductListParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<ProductListResponse>
+        suspend fun list(params: ProductListParams = ProductListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<ProductListResponse>
 
         /** @see [list] */
         @MustBeClosed
-        suspend fun list(requestOptions: RequestOptions): HttpResponseFor<ProductListResponse> =
-            list(ProductListParams.none(), requestOptions)
+        suspend fun list(requestOptions: RequestOptions): HttpResponseFor<ProductListResponse> = list(ProductListParams.none(), requestOptions)
 
         /**
-         * Returns a raw HTTP response for `get /product/{id}`, but is otherwise the same as
-         * [ProductServiceAsync.get].
+         * Returns a raw HTTP response for `get /product/{id}`, but is otherwise the same
+         * as [ProductServiceAsync.get].
          */
         @MustBeClosed
-        suspend fun get(
-            params: ProductGetParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<ProductGetResponse>
+        suspend fun get(params: ProductGetParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<ProductGetResponse>
     }
 }
