@@ -5,6 +5,8 @@ package shop.terminal.api.services.blocking
 import com.google.errorprone.annotations.MustBeClosed
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.http.HttpResponseFor
+import shop.terminal.api.models.cart.CartClearParams
+import shop.terminal.api.models.cart.CartClearResponse
 import shop.terminal.api.models.cart.CartConvertParams
 import shop.terminal.api.models.cart.CartConvertResponse
 import shop.terminal.api.models.cart.CartGetParams
@@ -26,6 +28,16 @@ interface CartService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /** Clear the current user's cart. */
+    fun clear(
+        params: CartClearParams = CartClearParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CartClearResponse
+
+    /** @see [clear] */
+    fun clear(requestOptions: RequestOptions): CartClearResponse =
+        clear(CartClearParams.none(), requestOptions)
 
     /** Convert the current user's cart to an order. */
     fun convert(
@@ -83,6 +95,21 @@ interface CartService {
 
     /** A view of [CartService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a raw HTTP response for `delete /cart`, but is otherwise the same as
+         * [CartService.clear].
+         */
+        @MustBeClosed
+        fun clear(
+            params: CartClearParams = CartClearParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CartClearResponse>
+
+        /** @see [clear] */
+        @MustBeClosed
+        fun clear(requestOptions: RequestOptions): HttpResponseFor<CartClearResponse> =
+            clear(CartClearParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /cart/convert`, but is otherwise the same as
