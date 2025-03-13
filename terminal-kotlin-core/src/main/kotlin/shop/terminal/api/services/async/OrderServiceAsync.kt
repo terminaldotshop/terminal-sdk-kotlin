@@ -15,33 +15,27 @@ import shop.terminal.api.models.order.OrderListResponse
 interface OrderServiceAsync {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     * Returns a view of this service that provides access to raw HTTP responses for
+     * each method.
      */
     fun withRawResponse(): WithRawResponse
 
     /** Create an order without a cart. The order will be placed immediately. */
-    suspend fun create(
-        params: OrderCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): OrderCreateResponse
+    suspend fun create(params: OrderCreateParams, requestOptions: RequestOptions = RequestOptions.none()): OrderCreateResponse
 
     /** List the orders associated with the current user. */
-    suspend fun list(
-        params: OrderListParams = OrderListParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): OrderListResponse
+    suspend fun list(params: OrderListParams = OrderListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): OrderListResponse
 
     /** @see [list] */
-    suspend fun list(requestOptions: RequestOptions): OrderListResponse =
-        list(OrderListParams.none(), requestOptions)
+    suspend fun list(requestOptions: RequestOptions): OrderListResponse = list(OrderListParams.none(), requestOptions)
 
     /** Get the order with the given ID. */
-    suspend fun get(
-        params: OrderGetParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): OrderGetResponse
+    suspend fun get(params: OrderGetParams, requestOptions: RequestOptions = RequestOptions.none()): OrderGetResponse
 
-    /** A view of [OrderServiceAsync] that provides access to raw HTTP responses for each method. */
+    /**
+     * A view of [OrderServiceAsync] that provides access to raw HTTP responses for
+     * each method.
+     */
     interface WithRawResponse {
 
         /**
@@ -49,34 +43,24 @@ interface OrderServiceAsync {
          * [OrderServiceAsync.create].
          */
         @MustBeClosed
-        suspend fun create(
-            params: OrderCreateParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<OrderCreateResponse>
+        suspend fun create(params: OrderCreateParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<OrderCreateResponse>
 
         /**
          * Returns a raw HTTP response for `get /order`, but is otherwise the same as
          * [OrderServiceAsync.list].
          */
         @MustBeClosed
-        suspend fun list(
-            params: OrderListParams = OrderListParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<OrderListResponse>
+        suspend fun list(params: OrderListParams = OrderListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<OrderListResponse>
 
         /** @see [list] */
         @MustBeClosed
-        suspend fun list(requestOptions: RequestOptions): HttpResponseFor<OrderListResponse> =
-            list(OrderListParams.none(), requestOptions)
+        suspend fun list(requestOptions: RequestOptions): HttpResponseFor<OrderListResponse> = list(OrderListParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /order/{id}`, but is otherwise the same as
          * [OrderServiceAsync.get].
          */
         @MustBeClosed
-        suspend fun get(
-            params: OrderGetParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<OrderGetResponse>
+        suspend fun get(params: OrderGetParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<OrderGetResponse>
     }
 }

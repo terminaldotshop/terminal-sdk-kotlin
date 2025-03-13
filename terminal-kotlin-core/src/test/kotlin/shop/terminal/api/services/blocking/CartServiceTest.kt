@@ -7,7 +7,9 @@ import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
 import shop.terminal.api.models.cart.CartConvertParams
+import shop.terminal.api.models.cart.CartGetParams
 import shop.terminal.api.models.cart.CartRedeemGiftCardParams
+import shop.terminal.api.models.cart.CartRemoveGiftCardParams
 import shop.terminal.api.models.cart.CartSetAddressParams
 import shop.terminal.api.models.cart.CartSetCardParams
 import shop.terminal.api.models.cart.CartSetItemParams
@@ -17,117 +19,103 @@ class CartServiceTest {
 
     @Test
     fun convert() {
-        val client =
-            TerminalOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val cartService = client.cart()
+      val client = TerminalOkHttpClient.builder()
+          .baseUrl(TestServerExtension.BASE_URL)
+          .bearerToken("My Bearer Token")
+          .build()
+      val cartService = client.cart()
 
-        val response =
-            cartService.convert(
-                CartConvertParams.builder().recipientEmail("dev@stainless.com").build()
-            )
+      val response = cartService.convert(CartConvertParams.builder()
+          .recipientEmail("dev@stainless.com")
+          .build())
 
-        response.validate()
+      response.validate()
     }
 
     @Test
     fun get() {
-        val client =
-            TerminalOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val cartService = client.cart()
+      val client = TerminalOkHttpClient.builder()
+          .baseUrl(TestServerExtension.BASE_URL)
+          .bearerToken("My Bearer Token")
+          .build()
+      val cartService = client.cart()
 
-        val cart = cartService.get()
+      val cart = cartService.get()
 
-        cart.validate()
+      cart.validate()
     }
 
     @Test
     fun redeemGiftCard() {
-        val client =
-            TerminalOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val cartService = client.cart()
+      val client = TerminalOkHttpClient.builder()
+          .baseUrl(TestServerExtension.BASE_URL)
+          .bearerToken("My Bearer Token")
+          .build()
+      val cartService = client.cart()
 
-        val response =
-            cartService.redeemGiftCard(
-                CartRedeemGiftCardParams.builder().giftCardId("giftCardID").build()
-            )
+      val response = cartService.redeemGiftCard(CartRedeemGiftCardParams.builder()
+          .giftCardId("giftCardID")
+          .build())
 
-        response.validate()
+      response.validate()
     }
 
     @Test
     fun removeGiftCard() {
-        val client =
-            TerminalOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val cartService = client.cart()
+      val client = TerminalOkHttpClient.builder()
+          .baseUrl(TestServerExtension.BASE_URL)
+          .bearerToken("My Bearer Token")
+          .build()
+      val cartService = client.cart()
 
-        val response = cartService.removeGiftCard()
+      val response = cartService.removeGiftCard()
 
-        response.validate()
+      response.validate()
     }
 
     @Test
     fun setAddress() {
-        val client =
-            TerminalOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val cartService = client.cart()
+      val client = TerminalOkHttpClient.builder()
+          .baseUrl(TestServerExtension.BASE_URL)
+          .bearerToken("My Bearer Token")
+          .build()
+      val cartService = client.cart()
 
-        val response =
-            cartService.setAddress(
-                CartSetAddressParams.builder().addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
-            )
+      val response = cartService.setAddress(CartSetAddressParams.builder()
+          .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+          .build())
 
-        response.validate()
+      response.validate()
     }
 
     @Test
     fun setCard() {
-        val client =
-            TerminalOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val cartService = client.cart()
+      val client = TerminalOkHttpClient.builder()
+          .baseUrl(TestServerExtension.BASE_URL)
+          .bearerToken("My Bearer Token")
+          .build()
+      val cartService = client.cart()
 
-        val response =
-            cartService.setCard(
-                CartSetCardParams.builder().cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
-            )
+      val response = cartService.setCard(CartSetCardParams.builder()
+          .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+          .build())
 
-        response.validate()
+      response.validate()
     }
 
     @Test
     fun setItem() {
-        val client =
-            TerminalOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val cartService = client.cart()
+      val client = TerminalOkHttpClient.builder()
+          .baseUrl(TestServerExtension.BASE_URL)
+          .bearerToken("My Bearer Token")
+          .build()
+      val cartService = client.cart()
 
-        val response =
-            cartService.setItem(
-                CartSetItemParams.builder()
-                    .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                    .quantity(2L)
-                    .build()
-            )
+      val response = cartService.setItem(CartSetItemParams.builder()
+          .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
+          .quantity(2L)
+          .build())
 
-        response.validate()
+      response.validate()
     }
 }

@@ -18,20 +18,19 @@ import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
 @NoAutoDetect
-class ProductListResponse
-@JsonCreator
-private constructor(
-    @JsonProperty("data")
-    @ExcludeMissing
-    private val data: JsonField<List<Product>> = JsonMissing.of(),
+class ProductListResponse @JsonCreator private constructor(
+    @JsonProperty("data") @ExcludeMissing private val data: JsonField<List<Product>> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
 ) {
 
     /** A list of products. */
     fun data(): List<Product> = data.getRequired("data")
 
     /** A list of products. */
-    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<Product>> = data
+    @JsonProperty("data")
+    @ExcludeMissing
+    fun _data(): JsonField<List<Product>> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -39,14 +38,15 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): ProductListResponse = apply {
-        if (validated) {
-            return@apply
-        }
+    fun validate(): ProductListResponse =
+        apply {
+            if (validated) {
+              return@apply
+            }
 
-        data().forEach { it.validate() }
-        validated = true
-    }
+            data().forEach { it.validate() }
+            validated = true
+        }
 
     fun toBuilder() = Builder().from(this)
 
@@ -56,6 +56,7 @@ private constructor(
          * Returns a mutable builder for constructing an instance of [ProductListResponse].
          *
          * The following fields are required:
+         *
          * ```kotlin
          * .data()
          * ```
@@ -69,59 +70,69 @@ private constructor(
         private var data: JsonField<MutableList<Product>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-        internal fun from(productListResponse: ProductListResponse) = apply {
-            data = productListResponse.data.map { it.toMutableList() }
-            additionalProperties = productListResponse.additionalProperties.toMutableMap()
-        }
+        internal fun from(productListResponse: ProductListResponse) =
+            apply {
+                data = productListResponse.data.map { it.toMutableList() }
+                additionalProperties = productListResponse.additionalProperties.toMutableMap()
+            }
 
         /** A list of products. */
         fun data(data: List<Product>) = data(JsonField.of(data))
 
         /** A list of products. */
-        fun data(data: JsonField<List<Product>>) = apply {
-            this.data = data.map { it.toMutableList() }
-        }
+        fun data(data: JsonField<List<Product>>) =
+            apply {
+                this.data = data.map { it.toMutableList() }
+            }
 
         /** A list of products. */
-        fun addData(data: Product) = apply {
-            this.data =
-                (this.data ?: JsonField.of(mutableListOf())).also {
+        fun addData(data: Product) =
+            apply {
+                this.data = (this.data ?: JsonField.of(mutableListOf())).also {
                     checkKnown("data", it).add(data)
                 }
-        }
+            }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.clear()
-            putAllAdditionalProperties(additionalProperties)
-        }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            additionalProperties.put(key, value)
-        }
+        fun putAdditionalProperty(key: String, value: JsonValue) =
+            apply {
+                additionalProperties.put(key, value)
+            }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.putAll(additionalProperties)
-        }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+        fun removeAdditionalProperty(key: String) =
+            apply {
+                additionalProperties.remove(key)
+            }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalProperty)
-        }
+        fun removeAllAdditionalProperties(keys: Set<String>) =
+            apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
         fun build(): ProductListResponse =
             ProductListResponse(
-                checkRequired("data", data).map { it.toImmutable() },
-                additionalProperties.toImmutable(),
+              checkRequired(
+                "data", data
+              ).map { it.toImmutable() }, additionalProperties.toImmutable()
             )
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return /* spotless:off */ other is ProductListResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
+      return /* spotless:off */ other is ProductListResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -130,6 +141,5 @@ private constructor(
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() =
-        "ProductListResponse{data=$data, additionalProperties=$additionalProperties}"
+    override fun toString() = "ProductListResponse{data=$data, additionalProperties=$additionalProperties}"
 }

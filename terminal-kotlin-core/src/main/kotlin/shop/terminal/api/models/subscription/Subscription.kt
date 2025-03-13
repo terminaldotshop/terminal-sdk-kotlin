@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.util.Objects
+import java.util.Optional
 import shop.terminal.api.core.BaseDeserializer
 import shop.terminal.api.core.BaseSerializer
 import shop.terminal.api.core.Enum
@@ -30,27 +31,16 @@ import shop.terminal.api.errors.TerminalInvalidDataException
 
 /** Subscription to a Terminal shop product. */
 @NoAutoDetect
-class Subscription
-@JsonCreator
-private constructor(
+class Subscription @JsonCreator private constructor(
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("addressID")
-    @ExcludeMissing
-    private val addressId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("cardID")
-    @ExcludeMissing
-    private val cardId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("productVariantID")
-    @ExcludeMissing
-    private val productVariantId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("quantity")
-    @ExcludeMissing
-    private val quantity: JsonField<Long> = JsonMissing.of(),
+    @JsonProperty("addressID") @ExcludeMissing private val addressId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("cardID") @ExcludeMissing private val cardId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("productVariantID") @ExcludeMissing private val productVariantId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("quantity") @ExcludeMissing private val quantity: JsonField<Long> = JsonMissing.of(),
     @JsonProperty("next") @ExcludeMissing private val next: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("schedule")
-    @ExcludeMissing
-    private val schedule: JsonField<Schedule> = JsonMissing.of(),
+    @JsonProperty("schedule") @ExcludeMissing private val schedule: JsonField<Schedule> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
 ) {
 
     /** Unique object identifier. The format and length of IDs may change over time. */
@@ -75,13 +65,19 @@ private constructor(
     fun schedule(): Schedule? = schedule.getNullable("schedule")
 
     /** Unique object identifier. The format and length of IDs may change over time. */
-    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+    @JsonProperty("id")
+    @ExcludeMissing
+    fun _id(): JsonField<String> = id
 
     /** ID of the shipping address used for the subscription. */
-    @JsonProperty("addressID") @ExcludeMissing fun _addressId(): JsonField<String> = addressId
+    @JsonProperty("addressID")
+    @ExcludeMissing
+    fun _addressId(): JsonField<String> = addressId
 
     /** ID of the card used for the subscription. */
-    @JsonProperty("cardID") @ExcludeMissing fun _cardId(): JsonField<String> = cardId
+    @JsonProperty("cardID")
+    @ExcludeMissing
+    fun _cardId(): JsonField<String> = cardId
 
     /** ID of the product variant being subscribed to. */
     @JsonProperty("productVariantID")
@@ -89,13 +85,19 @@ private constructor(
     fun _productVariantId(): JsonField<String> = productVariantId
 
     /** Quantity of the subscription. */
-    @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Long> = quantity
+    @JsonProperty("quantity")
+    @ExcludeMissing
+    fun _quantity(): JsonField<Long> = quantity
 
     /** Next shipment and billing date for the subscription. */
-    @JsonProperty("next") @ExcludeMissing fun _next(): JsonField<String> = next
+    @JsonProperty("next")
+    @ExcludeMissing
+    fun _next(): JsonField<String> = next
 
     /** Schedule of the subscription. */
-    @JsonProperty("schedule") @ExcludeMissing fun _schedule(): JsonField<Schedule> = schedule
+    @JsonProperty("schedule")
+    @ExcludeMissing
+    fun _schedule(): JsonField<Schedule> = schedule
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -103,20 +105,21 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): Subscription = apply {
-        if (validated) {
-            return@apply
-        }
+    fun validate(): Subscription =
+        apply {
+            if (validated) {
+              return@apply
+            }
 
-        id()
-        addressId()
-        cardId()
-        productVariantId()
-        quantity()
-        next()
-        schedule()?.validate()
-        validated = true
-    }
+            id()
+            addressId()
+            cardId()
+            productVariantId()
+            quantity()
+            next()
+            schedule()?.validate()
+            validated = true
+        }
 
     fun toBuilder() = Builder().from(this)
 
@@ -126,6 +129,7 @@ private constructor(
          * Returns a mutable builder for constructing an instance of [Subscription].
          *
          * The following fields are required:
+         *
          * ```kotlin
          * .id()
          * .addressId()
@@ -149,61 +153,80 @@ private constructor(
         private var schedule: JsonField<Schedule> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-        internal fun from(subscription: Subscription) = apply {
-            id = subscription.id
-            addressId = subscription.addressId
-            cardId = subscription.cardId
-            productVariantId = subscription.productVariantId
-            quantity = subscription.quantity
-            next = subscription.next
-            schedule = subscription.schedule
-            additionalProperties = subscription.additionalProperties.toMutableMap()
-        }
+        internal fun from(subscription: Subscription) =
+            apply {
+                id = subscription.id
+                addressId = subscription.addressId
+                cardId = subscription.cardId
+                productVariantId = subscription.productVariantId
+                quantity = subscription.quantity
+                next = subscription.next
+                schedule = subscription.schedule
+                additionalProperties = subscription.additionalProperties.toMutableMap()
+            }
 
         /** Unique object identifier. The format and length of IDs may change over time. */
         fun id(id: String) = id(JsonField.of(id))
 
         /** Unique object identifier. The format and length of IDs may change over time. */
-        fun id(id: JsonField<String>) = apply { this.id = id }
+        fun id(id: JsonField<String>) =
+            apply {
+                this.id = id
+            }
 
         /** ID of the shipping address used for the subscription. */
         fun addressId(addressId: String) = addressId(JsonField.of(addressId))
 
         /** ID of the shipping address used for the subscription. */
-        fun addressId(addressId: JsonField<String>) = apply { this.addressId = addressId }
+        fun addressId(addressId: JsonField<String>) =
+            apply {
+                this.addressId = addressId
+            }
 
         /** ID of the card used for the subscription. */
         fun cardId(cardId: String) = cardId(JsonField.of(cardId))
 
         /** ID of the card used for the subscription. */
-        fun cardId(cardId: JsonField<String>) = apply { this.cardId = cardId }
+        fun cardId(cardId: JsonField<String>) =
+            apply {
+                this.cardId = cardId
+            }
 
         /** ID of the product variant being subscribed to. */
-        fun productVariantId(productVariantId: String) =
-            productVariantId(JsonField.of(productVariantId))
+        fun productVariantId(productVariantId: String) = productVariantId(JsonField.of(productVariantId))
 
         /** ID of the product variant being subscribed to. */
-        fun productVariantId(productVariantId: JsonField<String>) = apply {
-            this.productVariantId = productVariantId
-        }
+        fun productVariantId(productVariantId: JsonField<String>) =
+            apply {
+                this.productVariantId = productVariantId
+            }
 
         /** Quantity of the subscription. */
         fun quantity(quantity: Long) = quantity(JsonField.of(quantity))
 
         /** Quantity of the subscription. */
-        fun quantity(quantity: JsonField<Long>) = apply { this.quantity = quantity }
+        fun quantity(quantity: JsonField<Long>) =
+            apply {
+                this.quantity = quantity
+            }
 
         /** Next shipment and billing date for the subscription. */
         fun next(next: String) = next(JsonField.of(next))
 
         /** Next shipment and billing date for the subscription. */
-        fun next(next: JsonField<String>) = apply { this.next = next }
+        fun next(next: JsonField<String>) =
+            apply {
+                this.next = next
+            }
 
         /** Schedule of the subscription. */
         fun schedule(schedule: Schedule) = schedule(JsonField.of(schedule))
 
         /** Schedule of the subscription. */
-        fun schedule(schedule: JsonField<Schedule>) = apply { this.schedule = schedule }
+        fun schedule(schedule: JsonField<Schedule>) =
+            apply {
+                this.schedule = schedule
+            }
 
         /** Schedule of the subscription. */
         fun schedule(fixed: Schedule.Fixed) = schedule(Schedule.ofFixed(fixed))
@@ -211,46 +234,63 @@ private constructor(
         /** Schedule of the subscription. */
         fun schedule(weekly: Schedule.Weekly) = schedule(Schedule.ofWeekly(weekly))
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.clear()
-            putAllAdditionalProperties(additionalProperties)
-        }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            additionalProperties.put(key, value)
-        }
+        fun putAdditionalProperty(key: String, value: JsonValue) =
+            apply {
+                additionalProperties.put(key, value)
+            }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.putAll(additionalProperties)
-        }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+        fun removeAdditionalProperty(key: String) =
+            apply {
+                additionalProperties.remove(key)
+            }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalProperty)
-        }
+        fun removeAllAdditionalProperties(keys: Set<String>) =
+            apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
         fun build(): Subscription =
             Subscription(
-                checkRequired("id", id),
-                checkRequired("addressId", addressId),
-                checkRequired("cardId", cardId),
-                checkRequired("productVariantId", productVariantId),
-                checkRequired("quantity", quantity),
-                next,
-                schedule,
-                additionalProperties.toImmutable(),
+              checkRequired(
+                "id", id
+              ),
+              checkRequired(
+                "addressId", addressId
+              ),
+              checkRequired(
+                "cardId", cardId
+              ),
+              checkRequired(
+                "productVariantId", productVariantId
+              ),
+              checkRequired(
+                "quantity", quantity
+              ),
+              next,
+              schedule,
+              additionalProperties.toImmutable(),
             )
     }
 
     /** Schedule of the subscription. */
     @JsonDeserialize(using = Schedule.Deserializer::class)
     @JsonSerialize(using = Schedule.Serializer::class)
-    class Schedule
-    private constructor(
+    class Schedule private constructor(
         private val fixed: Fixed? = null,
         private val weekly: Weekly? = null,
         private val _json: JsonValue? = null,
+
     ) {
 
         fun fixed(): Fixed? = fixed
@@ -268,40 +308,39 @@ private constructor(
         fun _json(): JsonValue? = _json
 
         fun <T> accept(visitor: Visitor<T>): T {
-            return when {
-                fixed != null -> visitor.visitFixed(fixed)
-                weekly != null -> visitor.visitWeekly(weekly)
-                else -> visitor.unknown(_json)
-            }
+          return when {
+              fixed != null -> visitor.visitFixed(fixed)
+              weekly != null -> visitor.visitWeekly(weekly)
+              else -> visitor.unknown(_json)
+          }
         }
 
         private var validated: Boolean = false
 
-        fun validate(): Schedule = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): Schedule =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            accept(
-                object : Visitor<Unit> {
+                accept(object : Visitor<Unit> {
                     override fun visitFixed(fixed: Fixed) {
-                        fixed.validate()
+                      fixed.validate()
                     }
 
                     override fun visitWeekly(weekly: Weekly) {
-                        weekly.validate()
+                      weekly.validate()
                     }
-                }
-            )
-            validated = true
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
+                })
+                validated = true
             }
 
-            return /* spotless:off */ other is Schedule && fixed == other.fixed && weekly == other.weekly /* spotless:on */
+        override fun equals(other: Any?): Boolean {
+          if (this === other) {
+              return true
+          }
+
+          return /* spotless:off */ other is Schedule && fixed == other.fixed && weekly == other.weekly /* spotless:on */
         }
 
         override fun hashCode(): Int = /* spotless:off */ Objects.hash(fixed, weekly) /* spotless:on */
@@ -322,7 +361,8 @@ private constructor(
         }
 
         /**
-         * An interface that defines how to map each variant of [Schedule] to a value of type [T].
+         * An interface that defines how to map each variant of [Schedule] to a value of
+         * type [T].
          */
         interface Visitor<out T> {
 
@@ -333,66 +373,58 @@ private constructor(
             /**
              * Maps an unknown variant of [Schedule] to a value of type [T].
              *
-             * An instance of [Schedule] can contain an unknown variant if it was deserialized from
-             * data that doesn't match any known variant. For example, if the SDK is on an older
-             * version than the API, then the API may respond with new variants that the SDK is
-             * unaware of.
+             * An instance of [Schedule] can contain an unknown variant if it was deserialized
+             * from data that doesn't match any known variant. For example, if the SDK is on an
+             * older version than the API, then the API may respond with new variants that the
+             * SDK is unaware of.
              *
              * @throws TerminalInvalidDataException in the default implementation.
              */
             fun unknown(json: JsonValue?): T {
-                throw TerminalInvalidDataException("Unknown Schedule: $json")
+              throw TerminalInvalidDataException("Unknown Schedule: $json")
             }
         }
 
         internal class Deserializer : BaseDeserializer<Schedule>(Schedule::class) {
 
             override fun ObjectCodec.deserialize(node: JsonNode): Schedule {
-                val json = JsonValue.fromJsonNode(node)
+              val json = JsonValue.fromJsonNode(node)
 
-                tryDeserialize(node, jacksonTypeRef<Fixed>()) { it.validate() }
-                    ?.let {
-                        return Schedule(fixed = it, _json = json)
-                    }
-                tryDeserialize(node, jacksonTypeRef<Weekly>()) { it.validate() }
-                    ?.let {
-                        return Schedule(weekly = it, _json = json)
-                    }
+              tryDeserialize(node, jacksonTypeRef<Fixed>()){ it.validate() }?.let {
+                  return Schedule(fixed = it, _json = json)
+              }
+              tryDeserialize(node, jacksonTypeRef<Weekly>()){ it.validate() }?.let {
+                  return Schedule(weekly = it, _json = json)
+              }
 
-                return Schedule(_json = json)
+              return Schedule(_json = json)
             }
         }
 
         internal class Serializer : BaseSerializer<Schedule>(Schedule::class) {
 
-            override fun serialize(
-                value: Schedule,
-                generator: JsonGenerator,
-                provider: SerializerProvider,
-            ) {
-                when {
-                    value.fixed != null -> generator.writeObject(value.fixed)
-                    value.weekly != null -> generator.writeObject(value.weekly)
-                    value._json != null -> generator.writeObject(value._json)
-                    else -> throw IllegalStateException("Invalid Schedule")
-                }
+            override fun serialize(value: Schedule, generator: JsonGenerator, provider: SerializerProvider) {
+              when {
+                  value.fixed != null -> generator.writeObject(value.fixed)
+                  value.weekly != null -> generator.writeObject(value.weekly)
+                  value._json != null -> generator.writeObject(value._json)
+                  else -> throw IllegalStateException("Invalid Schedule")
+              }
             }
         }
 
         @NoAutoDetect
-        class Fixed
-        @JsonCreator
-        private constructor(
-            @JsonProperty("type")
-            @ExcludeMissing
-            private val type: JsonField<Type> = JsonMissing.of(),
-            @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        class Fixed @JsonCreator private constructor(
+            @JsonProperty("type") @ExcludeMissing private val type: JsonField<Type> = JsonMissing.of(),
+            @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
         ) {
 
             fun type(): Type = type.getRequired("type")
 
-            @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
+            @JsonProperty("type")
+            @ExcludeMissing
+            fun _type(): JsonField<Type> = type
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -400,14 +432,15 @@ private constructor(
 
             private var validated: Boolean = false
 
-            fun validate(): Fixed = apply {
-                if (validated) {
-                    return@apply
-                }
+            fun validate(): Fixed =
+                apply {
+                    if (validated) {
+                      return@apply
+                    }
 
-                type()
-                validated = true
-            }
+                    type()
+                    validated = true
+                }
 
             fun toBuilder() = Builder().from(this)
 
@@ -417,6 +450,7 @@ private constructor(
                  * Returns a mutable builder for constructing an instance of [Fixed].
                  *
                  * The following fields are required:
+                 *
                  * ```kotlin
                  * .type()
                  * ```
@@ -430,43 +464,57 @@ private constructor(
                 private var type: JsonField<Type>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-                internal fun from(fixed: Fixed) = apply {
-                    type = fixed.type
-                    additionalProperties = fixed.additionalProperties.toMutableMap()
-                }
+                internal fun from(fixed: Fixed) =
+                    apply {
+                        type = fixed.type
+                        additionalProperties = fixed.additionalProperties.toMutableMap()
+                    }
 
                 fun type(type: Type) = type(JsonField.of(type))
 
-                fun type(type: JsonField<Type>) = apply { this.type = type }
+                fun type(type: JsonField<Type>) =
+                    apply {
+                        this.type = type
+                    }
 
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
 
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
+                fun putAdditionalProperty(key: String, value: JsonValue) =
+                    apply {
+                        additionalProperties.put(key, value)
+                    }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
+                fun removeAdditionalProperty(key: String) =
+                    apply {
+                        additionalProperties.remove(key)
+                    }
 
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+                fun removeAllAdditionalProperties(keys: Set<String>) =
+                    apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
 
                 fun build(): Fixed =
-                    Fixed(checkRequired("type", type), additionalProperties.toImmutable())
+                    Fixed(
+                      checkRequired(
+                        "type", type
+                      ), additionalProperties.toImmutable()
+                    )
             }
 
-            class Type @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
+            class Type @JsonCreator private constructor(
+                private val value: JsonField<String>,
+
+            ) : Enum {
 
                 /**
                  * Returns this class instance's raw value.
@@ -476,7 +524,8 @@ private constructor(
                  * the SDK is on an older version than the API, then the API may respond with new
                  * members that the SDK is unaware of.
                  */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue
+                fun _value(): JsonField<String> = value
 
                 companion object {
 
@@ -487,23 +536,23 @@ private constructor(
 
                 /** An enum containing [Type]'s known values. */
                 enum class Known {
-                    FIXED
+                    FIXED,
                 }
 
                 /**
                  * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
                  *
                  * An instance of [Type] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
+                 *
+                 * - It was deserialized from data that doesn't match any known member. For
+                 *   example, if the SDK is on an older version than the API, then the API may
+                 *   respond with new members that the SDK is unaware of.
+                 *
                  * - It was constructed with an arbitrary value using the [of] method.
                  */
                 enum class Value {
                     FIXED,
-                    /**
-                     * An enum member indicating that [Type] was instantiated with an unknown value.
-                     */
+                    /** An enum member indicating that [Type] was instantiated with an unknown value. */
                     _UNKNOWN,
                 }
 
@@ -527,7 +576,7 @@ private constructor(
                  * don't want to throw for the unknown case.
                  *
                  * @throws TerminalInvalidDataException if this class instance's value is a not a
-                 *   known member.
+                 * known member.
                  */
                 fun known(): Known =
                     when (this) {
@@ -541,19 +590,17 @@ private constructor(
                  * This differs from the [toString] method because that method is primarily for
                  * debugging and generally doesn't throw.
                  *
-                 * @throws TerminalInvalidDataException if this class instance's value does not have
-                 *   the expected primitive type.
+                 * @throws TerminalInvalidDataException if this class instance's value does not
+                 * have the expected primitive type.
                  */
-                fun asString(): String =
-                    _value().asString()
-                        ?: throw TerminalInvalidDataException("Value is not a String")
+                fun asString(): String = _value().asString() ?: throw TerminalInvalidDataException("Value is not a String")
 
                 override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
+                  if (this === other) {
+                      return true
+                  }
 
-                    return /* spotless:off */ other is Type && value == other.value /* spotless:on */
+                  return /* spotless:off */ other is Type && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -562,11 +609,11 @@ private constructor(
             }
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return /* spotless:off */ other is Fixed && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+              return /* spotless:off */ other is Fixed && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
@@ -575,31 +622,28 @@ private constructor(
 
             override fun hashCode(): Int = hashCode
 
-            override fun toString() =
-                "Fixed{type=$type, additionalProperties=$additionalProperties}"
+            override fun toString() = "Fixed{type=$type, additionalProperties=$additionalProperties}"
         }
 
         @NoAutoDetect
-        class Weekly
-        @JsonCreator
-        private constructor(
-            @JsonProperty("interval")
-            @ExcludeMissing
-            private val interval: JsonField<Long> = JsonMissing.of(),
-            @JsonProperty("type")
-            @ExcludeMissing
-            private val type: JsonField<Type> = JsonMissing.of(),
-            @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        class Weekly @JsonCreator private constructor(
+            @JsonProperty("interval") @ExcludeMissing private val interval: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("type") @ExcludeMissing private val type: JsonField<Type> = JsonMissing.of(),
+            @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
         ) {
 
             fun interval(): Long = interval.getRequired("interval")
 
             fun type(): Type = type.getRequired("type")
 
-            @JsonProperty("interval") @ExcludeMissing fun _interval(): JsonField<Long> = interval
+            @JsonProperty("interval")
+            @ExcludeMissing
+            fun _interval(): JsonField<Long> = interval
 
-            @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
+            @JsonProperty("type")
+            @ExcludeMissing
+            fun _type(): JsonField<Type> = type
 
             @JsonAnyGetter
             @ExcludeMissing
@@ -607,15 +651,16 @@ private constructor(
 
             private var validated: Boolean = false
 
-            fun validate(): Weekly = apply {
-                if (validated) {
-                    return@apply
-                }
+            fun validate(): Weekly =
+                apply {
+                    if (validated) {
+                      return@apply
+                    }
 
-                interval()
-                type()
-                validated = true
-            }
+                    interval()
+                    type()
+                    validated = true
+                }
 
             fun toBuilder() = Builder().from(this)
 
@@ -625,6 +670,7 @@ private constructor(
                  * Returns a mutable builder for constructing an instance of [Weekly].
                  *
                  * The following fields are required:
+                 *
                  * ```kotlin
                  * .interval()
                  * .type()
@@ -640,52 +686,69 @@ private constructor(
                 private var type: JsonField<Type>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-                internal fun from(weekly: Weekly) = apply {
-                    interval = weekly.interval
-                    type = weekly.type
-                    additionalProperties = weekly.additionalProperties.toMutableMap()
-                }
+                internal fun from(weekly: Weekly) =
+                    apply {
+                        interval = weekly.interval
+                        type = weekly.type
+                        additionalProperties = weekly.additionalProperties.toMutableMap()
+                    }
 
                 fun interval(interval: Long) = interval(JsonField.of(interval))
 
-                fun interval(interval: JsonField<Long>) = apply { this.interval = interval }
+                fun interval(interval: JsonField<Long>) =
+                    apply {
+                        this.interval = interval
+                    }
 
                 fun type(type: Type) = type(JsonField.of(type))
 
-                fun type(type: JsonField<Type>) = apply { this.type = type }
+                fun type(type: JsonField<Type>) =
+                    apply {
+                        this.type = type
+                    }
 
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
 
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
+                fun putAdditionalProperty(key: String, value: JsonValue) =
+                    apply {
+                        additionalProperties.put(key, value)
+                    }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
+                fun removeAdditionalProperty(key: String) =
+                    apply {
+                        additionalProperties.remove(key)
+                    }
 
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+                fun removeAllAdditionalProperties(keys: Set<String>) =
+                    apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
 
                 fun build(): Weekly =
                     Weekly(
-                        checkRequired("interval", interval),
-                        checkRequired("type", type),
-                        additionalProperties.toImmutable(),
+                      checkRequired(
+                        "interval", interval
+                      ),
+                      checkRequired(
+                        "type", type
+                      ),
+                      additionalProperties.toImmutable(),
                     )
             }
 
-            class Type @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
+            class Type @JsonCreator private constructor(
+                private val value: JsonField<String>,
+
+            ) : Enum {
 
                 /**
                  * Returns this class instance's raw value.
@@ -695,7 +758,8 @@ private constructor(
                  * the SDK is on an older version than the API, then the API may respond with new
                  * members that the SDK is unaware of.
                  */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue
+                fun _value(): JsonField<String> = value
 
                 companion object {
 
@@ -706,23 +770,23 @@ private constructor(
 
                 /** An enum containing [Type]'s known values. */
                 enum class Known {
-                    WEEKLY
+                    WEEKLY,
                 }
 
                 /**
                  * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
                  *
                  * An instance of [Type] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
+                 *
+                 * - It was deserialized from data that doesn't match any known member. For
+                 *   example, if the SDK is on an older version than the API, then the API may
+                 *   respond with new members that the SDK is unaware of.
+                 *
                  * - It was constructed with an arbitrary value using the [of] method.
                  */
                 enum class Value {
                     WEEKLY,
-                    /**
-                     * An enum member indicating that [Type] was instantiated with an unknown value.
-                     */
+                    /** An enum member indicating that [Type] was instantiated with an unknown value. */
                     _UNKNOWN,
                 }
 
@@ -746,7 +810,7 @@ private constructor(
                  * don't want to throw for the unknown case.
                  *
                  * @throws TerminalInvalidDataException if this class instance's value is a not a
-                 *   known member.
+                 * known member.
                  */
                 fun known(): Known =
                     when (this) {
@@ -760,19 +824,17 @@ private constructor(
                  * This differs from the [toString] method because that method is primarily for
                  * debugging and generally doesn't throw.
                  *
-                 * @throws TerminalInvalidDataException if this class instance's value does not have
-                 *   the expected primitive type.
+                 * @throws TerminalInvalidDataException if this class instance's value does not
+                 * have the expected primitive type.
                  */
-                fun asString(): String =
-                    _value().asString()
-                        ?: throw TerminalInvalidDataException("Value is not a String")
+                fun asString(): String = _value().asString() ?: throw TerminalInvalidDataException("Value is not a String")
 
                 override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
+                  if (this === other) {
+                      return true
+                  }
 
-                    return /* spotless:off */ other is Type && value == other.value /* spotless:on */
+                  return /* spotless:off */ other is Type && value == other.value /* spotless:on */
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -781,11 +843,11 @@ private constructor(
             }
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return /* spotless:off */ other is Weekly && interval == other.interval && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+              return /* spotless:off */ other is Weekly && interval == other.interval && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
@@ -794,17 +856,16 @@ private constructor(
 
             override fun hashCode(): Int = hashCode
 
-            override fun toString() =
-                "Weekly{interval=$interval, type=$type, additionalProperties=$additionalProperties}"
+            override fun toString() = "Weekly{interval=$interval, type=$type, additionalProperties=$additionalProperties}"
         }
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return /* spotless:off */ other is Subscription && id == other.id && addressId == other.addressId && cardId == other.cardId && productVariantId == other.productVariantId && quantity == other.quantity && next == other.next && schedule == other.schedule && additionalProperties == other.additionalProperties /* spotless:on */
+      return /* spotless:off */ other is Subscription && id == other.id && addressId == other.addressId && cardId == other.cardId && productVariantId == other.productVariantId && quantity == other.quantity && next == other.next && schedule == other.schedule && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -813,6 +874,5 @@ private constructor(
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() =
-        "Subscription{id=$id, addressId=$addressId, cardId=$cardId, productVariantId=$productVariantId, quantity=$quantity, next=$next, schedule=$schedule, additionalProperties=$additionalProperties}"
+    override fun toString() = "Subscription{id=$id, addressId=$addressId, cardId=$cardId, productVariantId=$productVariantId, quantity=$quantity, next=$next, schedule=$schedule, additionalProperties=$additionalProperties}"
 }

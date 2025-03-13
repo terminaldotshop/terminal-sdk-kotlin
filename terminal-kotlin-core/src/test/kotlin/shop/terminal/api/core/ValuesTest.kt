@@ -31,33 +31,33 @@ internal class ValuesTest {
         STRING(JsonString.of("hello"), expectedAsString = "hello"),
         KNOWN_ARRAY_NOT_ALL_JSON(
             KnownValue.of(listOf("a", "b", NON_JSON)),
-            expectedAsKnown = listOf("a", "b", NON_JSON),
+            expectedAsKnown = listOf("a", "b", NON_JSON)
         ),
         KNOWN_ARRAY(
             KnownValue.of(listOf("a", "b", "c")),
             expectedAsKnown = listOf("a", "b", "c"),
-            expectedAsArray = listOf(JsonString.of("a"), JsonString.of("b"), JsonString.of("c")),
+            expectedAsArray = listOf(JsonString.of("a"), JsonString.of("b"), JsonString.of("c"))
         ),
         ARRAY(
             JsonArray.of(listOf(JsonString.of("a"), JsonString.of("b"), JsonString.of("c"))),
-            expectedAsArray = listOf(JsonString.of("a"), JsonString.of("b"), JsonString.of("c")),
+            expectedAsArray = listOf(JsonString.of("a"), JsonString.of("b"), JsonString.of("c"))
         ),
         KNOWN_OBJECT_NOT_ALL_STRING_KEYS(
             KnownValue.of(mapOf("a" to "b", 42 to "c")),
-            expectedAsKnown = mapOf("a" to "b", 42 to "c"),
+            expectedAsKnown = mapOf("a" to "b", 42 to "c")
         ),
         KNOWN_OBJECT_NOT_ALL_JSON(
             KnownValue.of(mapOf("a" to "b", "b" to NON_JSON)),
-            expectedAsKnown = mapOf("a" to "b", "b" to NON_JSON),
+            expectedAsKnown = mapOf("a" to "b", "b" to NON_JSON)
         ),
         KNOWN_OBJECT(
             KnownValue.of(mapOf("a" to "b", "b" to "c")),
             expectedAsKnown = mapOf("a" to "b", "b" to "c"),
-            expectedAsObject = mapOf("a" to JsonString.of("b"), "b" to JsonString.of("c")),
+            expectedAsObject = mapOf("a" to JsonString.of("b"), "b" to JsonString.of("c"))
         ),
         OBJECT(
             JsonObject.of(mapOf("a" to JsonString.of("b"), "b" to JsonString.of("c"))),
-            expectedAsObject = mapOf("a" to JsonString.of("b"), "b" to JsonString.of("c")),
+            expectedAsObject = mapOf("a" to JsonString.of("b"), "b" to JsonString.of("c"))
         ),
     }
 

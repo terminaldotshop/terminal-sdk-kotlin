@@ -13,16 +13,16 @@ class EmailServiceAsyncTest {
 
     @Test
     suspend fun create() {
-        val client =
-            TerminalOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val emailServiceAsync = client.email()
+      val client = TerminalOkHttpClientAsync.builder()
+          .baseUrl(TestServerExtension.BASE_URL)
+          .bearerToken("My Bearer Token")
+          .build()
+      val emailServiceAsync = client.email()
 
-        val email =
-            emailServiceAsync.create(EmailCreateParams.builder().email("john@example.com").build())
+      val email = emailServiceAsync.create(EmailCreateParams.builder()
+          .email("john@example.com")
+          .build())
 
-        email.validate()
+      email.validate()
     }
 }

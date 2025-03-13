@@ -18,20 +18,19 @@ import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
 @NoAutoDetect
-class OrderListResponse
-@JsonCreator
-private constructor(
-    @JsonProperty("data")
-    @ExcludeMissing
-    private val data: JsonField<List<Order>> = JsonMissing.of(),
+class OrderListResponse @JsonCreator private constructor(
+    @JsonProperty("data") @ExcludeMissing private val data: JsonField<List<Order>> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
 ) {
 
     /** List of orders. */
     fun data(): List<Order> = data.getRequired("data")
 
     /** List of orders. */
-    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<Order>> = data
+    @JsonProperty("data")
+    @ExcludeMissing
+    fun _data(): JsonField<List<Order>> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -39,14 +38,15 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): OrderListResponse = apply {
-        if (validated) {
-            return@apply
-        }
+    fun validate(): OrderListResponse =
+        apply {
+            if (validated) {
+              return@apply
+            }
 
-        data().forEach { it.validate() }
-        validated = true
-    }
+            data().forEach { it.validate() }
+            validated = true
+        }
 
     fun toBuilder() = Builder().from(this)
 
@@ -56,6 +56,7 @@ private constructor(
          * Returns a mutable builder for constructing an instance of [OrderListResponse].
          *
          * The following fields are required:
+         *
          * ```kotlin
          * .data()
          * ```
@@ -69,59 +70,69 @@ private constructor(
         private var data: JsonField<MutableList<Order>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-        internal fun from(orderListResponse: OrderListResponse) = apply {
-            data = orderListResponse.data.map { it.toMutableList() }
-            additionalProperties = orderListResponse.additionalProperties.toMutableMap()
-        }
+        internal fun from(orderListResponse: OrderListResponse) =
+            apply {
+                data = orderListResponse.data.map { it.toMutableList() }
+                additionalProperties = orderListResponse.additionalProperties.toMutableMap()
+            }
 
         /** List of orders. */
         fun data(data: List<Order>) = data(JsonField.of(data))
 
         /** List of orders. */
-        fun data(data: JsonField<List<Order>>) = apply {
-            this.data = data.map { it.toMutableList() }
-        }
+        fun data(data: JsonField<List<Order>>) =
+            apply {
+                this.data = data.map { it.toMutableList() }
+            }
 
         /** List of orders. */
-        fun addData(data: Order) = apply {
-            this.data =
-                (this.data ?: JsonField.of(mutableListOf())).also {
+        fun addData(data: Order) =
+            apply {
+                this.data = (this.data ?: JsonField.of(mutableListOf())).also {
                     checkKnown("data", it).add(data)
                 }
-        }
+            }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.clear()
-            putAllAdditionalProperties(additionalProperties)
-        }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            additionalProperties.put(key, value)
-        }
+        fun putAdditionalProperty(key: String, value: JsonValue) =
+            apply {
+                additionalProperties.put(key, value)
+            }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.putAll(additionalProperties)
-        }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+        fun removeAdditionalProperty(key: String) =
+            apply {
+                additionalProperties.remove(key)
+            }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalProperty)
-        }
+        fun removeAllAdditionalProperties(keys: Set<String>) =
+            apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
         fun build(): OrderListResponse =
             OrderListResponse(
-                checkRequired("data", data).map { it.toImmutable() },
-                additionalProperties.toImmutable(),
+              checkRequired(
+                "data", data
+              ).map { it.toImmutable() }, additionalProperties.toImmutable()
             )
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return /* spotless:off */ other is OrderListResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
+      return /* spotless:off */ other is OrderListResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -130,6 +141,5 @@ private constructor(
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() =
-        "OrderListResponse{data=$data, additionalProperties=$additionalProperties}"
+    override fun toString() = "OrderListResponse{data=$data, additionalProperties=$additionalProperties}"
 }

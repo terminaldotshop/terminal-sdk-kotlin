@@ -8,6 +8,6 @@ class AppListParamsTest {
 
     @Test
     fun create() {
-        AppListParams.builder().build()
+      AppListParams.builder().build()
     }
 }

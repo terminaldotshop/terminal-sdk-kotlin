@@ -19,49 +19,39 @@ import shop.terminal.api.models.card.CardListResponse
 interface CardServiceAsync {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     * Returns a view of this service that provides access to raw HTTP responses for
+     * each method.
      */
     fun withRawResponse(): WithRawResponse
 
     /** Attach a credit card (tokenized via Stripe) to the current user. */
-    suspend fun create(
-        params: CardCreateParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CardCreateResponse
+    suspend fun create(params: CardCreateParams, requestOptions: RequestOptions = RequestOptions.none()): CardCreateResponse
 
     /** List the credit cards associated with the current user. */
-    suspend fun list(
-        params: CardListParams = CardListParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CardListResponse
+    suspend fun list(params: CardListParams = CardListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): CardListResponse
 
     /** @see [list] */
-    suspend fun list(requestOptions: RequestOptions): CardListResponse =
-        list(CardListParams.none(), requestOptions)
+    suspend fun list(requestOptions: RequestOptions): CardListResponse = list(CardListParams.none(), requestOptions)
 
     /** Delete a credit card associated with the current user. */
-    suspend fun delete(
-        params: CardDeleteParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CardDeleteResponse
+    suspend fun delete(params: CardDeleteParams, requestOptions: RequestOptions = RequestOptions.none()): CardDeleteResponse
 
-    /** Create a temporary URL for collecting credit card information for the current user. */
-    suspend fun collect(
-        params: CardCollectParams = CardCollectParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CardCollectResponse
+    /**
+     * Create a temporary URL for collecting credit card information for the current
+     * user.
+     */
+    suspend fun collect(params: CardCollectParams = CardCollectParams.none(), requestOptions: RequestOptions = RequestOptions.none()): CardCollectResponse
 
     /** @see [collect] */
-    suspend fun collect(requestOptions: RequestOptions): CardCollectResponse =
-        collect(CardCollectParams.none(), requestOptions)
+    suspend fun collect(requestOptions: RequestOptions): CardCollectResponse = collect(CardCollectParams.none(), requestOptions)
 
     /** Get a credit card by ID associated with the current user. */
-    suspend fun get(
-        params: CardGetParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CardGetResponse
+    suspend fun get(params: CardGetParams, requestOptions: RequestOptions = RequestOptions.none()): CardGetResponse
 
-    /** A view of [CardServiceAsync] that provides access to raw HTTP responses for each method. */
+    /**
+     * A view of [CardServiceAsync] that provides access to raw HTTP responses for each
+     * method.
+     */
     interface WithRawResponse {
 
         /**
@@ -69,59 +59,42 @@ interface CardServiceAsync {
          * [CardServiceAsync.create].
          */
         @MustBeClosed
-        suspend fun create(
-            params: CardCreateParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<CardCreateResponse>
+        suspend fun create(params: CardCreateParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<CardCreateResponse>
 
         /**
          * Returns a raw HTTP response for `get /card`, but is otherwise the same as
          * [CardServiceAsync.list].
          */
         @MustBeClosed
-        suspend fun list(
-            params: CardListParams = CardListParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<CardListResponse>
+        suspend fun list(params: CardListParams = CardListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<CardListResponse>
 
         /** @see [list] */
         @MustBeClosed
-        suspend fun list(requestOptions: RequestOptions): HttpResponseFor<CardListResponse> =
-            list(CardListParams.none(), requestOptions)
+        suspend fun list(requestOptions: RequestOptions): HttpResponseFor<CardListResponse> = list(CardListParams.none(), requestOptions)
 
         /**
-         * Returns a raw HTTP response for `delete /card/{id}`, but is otherwise the same as
-         * [CardServiceAsync.delete].
+         * Returns a raw HTTP response for `delete /card/{id}`, but is otherwise the same
+         * as [CardServiceAsync.delete].
          */
         @MustBeClosed
-        suspend fun delete(
-            params: CardDeleteParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<CardDeleteResponse>
+        suspend fun delete(params: CardDeleteParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<CardDeleteResponse>
 
         /**
-         * Returns a raw HTTP response for `post /card/collect`, but is otherwise the same as
-         * [CardServiceAsync.collect].
+         * Returns a raw HTTP response for `post /card/collect`, but is otherwise the same
+         * as [CardServiceAsync.collect].
          */
         @MustBeClosed
-        suspend fun collect(
-            params: CardCollectParams = CardCollectParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<CardCollectResponse>
+        suspend fun collect(params: CardCollectParams = CardCollectParams.none(), requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<CardCollectResponse>
 
         /** @see [collect] */
         @MustBeClosed
-        suspend fun collect(requestOptions: RequestOptions): HttpResponseFor<CardCollectResponse> =
-            collect(CardCollectParams.none(), requestOptions)
+        suspend fun collect(requestOptions: RequestOptions): HttpResponseFor<CardCollectResponse> = collect(CardCollectParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /card/{id}`, but is otherwise the same as
          * [CardServiceAsync.get].
          */
         @MustBeClosed
-        suspend fun get(
-            params: CardGetParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<CardGetResponse>
+        suspend fun get(params: CardGetParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<CardGetResponse>
     }
 }
