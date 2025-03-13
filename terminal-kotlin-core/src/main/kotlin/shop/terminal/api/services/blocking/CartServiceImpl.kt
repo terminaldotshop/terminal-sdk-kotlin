@@ -15,6 +15,8 @@ import shop.terminal.api.core.http.json
 import shop.terminal.api.core.http.parseable
 import shop.terminal.api.core.prepare
 import shop.terminal.api.errors.TerminalError
+import shop.terminal.api.models.cart.CartClearParams
+import shop.terminal.api.models.cart.CartClearResponse
 import shop.terminal.api.models.cart.CartConvertParams
 import shop.terminal.api.models.cart.CartConvertResponse
 import shop.terminal.api.models.cart.CartGetParams
@@ -37,6 +39,10 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
     }
 
     override fun withRawResponse(): CartService.WithRawResponse = withRawResponse
+
+    override fun clear(params: CartClearParams, requestOptions: RequestOptions): CartClearResponse =
+        // delete /cart
+        withRawResponse().clear(params, requestOptions).parse()
 
     override fun convert(
         params: CartConvertParams,
@@ -88,6 +94,33 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
         CartService.WithRawResponse {
 
         private val errorHandler: Handler<TerminalError> = errorHandler(clientOptions.jsonMapper)
+
+        private val clearHandler: Handler<CartClearResponse> =
+            jsonHandler<CartClearResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+        override fun clear(
+            params: CartClearParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<CartClearResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.DELETE)
+                    .addPathSegments("cart")
+                    .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { clearHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
 
         private val convertHandler: Handler<CartConvertResponse> =
             jsonHandler<CartConvertResponse>(clientOptions.jsonMapper)
