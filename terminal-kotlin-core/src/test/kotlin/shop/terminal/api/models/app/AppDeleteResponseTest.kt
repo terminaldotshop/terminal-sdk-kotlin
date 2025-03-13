@@ -9,10 +9,8 @@ class AppDeleteResponseTest {
 
     @Test
     fun createAppDeleteResponse() {
-      val appDeleteResponse = AppDeleteResponse.builder()
-          .data(AppDeleteResponse.Data.OK)
-          .build()
-      assertThat(appDeleteResponse).isNotNull
-      assertThat(appDeleteResponse.data()).isEqualTo(AppDeleteResponse.Data.OK)
+        val appDeleteResponse = AppDeleteResponse.builder().data(AppDeleteResponse.Data.OK).build()
+        assertThat(appDeleteResponse).isNotNull
+        assertThat(appDeleteResponse.data()).isEqualTo(AppDeleteResponse.Data.OK)
     }
 }

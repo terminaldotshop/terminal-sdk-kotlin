@@ -17,69 +17,100 @@ import shop.terminal.api.models.subscription.SubscriptionListResponse
 interface SubscriptionServiceAsync {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for
-     * each method.
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
 
     /** Create a subscription for the current user. */
-    suspend fun create(params: SubscriptionCreateParams = SubscriptionCreateParams.none(), requestOptions: RequestOptions = RequestOptions.none()): SubscriptionCreateResponse
+    suspend fun create(
+        params: SubscriptionCreateParams = SubscriptionCreateParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): SubscriptionCreateResponse
 
     /** @see [create] */
-    suspend fun create(requestOptions: RequestOptions): SubscriptionCreateResponse = create(SubscriptionCreateParams.none(), requestOptions)
+    suspend fun create(requestOptions: RequestOptions): SubscriptionCreateResponse =
+        create(SubscriptionCreateParams.none(), requestOptions)
 
     /** List the subscriptions associated with the current user. */
-    suspend fun list(params: SubscriptionListParams = SubscriptionListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): SubscriptionListResponse
+    suspend fun list(
+        params: SubscriptionListParams = SubscriptionListParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): SubscriptionListResponse
 
     /** @see [list] */
-    suspend fun list(requestOptions: RequestOptions): SubscriptionListResponse = list(SubscriptionListParams.none(), requestOptions)
+    suspend fun list(requestOptions: RequestOptions): SubscriptionListResponse =
+        list(SubscriptionListParams.none(), requestOptions)
 
     /** Cancel a subscription for the current user. */
-    suspend fun delete(params: SubscriptionDeleteParams, requestOptions: RequestOptions = RequestOptions.none()): SubscriptionDeleteResponse
+    suspend fun delete(
+        params: SubscriptionDeleteParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): SubscriptionDeleteResponse
 
     /** Get the subscription with the given ID. */
-    suspend fun get(params: SubscriptionGetParams, requestOptions: RequestOptions = RequestOptions.none()): SubscriptionGetResponse
+    suspend fun get(
+        params: SubscriptionGetParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): SubscriptionGetResponse
 
     /**
-     * A view of [SubscriptionServiceAsync] that provides access to raw HTTP responses
-     * for each method.
+     * A view of [SubscriptionServiceAsync] that provides access to raw HTTP responses for each
+     * method.
      */
     interface WithRawResponse {
 
         /**
-         * Returns a raw HTTP response for `post /subscription`, but is otherwise the same
-         * as [SubscriptionServiceAsync.create].
+         * Returns a raw HTTP response for `post /subscription`, but is otherwise the same as
+         * [SubscriptionServiceAsync.create].
          */
         @MustBeClosed
-        suspend fun create(params: SubscriptionCreateParams = SubscriptionCreateParams.none(), requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<SubscriptionCreateResponse>
+        suspend fun create(
+            params: SubscriptionCreateParams = SubscriptionCreateParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionCreateResponse>
 
         /** @see [create] */
         @MustBeClosed
-        suspend fun create(requestOptions: RequestOptions): HttpResponseFor<SubscriptionCreateResponse> = create(SubscriptionCreateParams.none(), requestOptions)
+        suspend fun create(
+            requestOptions: RequestOptions
+        ): HttpResponseFor<SubscriptionCreateResponse> =
+            create(SubscriptionCreateParams.none(), requestOptions)
 
         /**
-         * Returns a raw HTTP response for `get /subscription`, but is otherwise the same
-         * as [SubscriptionServiceAsync.list].
+         * Returns a raw HTTP response for `get /subscription`, but is otherwise the same as
+         * [SubscriptionServiceAsync.list].
          */
         @MustBeClosed
-        suspend fun list(params: SubscriptionListParams = SubscriptionListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<SubscriptionListResponse>
+        suspend fun list(
+            params: SubscriptionListParams = SubscriptionListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionListResponse>
 
         /** @see [list] */
         @MustBeClosed
-        suspend fun list(requestOptions: RequestOptions): HttpResponseFor<SubscriptionListResponse> = list(SubscriptionListParams.none(), requestOptions)
+        suspend fun list(
+            requestOptions: RequestOptions
+        ): HttpResponseFor<SubscriptionListResponse> =
+            list(SubscriptionListParams.none(), requestOptions)
 
         /**
-         * Returns a raw HTTP response for `delete /subscription/{id}`, but is otherwise
-         * the same as [SubscriptionServiceAsync.delete].
+         * Returns a raw HTTP response for `delete /subscription/{id}`, but is otherwise the same as
+         * [SubscriptionServiceAsync.delete].
          */
         @MustBeClosed
-        suspend fun delete(params: SubscriptionDeleteParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<SubscriptionDeleteResponse>
+        suspend fun delete(
+            params: SubscriptionDeleteParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionDeleteResponse>
 
         /**
-         * Returns a raw HTTP response for `get /subscription/{id}`, but is otherwise the
-         * same as [SubscriptionServiceAsync.get].
+         * Returns a raw HTTP response for `get /subscription/{id}`, but is otherwise the same as
+         * [SubscriptionServiceAsync.get].
          */
         @MustBeClosed
-        suspend fun get(params: SubscriptionGetParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<SubscriptionGetResponse>
+        suspend fun get(
+            params: SubscriptionGetParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionGetResponse>
     }
 }

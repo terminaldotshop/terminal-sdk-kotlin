@@ -17,19 +17,18 @@ import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 
 @NoAutoDetect
-class CardGetResponse @JsonCreator private constructor(
+class CardGetResponse
+@JsonCreator
+private constructor(
     @JsonProperty("data") @ExcludeMissing private val data: JsonField<Card> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-
 ) {
 
     /** Credit card used for payments in the Terminal shop. */
     fun data(): Card = data.getRequired("data")
 
     /** Credit card used for payments in the Terminal shop. */
-    @JsonProperty("data")
-    @ExcludeMissing
-    fun _data(): JsonField<Card> = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Card> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -37,15 +36,14 @@ class CardGetResponse @JsonCreator private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): CardGetResponse =
-        apply {
-            if (validated) {
-              return@apply
-            }
-
-            data().validate()
-            validated = true
+    fun validate(): CardGetResponse = apply {
+        if (validated) {
+            return@apply
         }
+
+        data().validate()
+        validated = true
+    }
 
     fun toBuilder() = Builder().from(this)
 
@@ -55,7 +53,6 @@ class CardGetResponse @JsonCreator private constructor(
          * Returns a mutable builder for constructing an instance of [CardGetResponse].
          *
          * The following fields are required:
-         *
          * ```kotlin
          * .data()
          * ```
@@ -69,61 +66,46 @@ class CardGetResponse @JsonCreator private constructor(
         private var data: JsonField<Card>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-        internal fun from(cardGetResponse: CardGetResponse) =
-            apply {
-                data = cardGetResponse.data
-                additionalProperties = cardGetResponse.additionalProperties.toMutableMap()
-            }
+        internal fun from(cardGetResponse: CardGetResponse) = apply {
+            data = cardGetResponse.data
+            additionalProperties = cardGetResponse.additionalProperties.toMutableMap()
+        }
 
         /** Credit card used for payments in the Terminal shop. */
         fun data(data: Card) = data(JsonField.of(data))
 
         /** Credit card used for payments in the Terminal shop. */
-        fun data(data: JsonField<Card>) =
-            apply {
-                this.data = data
-            }
+        fun data(data: JsonField<Card>) = apply { this.data = data }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            putAllAdditionalProperties(additionalProperties)
+        }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) =
-            apply {
-                additionalProperties.put(key, value)
-            }
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            additionalProperties.put(key, value)
+        }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
 
-        fun removeAdditionalProperty(key: String) =
-            apply {
-                additionalProperties.remove(key)
-            }
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) =
-            apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
 
         fun build(): CardGetResponse =
-            CardGetResponse(
-              checkRequired(
-                "data", data
-              ), additionalProperties.toImmutable()
-            )
+            CardGetResponse(checkRequired("data", data), additionalProperties.toImmutable())
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return /* spotless:off */ other is CardGetResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is CardGetResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -132,5 +114,6 @@ class CardGetResponse @JsonCreator private constructor(
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() = "CardGetResponse{data=$data, additionalProperties=$additionalProperties}"
+    override fun toString() =
+        "CardGetResponse{data=$data, additionalProperties=$additionalProperties}"
 }
