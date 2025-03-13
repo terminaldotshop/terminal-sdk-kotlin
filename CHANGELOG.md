@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.2.0 (2025-03-13)
+
+Full Changelog: [v1.1.0...v1.2.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v1.1.0...v1.2.0)
+
+### Features
+
+* **api:** clear cart api ([#118](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/118)) ([5de62a7](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/5de62a7c1f7c0b4db705e84ea756a0508028a5f7))
+
+
+### Chores
+
+* **internal:** codegen related update ([#112](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/112)) ([56e910e](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/56e910ef66376e50878cab6513cea626fd468eed))
+* **internal:** codegen related update ([#113](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/113)) ([3065c22](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/3065c22952eeb0b2c602a77eabf5d47220aa6c29))
+* **internal:** codegen related update ([#114](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/114)) ([5a0e889](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/5a0e889abe3d0b725faa0d2c791d01c9ba696455))
+* **internal:** codegen related update ([#115](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/115)) ([658f86d](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/658f86dda8d421afbd9c22bdd486bb21e8b98a09))
+* **internal:** codegen related update ([#116](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/116)) ([d94b492](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/d94b4927a308ab53cfeda2bca234274a520a87b0))
+* **internal:** codegen related update ([#117](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/117)) ([79f35f2](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/79f35f29af0ac2e247fc899ad0263a77f67bae0e))
+* update SDK settings ([#110](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/110)) ([3d5506a](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/3d5506a6baa424a1d39e472c3b6514f061824083))
+
 ## 1.1.0 (2025-03-11)
 
 Full Changelog: [v1.0.0...v1.1.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v1.0.0...v1.1.0)
