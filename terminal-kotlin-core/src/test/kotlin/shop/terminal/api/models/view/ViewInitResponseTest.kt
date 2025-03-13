@@ -144,7 +144,6 @@ class ViewInitResponseTest {
                                         .featured(true)
                                         .marketEu(true)
                                         .marketNa(true)
-                                        .type("type")
                                         .build()
                                 )
                                 .build()
@@ -162,6 +161,7 @@ class ViewInitResponseTest {
                                 )
                                 .build()
                         )
+                        .region(ViewInitResponse.Data.Region.NA)
                         .addSubscription(
                             Subscription.builder()
                                 .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
@@ -309,7 +309,6 @@ class ViewInitResponseTest {
                                     .featured(true)
                                     .marketEu(true)
                                     .marketNa(true)
-                                    .type("type")
                                     .build()
                             )
                             .build()
@@ -327,6 +326,7 @@ class ViewInitResponseTest {
                             )
                             .build()
                     )
+                    .region(ViewInitResponse.Data.Region.NA)
                     .addSubscription(
                         Subscription.builder()
                             .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")

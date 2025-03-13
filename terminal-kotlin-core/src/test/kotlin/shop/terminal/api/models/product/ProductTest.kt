@@ -32,7 +32,6 @@ class ProductTest {
                         .featured(true)
                         .marketEu(true)
                         .marketNa(true)
-                        .type("type")
                         .build()
                 )
                 .build()
@@ -61,7 +60,6 @@ class ProductTest {
                     .featured(true)
                     .marketEu(true)
                     .marketNa(true)
-                    .type("type")
                     .build()
             )
     }
