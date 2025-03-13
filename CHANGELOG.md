@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.3.0 (2025-03-13)
+
+Full Changelog: [v1.2.0...v1.3.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v1.2.0...v1.3.0)
+
+### Features
+
+* **api:** remove gift cards ([#121](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/121)) ([4522484](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/4522484f0e53edb25fa8dd74f766ac35bb35f5ea))
+
+
+### Chores
+
+* **internal:** version bump ([#119](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/119)) ([007908c](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/007908c01544c72632232696ffc2711376ffe8b7))
+
 ## 1.2.0 (2025-03-13)
 
 Full Changelog: [v1.1.0...v1.2.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v1.1.0...v1.2.0)
