@@ -24,29 +24,26 @@ internal class ServiceParamsTest {
 
     @BeforeEach
     fun beforeEach(wmRuntimeInfo: WireMockRuntimeInfo) {
-        client =
-            TerminalOkHttpClient.builder()
-                .baseUrl(wmRuntimeInfo.httpBaseUrl)
-                .bearerToken("My Bearer Token")
-                .build()
+      client = TerminalOkHttpClient.builder()
+          .baseUrl(wmRuntimeInfo.httpBaseUrl)
+          .bearerToken("My Bearer Token")
+          .build()
     }
 
     @Test
     fun list() {
-        val productService = client.product()
-        stubFor(get(anyUrl()).willReturn(ok("{}")))
+      val productService = client.product()
+      stubFor(get(anyUrl()).willReturn(ok("{}")))
 
-        productService.list(
-            ProductListParams.builder()
-                .putAdditionalHeader("Secret-Header", "42")
-                .putAdditionalQueryParam("secret_query_param", "42")
-                .build()
-        )
+      productService.list(ProductListParams.builder()
+          .putAdditionalHeader("Secret-Header", "42")
+          .putAdditionalQueryParam("secret_query_param", "42")
+          .build())
 
-        verify(
-            getRequestedFor(anyUrl())
-                .withHeader("Secret-Header", equalTo("42"))
-                .withQueryParam("secret_query_param", equalTo("42"))
-        )
+      verify(
+          getRequestedFor(anyUrl())
+              .withHeader("Secret-Header", equalTo("42"))
+              .withQueryParam("secret_query_param", equalTo("42"))
+      )
     }
 }

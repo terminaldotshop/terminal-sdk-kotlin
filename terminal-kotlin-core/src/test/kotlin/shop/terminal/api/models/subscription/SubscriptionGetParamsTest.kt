@@ -9,16 +9,20 @@ class SubscriptionGetParamsTest {
 
     @Test
     fun create() {
-        SubscriptionGetParams.builder().id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
+      SubscriptionGetParams.builder()
+          .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
+          .build()
     }
 
     @Test
     fun getPathParam() {
-        val params = SubscriptionGetParams.builder().id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
-        assertThat(params).isNotNull
-        // path param "id"
-        assertThat(params.getPathParam(0)).isEqualTo("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+      val params = SubscriptionGetParams.builder()
+          .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
+          .build()
+      assertThat(params).isNotNull
+      // path param "id"
+      assertThat(params.getPathParam(0)).isEqualTo("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
+      // out-of-bound path param
+      assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }
