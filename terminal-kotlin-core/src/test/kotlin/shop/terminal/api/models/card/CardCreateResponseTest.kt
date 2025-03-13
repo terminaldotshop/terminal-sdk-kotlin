@@ -9,10 +9,9 @@ class CardCreateResponseTest {
 
     @Test
     fun createCardCreateResponse() {
-      val cardCreateResponse = CardCreateResponse.builder()
-          .data("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-          .build()
-      assertThat(cardCreateResponse).isNotNull
-      assertThat(cardCreateResponse.data()).isEqualTo("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+        val cardCreateResponse =
+            CardCreateResponse.builder().data("crd_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
+        assertThat(cardCreateResponse).isNotNull
+        assertThat(cardCreateResponse.data()).isEqualTo("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
     }
 }

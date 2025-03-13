@@ -10,32 +10,26 @@ class CardCreateParamsTest {
 
     @Test
     fun create() {
-      CardCreateParams.builder()
-          .token("tok_1N3T00LkdIwHu7ixt44h1F8k")
-          .build()
+        CardCreateParams.builder().token("tok_1N3T00LkdIwHu7ixt44h1F8k").build()
     }
 
     @Test
     fun body() {
-      val params = CardCreateParams.builder()
-          .token("tok_1N3T00LkdIwHu7ixt44h1F8k")
-          .build()
+        val params = CardCreateParams.builder().token("tok_1N3T00LkdIwHu7ixt44h1F8k").build()
 
-      val body = params._body()
+        val body = params._body()
 
-      assertNotNull(body)
-      assertThat(body.token()).isEqualTo("tok_1N3T00LkdIwHu7ixt44h1F8k")
+        assertNotNull(body)
+        assertThat(body.token()).isEqualTo("tok_1N3T00LkdIwHu7ixt44h1F8k")
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
-      val params = CardCreateParams.builder()
-          .token("tok_1N3T00LkdIwHu7ixt44h1F8k")
-          .build()
+        val params = CardCreateParams.builder().token("tok_1N3T00LkdIwHu7ixt44h1F8k").build()
 
-      val body = params._body()
+        val body = params._body()
 
-      assertNotNull(body)
-      assertThat(body.token()).isEqualTo("tok_1N3T00LkdIwHu7ixt44h1F8k")
+        assertNotNull(body)
+        assertThat(body.token()).isEqualTo("tok_1N3T00LkdIwHu7ixt44h1F8k")
     }
 }

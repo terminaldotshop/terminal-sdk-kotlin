@@ -9,20 +9,26 @@ class AppGetResponseTest {
 
     @Test
     fun createAppGetResponse() {
-      val appGetResponse = AppGetResponse.builder()
-          .data(App.builder()
-              .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
-              .name("Example App")
-              .redirectUri("https://example.com/callback")
-              .secret("sec_******XXXX")
-              .build())
-          .build()
-      assertThat(appGetResponse).isNotNull
-      assertThat(appGetResponse.data()).isEqualTo(App.builder()
-          .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
-          .name("Example App")
-          .redirectUri("https://example.com/callback")
-          .secret("sec_******XXXX")
-          .build())
+        val appGetResponse =
+            AppGetResponse.builder()
+                .data(
+                    App.builder()
+                        .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                        .name("Example App")
+                        .redirectUri("https://example.com/callback")
+                        .secret("sec_******XXXX")
+                        .build()
+                )
+                .build()
+        assertThat(appGetResponse).isNotNull
+        assertThat(appGetResponse.data())
+            .isEqualTo(
+                App.builder()
+                    .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .name("Example App")
+                    .redirectUri("https://example.com/callback")
+                    .secret("sec_******XXXX")
+                    .build()
+            )
     }
 }

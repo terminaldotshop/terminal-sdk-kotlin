@@ -8,6 +8,6 @@ class CartGetParamsTest {
 
     @Test
     fun create() {
-      CartGetParams.builder().build()
+        CartGetParams.builder().build()
     }
 }

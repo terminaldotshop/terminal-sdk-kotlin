@@ -8,6 +8,6 @@ class CartRemoveGiftCardParamsTest {
 
     @Test
     fun create() {
-      CartRemoveGiftCardParams.builder().build()
+        CartRemoveGiftCardParams.builder().build()
     }
 }
