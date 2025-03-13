@@ -165,6 +165,7 @@ private constructor(
         /** A Terminal shop user's profile. (We have users, btw.) */
         fun profile(): Profile = profile.getRequired("profile")
 
+        /** A Terminal shop user's region. */
         fun region(): Region = region.getRequired("region")
 
         fun subscriptions(): List<Subscription> = subscriptions.getRequired("subscriptions")
@@ -191,6 +192,7 @@ private constructor(
         /** A Terminal shop user's profile. (We have users, btw.) */
         @JsonProperty("profile") @ExcludeMissing fun _profile(): JsonField<Profile> = profile
 
+        /** A Terminal shop user's region. */
         @JsonProperty("region") @ExcludeMissing fun _region(): JsonField<Region> = region
 
         @JsonProperty("subscriptions")
@@ -351,8 +353,10 @@ private constructor(
             /** A Terminal shop user's profile. (We have users, btw.) */
             fun profile(profile: JsonField<Profile>) = apply { this.profile = profile }
 
+            /** A Terminal shop user's region. */
             fun region(region: Region) = region(JsonField.of(region))
 
+            /** A Terminal shop user's region. */
             fun region(region: JsonField<Region>) = apply { this.region = region }
 
             fun subscriptions(subscriptions: List<Subscription>) =
@@ -417,6 +421,7 @@ private constructor(
                 )
         }
 
+        /** A Terminal shop user's region. */
         class Region @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
             /**
@@ -431,17 +436,17 @@ private constructor(
 
             companion object {
 
-                val NA = of("na")
-
                 val EU = of("eu")
+
+                val NA = of("na")
 
                 fun of(value: String) = Region(JsonField.of(value))
             }
 
             /** An enum containing [Region]'s known values. */
             enum class Known {
-                NA,
                 EU,
+                NA,
             }
 
             /**
@@ -454,8 +459,8 @@ private constructor(
              * - It was constructed with an arbitrary value using the [of] method.
              */
             enum class Value {
-                NA,
                 EU,
+                NA,
                 /**
                  * An enum member indicating that [Region] was instantiated with an unknown value.
                  */
@@ -471,8 +476,8 @@ private constructor(
              */
             fun value(): Value =
                 when (this) {
-                    NA -> Value.NA
                     EU -> Value.EU
+                    NA -> Value.NA
                     else -> Value._UNKNOWN
                 }
 
@@ -487,8 +492,8 @@ private constructor(
              */
             fun known(): Known =
                 when (this) {
-                    NA -> Known.NA
                     EU -> Known.EU
+                    NA -> Known.NA
                     else -> throw TerminalInvalidDataException("Unknown Region: $value")
                 }
 
