@@ -11,14 +11,7 @@ class CartTest {
     fun createCart() {
         val cart =
             Cart.builder()
-                .amount(
-                    Cart.Amount.builder()
-                        .subtotal(4400L)
-                        .giftCard(0L)
-                        .shipping(800L)
-                        .total(0L)
-                        .build()
-                )
+                .amount(Cart.Amount.builder().subtotal(4400L).shipping(800L).total(0L).build())
                 .addItem(
                     Cart.Item.builder()
                         .id("itm_XXXXXXXXXXXXXXXXXXXXXXXXX")
@@ -30,7 +23,6 @@ class CartTest {
                 .subtotal(4400L)
                 .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
                 .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                .giftCardId("giftCardID")
                 .shipping(
                     Cart.Shipping.builder()
                         .service("USPS Ground Advantage")
@@ -40,9 +32,7 @@ class CartTest {
                 .build()
         assertThat(cart).isNotNull
         assertThat(cart.amount())
-            .isEqualTo(
-                Cart.Amount.builder().subtotal(4400L).giftCard(0L).shipping(800L).total(0L).build()
-            )
+            .isEqualTo(Cart.Amount.builder().subtotal(4400L).shipping(800L).total(0L).build())
         assertThat(cart.items())
             .containsExactly(
                 Cart.Item.builder()
@@ -55,7 +45,6 @@ class CartTest {
         assertThat(cart.subtotal()).isEqualTo(4400L)
         assertThat(cart.addressId()).isEqualTo("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
         assertThat(cart.cardId()).isEqualTo("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-        assertThat(cart.giftCardId()).isEqualTo("giftCardID")
         assertThat(cart.shipping())
             .isEqualTo(
                 Cart.Shipping.builder()

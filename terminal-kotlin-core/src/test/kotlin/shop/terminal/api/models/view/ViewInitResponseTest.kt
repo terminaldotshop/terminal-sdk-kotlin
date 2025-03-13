@@ -59,7 +59,6 @@ class ViewInitResponseTest {
                                 .amount(
                                     Cart.Amount.builder()
                                         .subtotal(4400L)
-                                        .giftCard(0L)
                                         .shipping(800L)
                                         .total(0L)
                                         .build()
@@ -75,7 +74,6 @@ class ViewInitResponseTest {
                                 .subtotal(4400L)
                                 .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
                                 .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                                .giftCardId("giftCardID")
                                 .shipping(
                                     Cart.Shipping.builder()
                                         .service("USPS Ground Advantage")
@@ -228,7 +226,6 @@ class ViewInitResponseTest {
                             .amount(
                                 Cart.Amount.builder()
                                     .subtotal(4400L)
-                                    .giftCard(0L)
                                     .shipping(800L)
                                     .total(0L)
                                     .build()
@@ -244,7 +241,6 @@ class ViewInitResponseTest {
                             .subtotal(4400L)
                             .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
                             .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                            .giftCardId("giftCardID")
                             .shipping(
                                 Cart.Shipping.builder()
                                     .service("USPS Ground Advantage")
