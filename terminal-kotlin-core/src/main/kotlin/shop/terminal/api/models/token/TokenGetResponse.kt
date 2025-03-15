@@ -15,6 +15,7 @@ import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
+import shop.terminal.api.errors.TerminalInvalidDataException
 
 @NoAutoDetect
 class TokenGetResponse
@@ -27,12 +28,16 @@ private constructor(
     /**
      * A personal access token used to access the Terminal API. If you leak this, expect large sums
      * of coffee to be ordered on your credit card.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun data(): Token = data.getRequired("data")
 
     /**
-     * A personal access token used to access the Terminal API. If you leak this, expect large sums
-     * of coffee to be ordered on your credit card.
+     * Returns the raw JSON value of [data].
+     *
+     * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Token> = data
 
@@ -84,8 +89,10 @@ private constructor(
         fun data(data: Token) = data(JsonField.of(data))
 
         /**
-         * A personal access token used to access the Terminal API. If you leak this, expect large
-         * sums of coffee to be ordered on your credit card.
+         * Sets [Builder.data] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.data] with a well-typed [Token] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun data(data: JsonField<Token>) = apply { this.data = data }
 

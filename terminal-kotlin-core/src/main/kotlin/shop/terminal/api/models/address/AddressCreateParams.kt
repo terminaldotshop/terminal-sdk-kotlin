@@ -18,6 +18,7 @@ import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
+import shop.terminal.api.errors.TerminalInvalidDataException
 
 /** Create and add a shipping address to the current user. */
 class AddressCreateParams
@@ -27,52 +28,124 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** City of the address. */
+    /**
+     * City of the address.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun city(): String = body.city()
 
-    /** ISO 3166-1 alpha-2 country code of the address. */
+    /**
+     * ISO 3166-1 alpha-2 country code of the address.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun country(): String = body.country()
 
-    /** The recipient's name. */
+    /**
+     * The recipient's name.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun name(): String = body.name()
 
-    /** Street of the address. */
+    /**
+     * Street of the address.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun street1(): String = body.street1()
 
-    /** Zip code of the address. */
+    /**
+     * Zip code of the address.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun zip(): String = body.zip()
 
-    /** Phone number of the recipient. */
+    /**
+     * Phone number of the recipient.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun phone(): String? = body.phone()
 
-    /** Province or state of the address. */
+    /**
+     * Province or state of the address.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun province(): String? = body.province()
 
-    /** Apartment, suite, etc. of the address. */
+    /**
+     * Apartment, suite, etc. of the address.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun street2(): String? = body.street2()
 
-    /** City of the address. */
+    /**
+     * Returns the raw JSON value of [city].
+     *
+     * Unlike [city], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _city(): JsonField<String> = body._city()
 
-    /** ISO 3166-1 alpha-2 country code of the address. */
+    /**
+     * Returns the raw JSON value of [country].
+     *
+     * Unlike [country], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _country(): JsonField<String> = body._country()
 
-    /** The recipient's name. */
+    /**
+     * Returns the raw JSON value of [name].
+     *
+     * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _name(): JsonField<String> = body._name()
 
-    /** Street of the address. */
+    /**
+     * Returns the raw JSON value of [street1].
+     *
+     * Unlike [street1], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _street1(): JsonField<String> = body._street1()
 
-    /** Zip code of the address. */
+    /**
+     * Returns the raw JSON value of [zip].
+     *
+     * Unlike [zip], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _zip(): JsonField<String> = body._zip()
 
-    /** Phone number of the recipient. */
+    /**
+     * Returns the raw JSON value of [phone].
+     *
+     * Unlike [phone], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _phone(): JsonField<String> = body._phone()
 
-    /** Province or state of the address. */
+    /**
+     * Returns the raw JSON value of [province].
+     *
+     * Unlike [province], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _province(): JsonField<String> = body._province()
 
-    /** Apartment, suite, etc. of the address. */
+    /**
+     * Returns the raw JSON value of [street2].
+     *
+     * Unlike [street2], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _street2(): JsonField<String> = body._street2()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
@@ -118,52 +191,124 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** City of the address. */
+        /**
+         * City of the address.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun city(): String = city.getRequired("city")
 
-        /** ISO 3166-1 alpha-2 country code of the address. */
+        /**
+         * ISO 3166-1 alpha-2 country code of the address.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun country(): String = country.getRequired("country")
 
-        /** The recipient's name. */
+        /**
+         * The recipient's name.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun name(): String = name.getRequired("name")
 
-        /** Street of the address. */
+        /**
+         * Street of the address.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun street1(): String = street1.getRequired("street1")
 
-        /** Zip code of the address. */
+        /**
+         * Zip code of the address.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun zip(): String = zip.getRequired("zip")
 
-        /** Phone number of the recipient. */
+        /**
+         * Phone number of the recipient.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun phone(): String? = phone.getNullable("phone")
 
-        /** Province or state of the address. */
+        /**
+         * Province or state of the address.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun province(): String? = province.getNullable("province")
 
-        /** Apartment, suite, etc. of the address. */
+        /**
+         * Apartment, suite, etc. of the address.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun street2(): String? = street2.getNullable("street2")
 
-        /** City of the address. */
+        /**
+         * Returns the raw JSON value of [city].
+         *
+         * Unlike [city], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("city") @ExcludeMissing fun _city(): JsonField<String> = city
 
-        /** ISO 3166-1 alpha-2 country code of the address. */
+        /**
+         * Returns the raw JSON value of [country].
+         *
+         * Unlike [country], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("country") @ExcludeMissing fun _country(): JsonField<String> = country
 
-        /** The recipient's name. */
+        /**
+         * Returns the raw JSON value of [name].
+         *
+         * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
-        /** Street of the address. */
+        /**
+         * Returns the raw JSON value of [street1].
+         *
+         * Unlike [street1], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("street1") @ExcludeMissing fun _street1(): JsonField<String> = street1
 
-        /** Zip code of the address. */
+        /**
+         * Returns the raw JSON value of [zip].
+         *
+         * Unlike [zip], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("zip") @ExcludeMissing fun _zip(): JsonField<String> = zip
 
-        /** Phone number of the recipient. */
+        /**
+         * Returns the raw JSON value of [phone].
+         *
+         * Unlike [phone], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("phone") @ExcludeMissing fun _phone(): JsonField<String> = phone
 
-        /** Province or state of the address. */
+        /**
+         * Returns the raw JSON value of [province].
+         *
+         * Unlike [province], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("province") @ExcludeMissing fun _province(): JsonField<String> = province
 
-        /** Apartment, suite, etc. of the address. */
+        /**
+         * Returns the raw JSON value of [street2].
+         *
+         * Unlike [street2], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("street2") @ExcludeMissing fun _street2(): JsonField<String> = street2
 
         @JsonAnyGetter
@@ -235,49 +380,97 @@ private constructor(
             /** City of the address. */
             fun city(city: String) = city(JsonField.of(city))
 
-            /** City of the address. */
+            /**
+             * Sets [Builder.city] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.city] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun city(city: JsonField<String>) = apply { this.city = city }
 
             /** ISO 3166-1 alpha-2 country code of the address. */
             fun country(country: String) = country(JsonField.of(country))
 
-            /** ISO 3166-1 alpha-2 country code of the address. */
+            /**
+             * Sets [Builder.country] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.country] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun country(country: JsonField<String>) = apply { this.country = country }
 
             /** The recipient's name. */
             fun name(name: String) = name(JsonField.of(name))
 
-            /** The recipient's name. */
+            /**
+             * Sets [Builder.name] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.name] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun name(name: JsonField<String>) = apply { this.name = name }
 
             /** Street of the address. */
             fun street1(street1: String) = street1(JsonField.of(street1))
 
-            /** Street of the address. */
+            /**
+             * Sets [Builder.street1] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.street1] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun street1(street1: JsonField<String>) = apply { this.street1 = street1 }
 
             /** Zip code of the address. */
             fun zip(zip: String) = zip(JsonField.of(zip))
 
-            /** Zip code of the address. */
+            /**
+             * Sets [Builder.zip] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.zip] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun zip(zip: JsonField<String>) = apply { this.zip = zip }
 
             /** Phone number of the recipient. */
             fun phone(phone: String) = phone(JsonField.of(phone))
 
-            /** Phone number of the recipient. */
+            /**
+             * Sets [Builder.phone] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.phone] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun phone(phone: JsonField<String>) = apply { this.phone = phone }
 
             /** Province or state of the address. */
             fun province(province: String) = province(JsonField.of(province))
 
-            /** Province or state of the address. */
+            /**
+             * Sets [Builder.province] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.province] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun province(province: JsonField<String>) = apply { this.province = province }
 
             /** Apartment, suite, etc. of the address. */
             fun street2(street2: String) = street2(JsonField.of(street2))
 
-            /** Apartment, suite, etc. of the address. */
+            /**
+             * Sets [Builder.street2] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.street2] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun street2(street2: JsonField<String>) = apply { this.street2 = street2 }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -367,49 +560,89 @@ private constructor(
         /** City of the address. */
         fun city(city: String) = apply { body.city(city) }
 
-        /** City of the address. */
+        /**
+         * Sets [Builder.city] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.city] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun city(city: JsonField<String>) = apply { body.city(city) }
 
         /** ISO 3166-1 alpha-2 country code of the address. */
         fun country(country: String) = apply { body.country(country) }
 
-        /** ISO 3166-1 alpha-2 country code of the address. */
+        /**
+         * Sets [Builder.country] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.country] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun country(country: JsonField<String>) = apply { body.country(country) }
 
         /** The recipient's name. */
         fun name(name: String) = apply { body.name(name) }
 
-        /** The recipient's name. */
+        /**
+         * Sets [Builder.name] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.name] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun name(name: JsonField<String>) = apply { body.name(name) }
 
         /** Street of the address. */
         fun street1(street1: String) = apply { body.street1(street1) }
 
-        /** Street of the address. */
+        /**
+         * Sets [Builder.street1] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.street1] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun street1(street1: JsonField<String>) = apply { body.street1(street1) }
 
         /** Zip code of the address. */
         fun zip(zip: String) = apply { body.zip(zip) }
 
-        /** Zip code of the address. */
+        /**
+         * Sets [Builder.zip] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.zip] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun zip(zip: JsonField<String>) = apply { body.zip(zip) }
 
         /** Phone number of the recipient. */
         fun phone(phone: String) = apply { body.phone(phone) }
 
-        /** Phone number of the recipient. */
+        /**
+         * Sets [Builder.phone] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.phone] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun phone(phone: JsonField<String>) = apply { body.phone(phone) }
 
         /** Province or state of the address. */
         fun province(province: String) = apply { body.province(province) }
 
-        /** Province or state of the address. */
+        /**
+         * Sets [Builder.province] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.province] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun province(province: JsonField<String>) = apply { body.province(province) }
 
         /** Apartment, suite, etc. of the address. */
         fun street2(street2: String) = apply { body.street2(street2) }
 
-        /** Apartment, suite, etc. of the address. */
+        /**
+         * Sets [Builder.street2] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.street2] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun street2(street2: JsonField<String>) = apply { body.street2(street2) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
