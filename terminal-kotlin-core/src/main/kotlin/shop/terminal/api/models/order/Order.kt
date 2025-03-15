@@ -16,6 +16,7 @@ import shop.terminal.api.core.checkKnown
 import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
+import shop.terminal.api.errors.TerminalInvalidDataException
 
 /** An order from the Terminal shop. */
 @NoAutoDetect
@@ -39,40 +40,94 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
-    /** Unique object identifier. The format and length of IDs may change over time. */
+    /**
+     * Unique object identifier. The format and length of IDs may change over time.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun id(): String = id.getRequired("id")
 
-    /** The subtotal and shipping amounts of the order. */
+    /**
+     * The subtotal and shipping amounts of the order.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun amount(): Amount = amount.getRequired("amount")
 
-    /** Items in the order. */
+    /**
+     * Items in the order.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun items(): List<Item> = items.getRequired("items")
 
-    /** Shipping address of the order. */
+    /**
+     * Shipping address of the order.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun shipping(): Shipping = shipping.getRequired("shipping")
 
-    /** Tracking information of the order. */
+    /**
+     * Tracking information of the order.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun tracking(): Tracking = tracking.getRequired("tracking")
 
-    /** Zero-based index of the order for this user only. */
+    /**
+     * Zero-based index of the order for this user only.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun index(): Long? = index.getNullable("index")
 
-    /** Unique object identifier. The format and length of IDs may change over time. */
+    /**
+     * Returns the raw JSON value of [id].
+     *
+     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-    /** The subtotal and shipping amounts of the order. */
+    /**
+     * Returns the raw JSON value of [amount].
+     *
+     * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Amount> = amount
 
-    /** Items in the order. */
+    /**
+     * Returns the raw JSON value of [items].
+     *
+     * Unlike [items], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("items") @ExcludeMissing fun _items(): JsonField<List<Item>> = items
 
-    /** Shipping address of the order. */
+    /**
+     * Returns the raw JSON value of [shipping].
+     *
+     * Unlike [shipping], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("shipping") @ExcludeMissing fun _shipping(): JsonField<Shipping> = shipping
 
-    /** Tracking information of the order. */
+    /**
+     * Returns the raw JSON value of [tracking].
+     *
+     * Unlike [tracking], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("tracking") @ExcludeMissing fun _tracking(): JsonField<Tracking> = tracking
 
-    /** Zero-based index of the order for this user only. */
+    /**
+     * Returns the raw JSON value of [index].
+     *
+     * Unlike [index], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("index") @ExcludeMissing fun _index(): JsonField<Long> = index
 
     @JsonAnyGetter
@@ -138,24 +193,44 @@ private constructor(
         /** Unique object identifier. The format and length of IDs may change over time. */
         fun id(id: String) = id(JsonField.of(id))
 
-        /** Unique object identifier. The format and length of IDs may change over time. */
+        /**
+         * Sets [Builder.id] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.id] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
         /** The subtotal and shipping amounts of the order. */
         fun amount(amount: Amount) = amount(JsonField.of(amount))
 
-        /** The subtotal and shipping amounts of the order. */
+        /**
+         * Sets [Builder.amount] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.amount] with a well-typed [Amount] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun amount(amount: JsonField<Amount>) = apply { this.amount = amount }
 
         /** Items in the order. */
         fun items(items: List<Item>) = items(JsonField.of(items))
 
-        /** Items in the order. */
+        /**
+         * Sets [Builder.items] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.items] with a well-typed `List<Item>` value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun items(items: JsonField<List<Item>>) = apply {
             this.items = items.map { it.toMutableList() }
         }
 
-        /** Items in the order. */
+        /**
+         * Adds a single [Item] to [items].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addItem(item: Item) = apply {
             items =
                 (items ?: JsonField.of(mutableListOf())).also { checkKnown("items", it).add(item) }
@@ -164,19 +239,36 @@ private constructor(
         /** Shipping address of the order. */
         fun shipping(shipping: Shipping) = shipping(JsonField.of(shipping))
 
-        /** Shipping address of the order. */
+        /**
+         * Sets [Builder.shipping] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.shipping] with a well-typed [Shipping] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun shipping(shipping: JsonField<Shipping>) = apply { this.shipping = shipping }
 
         /** Tracking information of the order. */
         fun tracking(tracking: Tracking) = tracking(JsonField.of(tracking))
 
-        /** Tracking information of the order. */
+        /**
+         * Sets [Builder.tracking] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.tracking] with a well-typed [Tracking] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun tracking(tracking: JsonField<Tracking>) = apply { this.tracking = tracking }
 
         /** Zero-based index of the order for this user only. */
         fun index(index: Long) = index(JsonField.of(index))
 
-        /** Zero-based index of the order for this user only. */
+        /**
+         * Sets [Builder.index] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.index] with a well-typed [Long] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun index(index: JsonField<Long>) = apply { this.index = index }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -225,16 +317,34 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** Shipping amount of the order, in cents (USD). */
+        /**
+         * Shipping amount of the order, in cents (USD).
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun shipping(): Long = shipping.getRequired("shipping")
 
-        /** Subtotal amount of the order, in cents (USD). */
+        /**
+         * Subtotal amount of the order, in cents (USD).
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun subtotal(): Long = subtotal.getRequired("subtotal")
 
-        /** Shipping amount of the order, in cents (USD). */
+        /**
+         * Returns the raw JSON value of [shipping].
+         *
+         * Unlike [shipping], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("shipping") @ExcludeMissing fun _shipping(): JsonField<Long> = shipping
 
-        /** Subtotal amount of the order, in cents (USD). */
+        /**
+         * Returns the raw JSON value of [subtotal].
+         *
+         * Unlike [subtotal], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("subtotal") @ExcludeMissing fun _subtotal(): JsonField<Long> = subtotal
 
         @JsonAnyGetter
@@ -285,13 +395,25 @@ private constructor(
             /** Shipping amount of the order, in cents (USD). */
             fun shipping(shipping: Long) = shipping(JsonField.of(shipping))
 
-            /** Shipping amount of the order, in cents (USD). */
+            /**
+             * Sets [Builder.shipping] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.shipping] with a well-typed [Long] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun shipping(shipping: JsonField<Long>) = apply { this.shipping = shipping }
 
             /** Subtotal amount of the order, in cents (USD). */
             fun subtotal(subtotal: Long) = subtotal(JsonField.of(subtotal))
 
-            /** Subtotal amount of the order, in cents (USD). */
+            /**
+             * Sets [Builder.subtotal] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.subtotal] with a well-typed [Long] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun subtotal(subtotal: JsonField<Long>) = apply { this.subtotal = subtotal }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -360,36 +482,82 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** Unique object identifier. The format and length of IDs may change over time. */
+        /**
+         * Unique object identifier. The format and length of IDs may change over time.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun id(): String = id.getRequired("id")
 
-        /** Amount of the item in the order, in cents (USD). */
+        /**
+         * Amount of the item in the order, in cents (USD).
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun amount(): Long = amount.getRequired("amount")
 
-        /** Quantity of the item in the order. */
+        /**
+         * Quantity of the item in the order.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun quantity(): Long = quantity.getRequired("quantity")
 
-        /** Description of the item in the order. */
+        /**
+         * Description of the item in the order.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun description(): String? = description.getNullable("description")
 
-        /** ID of the product variant of the item in the order. */
+        /**
+         * ID of the product variant of the item in the order.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun productVariantId(): String? = productVariantId.getNullable("productVariantID")
 
-        /** Unique object identifier. The format and length of IDs may change over time. */
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-        /** Amount of the item in the order, in cents (USD). */
+        /**
+         * Returns the raw JSON value of [amount].
+         *
+         * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Long> = amount
 
-        /** Quantity of the item in the order. */
+        /**
+         * Returns the raw JSON value of [quantity].
+         *
+         * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Long> = quantity
 
-        /** Description of the item in the order. */
+        /**
+         * Returns the raw JSON value of [description].
+         *
+         * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("description")
         @ExcludeMissing
         fun _description(): JsonField<String> = description
 
-        /** ID of the product variant of the item in the order. */
+        /**
+         * Returns the raw JSON value of [productVariantId].
+         *
+         * Unlike [productVariantId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @JsonProperty("productVariantID")
         @ExcludeMissing
         fun _productVariantId(): JsonField<String> = productVariantId
@@ -452,25 +620,49 @@ private constructor(
             /** Unique object identifier. The format and length of IDs may change over time. */
             fun id(id: String) = id(JsonField.of(id))
 
-            /** Unique object identifier. The format and length of IDs may change over time. */
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             /** Amount of the item in the order, in cents (USD). */
             fun amount(amount: Long) = amount(JsonField.of(amount))
 
-            /** Amount of the item in the order, in cents (USD). */
+            /**
+             * Sets [Builder.amount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.amount] with a well-typed [Long] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun amount(amount: JsonField<Long>) = apply { this.amount = amount }
 
             /** Quantity of the item in the order. */
             fun quantity(quantity: Long) = quantity(JsonField.of(quantity))
 
-            /** Quantity of the item in the order. */
+            /**
+             * Sets [Builder.quantity] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.quantity] with a well-typed [Long] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun quantity(quantity: JsonField<Long>) = apply { this.quantity = quantity }
 
             /** Description of the item in the order. */
             fun description(description: String) = description(JsonField.of(description))
 
-            /** Description of the item in the order. */
+            /**
+             * Sets [Builder.description] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.description] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun description(description: JsonField<String>) = apply {
                 this.description = description
             }
@@ -479,7 +671,13 @@ private constructor(
             fun productVariantId(productVariantId: String) =
                 productVariantId(JsonField.of(productVariantId))
 
-            /** ID of the product variant of the item in the order. */
+            /**
+             * Sets [Builder.productVariantId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.productVariantId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun productVariantId(productVariantId: JsonField<String>) = apply {
                 this.productVariantId = productVariantId
             }
@@ -563,52 +761,124 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** City of the address. */
+        /**
+         * City of the address.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun city(): String = city.getRequired("city")
 
-        /** ISO 3166-1 alpha-2 country code of the address. */
+        /**
+         * ISO 3166-1 alpha-2 country code of the address.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun country(): String = country.getRequired("country")
 
-        /** The recipient's name. */
+        /**
+         * The recipient's name.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun name(): String = name.getRequired("name")
 
-        /** Street of the address. */
+        /**
+         * Street of the address.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun street1(): String = street1.getRequired("street1")
 
-        /** Zip code of the address. */
+        /**
+         * Zip code of the address.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun zip(): String = zip.getRequired("zip")
 
-        /** Phone number of the recipient. */
+        /**
+         * Phone number of the recipient.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun phone(): String? = phone.getNullable("phone")
 
-        /** Province or state of the address. */
+        /**
+         * Province or state of the address.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun province(): String? = province.getNullable("province")
 
-        /** Apartment, suite, etc. of the address. */
+        /**
+         * Apartment, suite, etc. of the address.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun street2(): String? = street2.getNullable("street2")
 
-        /** City of the address. */
+        /**
+         * Returns the raw JSON value of [city].
+         *
+         * Unlike [city], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("city") @ExcludeMissing fun _city(): JsonField<String> = city
 
-        /** ISO 3166-1 alpha-2 country code of the address. */
+        /**
+         * Returns the raw JSON value of [country].
+         *
+         * Unlike [country], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("country") @ExcludeMissing fun _country(): JsonField<String> = country
 
-        /** The recipient's name. */
+        /**
+         * Returns the raw JSON value of [name].
+         *
+         * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
-        /** Street of the address. */
+        /**
+         * Returns the raw JSON value of [street1].
+         *
+         * Unlike [street1], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("street1") @ExcludeMissing fun _street1(): JsonField<String> = street1
 
-        /** Zip code of the address. */
+        /**
+         * Returns the raw JSON value of [zip].
+         *
+         * Unlike [zip], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("zip") @ExcludeMissing fun _zip(): JsonField<String> = zip
 
-        /** Phone number of the recipient. */
+        /**
+         * Returns the raw JSON value of [phone].
+         *
+         * Unlike [phone], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("phone") @ExcludeMissing fun _phone(): JsonField<String> = phone
 
-        /** Province or state of the address. */
+        /**
+         * Returns the raw JSON value of [province].
+         *
+         * Unlike [province], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("province") @ExcludeMissing fun _province(): JsonField<String> = province
 
-        /** Apartment, suite, etc. of the address. */
+        /**
+         * Returns the raw JSON value of [street2].
+         *
+         * Unlike [street2], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("street2") @ExcludeMissing fun _street2(): JsonField<String> = street2
 
         @JsonAnyGetter
@@ -680,49 +950,97 @@ private constructor(
             /** City of the address. */
             fun city(city: String) = city(JsonField.of(city))
 
-            /** City of the address. */
+            /**
+             * Sets [Builder.city] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.city] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun city(city: JsonField<String>) = apply { this.city = city }
 
             /** ISO 3166-1 alpha-2 country code of the address. */
             fun country(country: String) = country(JsonField.of(country))
 
-            /** ISO 3166-1 alpha-2 country code of the address. */
+            /**
+             * Sets [Builder.country] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.country] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun country(country: JsonField<String>) = apply { this.country = country }
 
             /** The recipient's name. */
             fun name(name: String) = name(JsonField.of(name))
 
-            /** The recipient's name. */
+            /**
+             * Sets [Builder.name] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.name] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun name(name: JsonField<String>) = apply { this.name = name }
 
             /** Street of the address. */
             fun street1(street1: String) = street1(JsonField.of(street1))
 
-            /** Street of the address. */
+            /**
+             * Sets [Builder.street1] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.street1] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun street1(street1: JsonField<String>) = apply { this.street1 = street1 }
 
             /** Zip code of the address. */
             fun zip(zip: String) = zip(JsonField.of(zip))
 
-            /** Zip code of the address. */
+            /**
+             * Sets [Builder.zip] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.zip] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun zip(zip: JsonField<String>) = apply { this.zip = zip }
 
             /** Phone number of the recipient. */
             fun phone(phone: String) = phone(JsonField.of(phone))
 
-            /** Phone number of the recipient. */
+            /**
+             * Sets [Builder.phone] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.phone] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun phone(phone: JsonField<String>) = apply { this.phone = phone }
 
             /** Province or state of the address. */
             fun province(province: String) = province(JsonField.of(province))
 
-            /** Province or state of the address. */
+            /**
+             * Sets [Builder.province] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.province] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun province(province: JsonField<String>) = apply { this.province = province }
 
             /** Apartment, suite, etc. of the address. */
             fun street2(street2: String) = street2(JsonField.of(street2))
 
-            /** Apartment, suite, etc. of the address. */
+            /**
+             * Sets [Builder.street2] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.street2] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun street2(street2: JsonField<String>) = apply { this.street2 = street2 }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -792,22 +1110,49 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** Tracking number of the order. */
+        /**
+         * Tracking number of the order.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun number(): String? = number.getNullable("number")
 
-        /** Shipping service of the order. */
+        /**
+         * Shipping service of the order.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun service(): String? = service.getNullable("service")
 
-        /** Tracking URL of the order. */
+        /**
+         * Tracking URL of the order.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun url(): String? = url.getNullable("url")
 
-        /** Tracking number of the order. */
+        /**
+         * Returns the raw JSON value of [number].
+         *
+         * Unlike [number], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("number") @ExcludeMissing fun _number(): JsonField<String> = number
 
-        /** Shipping service of the order. */
+        /**
+         * Returns the raw JSON value of [service].
+         *
+         * Unlike [service], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("service") @ExcludeMissing fun _service(): JsonField<String> = service
 
-        /** Tracking URL of the order. */
+        /**
+         * Returns the raw JSON value of [url].
+         *
+         * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
 
         @JsonAnyGetter
@@ -853,19 +1198,37 @@ private constructor(
             /** Tracking number of the order. */
             fun number(number: String) = number(JsonField.of(number))
 
-            /** Tracking number of the order. */
+            /**
+             * Sets [Builder.number] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.number] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun number(number: JsonField<String>) = apply { this.number = number }
 
             /** Shipping service of the order. */
             fun service(service: String) = service(JsonField.of(service))
 
-            /** Shipping service of the order. */
+            /**
+             * Sets [Builder.service] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.service] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun service(service: JsonField<String>) = apply { this.service = service }
 
             /** Tracking URL of the order. */
             fun url(url: String) = url(JsonField.of(url))
 
-            /** Tracking URL of the order. */
+            /**
+             * Sets [Builder.url] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.url] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun url(url: JsonField<String>) = apply { this.url = url }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {

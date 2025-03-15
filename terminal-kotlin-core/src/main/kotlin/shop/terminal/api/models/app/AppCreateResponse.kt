@@ -15,6 +15,7 @@ import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
+import shop.terminal.api.errors.TerminalInvalidDataException
 
 @NoAutoDetect
 class AppCreateResponse
@@ -24,8 +25,17 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
+    /**
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun data(): Data = data.getRequired("data")
 
+    /**
+     * Returns the raw JSON value of [data].
+     *
+     * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
 
     @JsonAnyGetter
@@ -71,6 +81,12 @@ private constructor(
 
         fun data(data: Data) = data(JsonField.of(data))
 
+        /**
+         * Sets [Builder.data] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.data] with a well-typed [Data] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun data(data: JsonField<Data>) = apply { this.data = data }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -108,16 +124,34 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** OAuth 2.0 client ID. */
+        /**
+         * OAuth 2.0 client ID.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun id(): String = id.getRequired("id")
 
-        /** OAuth 2.0 client secret. */
+        /**
+         * OAuth 2.0 client secret.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun secret(): String = secret.getRequired("secret")
 
-        /** OAuth 2.0 client ID. */
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-        /** OAuth 2.0 client secret. */
+        /**
+         * Returns the raw JSON value of [secret].
+         *
+         * Unlike [secret], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("secret") @ExcludeMissing fun _secret(): JsonField<String> = secret
 
         @JsonAnyGetter
@@ -168,13 +202,25 @@ private constructor(
             /** OAuth 2.0 client ID. */
             fun id(id: String) = id(JsonField.of(id))
 
-            /** OAuth 2.0 client ID. */
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             /** OAuth 2.0 client secret. */
             fun secret(secret: String) = secret(JsonField.of(secret))
 
-            /** OAuth 2.0 client secret. */
+            /**
+             * Sets [Builder.secret] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.secret] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun secret(secret: JsonField<String>) = apply { this.secret = secret }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {

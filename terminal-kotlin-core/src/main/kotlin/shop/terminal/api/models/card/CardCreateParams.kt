@@ -18,6 +18,7 @@ import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
+import shop.terminal.api.errors.TerminalInvalidDataException
 
 /** Attach a credit card (tokenized via Stripe) to the current user. */
 class CardCreateParams
@@ -30,12 +31,16 @@ private constructor(
     /**
      * Stripe card token. Learn how to
      * [create one here](https://docs.stripe.com/api/tokens/create_card).
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun token(): String = body.token()
 
     /**
-     * Stripe card token. Learn how to
-     * [create one here](https://docs.stripe.com/api/tokens/create_card).
+     * Returns the raw JSON value of [token].
+     *
+     * Unlike [token], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _token(): JsonField<String> = body._token()
 
@@ -65,12 +70,16 @@ private constructor(
         /**
          * Stripe card token. Learn how to
          * [create one here](https://docs.stripe.com/api/tokens/create_card).
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun token(): String = token.getRequired("token")
 
         /**
-         * Stripe card token. Learn how to
-         * [create one here](https://docs.stripe.com/api/tokens/create_card).
+         * Returns the raw JSON value of [token].
+         *
+         * Unlike [token], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("token") @ExcludeMissing fun _token(): JsonField<String> = token
 
@@ -122,8 +131,11 @@ private constructor(
             fun token(token: String) = token(JsonField.of(token))
 
             /**
-             * Stripe card token. Learn how to
-             * [create one here](https://docs.stripe.com/api/tokens/create_card).
+             * Sets [Builder.token] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.token] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun token(token: JsonField<String>) = apply { this.token = token }
 
@@ -203,8 +215,10 @@ private constructor(
         fun token(token: String) = apply { body.token(token) }
 
         /**
-         * Stripe card token. Learn how to
-         * [create one here](https://docs.stripe.com/api/tokens/create_card).
+         * Sets [Builder.token] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.token] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun token(token: JsonField<String>) = apply { body.token(token) }
 

@@ -15,6 +15,7 @@ import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
+import shop.terminal.api.errors.TerminalInvalidDataException
 
 /** A Terminal shop user's profile. (We have users, btw.) */
 @NoAutoDetect
@@ -25,10 +26,19 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
-    /** A Terminal shop user. (We have users, btw.) */
+    /**
+     * A Terminal shop user. (We have users, btw.)
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun user(): User = user.getRequired("user")
 
-    /** A Terminal shop user. (We have users, btw.) */
+    /**
+     * Returns the raw JSON value of [user].
+     *
+     * Unlike [user], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("user") @ExcludeMissing fun _user(): JsonField<User> = user
 
     @JsonAnyGetter
@@ -75,7 +85,12 @@ private constructor(
         /** A Terminal shop user. (We have users, btw.) */
         fun user(user: User) = user(JsonField.of(user))
 
-        /** A Terminal shop user. (We have users, btw.) */
+        /**
+         * Sets [Builder.user] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.user] with a well-typed [User] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun user(user: JsonField<User>) = apply { this.user = user }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -123,36 +138,82 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** Unique object identifier. The format and length of IDs may change over time. */
+        /**
+         * Unique object identifier. The format and length of IDs may change over time.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun id(): String = id.getRequired("id")
 
-        /** Email address of the user. */
+        /**
+         * Email address of the user.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun email(): String? = email.getNullable("email")
 
-        /** The user's fingerprint, derived from their public SSH key. */
+        /**
+         * The user's fingerprint, derived from their public SSH key.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun fingerprint(): String? = fingerprint.getNullable("fingerprint")
 
-        /** Name of the user. */
+        /**
+         * Name of the user.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun name(): String? = name.getNullable("name")
 
-        /** Stripe customer ID of the user. */
+        /**
+         * Stripe customer ID of the user.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun stripeCustomerId(): String = stripeCustomerId.getRequired("stripeCustomerID")
 
-        /** Unique object identifier. The format and length of IDs may change over time. */
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-        /** Email address of the user. */
+        /**
+         * Returns the raw JSON value of [email].
+         *
+         * Unlike [email], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("email") @ExcludeMissing fun _email(): JsonField<String> = email
 
-        /** The user's fingerprint, derived from their public SSH key. */
+        /**
+         * Returns the raw JSON value of [fingerprint].
+         *
+         * Unlike [fingerprint], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("fingerprint")
         @ExcludeMissing
         fun _fingerprint(): JsonField<String> = fingerprint
 
-        /** Name of the user. */
+        /**
+         * Returns the raw JSON value of [name].
+         *
+         * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
-        /** Stripe customer ID of the user. */
+        /**
+         * Returns the raw JSON value of [stripeCustomerId].
+         *
+         * Unlike [stripeCustomerId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @JsonProperty("stripeCustomerID")
         @ExcludeMissing
         fun _stripeCustomerId(): JsonField<String> = stripeCustomerId
@@ -217,19 +278,37 @@ private constructor(
             /** Unique object identifier. The format and length of IDs may change over time. */
             fun id(id: String) = id(JsonField.of(id))
 
-            /** Unique object identifier. The format and length of IDs may change over time. */
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             /** Email address of the user. */
             fun email(email: String?) = email(JsonField.ofNullable(email))
 
-            /** Email address of the user. */
+            /**
+             * Sets [Builder.email] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.email] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun email(email: JsonField<String>) = apply { this.email = email }
 
             /** The user's fingerprint, derived from their public SSH key. */
             fun fingerprint(fingerprint: String?) = fingerprint(JsonField.ofNullable(fingerprint))
 
-            /** The user's fingerprint, derived from their public SSH key. */
+            /**
+             * Sets [Builder.fingerprint] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.fingerprint] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun fingerprint(fingerprint: JsonField<String>) = apply {
                 this.fingerprint = fingerprint
             }
@@ -237,14 +316,26 @@ private constructor(
             /** Name of the user. */
             fun name(name: String?) = name(JsonField.ofNullable(name))
 
-            /** Name of the user. */
+            /**
+             * Sets [Builder.name] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.name] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun name(name: JsonField<String>) = apply { this.name = name }
 
             /** Stripe customer ID of the user. */
             fun stripeCustomerId(stripeCustomerId: String) =
                 stripeCustomerId(JsonField.of(stripeCustomerId))
 
-            /** Stripe customer ID of the user. */
+            /**
+             * Sets [Builder.stripeCustomerId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.stripeCustomerId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun stripeCustomerId(stripeCustomerId: JsonField<String>) = apply {
                 this.stripeCustomerId = stripeCustomerId
             }

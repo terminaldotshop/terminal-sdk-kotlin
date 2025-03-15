@@ -16,6 +16,7 @@ import shop.terminal.api.core.checkKnown
 import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
+import shop.terminal.api.errors.TerminalInvalidDataException
 import shop.terminal.api.models.address.Address
 import shop.terminal.api.models.app.App
 import shop.terminal.api.models.card.Card
@@ -34,10 +35,19 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
-    /** Initial app data. */
+    /**
+     * Initial app data.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun data(): Data = data.getRequired("data")
 
-    /** Initial app data. */
+    /**
+     * Returns the raw JSON value of [data].
+     *
+     * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
 
     @JsonAnyGetter
@@ -84,7 +94,12 @@ private constructor(
         /** Initial app data. */
         fun data(data: Data) = data(JsonField.of(data))
 
-        /** Initial app data. */
+        /**
+         * Sets [Builder.data] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.data] with a well-typed [Data] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun data(data: JsonField<Data>) = apply { this.data = data }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -147,56 +162,147 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun addresses(): List<Address> = addresses.getRequired("addresses")
 
+        /**
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun apps(): List<App> = apps.getRequired("apps")
 
+        /**
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun cards(): List<Card> = cards.getRequired("cards")
 
-        /** The current Terminal shop user's cart. */
+        /**
+         * The current Terminal shop user's cart.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun cart(): Cart = cart.getRequired("cart")
 
+        /**
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun orders(): List<Order> = orders.getRequired("orders")
 
+        /**
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun products(): List<Product> = products.getRequired("products")
 
-        /** A Terminal shop user's profile. (We have users, btw.) */
+        /**
+         * A Terminal shop user's profile. (We have users, btw.)
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun profile(): Profile = profile.getRequired("profile")
 
-        /** A Terminal shop user's region. */
+        /**
+         * A Terminal shop user's region.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun region(): Region = region.getRequired("region")
 
+        /**
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun subscriptions(): List<Subscription> = subscriptions.getRequired("subscriptions")
 
+        /**
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun tokens(): List<Token> = tokens.getRequired("tokens")
 
+        /**
+         * Returns the raw JSON value of [addresses].
+         *
+         * Unlike [addresses], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("addresses")
         @ExcludeMissing
         fun _addresses(): JsonField<List<Address>> = addresses
 
+        /**
+         * Returns the raw JSON value of [apps].
+         *
+         * Unlike [apps], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("apps") @ExcludeMissing fun _apps(): JsonField<List<App>> = apps
 
+        /**
+         * Returns the raw JSON value of [cards].
+         *
+         * Unlike [cards], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("cards") @ExcludeMissing fun _cards(): JsonField<List<Card>> = cards
 
-        /** The current Terminal shop user's cart. */
+        /**
+         * Returns the raw JSON value of [cart].
+         *
+         * Unlike [cart], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("cart") @ExcludeMissing fun _cart(): JsonField<Cart> = cart
 
+        /**
+         * Returns the raw JSON value of [orders].
+         *
+         * Unlike [orders], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("orders") @ExcludeMissing fun _orders(): JsonField<List<Order>> = orders
 
+        /**
+         * Returns the raw JSON value of [products].
+         *
+         * Unlike [products], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("products")
         @ExcludeMissing
         fun _products(): JsonField<List<Product>> = products
 
-        /** A Terminal shop user's profile. (We have users, btw.) */
+        /**
+         * Returns the raw JSON value of [profile].
+         *
+         * Unlike [profile], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("profile") @ExcludeMissing fun _profile(): JsonField<Profile> = profile
 
-        /** A Terminal shop user's region. */
+        /**
+         * Returns the raw JSON value of [region].
+         *
+         * Unlike [region], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("region") @ExcludeMissing fun _region(): JsonField<Region> = region
 
+        /**
+         * Returns the raw JSON value of [subscriptions].
+         *
+         * Unlike [subscriptions], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @JsonProperty("subscriptions")
         @ExcludeMissing
         fun _subscriptions(): JsonField<List<Subscription>> = subscriptions
 
+        /**
+         * Returns the raw JSON value of [tokens].
+         *
+         * Unlike [tokens], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("tokens") @ExcludeMissing fun _tokens(): JsonField<List<Token>> = tokens
 
         @JsonAnyGetter
@@ -278,10 +384,22 @@ private constructor(
 
             fun addresses(addresses: List<Address>) = addresses(JsonField.of(addresses))
 
+            /**
+             * Sets [Builder.addresses] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.addresses] with a well-typed `List<Address>` value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun addresses(addresses: JsonField<List<Address>>) = apply {
                 this.addresses = addresses.map { it.toMutableList() }
             }
 
+            /**
+             * Adds a single [Address] to [addresses].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
             fun addAddress(address: Address) = apply {
                 addresses =
                     (addresses ?: JsonField.of(mutableListOf())).also {
@@ -291,10 +409,22 @@ private constructor(
 
             fun apps(apps: List<App>) = apps(JsonField.of(apps))
 
+            /**
+             * Sets [Builder.apps] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.apps] with a well-typed `List<App>` value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun apps(apps: JsonField<List<App>>) = apply {
                 this.apps = apps.map { it.toMutableList() }
             }
 
+            /**
+             * Adds a single [App] to [apps].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
             fun addApp(app: App) = apply {
                 apps =
                     (apps ?: JsonField.of(mutableListOf())).also { checkKnown("apps", it).add(app) }
@@ -302,10 +432,22 @@ private constructor(
 
             fun cards(cards: List<Card>) = cards(JsonField.of(cards))
 
+            /**
+             * Sets [Builder.cards] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.cards] with a well-typed `List<Card>` value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun cards(cards: JsonField<List<Card>>) = apply {
                 this.cards = cards.map { it.toMutableList() }
             }
 
+            /**
+             * Adds a single [Card] to [cards].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
             fun addCard(card: Card) = apply {
                 cards =
                     (cards ?: JsonField.of(mutableListOf())).also {
@@ -316,15 +458,33 @@ private constructor(
             /** The current Terminal shop user's cart. */
             fun cart(cart: Cart) = cart(JsonField.of(cart))
 
-            /** The current Terminal shop user's cart. */
+            /**
+             * Sets [Builder.cart] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.cart] with a well-typed [Cart] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun cart(cart: JsonField<Cart>) = apply { this.cart = cart }
 
             fun orders(orders: List<Order>) = orders(JsonField.of(orders))
 
+            /**
+             * Sets [Builder.orders] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.orders] with a well-typed `List<Order>` value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun orders(orders: JsonField<List<Order>>) = apply {
                 this.orders = orders.map { it.toMutableList() }
             }
 
+            /**
+             * Adds a single [Order] to [orders].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
             fun addOrder(order: Order) = apply {
                 orders =
                     (orders ?: JsonField.of(mutableListOf())).also {
@@ -334,10 +494,22 @@ private constructor(
 
             fun products(products: List<Product>) = products(JsonField.of(products))
 
+            /**
+             * Sets [Builder.products] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.products] with a well-typed `List<Product>` value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun products(products: JsonField<List<Product>>) = apply {
                 this.products = products.map { it.toMutableList() }
             }
 
+            /**
+             * Adds a single [Product] to [products].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
             fun addProduct(product: Product) = apply {
                 products =
                     (products ?: JsonField.of(mutableListOf())).also {
@@ -348,22 +520,46 @@ private constructor(
             /** A Terminal shop user's profile. (We have users, btw.) */
             fun profile(profile: Profile) = profile(JsonField.of(profile))
 
-            /** A Terminal shop user's profile. (We have users, btw.) */
+            /**
+             * Sets [Builder.profile] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.profile] with a well-typed [Profile] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun profile(profile: JsonField<Profile>) = apply { this.profile = profile }
 
             /** A Terminal shop user's region. */
             fun region(region: Region) = region(JsonField.of(region))
 
-            /** A Terminal shop user's region. */
+            /**
+             * Sets [Builder.region] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.region] with a well-typed [Region] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun region(region: JsonField<Region>) = apply { this.region = region }
 
             fun subscriptions(subscriptions: List<Subscription>) =
                 subscriptions(JsonField.of(subscriptions))
 
+            /**
+             * Sets [Builder.subscriptions] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.subscriptions] with a well-typed
+             * `List<Subscription>` value instead. This method is primarily for setting the field to
+             * an undocumented or not yet supported value.
+             */
             fun subscriptions(subscriptions: JsonField<List<Subscription>>) = apply {
                 this.subscriptions = subscriptions.map { it.toMutableList() }
             }
 
+            /**
+             * Adds a single [Subscription] to [subscriptions].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
             fun addSubscription(subscription: Subscription) = apply {
                 subscriptions =
                     (subscriptions ?: JsonField.of(mutableListOf())).also {
@@ -373,10 +569,22 @@ private constructor(
 
             fun tokens(tokens: List<Token>) = tokens(JsonField.of(tokens))
 
+            /**
+             * Sets [Builder.tokens] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.tokens] with a well-typed `List<Token>` value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun tokens(tokens: JsonField<List<Token>>) = apply {
                 this.tokens = tokens.map { it.toMutableList() }
             }
 
+            /**
+             * Adds a single [Token] to [tokens].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
             fun addToken(token: Token) = apply {
                 tokens =
                     (tokens ?: JsonField.of(mutableListOf())).also {

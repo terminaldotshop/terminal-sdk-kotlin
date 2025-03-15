@@ -15,6 +15,7 @@ import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
+import shop.terminal.api.errors.TerminalInvalidDataException
 
 @NoAutoDetect
 class AppGetResponse
@@ -24,10 +25,19 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
-    /** A Terminal App used for configuring an OAuth 2.0 client. */
+    /**
+     * A Terminal App used for configuring an OAuth 2.0 client.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun data(): App = data.getRequired("data")
 
-    /** A Terminal App used for configuring an OAuth 2.0 client. */
+    /**
+     * Returns the raw JSON value of [data].
+     *
+     * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<App> = data
 
     @JsonAnyGetter
@@ -74,7 +84,12 @@ private constructor(
         /** A Terminal App used for configuring an OAuth 2.0 client. */
         fun data(data: App) = data(JsonField.of(data))
 
-        /** A Terminal App used for configuring an OAuth 2.0 client. */
+        /**
+         * Sets [Builder.data] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.data] with a well-typed [App] value instead. This method
+         * is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun data(data: JsonField<App>) = apply { this.data = data }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {

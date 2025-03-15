@@ -15,6 +15,7 @@ import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
+import shop.terminal.api.errors.TerminalInvalidDataException
 
 /** Credit card used for payments in the Terminal shop. */
 @NoAutoDetect
@@ -30,30 +31,66 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
-    /** Unique object identifier. The format and length of IDs may change over time. */
+    /**
+     * Unique object identifier. The format and length of IDs may change over time.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun id(): String = id.getRequired("id")
 
-    /** Brand of the card. */
+    /**
+     * Brand of the card.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun brand(): String = brand.getRequired("brand")
 
-    /** Expiration of the card. */
+    /**
+     * Expiration of the card.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun expiration(): Expiration = expiration.getRequired("expiration")
 
-    /** Last four digits of the card. */
+    /**
+     * Last four digits of the card.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun last4(): String = last4.getRequired("last4")
 
-    /** Unique object identifier. The format and length of IDs may change over time. */
+    /**
+     * Returns the raw JSON value of [id].
+     *
+     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-    /** Brand of the card. */
+    /**
+     * Returns the raw JSON value of [brand].
+     *
+     * Unlike [brand], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("brand") @ExcludeMissing fun _brand(): JsonField<String> = brand
 
-    /** Expiration of the card. */
+    /**
+     * Returns the raw JSON value of [expiration].
+     *
+     * Unlike [expiration], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("expiration")
     @ExcludeMissing
     fun _expiration(): JsonField<Expiration> = expiration
 
-    /** Last four digits of the card. */
+    /**
+     * Returns the raw JSON value of [last4].
+     *
+     * Unlike [last4], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("last4") @ExcludeMissing fun _last4(): JsonField<String> = last4
 
     @JsonAnyGetter
@@ -112,25 +149,46 @@ private constructor(
         /** Unique object identifier. The format and length of IDs may change over time. */
         fun id(id: String) = id(JsonField.of(id))
 
-        /** Unique object identifier. The format and length of IDs may change over time. */
+        /**
+         * Sets [Builder.id] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.id] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
         /** Brand of the card. */
         fun brand(brand: String) = brand(JsonField.of(brand))
 
-        /** Brand of the card. */
+        /**
+         * Sets [Builder.brand] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.brand] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun brand(brand: JsonField<String>) = apply { this.brand = brand }
 
         /** Expiration of the card. */
         fun expiration(expiration: Expiration) = expiration(JsonField.of(expiration))
 
-        /** Expiration of the card. */
+        /**
+         * Sets [Builder.expiration] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.expiration] with a well-typed [Expiration] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun expiration(expiration: JsonField<Expiration>) = apply { this.expiration = expiration }
 
         /** Last four digits of the card. */
         fun last4(last4: String) = last4(JsonField.of(last4))
 
-        /** Last four digits of the card. */
+        /**
+         * Sets [Builder.last4] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.last4] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun last4(last4: JsonField<String>) = apply { this.last4 = last4 }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -175,16 +233,34 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** Expiration month of the card. */
+        /**
+         * Expiration month of the card.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun month(): Long = month.getRequired("month")
 
-        /** Expiration year of the card. */
+        /**
+         * Expiration year of the card.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun year(): Long = year.getRequired("year")
 
-        /** Expiration month of the card. */
+        /**
+         * Returns the raw JSON value of [month].
+         *
+         * Unlike [month], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("month") @ExcludeMissing fun _month(): JsonField<Long> = month
 
-        /** Expiration year of the card. */
+        /**
+         * Returns the raw JSON value of [year].
+         *
+         * Unlike [year], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("year") @ExcludeMissing fun _year(): JsonField<Long> = year
 
         @JsonAnyGetter
@@ -235,13 +311,25 @@ private constructor(
             /** Expiration month of the card. */
             fun month(month: Long) = month(JsonField.of(month))
 
-            /** Expiration month of the card. */
+            /**
+             * Sets [Builder.month] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.month] with a well-typed [Long] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun month(month: JsonField<Long>) = apply { this.month = month }
 
             /** Expiration year of the card. */
             fun year(year: Long) = year(JsonField.of(year))
 
-            /** Expiration year of the card. */
+            /**
+             * Sets [Builder.year] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.year] with a well-typed [Long] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun year(year: JsonField<Long>) = apply { this.year = year }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {

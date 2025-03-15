@@ -18,6 +18,7 @@ import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
+import shop.terminal.api.errors.TerminalInvalidDataException
 
 /** Set the shipping address for the current user's cart. */
 class CartSetAddressParams
@@ -27,10 +28,19 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** ID of the shipping address to set for the current user's cart. */
+    /**
+     * ID of the shipping address to set for the current user's cart.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun addressId(): String = body.addressId()
 
-    /** ID of the shipping address to set for the current user's cart. */
+    /**
+     * Returns the raw JSON value of [addressId].
+     *
+     * Unlike [addressId], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _addressId(): JsonField<String> = body._addressId()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
@@ -56,10 +66,19 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** ID of the shipping address to set for the current user's cart. */
+        /**
+         * ID of the shipping address to set for the current user's cart.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun addressId(): String = addressId.getRequired("addressID")
 
-        /** ID of the shipping address to set for the current user's cart. */
+        /**
+         * Returns the raw JSON value of [addressId].
+         *
+         * Unlike [addressId], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("addressID") @ExcludeMissing fun _addressId(): JsonField<String> = addressId
 
         @JsonAnyGetter
@@ -106,7 +125,13 @@ private constructor(
             /** ID of the shipping address to set for the current user's cart. */
             fun addressId(addressId: String) = addressId(JsonField.of(addressId))
 
-            /** ID of the shipping address to set for the current user's cart. */
+            /**
+             * Sets [Builder.addressId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.addressId] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun addressId(addressId: JsonField<String>) = apply { this.addressId = addressId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -182,7 +207,13 @@ private constructor(
         /** ID of the shipping address to set for the current user's cart. */
         fun addressId(addressId: String) = apply { body.addressId(addressId) }
 
-        /** ID of the shipping address to set for the current user's cart. */
+        /**
+         * Sets [Builder.addressId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.addressId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun addressId(addressId: JsonField<String>) = apply { body.addressId(addressId) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
