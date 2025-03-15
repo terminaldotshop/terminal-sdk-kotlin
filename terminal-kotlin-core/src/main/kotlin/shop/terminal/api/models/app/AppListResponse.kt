@@ -16,6 +16,7 @@ import shop.terminal.api.core.checkKnown
 import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
+import shop.terminal.api.errors.TerminalInvalidDataException
 
 @NoAutoDetect
 class AppListResponse
@@ -25,10 +26,19 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
-    /** List of apps. */
+    /**
+     * List of apps.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun data(): List<App> = data.getRequired("data")
 
-    /** List of apps. */
+    /**
+     * Returns the raw JSON value of [data].
+     *
+     * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<App>> = data
 
     @JsonAnyGetter
@@ -75,10 +85,19 @@ private constructor(
         /** List of apps. */
         fun data(data: List<App>) = data(JsonField.of(data))
 
-        /** List of apps. */
+        /**
+         * Sets [Builder.data] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.data] with a well-typed `List<App>` value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun data(data: JsonField<List<App>>) = apply { this.data = data.map { it.toMutableList() } }
 
-        /** List of apps. */
+        /**
+         * Adds a single [App] to [Builder.data].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addData(data: App) = apply {
             this.data =
                 (this.data ?: JsonField.of(mutableListOf())).also {

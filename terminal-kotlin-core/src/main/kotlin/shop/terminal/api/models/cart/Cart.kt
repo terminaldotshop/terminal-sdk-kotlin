@@ -16,6 +16,7 @@ import shop.terminal.api.core.checkKnown
 import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
+import shop.terminal.api.errors.TerminalInvalidDataException
 
 /** The current Terminal shop user's cart. */
 @NoAutoDetect
@@ -43,40 +44,94 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
-    /** The subtotal and shipping amounts for the current user's cart. */
+    /**
+     * The subtotal and shipping amounts for the current user's cart.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun amount(): Amount = amount.getRequired("amount")
 
-    /** An array of items in the current user's cart. */
+    /**
+     * An array of items in the current user's cart.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun items(): List<Item> = items.getRequired("items")
 
-    /** The subtotal of all items in the current user's cart, in cents (USD). */
+    /**
+     * The subtotal of all items in the current user's cart, in cents (USD).
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun subtotal(): Long = subtotal.getRequired("subtotal")
 
-    /** ID of the shipping address selected on the current user's cart. */
+    /**
+     * ID of the shipping address selected on the current user's cart.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun addressId(): String? = addressId.getNullable("addressID")
 
-    /** ID of the card selected on the current user's cart. */
+    /**
+     * ID of the card selected on the current user's cart.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun cardId(): String? = cardId.getNullable("cardID")
 
-    /** Shipping information for the current user's cart. */
+    /**
+     * Shipping information for the current user's cart.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun shipping(): Shipping? = shipping.getNullable("shipping")
 
-    /** The subtotal and shipping amounts for the current user's cart. */
+    /**
+     * Returns the raw JSON value of [amount].
+     *
+     * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Amount> = amount
 
-    /** An array of items in the current user's cart. */
+    /**
+     * Returns the raw JSON value of [items].
+     *
+     * Unlike [items], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("items") @ExcludeMissing fun _items(): JsonField<List<Item>> = items
 
-    /** The subtotal of all items in the current user's cart, in cents (USD). */
+    /**
+     * Returns the raw JSON value of [subtotal].
+     *
+     * Unlike [subtotal], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("subtotal") @ExcludeMissing fun _subtotal(): JsonField<Long> = subtotal
 
-    /** ID of the shipping address selected on the current user's cart. */
+    /**
+     * Returns the raw JSON value of [addressId].
+     *
+     * Unlike [addressId], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("addressID") @ExcludeMissing fun _addressId(): JsonField<String> = addressId
 
-    /** ID of the card selected on the current user's cart. */
+    /**
+     * Returns the raw JSON value of [cardId].
+     *
+     * Unlike [cardId], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("cardID") @ExcludeMissing fun _cardId(): JsonField<String> = cardId
 
-    /** Shipping information for the current user's cart. */
+    /**
+     * Returns the raw JSON value of [shipping].
+     *
+     * Unlike [shipping], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("shipping") @ExcludeMissing fun _shipping(): JsonField<Shipping> = shipping
 
     @JsonAnyGetter
@@ -140,18 +195,33 @@ private constructor(
         /** The subtotal and shipping amounts for the current user's cart. */
         fun amount(amount: Amount) = amount(JsonField.of(amount))
 
-        /** The subtotal and shipping amounts for the current user's cart. */
+        /**
+         * Sets [Builder.amount] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.amount] with a well-typed [Amount] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun amount(amount: JsonField<Amount>) = apply { this.amount = amount }
 
         /** An array of items in the current user's cart. */
         fun items(items: List<Item>) = items(JsonField.of(items))
 
-        /** An array of items in the current user's cart. */
+        /**
+         * Sets [Builder.items] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.items] with a well-typed `List<Item>` value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun items(items: JsonField<List<Item>>) = apply {
             this.items = items.map { it.toMutableList() }
         }
 
-        /** An array of items in the current user's cart. */
+        /**
+         * Adds a single [Item] to [items].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addItem(item: Item) = apply {
             items =
                 (items ?: JsonField.of(mutableListOf())).also { checkKnown("items", it).add(item) }
@@ -160,25 +230,47 @@ private constructor(
         /** The subtotal of all items in the current user's cart, in cents (USD). */
         fun subtotal(subtotal: Long) = subtotal(JsonField.of(subtotal))
 
-        /** The subtotal of all items in the current user's cart, in cents (USD). */
+        /**
+         * Sets [Builder.subtotal] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.subtotal] with a well-typed [Long] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun subtotal(subtotal: JsonField<Long>) = apply { this.subtotal = subtotal }
 
         /** ID of the shipping address selected on the current user's cart. */
         fun addressId(addressId: String) = addressId(JsonField.of(addressId))
 
-        /** ID of the shipping address selected on the current user's cart. */
+        /**
+         * Sets [Builder.addressId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.addressId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun addressId(addressId: JsonField<String>) = apply { this.addressId = addressId }
 
         /** ID of the card selected on the current user's cart. */
         fun cardId(cardId: String) = cardId(JsonField.of(cardId))
 
-        /** ID of the card selected on the current user's cart. */
+        /**
+         * Sets [Builder.cardId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cardId] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun cardId(cardId: JsonField<String>) = apply { this.cardId = cardId }
 
         /** Shipping information for the current user's cart. */
         fun shipping(shipping: Shipping) = shipping(JsonField.of(shipping))
 
-        /** Shipping information for the current user's cart. */
+        /**
+         * Sets [Builder.shipping] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.shipping] with a well-typed [Shipping] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun shipping(shipping: JsonField<Shipping>) = apply { this.shipping = shipping }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -230,22 +322,49 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** Subtotal of the current user's cart, in cents (USD). */
+        /**
+         * Subtotal of the current user's cart, in cents (USD).
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun subtotal(): Long = subtotal.getRequired("subtotal")
 
-        /** Shipping amount of the current user's cart, in cents (USD). */
+        /**
+         * Shipping amount of the current user's cart, in cents (USD).
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun shipping(): Long? = shipping.getNullable("shipping")
 
-        /** Total amount after any discounts, in cents (USD). */
+        /**
+         * Total amount after any discounts, in cents (USD).
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun total(): Long? = total.getNullable("total")
 
-        /** Subtotal of the current user's cart, in cents (USD). */
+        /**
+         * Returns the raw JSON value of [subtotal].
+         *
+         * Unlike [subtotal], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("subtotal") @ExcludeMissing fun _subtotal(): JsonField<Long> = subtotal
 
-        /** Shipping amount of the current user's cart, in cents (USD). */
+        /**
+         * Returns the raw JSON value of [shipping].
+         *
+         * Unlike [shipping], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("shipping") @ExcludeMissing fun _shipping(): JsonField<Long> = shipping
 
-        /** Total amount after any discounts, in cents (USD). */
+        /**
+         * Returns the raw JSON value of [total].
+         *
+         * Unlike [total], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("total") @ExcludeMissing fun _total(): JsonField<Long> = total
 
         @JsonAnyGetter
@@ -298,19 +417,37 @@ private constructor(
             /** Subtotal of the current user's cart, in cents (USD). */
             fun subtotal(subtotal: Long) = subtotal(JsonField.of(subtotal))
 
-            /** Subtotal of the current user's cart, in cents (USD). */
+            /**
+             * Sets [Builder.subtotal] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.subtotal] with a well-typed [Long] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun subtotal(subtotal: JsonField<Long>) = apply { this.subtotal = subtotal }
 
             /** Shipping amount of the current user's cart, in cents (USD). */
             fun shipping(shipping: Long) = shipping(JsonField.of(shipping))
 
-            /** Shipping amount of the current user's cart, in cents (USD). */
+            /**
+             * Sets [Builder.shipping] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.shipping] with a well-typed [Long] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun shipping(shipping: JsonField<Long>) = apply { this.shipping = shipping }
 
             /** Total amount after any discounts, in cents (USD). */
             fun total(total: Long) = total(JsonField.of(total))
 
-            /** Total amount after any discounts, in cents (USD). */
+            /**
+             * Sets [Builder.total] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.total] with a well-typed [Long] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun total(total: JsonField<Long>) = apply { this.total = total }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -378,30 +515,67 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** Unique object identifier. The format and length of IDs may change over time. */
+        /**
+         * Unique object identifier. The format and length of IDs may change over time.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun id(): String = id.getRequired("id")
 
-        /** ID of the product variant for this item in the current user's cart. */
+        /**
+         * ID of the product variant for this item in the current user's cart.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun productVariantId(): String = productVariantId.getRequired("productVariantID")
 
-        /** Quantity of the item in the current user's cart. */
+        /**
+         * Quantity of the item in the current user's cart.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun quantity(): Long = quantity.getRequired("quantity")
 
-        /** Subtotal of the item in the current user's cart, in cents (USD). */
+        /**
+         * Subtotal of the item in the current user's cart, in cents (USD).
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun subtotal(): Long = subtotal.getRequired("subtotal")
 
-        /** Unique object identifier. The format and length of IDs may change over time. */
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-        /** ID of the product variant for this item in the current user's cart. */
+        /**
+         * Returns the raw JSON value of [productVariantId].
+         *
+         * Unlike [productVariantId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @JsonProperty("productVariantID")
         @ExcludeMissing
         fun _productVariantId(): JsonField<String> = productVariantId
 
-        /** Quantity of the item in the current user's cart. */
+        /**
+         * Returns the raw JSON value of [quantity].
+         *
+         * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Long> = quantity
 
-        /** Subtotal of the item in the current user's cart, in cents (USD). */
+        /**
+         * Returns the raw JSON value of [subtotal].
+         *
+         * Unlike [subtotal], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("subtotal") @ExcludeMissing fun _subtotal(): JsonField<Long> = subtotal
 
         @JsonAnyGetter
@@ -460,14 +634,26 @@ private constructor(
             /** Unique object identifier. The format and length of IDs may change over time. */
             fun id(id: String) = id(JsonField.of(id))
 
-            /** Unique object identifier. The format and length of IDs may change over time. */
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             /** ID of the product variant for this item in the current user's cart. */
             fun productVariantId(productVariantId: String) =
                 productVariantId(JsonField.of(productVariantId))
 
-            /** ID of the product variant for this item in the current user's cart. */
+            /**
+             * Sets [Builder.productVariantId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.productVariantId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun productVariantId(productVariantId: JsonField<String>) = apply {
                 this.productVariantId = productVariantId
             }
@@ -475,13 +661,25 @@ private constructor(
             /** Quantity of the item in the current user's cart. */
             fun quantity(quantity: Long) = quantity(JsonField.of(quantity))
 
-            /** Quantity of the item in the current user's cart. */
+            /**
+             * Sets [Builder.quantity] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.quantity] with a well-typed [Long] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun quantity(quantity: JsonField<Long>) = apply { this.quantity = quantity }
 
             /** Subtotal of the item in the current user's cart, in cents (USD). */
             fun subtotal(subtotal: Long) = subtotal(JsonField.of(subtotal))
 
-            /** Subtotal of the item in the current user's cart, in cents (USD). */
+            /**
+             * Sets [Builder.subtotal] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.subtotal] with a well-typed [Long] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun subtotal(subtotal: JsonField<Long>) = apply { this.subtotal = subtotal }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -546,16 +744,34 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** Shipping service name. */
+        /**
+         * Shipping service name.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun service(): String? = service.getNullable("service")
 
-        /** Shipping timeframe provided by the shipping carrier. */
+        /**
+         * Shipping timeframe provided by the shipping carrier.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun timeframe(): String? = timeframe.getNullable("timeframe")
 
-        /** Shipping service name. */
+        /**
+         * Returns the raw JSON value of [service].
+         *
+         * Unlike [service], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("service") @ExcludeMissing fun _service(): JsonField<String> = service
 
-        /** Shipping timeframe provided by the shipping carrier. */
+        /**
+         * Returns the raw JSON value of [timeframe].
+         *
+         * Unlike [timeframe], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("timeframe") @ExcludeMissing fun _timeframe(): JsonField<String> = timeframe
 
         @JsonAnyGetter
@@ -598,13 +814,25 @@ private constructor(
             /** Shipping service name. */
             fun service(service: String) = service(JsonField.of(service))
 
-            /** Shipping service name. */
+            /**
+             * Sets [Builder.service] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.service] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun service(service: JsonField<String>) = apply { this.service = service }
 
             /** Shipping timeframe provided by the shipping carrier. */
             fun timeframe(timeframe: String) = timeframe(JsonField.of(timeframe))
 
-            /** Shipping timeframe provided by the shipping carrier. */
+            /**
+             * Sets [Builder.timeframe] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.timeframe] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun timeframe(timeframe: JsonField<String>) = apply { this.timeframe = timeframe }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {

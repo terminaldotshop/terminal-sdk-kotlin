@@ -18,6 +18,7 @@ import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
+import shop.terminal.api.errors.TerminalInvalidDataException
 
 /** Set the credit card for the current user's cart. */
 class CartSetCardParams
@@ -27,10 +28,19 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** ID of the credit card to set for the current user's cart. */
+    /**
+     * ID of the credit card to set for the current user's cart.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun cardId(): String = body.cardId()
 
-    /** ID of the credit card to set for the current user's cart. */
+    /**
+     * Returns the raw JSON value of [cardId].
+     *
+     * Unlike [cardId], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _cardId(): JsonField<String> = body._cardId()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
@@ -56,10 +66,19 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** ID of the credit card to set for the current user's cart. */
+        /**
+         * ID of the credit card to set for the current user's cart.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun cardId(): String = cardId.getRequired("cardID")
 
-        /** ID of the credit card to set for the current user's cart. */
+        /**
+         * Returns the raw JSON value of [cardId].
+         *
+         * Unlike [cardId], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("cardID") @ExcludeMissing fun _cardId(): JsonField<String> = cardId
 
         @JsonAnyGetter
@@ -106,7 +125,13 @@ private constructor(
             /** ID of the credit card to set for the current user's cart. */
             fun cardId(cardId: String) = cardId(JsonField.of(cardId))
 
-            /** ID of the credit card to set for the current user's cart. */
+            /**
+             * Sets [Builder.cardId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.cardId] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun cardId(cardId: JsonField<String>) = apply { this.cardId = cardId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -181,7 +206,12 @@ private constructor(
         /** ID of the credit card to set for the current user's cart. */
         fun cardId(cardId: String) = apply { body.cardId(cardId) }
 
-        /** ID of the credit card to set for the current user's cart. */
+        /**
+         * Sets [Builder.cardId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cardId] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun cardId(cardId: JsonField<String>) = apply { body.cardId(cardId) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
