@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.6.1 (2025-03-15)
+
+Full Changelog: [v1.6.0...v1.6.1](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v1.6.0...v1.6.1)
+
+### Chores
+
+* **internal:** remove extra empty newlines ([#133](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/133)) ([266e394](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/266e3943f2181718e6e6b3f8bac39fe9091dae17))
+* **internal:** version bump ([#131](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/131)) ([61e7f7d](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/61e7f7d94fd225ed07db032b75d1adc722c5047b))
+
+
+### Documentation
+
+* deduplicate and refine comments ([#134](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/134)) ([c5687b9](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/c5687b9744ebbe90a6c196468bc9b30b6159a256))
+
 ## 1.6.0 (2025-03-13)
 
 Full Changelog: [v1.5.0...v1.6.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v1.5.0...v1.6.0)
