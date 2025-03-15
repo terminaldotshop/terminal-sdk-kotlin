@@ -15,6 +15,7 @@ import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
+import shop.terminal.api.errors.TerminalInvalidDataException
 
 @NoAutoDetect
 class CardGetResponse
@@ -24,10 +25,19 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
-    /** Credit card used for payments in the Terminal shop. */
+    /**
+     * Credit card used for payments in the Terminal shop.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun data(): Card = data.getRequired("data")
 
-    /** Credit card used for payments in the Terminal shop. */
+    /**
+     * Returns the raw JSON value of [data].
+     *
+     * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Card> = data
 
     @JsonAnyGetter
@@ -74,7 +84,12 @@ private constructor(
         /** Credit card used for payments in the Terminal shop. */
         fun data(data: Card) = data(JsonField.of(data))
 
-        /** Credit card used for payments in the Terminal shop. */
+        /**
+         * Sets [Builder.data] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.data] with a well-typed [Card] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun data(data: JsonField<Card>) = apply { this.data = data }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {

@@ -18,6 +18,7 @@ import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
+import shop.terminal.api.errors.TerminalInvalidDataException
 
 /** Add an item to the current user's cart. */
 class CartSetItemParams
@@ -27,16 +28,35 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** ID of the product variant to add to the cart. */
+    /**
+     * ID of the product variant to add to the cart.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun productVariantId(): String = body.productVariantId()
 
-    /** Quantity of the item to add to the cart. */
+    /**
+     * Quantity of the item to add to the cart.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun quantity(): Long = body.quantity()
 
-    /** ID of the product variant to add to the cart. */
+    /**
+     * Returns the raw JSON value of [productVariantId].
+     *
+     * Unlike [productVariantId], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
     fun _productVariantId(): JsonField<String> = body._productVariantId()
 
-    /** Quantity of the item to add to the cart. */
+    /**
+     * Returns the raw JSON value of [quantity].
+     *
+     * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _quantity(): JsonField<Long> = body._quantity()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
@@ -65,18 +85,37 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** ID of the product variant to add to the cart. */
+        /**
+         * ID of the product variant to add to the cart.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun productVariantId(): String = productVariantId.getRequired("productVariantID")
 
-        /** Quantity of the item to add to the cart. */
+        /**
+         * Quantity of the item to add to the cart.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun quantity(): Long = quantity.getRequired("quantity")
 
-        /** ID of the product variant to add to the cart. */
+        /**
+         * Returns the raw JSON value of [productVariantId].
+         *
+         * Unlike [productVariantId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @JsonProperty("productVariantID")
         @ExcludeMissing
         fun _productVariantId(): JsonField<String> = productVariantId
 
-        /** Quantity of the item to add to the cart. */
+        /**
+         * Returns the raw JSON value of [quantity].
+         *
+         * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Long> = quantity
 
         @JsonAnyGetter
@@ -128,7 +167,13 @@ private constructor(
             fun productVariantId(productVariantId: String) =
                 productVariantId(JsonField.of(productVariantId))
 
-            /** ID of the product variant to add to the cart. */
+            /**
+             * Sets [Builder.productVariantId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.productVariantId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun productVariantId(productVariantId: JsonField<String>) = apply {
                 this.productVariantId = productVariantId
             }
@@ -136,7 +181,13 @@ private constructor(
             /** Quantity of the item to add to the cart. */
             fun quantity(quantity: Long) = quantity(JsonField.of(quantity))
 
-            /** Quantity of the item to add to the cart. */
+            /**
+             * Sets [Builder.quantity] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.quantity] with a well-typed [Long] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun quantity(quantity: JsonField<Long>) = apply { this.quantity = quantity }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -219,7 +270,13 @@ private constructor(
             body.productVariantId(productVariantId)
         }
 
-        /** ID of the product variant to add to the cart. */
+        /**
+         * Sets [Builder.productVariantId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.productVariantId] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun productVariantId(productVariantId: JsonField<String>) = apply {
             body.productVariantId(productVariantId)
         }
@@ -227,7 +284,12 @@ private constructor(
         /** Quantity of the item to add to the cart. */
         fun quantity(quantity: Long) = apply { body.quantity(quantity) }
 
-        /** Quantity of the item to add to the cart. */
+        /**
+         * Sets [Builder.quantity] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.quantity] with a well-typed [Long] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun quantity(quantity: JsonField<Long>) = apply { body.quantity(quantity) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {

@@ -15,6 +15,7 @@ import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
+import shop.terminal.api.errors.TerminalInvalidDataException
 
 @NoAutoDetect
 class CardCollectResponse
@@ -24,10 +25,19 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
-    /** URL for collecting card information. */
+    /**
+     * URL for collecting card information.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun data(): Data = data.getRequired("data")
 
-    /** URL for collecting card information. */
+    /**
+     * Returns the raw JSON value of [data].
+     *
+     * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
 
     @JsonAnyGetter
@@ -74,7 +84,12 @@ private constructor(
         /** URL for collecting card information. */
         fun data(data: Data) = data(JsonField.of(data))
 
-        /** URL for collecting card information. */
+        /**
+         * Sets [Builder.data] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.data] with a well-typed [Data] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun data(data: JsonField<Data>) = apply { this.data = data }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -113,12 +128,16 @@ private constructor(
         /**
          * Temporary URL that allows a user to enter credit card details over https at
          * terminal.shop.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun url(): String = url.getRequired("url")
 
         /**
-         * Temporary URL that allows a user to enter credit card details over https at
-         * terminal.shop.
+         * Returns the raw JSON value of [url].
+         *
+         * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
 
@@ -170,8 +189,11 @@ private constructor(
             fun url(url: String) = url(JsonField.of(url))
 
             /**
-             * Temporary URL that allows a user to enter credit card details over https at
-             * terminal.shop.
+             * Sets [Builder.url] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.url] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
              */
             fun url(url: JsonField<String>) = apply { this.url = url }
 

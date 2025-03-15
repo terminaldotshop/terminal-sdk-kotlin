@@ -40,50 +40,113 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
-    /** Unique object identifier. The format and length of IDs may change over time. */
+    /**
+     * Unique object identifier. The format and length of IDs may change over time.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun id(): String = id.getRequired("id")
 
-    /** Description of the product. */
+    /**
+     * Description of the product.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun description(): String = description.getRequired("description")
 
-    /** Name of the product. */
+    /**
+     * Name of the product.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun name(): String = name.getRequired("name")
 
-    /** List of variants of the product. */
+    /**
+     * List of variants of the product.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun variants(): List<ProductVariant> = variants.getRequired("variants")
 
-    /** Order of the product used when displaying a sorted list of products. */
+    /**
+     * Order of the product used when displaying a sorted list of products.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun order(): Long? = order.getNullable("order")
 
-    /** Whether the product must be or can be subscribed to. */
+    /**
+     * Whether the product must be or can be subscribed to.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun subscription(): Subscription? = subscription.getNullable("subscription")
 
-    /** Tags for the product. */
+    /**
+     * Tags for the product.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun tags(): Tags? = tags.getNullable("tags")
 
-    /** Unique object identifier. The format and length of IDs may change over time. */
+    /**
+     * Returns the raw JSON value of [id].
+     *
+     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-    /** Description of the product. */
+    /**
+     * Returns the raw JSON value of [description].
+     *
+     * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("description") @ExcludeMissing fun _description(): JsonField<String> = description
 
-    /** Name of the product. */
+    /**
+     * Returns the raw JSON value of [name].
+     *
+     * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
-    /** List of variants of the product. */
+    /**
+     * Returns the raw JSON value of [variants].
+     *
+     * Unlike [variants], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("variants")
     @ExcludeMissing
     fun _variants(): JsonField<List<ProductVariant>> = variants
 
-    /** Order of the product used when displaying a sorted list of products. */
+    /**
+     * Returns the raw JSON value of [order].
+     *
+     * Unlike [order], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("order") @ExcludeMissing fun _order(): JsonField<Long> = order
 
-    /** Whether the product must be or can be subscribed to. */
+    /**
+     * Returns the raw JSON value of [subscription].
+     *
+     * Unlike [subscription], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("subscription")
     @ExcludeMissing
     fun _subscription(): JsonField<Subscription> = subscription
 
-    /** Tags for the product. */
+    /**
+     * Returns the raw JSON value of [tags].
+     *
+     * Unlike [tags], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("tags") @ExcludeMissing fun _tags(): JsonField<Tags> = tags
 
     @JsonAnyGetter
@@ -151,30 +214,56 @@ private constructor(
         /** Unique object identifier. The format and length of IDs may change over time. */
         fun id(id: String) = id(JsonField.of(id))
 
-        /** Unique object identifier. The format and length of IDs may change over time. */
+        /**
+         * Sets [Builder.id] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.id] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
         /** Description of the product. */
         fun description(description: String) = description(JsonField.of(description))
 
-        /** Description of the product. */
+        /**
+         * Sets [Builder.description] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.description] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun description(description: JsonField<String>) = apply { this.description = description }
 
         /** Name of the product. */
         fun name(name: String) = name(JsonField.of(name))
 
-        /** Name of the product. */
+        /**
+         * Sets [Builder.name] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.name] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun name(name: JsonField<String>) = apply { this.name = name }
 
         /** List of variants of the product. */
         fun variants(variants: List<ProductVariant>) = variants(JsonField.of(variants))
 
-        /** List of variants of the product. */
+        /**
+         * Sets [Builder.variants] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.variants] with a well-typed `List<ProductVariant>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun variants(variants: JsonField<List<ProductVariant>>) = apply {
             this.variants = variants.map { it.toMutableList() }
         }
 
-        /** List of variants of the product. */
+        /**
+         * Adds a single [ProductVariant] to [variants].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addVariant(variant: ProductVariant) = apply {
             variants =
                 (variants ?: JsonField.of(mutableListOf())).also {
@@ -185,13 +274,24 @@ private constructor(
         /** Order of the product used when displaying a sorted list of products. */
         fun order(order: Long) = order(JsonField.of(order))
 
-        /** Order of the product used when displaying a sorted list of products. */
+        /**
+         * Sets [Builder.order] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.order] with a well-typed [Long] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun order(order: JsonField<Long>) = apply { this.order = order }
 
         /** Whether the product must be or can be subscribed to. */
         fun subscription(subscription: Subscription) = subscription(JsonField.of(subscription))
 
-        /** Whether the product must be or can be subscribed to. */
+        /**
+         * Sets [Builder.subscription] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.subscription] with a well-typed [Subscription] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun subscription(subscription: JsonField<Subscription>) = apply {
             this.subscription = subscription
         }
@@ -199,7 +299,12 @@ private constructor(
         /** Tags for the product. */
         fun tags(tags: Tags) = tags(JsonField.of(tags))
 
-        /** Tags for the product. */
+        /**
+         * Sets [Builder.tags] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.tags] with a well-typed [Tags] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun tags(tags: JsonField<Tags>) = apply { this.tags = tags }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -358,24 +463,69 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun app(): String? = app.getNullable("app")
 
+        /**
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun color(): String? = color.getNullable("color")
 
+        /**
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun featured(): Boolean? = featured.getNullable("featured")
 
+        /**
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun marketEu(): Boolean? = marketEu.getNullable("market_eu")
 
+        /**
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun marketNa(): Boolean? = marketNa.getNullable("market_na")
 
+        /**
+         * Returns the raw JSON value of [app].
+         *
+         * Unlike [app], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("app") @ExcludeMissing fun _app(): JsonField<String> = app
 
+        /**
+         * Returns the raw JSON value of [color].
+         *
+         * Unlike [color], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("color") @ExcludeMissing fun _color(): JsonField<String> = color
 
+        /**
+         * Returns the raw JSON value of [featured].
+         *
+         * Unlike [featured], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("featured") @ExcludeMissing fun _featured(): JsonField<Boolean> = featured
 
+        /**
+         * Returns the raw JSON value of [marketEu].
+         *
+         * Unlike [marketEu], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("market_eu") @ExcludeMissing fun _marketEu(): JsonField<Boolean> = marketEu
 
+        /**
+         * Returns the raw JSON value of [marketNa].
+         *
+         * Unlike [marketNa], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("market_na") @ExcludeMissing fun _marketNa(): JsonField<Boolean> = marketNa
 
         @JsonAnyGetter
@@ -426,22 +576,57 @@ private constructor(
 
             fun app(app: String) = app(JsonField.of(app))
 
+            /**
+             * Sets [Builder.app] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.app] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun app(app: JsonField<String>) = apply { this.app = app }
 
             fun color(color: String) = color(JsonField.of(color))
 
+            /**
+             * Sets [Builder.color] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.color] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun color(color: JsonField<String>) = apply { this.color = color }
 
             fun featured(featured: Boolean) = featured(JsonField.of(featured))
 
+            /**
+             * Sets [Builder.featured] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.featured] with a well-typed [Boolean] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun featured(featured: JsonField<Boolean>) = apply { this.featured = featured }
 
             fun marketEu(marketEu: Boolean) = marketEu(JsonField.of(marketEu))
 
+            /**
+             * Sets [Builder.marketEu] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.marketEu] with a well-typed [Boolean] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun marketEu(marketEu: JsonField<Boolean>) = apply { this.marketEu = marketEu }
 
             fun marketNa(marketNa: Boolean) = marketNa(JsonField.of(marketNa))
 
+            /**
+             * Sets [Builder.marketNa] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.marketNa] with a well-typed [Boolean] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun marketNa(marketNa: JsonField<Boolean>) = apply { this.marketNa = marketNa }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {

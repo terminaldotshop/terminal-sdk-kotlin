@@ -18,6 +18,7 @@ import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
+import shop.terminal.api.errors.TerminalInvalidDataException
 
 /** Create an order without a cart. The order will be placed immediately. */
 class OrderCreateParams
@@ -27,22 +28,49 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** Shipping address ID. */
+    /**
+     * Shipping address ID.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun addressId(): String = body.addressId()
 
-    /** Card ID. */
+    /**
+     * Card ID.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun cardId(): String = body.cardId()
 
-    /** Product variants to include in the order, along with their quantities. */
+    /**
+     * Product variants to include in the order, along with their quantities.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun variants(): Variants = body.variants()
 
-    /** Shipping address ID. */
+    /**
+     * Returns the raw JSON value of [addressId].
+     *
+     * Unlike [addressId], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _addressId(): JsonField<String> = body._addressId()
 
-    /** Card ID. */
+    /**
+     * Returns the raw JSON value of [cardId].
+     *
+     * Unlike [cardId], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _cardId(): JsonField<String> = body._cardId()
 
-    /** Product variants to include in the order, along with their quantities. */
+    /**
+     * Returns the raw JSON value of [variants].
+     *
+     * Unlike [variants], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _variants(): JsonField<Variants> = body._variants()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
@@ -75,22 +103,49 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** Shipping address ID. */
+        /**
+         * Shipping address ID.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun addressId(): String = addressId.getRequired("addressID")
 
-        /** Card ID. */
+        /**
+         * Card ID.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun cardId(): String = cardId.getRequired("cardID")
 
-        /** Product variants to include in the order, along with their quantities. */
+        /**
+         * Product variants to include in the order, along with their quantities.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun variants(): Variants = variants.getRequired("variants")
 
-        /** Shipping address ID. */
+        /**
+         * Returns the raw JSON value of [addressId].
+         *
+         * Unlike [addressId], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("addressID") @ExcludeMissing fun _addressId(): JsonField<String> = addressId
 
-        /** Card ID. */
+        /**
+         * Returns the raw JSON value of [cardId].
+         *
+         * Unlike [cardId], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("cardID") @ExcludeMissing fun _cardId(): JsonField<String> = cardId
 
-        /** Product variants to include in the order, along with their quantities. */
+        /**
+         * Returns the raw JSON value of [variants].
+         *
+         * Unlike [variants], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("variants") @ExcludeMissing fun _variants(): JsonField<Variants> = variants
 
         @JsonAnyGetter
@@ -145,19 +200,37 @@ private constructor(
             /** Shipping address ID. */
             fun addressId(addressId: String) = addressId(JsonField.of(addressId))
 
-            /** Shipping address ID. */
+            /**
+             * Sets [Builder.addressId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.addressId] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun addressId(addressId: JsonField<String>) = apply { this.addressId = addressId }
 
             /** Card ID. */
             fun cardId(cardId: String) = cardId(JsonField.of(cardId))
 
-            /** Card ID. */
+            /**
+             * Sets [Builder.cardId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.cardId] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun cardId(cardId: JsonField<String>) = apply { this.cardId = cardId }
 
             /** Product variants to include in the order, along with their quantities. */
             fun variants(variants: Variants) = variants(JsonField.of(variants))
 
-            /** Product variants to include in the order, along with their quantities. */
+            /**
+             * Sets [Builder.variants] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.variants] with a well-typed [Variants] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun variants(variants: JsonField<Variants>) = apply { this.variants = variants }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -240,19 +313,36 @@ private constructor(
         /** Shipping address ID. */
         fun addressId(addressId: String) = apply { body.addressId(addressId) }
 
-        /** Shipping address ID. */
+        /**
+         * Sets [Builder.addressId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.addressId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun addressId(addressId: JsonField<String>) = apply { body.addressId(addressId) }
 
         /** Card ID. */
         fun cardId(cardId: String) = apply { body.cardId(cardId) }
 
-        /** Card ID. */
+        /**
+         * Sets [Builder.cardId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cardId] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun cardId(cardId: JsonField<String>) = apply { body.cardId(cardId) }
 
         /** Product variants to include in the order, along with their quantities. */
         fun variants(variants: Variants) = apply { body.variants(variants) }
 
-        /** Product variants to include in the order, along with their quantities. */
+        /**
+         * Sets [Builder.variants] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.variants] with a well-typed [Variants] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun variants(variants: JsonField<Variants>) = apply { body.variants(variants) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {

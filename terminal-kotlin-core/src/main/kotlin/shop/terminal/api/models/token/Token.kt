@@ -15,6 +15,7 @@ import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
+import shop.terminal.api.errors.TerminalInvalidDataException
 
 /**
  * A personal access token used to access the Terminal API. If you leak this, expect large sums of
@@ -32,22 +33,49 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
-    /** Unique object identifier. The format and length of IDs may change over time. */
+    /**
+     * Unique object identifier. The format and length of IDs may change over time.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun id(): String = id.getRequired("id")
 
-    /** Personal access token (obfuscated). */
+    /**
+     * Personal access token (obfuscated).
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun token(): String = token.getRequired("token")
 
-    /** The created time for the token. */
+    /**
+     * The created time for the token.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun created(): String = created.getRequired("created")
 
-    /** Unique object identifier. The format and length of IDs may change over time. */
+    /**
+     * Returns the raw JSON value of [id].
+     *
+     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-    /** Personal access token (obfuscated). */
+    /**
+     * Returns the raw JSON value of [token].
+     *
+     * Unlike [token], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("token") @ExcludeMissing fun _token(): JsonField<String> = token
 
-    /** The created time for the token. */
+    /**
+     * Returns the raw JSON value of [created].
+     *
+     * Unlike [created], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("created") @ExcludeMissing fun _created(): JsonField<String> = created
 
     @JsonAnyGetter
@@ -102,19 +130,34 @@ private constructor(
         /** Unique object identifier. The format and length of IDs may change over time. */
         fun id(id: String) = id(JsonField.of(id))
 
-        /** Unique object identifier. The format and length of IDs may change over time. */
+        /**
+         * Sets [Builder.id] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.id] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
         /** Personal access token (obfuscated). */
         fun token(token: String) = token(JsonField.of(token))
 
-        /** Personal access token (obfuscated). */
+        /**
+         * Sets [Builder.token] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.token] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun token(token: JsonField<String>) = apply { this.token = token }
 
         /** The created time for the token. */
         fun created(created: String) = created(JsonField.of(created))
 
-        /** The created time for the token. */
+        /**
+         * Sets [Builder.created] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.created] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun created(created: JsonField<String>) = apply { this.created = created }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
