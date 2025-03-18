@@ -159,6 +159,11 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [SubscriptionCreateParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): SubscriptionCreateParams =
             SubscriptionCreateParams(
                 subscription,
