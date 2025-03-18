@@ -47,30 +47,4 @@ internal class OrderCreateParamsTest {
                     .build()
             )
     }
-
-    @Test
-    fun bodyWithoutOptionalFields() {
-        val params =
-            OrderCreateParams.builder()
-                .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                .variants(
-                    OrderCreateParams.Variants.builder()
-                        .putAdditionalProperty("var_XXXXXXXXXXXXXXXXXXXXXXXXX", JsonValue.from(1))
-                        .build()
-                )
-                .build()
-
-        val body = params._body()
-
-        assertNotNull(body)
-        assertThat(body.addressId()).isEqualTo("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
-        assertThat(body.cardId()).isEqualTo("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-        assertThat(body.variants())
-            .isEqualTo(
-                OrderCreateParams.Variants.builder()
-                    .putAdditionalProperty("var_XXXXXXXXXXXXXXXXXXXXXXXXX", JsonValue.from(1))
-                    .build()
-            )
-    }
 }

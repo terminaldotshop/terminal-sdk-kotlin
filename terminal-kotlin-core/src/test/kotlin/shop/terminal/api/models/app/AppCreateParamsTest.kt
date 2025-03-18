@@ -30,19 +30,4 @@ internal class AppCreateParamsTest {
         assertThat(body.name()).isEqualTo("Example App")
         assertThat(body.redirectUri()).isEqualTo("https://example.com/callback")
     }
-
-    @Test
-    fun bodyWithoutOptionalFields() {
-        val params =
-            AppCreateParams.builder()
-                .name("Example App")
-                .redirectUri("https://example.com/callback")
-                .build()
-
-        val body = params._body()
-
-        assertNotNull(body)
-        assertThat(body.name()).isEqualTo("Example App")
-        assertThat(body.redirectUri()).isEqualTo("https://example.com/callback")
-    }
 }

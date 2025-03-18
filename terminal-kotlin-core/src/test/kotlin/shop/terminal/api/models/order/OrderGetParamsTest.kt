@@ -13,12 +13,11 @@ internal class OrderGetParamsTest {
     }
 
     @Test
-    fun getPathParam() {
+    fun pathParams() {
         val params = OrderGetParams.builder().id("ord_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
-        assertThat(params).isNotNull
-        // path param "id"
-        assertThat(params.getPathParam(0)).isEqualTo("ord_XXXXXXXXXXXXXXXXXXXXXXXXX")
+
+        assertThat(params._pathParam(0)).isEqualTo("ord_XXXXXXXXXXXXXXXXXXXXXXXXX")
         // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+        assertThat(params._pathParam(1)).isEqualTo("")
     }
 }
