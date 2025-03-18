@@ -5,7 +5,7 @@ package shop.terminal.api.models.order
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class OrderTest {
+internal class OrderTest {
 
     @Test
     fun createOrder() {

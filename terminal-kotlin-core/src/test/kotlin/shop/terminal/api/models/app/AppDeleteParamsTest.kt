@@ -5,7 +5,7 @@ package shop.terminal.api.models.app
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class AppDeleteParamsTest {
+internal class AppDeleteParamsTest {
 
     @Test
     fun create() {

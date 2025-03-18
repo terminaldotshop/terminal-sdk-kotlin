@@ -12,7 +12,7 @@ import shop.terminal.api.models.subscription.SubscriptionDeleteParams
 import shop.terminal.api.models.subscription.SubscriptionGetParams
 
 @ExtendWith(TestServerExtension::class)
-class SubscriptionServiceAsyncTest {
+internal class SubscriptionServiceAsyncTest {
 
     @Test
     suspend fun create() {

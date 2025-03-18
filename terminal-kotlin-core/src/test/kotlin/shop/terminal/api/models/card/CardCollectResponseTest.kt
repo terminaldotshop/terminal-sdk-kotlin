@@ -5,7 +5,7 @@ package shop.terminal.api.models.card
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CardCollectResponseTest {
+internal class CardCollectResponseTest {
 
     @Test
     fun createCardCollectResponse() {

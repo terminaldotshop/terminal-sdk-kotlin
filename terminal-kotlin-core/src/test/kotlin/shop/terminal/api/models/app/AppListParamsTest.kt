@@ -4,7 +4,7 @@ package shop.terminal.api.models.app
 
 import org.junit.jupiter.api.Test
 
-class AppListParamsTest {
+internal class AppListParamsTest {
 
     @Test
     fun create() {

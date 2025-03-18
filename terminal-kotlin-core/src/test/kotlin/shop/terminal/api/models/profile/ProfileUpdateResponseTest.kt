@@ -5,7 +5,7 @@ package shop.terminal.api.models.profile
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ProfileUpdateResponseTest {
+internal class ProfileUpdateResponseTest {
 
     @Test
     fun createProfileUpdateResponse() {

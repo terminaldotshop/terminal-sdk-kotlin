@@ -11,7 +11,7 @@ import shop.terminal.api.models.app.AppDeleteParams
 import shop.terminal.api.models.app.AppGetParams
 
 @ExtendWith(TestServerExtension::class)
-class AppServiceAsyncTest {
+internal class AppServiceAsyncTest {
 
     @Test
     suspend fun create() {

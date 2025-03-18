@@ -4,7 +4,7 @@ package shop.terminal.api.models.subscription
 
 import org.junit.jupiter.api.Test
 
-class SubscriptionListParamsTest {
+internal class SubscriptionListParamsTest {
 
     @Test
     fun create() {

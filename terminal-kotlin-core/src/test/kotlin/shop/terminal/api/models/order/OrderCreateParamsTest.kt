@@ -7,7 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import shop.terminal.api.core.JsonValue
 
-class OrderCreateParamsTest {
+internal class OrderCreateParamsTest {
 
     @Test
     fun create() {

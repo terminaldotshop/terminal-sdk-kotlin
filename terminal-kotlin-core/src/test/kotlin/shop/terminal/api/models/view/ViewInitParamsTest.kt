@@ -4,7 +4,7 @@ package shop.terminal.api.models.view
 
 import org.junit.jupiter.api.Test
 
-class ViewInitParamsTest {
+internal class ViewInitParamsTest {
 
     @Test
     fun create() {

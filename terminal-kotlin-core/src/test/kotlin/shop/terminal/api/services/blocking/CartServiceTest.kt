@@ -11,7 +11,7 @@ import shop.terminal.api.models.cart.CartSetCardParams
 import shop.terminal.api.models.cart.CartSetItemParams
 
 @ExtendWith(TestServerExtension::class)
-class CartServiceTest {
+internal class CartServiceTest {
 
     @Test
     fun clear() {

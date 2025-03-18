@@ -4,7 +4,7 @@ package shop.terminal.api.models.token
 
 import org.junit.jupiter.api.Test
 
-class TokenListParamsTest {
+internal class TokenListParamsTest {
 
     @Test
     fun create() {
