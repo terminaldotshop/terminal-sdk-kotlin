@@ -11,7 +11,7 @@ import shop.terminal.api.models.address.AddressDeleteParams
 import shop.terminal.api.models.address.AddressGetParams
 
 @ExtendWith(TestServerExtension::class)
-class AddressServiceTest {
+internal class AddressServiceTest {
 
     @Test
     fun create() {

@@ -11,7 +11,7 @@ import shop.terminal.api.models.app.AppDeleteParams
 import shop.terminal.api.models.app.AppGetParams
 
 @ExtendWith(TestServerExtension::class)
-class AppServiceTest {
+internal class AppServiceTest {
 
     @Test
     fun create() {

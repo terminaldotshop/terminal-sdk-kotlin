@@ -10,7 +10,7 @@ import shop.terminal.api.models.token.TokenDeleteParams
 import shop.terminal.api.models.token.TokenGetParams
 
 @ExtendWith(TestServerExtension::class)
-class TokenServiceTest {
+internal class TokenServiceTest {
 
     @Test
     fun create() {

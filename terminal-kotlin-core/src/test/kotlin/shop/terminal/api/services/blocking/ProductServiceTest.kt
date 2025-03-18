@@ -9,7 +9,7 @@ import shop.terminal.api.client.okhttp.TerminalOkHttpClient
 import shop.terminal.api.models.product.ProductGetParams
 
 @ExtendWith(TestServerExtension::class)
-class ProductServiceTest {
+internal class ProductServiceTest {
 
     @Test
     fun list() {

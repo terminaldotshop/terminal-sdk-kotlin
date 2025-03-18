@@ -4,7 +4,7 @@ package shop.terminal.api.models.card
 
 import org.junit.jupiter.api.Test
 
-class CardCollectParamsTest {
+internal class CardCollectParamsTest {
 
     @Test
     fun create() {

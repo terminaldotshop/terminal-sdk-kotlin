@@ -9,7 +9,7 @@ import shop.terminal.api.client.okhttp.TerminalOkHttpClientAsync
 import shop.terminal.api.models.profile.ProfileUpdateParams
 
 @ExtendWith(TestServerExtension::class)
-class ProfileServiceAsyncTest {
+internal class ProfileServiceAsyncTest {
 
     @Test
     suspend fun update() {

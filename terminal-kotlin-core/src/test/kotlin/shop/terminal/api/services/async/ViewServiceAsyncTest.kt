@@ -8,7 +8,7 @@ import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClientAsync
 
 @ExtendWith(TestServerExtension::class)
-class ViewServiceAsyncTest {
+internal class ViewServiceAsyncTest {
 
     @Test
     suspend fun init() {

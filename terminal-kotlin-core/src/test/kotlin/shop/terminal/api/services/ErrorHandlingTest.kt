@@ -30,7 +30,7 @@ import shop.terminal.api.errors.UnexpectedStatusCodeException
 import shop.terminal.api.errors.UnprocessableEntityException
 
 @WireMockTest
-class ErrorHandlingTest {
+internal class ErrorHandlingTest {
 
     companion object {
 
