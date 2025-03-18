@@ -23,15 +23,4 @@ internal class CartSetAddressParamsTest {
         assertNotNull(body)
         assertThat(body.addressId()).isEqualTo("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
     }
-
-    @Test
-    fun bodyWithoutOptionalFields() {
-        val params =
-            CartSetAddressParams.builder().addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
-
-        val body = params._body()
-
-        assertNotNull(body)
-        assertThat(body.addressId()).isEqualTo("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
-    }
 }

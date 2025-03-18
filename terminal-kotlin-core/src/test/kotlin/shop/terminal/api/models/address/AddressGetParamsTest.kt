@@ -13,12 +13,11 @@ internal class AddressGetParamsTest {
     }
 
     @Test
-    fun getPathParam() {
+    fun pathParams() {
         val params = AddressGetParams.builder().id("shp_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
-        assertThat(params).isNotNull
-        // path param "id"
-        assertThat(params.getPathParam(0)).isEqualTo("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+
+        assertThat(params._pathParam(0)).isEqualTo("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
         // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+        assertThat(params._pathParam(1)).isEqualTo("")
     }
 }
