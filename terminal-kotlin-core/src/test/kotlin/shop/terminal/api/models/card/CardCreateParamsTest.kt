@@ -22,14 +22,4 @@ internal class CardCreateParamsTest {
         assertNotNull(body)
         assertThat(body.token()).isEqualTo("tok_1N3T00LkdIwHu7ixt44h1F8k")
     }
-
-    @Test
-    fun bodyWithoutOptionalFields() {
-        val params = CardCreateParams.builder().token("tok_1N3T00LkdIwHu7ixt44h1F8k").build()
-
-        val body = params._body()
-
-        assertNotNull(body)
-        assertThat(body.token()).isEqualTo("tok_1N3T00LkdIwHu7ixt44h1F8k")
-    }
 }
