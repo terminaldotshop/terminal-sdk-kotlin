@@ -11,7 +11,7 @@ import shop.terminal.api.models.card.CardDeleteParams
 import shop.terminal.api.models.card.CardGetParams
 
 @ExtendWith(TestServerExtension::class)
-class CardServiceAsyncTest {
+internal class CardServiceAsyncTest {
 
     @Test
     suspend fun create() {

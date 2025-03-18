@@ -11,7 +11,7 @@ import shop.terminal.api.models.order.OrderCreateParams
 import shop.terminal.api.models.order.OrderGetParams
 
 @ExtendWith(TestServerExtension::class)
-class OrderServiceAsyncTest {
+internal class OrderServiceAsyncTest {
 
     @Test
     suspend fun create() {

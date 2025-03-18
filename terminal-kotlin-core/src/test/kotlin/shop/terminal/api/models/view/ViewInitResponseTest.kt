@@ -15,7 +15,7 @@ import shop.terminal.api.models.profile.Profile
 import shop.terminal.api.models.subscription.Subscription
 import shop.terminal.api.models.token.Token
 
-class ViewInitResponseTest {
+internal class ViewInitResponseTest {
 
     @Test
     fun createViewInitResponse() {

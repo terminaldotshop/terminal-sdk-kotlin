@@ -8,7 +8,7 @@ import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
 
 @ExtendWith(TestServerExtension::class)
-class ViewServiceTest {
+internal class ViewServiceTest {
 
     @Test
     fun init() {

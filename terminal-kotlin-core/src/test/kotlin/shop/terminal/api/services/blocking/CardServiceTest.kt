@@ -11,7 +11,7 @@ import shop.terminal.api.models.card.CardDeleteParams
 import shop.terminal.api.models.card.CardGetParams
 
 @ExtendWith(TestServerExtension::class)
-class CardServiceTest {
+internal class CardServiceTest {
 
     @Test
     fun create() {

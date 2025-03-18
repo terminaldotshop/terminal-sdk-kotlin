@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import shop.terminal.api.models.order.Order
 
-class CartConvertResponseTest {
+internal class CartConvertResponseTest {
 
     @Test
     fun createCartConvertResponse() {

@@ -5,7 +5,7 @@ package shop.terminal.api.models.cart
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CartClearResponseTest {
+internal class CartClearResponseTest {
 
     @Test
     fun createCartClearResponse() {

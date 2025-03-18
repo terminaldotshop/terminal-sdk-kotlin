@@ -4,7 +4,7 @@ package shop.terminal.api.models.profile
 
 import org.junit.jupiter.api.Test
 
-class ProfileMeParamsTest {
+internal class ProfileMeParamsTest {
 
     @Test
     fun create() {

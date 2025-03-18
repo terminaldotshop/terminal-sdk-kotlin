@@ -5,7 +5,7 @@ package shop.terminal.api.models.subscription
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class SubscriptionDeleteResponseTest {
+internal class SubscriptionDeleteResponseTest {
 
     @Test
     fun createSubscriptionDeleteResponse() {

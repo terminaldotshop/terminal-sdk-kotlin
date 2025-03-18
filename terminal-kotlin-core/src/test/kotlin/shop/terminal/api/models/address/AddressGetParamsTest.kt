@@ -5,7 +5,7 @@ package shop.terminal.api.models.address
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class AddressGetParamsTest {
+internal class AddressGetParamsTest {
 
     @Test
     fun create() {

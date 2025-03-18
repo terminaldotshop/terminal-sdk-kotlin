@@ -4,7 +4,7 @@ package shop.terminal.api.models.cart
 
 import org.junit.jupiter.api.Test
 
-class CartConvertParamsTest {
+internal class CartConvertParamsTest {
 
     @Test
     fun create() {

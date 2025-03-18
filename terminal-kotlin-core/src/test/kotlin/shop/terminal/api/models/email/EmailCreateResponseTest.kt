@@ -5,7 +5,7 @@ package shop.terminal.api.models.email
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class EmailCreateResponseTest {
+internal class EmailCreateResponseTest {
 
     @Test
     fun createEmailCreateResponse() {
