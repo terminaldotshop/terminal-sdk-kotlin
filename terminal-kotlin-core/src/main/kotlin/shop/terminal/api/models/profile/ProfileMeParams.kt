@@ -143,6 +143,11 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [ProfileMeParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): ProfileMeParams =
             ProfileMeParams(additionalHeaders.build(), additionalQueryParams.build())
     }

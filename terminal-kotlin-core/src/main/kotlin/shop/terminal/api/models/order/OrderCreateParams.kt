@@ -252,6 +252,20 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Body].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .addressId()
+             * .cardId()
+             * .variants()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): Body =
                 Body(
                     checkRequired("addressId", addressId),
@@ -462,6 +476,20 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [OrderCreateParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .addressId()
+         * .cardId()
+         * .variants()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): OrderCreateParams =
             OrderCreateParams(
                 body.build(),
@@ -529,6 +557,11 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Variants].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
             fun build(): Variants = Variants(additionalProperties.toImmutable())
         }
 

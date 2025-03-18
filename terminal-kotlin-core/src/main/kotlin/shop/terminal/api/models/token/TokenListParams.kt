@@ -143,6 +143,11 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [TokenListParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): TokenListParams =
             TokenListParams(additionalHeaders.build(), additionalQueryParams.build())
     }

@@ -292,6 +292,20 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [Cart].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .amount()
+         * .items()
+         * .subtotal()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): Cart =
             Cart(
                 checkRequired("amount", amount),
@@ -469,6 +483,18 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Amount].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .subtotal()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): Amount =
                 Amount(
                     checkRequired("subtotal", subtotal),
@@ -701,6 +727,21 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Item].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .id()
+             * .productVariantId()
+             * .quantity()
+             * .subtotal()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): Item =
                 Item(
                     checkRequired("id", id),
@@ -854,6 +895,11 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Shipping].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
             fun build(): Shipping = Shipping(service, timeframe, additionalProperties.toImmutable())
         }
 
