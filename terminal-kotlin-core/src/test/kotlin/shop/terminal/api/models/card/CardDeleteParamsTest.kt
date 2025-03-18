@@ -5,7 +5,7 @@ package shop.terminal.api.models.card
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CardDeleteParamsTest {
+internal class CardDeleteParamsTest {
 
     @Test
     fun create() {

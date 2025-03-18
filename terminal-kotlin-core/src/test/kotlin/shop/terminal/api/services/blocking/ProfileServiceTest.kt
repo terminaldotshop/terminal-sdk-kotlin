@@ -9,7 +9,7 @@ import shop.terminal.api.client.okhttp.TerminalOkHttpClient
 import shop.terminal.api.models.profile.ProfileUpdateParams
 
 @ExtendWith(TestServerExtension::class)
-class ProfileServiceTest {
+internal class ProfileServiceTest {
 
     @Test
     fun update() {

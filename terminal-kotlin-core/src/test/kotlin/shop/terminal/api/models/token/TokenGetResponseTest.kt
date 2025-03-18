@@ -5,7 +5,7 @@ package shop.terminal.api.models.token
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class TokenGetResponseTest {
+internal class TokenGetResponseTest {
 
     @Test
     fun createTokenGetResponse() {

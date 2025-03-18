@@ -9,7 +9,7 @@ import shop.terminal.api.client.okhttp.TerminalOkHttpClient
 import shop.terminal.api.models.email.EmailCreateParams
 
 @ExtendWith(TestServerExtension::class)
-class EmailServiceTest {
+internal class EmailServiceTest {
 
     @Test
     fun create() {

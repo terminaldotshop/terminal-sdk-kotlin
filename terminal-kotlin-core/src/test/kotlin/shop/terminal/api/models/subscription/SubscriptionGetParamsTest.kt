@@ -5,7 +5,7 @@ package shop.terminal.api.models.subscription
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class SubscriptionGetParamsTest {
+internal class SubscriptionGetParamsTest {
 
     @Test
     fun create() {
