@@ -143,6 +143,11 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [AppListParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): AppListParams =
             AppListParams(additionalHeaders.build(), additionalQueryParams.build())
     }
