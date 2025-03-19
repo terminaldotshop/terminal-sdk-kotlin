@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class CardGetResponseTest {
 
     @Test
-    fun createCardGetResponse() {
+    fun create() {
         val cardGetResponse =
             CardGetResponse.builder()
                 .data(
@@ -20,7 +20,7 @@ internal class CardGetResponseTest {
                         .build()
                 )
                 .build()
-        assertThat(cardGetResponse).isNotNull
+
         assertThat(cardGetResponse.data())
             .isEqualTo(
                 Card.builder()

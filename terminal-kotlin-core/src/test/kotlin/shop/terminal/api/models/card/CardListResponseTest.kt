@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class CardListResponseTest {
 
     @Test
-    fun createCardListResponse() {
+    fun create() {
         val cardListResponse =
             CardListResponse.builder()
                 .addData(
@@ -20,7 +20,7 @@ internal class CardListResponseTest {
                         .build()
                 )
                 .build()
-        assertThat(cardListResponse).isNotNull
+
         assertThat(cardListResponse.data())
             .containsExactly(
                 Card.builder()

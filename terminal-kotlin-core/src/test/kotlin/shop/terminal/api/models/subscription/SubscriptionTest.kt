@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class SubscriptionTest {
 
     @Test
-    fun createSubscription() {
+    fun create() {
         val subscription =
             Subscription.builder()
                 .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
@@ -24,7 +24,7 @@ internal class SubscriptionTest {
                         .build()
                 )
                 .build()
-        assertThat(subscription).isNotNull
+
         assertThat(subscription.id()).isEqualTo("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
         assertThat(subscription.addressId()).isEqualTo("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
         assertThat(subscription.cardId()).isEqualTo("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")

@@ -8,10 +8,10 @@ import org.junit.jupiter.api.Test
 internal class OrderCreateResponseTest {
 
     @Test
-    fun createOrderCreateResponse() {
+    fun create() {
         val orderCreateResponse =
             OrderCreateResponse.builder().data("ord_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
-        assertThat(orderCreateResponse).isNotNull
+
         assertThat(orderCreateResponse.data()).isEqualTo("ord_XXXXXXXXXXXXXXXXXXXXXXXXX")
     }
 }

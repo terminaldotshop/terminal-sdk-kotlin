@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class SubscriptionListResponseTest {
 
     @Test
-    fun createSubscriptionListResponse() {
+    fun create() {
         val subscriptionListResponse =
             SubscriptionListResponse.builder()
                 .addData(
@@ -28,7 +28,7 @@ internal class SubscriptionListResponseTest {
                         .build()
                 )
                 .build()
-        assertThat(subscriptionListResponse).isNotNull
+
         assertThat(subscriptionListResponse.data())
             .containsExactly(
                 Subscription.builder()
