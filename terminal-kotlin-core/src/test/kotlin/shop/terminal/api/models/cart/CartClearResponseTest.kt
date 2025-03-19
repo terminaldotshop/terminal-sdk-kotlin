@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test
 internal class CartClearResponseTest {
 
     @Test
-    fun createCartClearResponse() {
+    fun create() {
         val cartClearResponse = CartClearResponse.builder().data(CartClearResponse.Data.OK).build()
-        assertThat(cartClearResponse).isNotNull
+
         assertThat(cartClearResponse.data()).isEqualTo(CartClearResponse.Data.OK)
     }
 }

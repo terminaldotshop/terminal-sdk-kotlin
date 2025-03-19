@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class AppTest {
 
     @Test
-    fun createApp() {
+    fun create() {
         val app =
             App.builder()
                 .id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
@@ -16,7 +16,7 @@ internal class AppTest {
                 .redirectUri("https://example.com/callback")
                 .secret("sec_******XXXX")
                 .build()
-        assertThat(app).isNotNull
+
         assertThat(app.id()).isEqualTo("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
         assertThat(app.name()).isEqualTo("Example App")
         assertThat(app.redirectUri()).isEqualTo("https://example.com/callback")

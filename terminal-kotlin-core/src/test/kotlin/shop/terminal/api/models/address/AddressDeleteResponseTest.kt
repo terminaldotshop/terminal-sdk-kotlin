@@ -8,10 +8,10 @@ import org.junit.jupiter.api.Test
 internal class AddressDeleteResponseTest {
 
     @Test
-    fun createAddressDeleteResponse() {
+    fun create() {
         val addressDeleteResponse =
             AddressDeleteResponse.builder().data(AddressDeleteResponse.Data.OK).build()
-        assertThat(addressDeleteResponse).isNotNull
+
         assertThat(addressDeleteResponse.data()).isEqualTo(AddressDeleteResponse.Data.OK)
     }
 }

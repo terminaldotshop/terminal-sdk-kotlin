@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class SubscriptionGetResponseTest {
 
     @Test
-    fun createSubscriptionGetResponse() {
+    fun create() {
         val subscriptionGetResponse =
             SubscriptionGetResponse.builder()
                 .data(
@@ -28,7 +28,7 @@ internal class SubscriptionGetResponseTest {
                         .build()
                 )
                 .build()
-        assertThat(subscriptionGetResponse).isNotNull
+
         assertThat(subscriptionGetResponse.data())
             .isEqualTo(
                 Subscription.builder()

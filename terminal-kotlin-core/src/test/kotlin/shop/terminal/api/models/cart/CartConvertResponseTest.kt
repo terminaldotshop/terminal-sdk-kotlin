@@ -9,7 +9,7 @@ import shop.terminal.api.models.order.Order
 internal class CartConvertResponseTest {
 
     @Test
-    fun createCartConvertResponse() {
+    fun create() {
         val cartConvertResponse =
             CartConvertResponse.builder()
                 .data(
@@ -50,7 +50,7 @@ internal class CartConvertResponseTest {
                         .build()
                 )
                 .build()
-        assertThat(cartConvertResponse).isNotNull
+
         assertThat(cartConvertResponse.data())
             .isEqualTo(
                 Order.builder()

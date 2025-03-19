@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class OrderListResponseTest {
 
     @Test
-    fun createOrderListResponse() {
+    fun create() {
         val orderListResponse =
             OrderListResponse.builder()
                 .addData(
@@ -49,7 +49,7 @@ internal class OrderListResponseTest {
                         .build()
                 )
                 .build()
-        assertThat(orderListResponse).isNotNull
+
         assertThat(orderListResponse.data())
             .containsExactly(
                 Order.builder()
