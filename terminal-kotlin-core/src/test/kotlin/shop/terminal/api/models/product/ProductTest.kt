@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class ProductTest {
 
     @Test
-    fun createProduct() {
+    fun create() {
         val product =
             Product.builder()
                 .id("prd_XXXXXXXXXXXXXXXXXXXXXXXXX")
@@ -35,7 +35,7 @@ internal class ProductTest {
                         .build()
                 )
                 .build()
-        assertThat(product).isNotNull
+
         assertThat(product.id()).isEqualTo("prd_XXXXXXXXXXXXXXXXXXXXXXXXX")
         assertThat(product.description())
             .isEqualTo(

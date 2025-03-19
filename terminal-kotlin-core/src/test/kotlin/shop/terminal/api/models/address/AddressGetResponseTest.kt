@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class AddressGetResponseTest {
 
     @Test
-    fun createAddressGetResponse() {
+    fun create() {
         val addressGetResponse =
             AddressGetResponse.builder()
                 .data(
@@ -25,7 +25,7 @@ internal class AddressGetResponseTest {
                         .build()
                 )
                 .build()
-        assertThat(addressGetResponse).isNotNull
+
         assertThat(addressGetResponse.data())
             .isEqualTo(
                 Address.builder()

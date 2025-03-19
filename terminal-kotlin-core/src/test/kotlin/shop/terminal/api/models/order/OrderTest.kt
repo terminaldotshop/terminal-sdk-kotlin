@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class OrderTest {
 
     @Test
-    fun createOrder() {
+    fun create() {
         val order =
             Order.builder()
                 .id("ord_XXXXXXXXXXXXXXXXXXXXXXXXX")
@@ -45,7 +45,7 @@ internal class OrderTest {
                 )
                 .index(0L)
                 .build()
-        assertThat(order).isNotNull
+
         assertThat(order.id()).isEqualTo("ord_XXXXXXXXXXXXXXXXXXXXXXXXX")
         assertThat(order.amount())
             .isEqualTo(Order.Amount.builder().shipping(800L).subtotal(4400L).build())

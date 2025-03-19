@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class AppGetResponseTest {
 
     @Test
-    fun createAppGetResponse() {
+    fun create() {
         val appGetResponse =
             AppGetResponse.builder()
                 .data(
@@ -20,7 +20,7 @@ internal class AppGetResponseTest {
                         .build()
                 )
                 .build()
-        assertThat(appGetResponse).isNotNull
+
         assertThat(appGetResponse.data())
             .isEqualTo(
                 App.builder()
