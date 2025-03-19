@@ -1,5 +1,32 @@
 # Changelog
 
+## 1.6.1 (2025-03-19)
+
+Full Changelog: [v1.6.0...v1.6.1](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v1.6.0...v1.6.1)
+
+### Bug Fixes
+
+* **client:** support kotlin 1.8 runtime ([#139](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/139)) ([6eb9e26](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/6eb9e26f0cd39b8eb6e0de78f8719cb6b6316321))
+
+
+### Chores
+
+* **internal:** codegen related update ([#135](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/135)) ([6407d8f](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/6407d8f9f099a54e17afc5cba93051bdfebc7862))
+* **internal:** delete duplicate tests ([0b08996](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/0b089965d006f74891472426896e620f7926c2eb))
+* **internal:** generate more tests ([592cc21](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/592cc21cf3a9b2ad2d72728bd40fc630f350a049))
+* **internal:** refactor some test assertions ([0b08996](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/0b089965d006f74891472426896e620f7926c2eb))
+* **internal:** reformat some tests ([#138](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/138)) ([592cc21](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/592cc21cf3a9b2ad2d72728bd40fc630f350a049))
+* **internal:** remove extra empty newlines ([#133](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/133)) ([266e394](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/266e3943f2181718e6e6b3f8bac39fe9091dae17))
+* **internal:** rename `getPathParam` ([#137](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/137)) ([0b08996](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/0b089965d006f74891472426896e620f7926c2eb))
+* **internal:** reorder some params methodsc ([0b08996](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/0b089965d006f74891472426896e620f7926c2eb))
+* **internal:** version bump ([#131](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/131)) ([61e7f7d](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/61e7f7d94fd225ed07db032b75d1adc722c5047b))
+
+
+### Documentation
+
+* add `build` method comments ([#136](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/136)) ([e044267](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/e0442676988e657cc04c08bf7d4d9e961d24ce38))
+* deduplicate and refine comments ([#134](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/134)) ([c5687b9](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/c5687b9744ebbe90a6c196468bc9b30b6159a256))
+
 ## 1.6.0 (2025-03-13)
 
 Full Changelog: [v1.5.0...v1.6.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v1.5.0...v1.6.0)
