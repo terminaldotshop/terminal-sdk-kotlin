@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class TokenGetResponseTest {
 
     @Test
-    fun createTokenGetResponse() {
+    fun create() {
         val tokenGetResponse =
             TokenGetResponse.builder()
                 .data(
@@ -19,7 +19,7 @@ internal class TokenGetResponseTest {
                         .build()
                 )
                 .build()
-        assertThat(tokenGetResponse).isNotNull
+
         assertThat(tokenGetResponse.data())
             .isEqualTo(
                 Token.builder()

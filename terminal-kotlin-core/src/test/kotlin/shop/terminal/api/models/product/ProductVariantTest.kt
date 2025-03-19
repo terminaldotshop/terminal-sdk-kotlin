@@ -8,14 +8,14 @@ import org.junit.jupiter.api.Test
 internal class ProductVariantTest {
 
     @Test
-    fun createProductVariant() {
+    fun create() {
         val productVariant =
             ProductVariant.builder()
                 .id("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                 .name("12oz")
                 .price(2200L)
                 .build()
-        assertThat(productVariant).isNotNull
+
         assertThat(productVariant.id()).isEqualTo("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
         assertThat(productVariant.name()).isEqualTo("12oz")
         assertThat(productVariant.price()).isEqualTo(2200L)

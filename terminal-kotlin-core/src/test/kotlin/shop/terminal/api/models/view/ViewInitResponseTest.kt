@@ -18,7 +18,7 @@ import shop.terminal.api.models.token.Token
 internal class ViewInitResponseTest {
 
     @Test
-    fun createViewInitResponse() {
+    fun create() {
         val viewInitResponse =
             ViewInitResponse.builder()
                 .data(
@@ -188,7 +188,7 @@ internal class ViewInitResponseTest {
                         .build()
                 )
                 .build()
-        assertThat(viewInitResponse).isNotNull
+
         assertThat(viewInitResponse.data())
             .isEqualTo(
                 ViewInitResponse.Data.builder()

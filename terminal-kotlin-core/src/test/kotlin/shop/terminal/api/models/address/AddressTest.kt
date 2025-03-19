@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class AddressTest {
 
     @Test
-    fun createAddress() {
+    fun create() {
         val address =
             Address.builder()
                 .id("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
@@ -21,7 +21,7 @@ internal class AddressTest {
                 .province("CA")
                 .street2("Apt 1")
                 .build()
-        assertThat(address).isNotNull
+
         assertThat(address.id()).isEqualTo("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
         assertThat(address.city()).isEqualTo("Anytown")
         assertThat(address.country()).isEqualTo("US")

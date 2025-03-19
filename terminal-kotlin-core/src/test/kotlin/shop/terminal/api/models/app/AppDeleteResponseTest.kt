@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test
 internal class AppDeleteResponseTest {
 
     @Test
-    fun createAppDeleteResponse() {
+    fun create() {
         val appDeleteResponse = AppDeleteResponse.builder().data(AppDeleteResponse.Data.OK).build()
-        assertThat(appDeleteResponse).isNotNull
+
         assertThat(appDeleteResponse.data()).isEqualTo(AppDeleteResponse.Data.OK)
     }
 }

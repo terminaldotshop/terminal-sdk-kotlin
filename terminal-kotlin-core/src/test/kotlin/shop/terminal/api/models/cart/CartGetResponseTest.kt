@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class CartGetResponseTest {
 
     @Test
-    fun createCartGetResponse() {
+    fun create() {
         val cartGetResponse =
             CartGetResponse.builder()
                 .data(
@@ -36,7 +36,7 @@ internal class CartGetResponseTest {
                         .build()
                 )
                 .build()
-        assertThat(cartGetResponse).isNotNull
+
         assertThat(cartGetResponse.data())
             .isEqualTo(
                 Cart.builder()

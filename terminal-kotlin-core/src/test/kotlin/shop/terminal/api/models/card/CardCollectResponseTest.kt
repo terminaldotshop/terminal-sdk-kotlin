@@ -8,12 +8,12 @@ import org.junit.jupiter.api.Test
 internal class CardCollectResponseTest {
 
     @Test
-    fun createCardCollectResponse() {
+    fun create() {
         val cardCollectResponse =
             CardCollectResponse.builder()
                 .data(CardCollectResponse.Data.builder().url("https://trm.sh/XXXXXXXXXX").build())
                 .build()
-        assertThat(cardCollectResponse).isNotNull
+
         assertThat(cardCollectResponse.data())
             .isEqualTo(CardCollectResponse.Data.builder().url("https://trm.sh/XXXXXXXXXX").build())
     }

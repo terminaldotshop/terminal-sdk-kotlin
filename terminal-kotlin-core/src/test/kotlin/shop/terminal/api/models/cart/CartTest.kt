@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class CartTest {
 
     @Test
-    fun createCart() {
+    fun create() {
         val cart =
             Cart.builder()
                 .amount(Cart.Amount.builder().subtotal(4400L).shipping(800L).total(0L).build())
@@ -30,7 +30,7 @@ internal class CartTest {
                         .build()
                 )
                 .build()
-        assertThat(cart).isNotNull
+
         assertThat(cart.amount())
             .isEqualTo(Cart.Amount.builder().subtotal(4400L).shipping(800L).total(0L).build())
         assertThat(cart.items())

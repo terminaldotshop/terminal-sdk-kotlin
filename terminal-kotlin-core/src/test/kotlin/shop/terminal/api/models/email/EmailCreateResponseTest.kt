@@ -8,10 +8,10 @@ import org.junit.jupiter.api.Test
 internal class EmailCreateResponseTest {
 
     @Test
-    fun createEmailCreateResponse() {
+    fun create() {
         val emailCreateResponse =
             EmailCreateResponse.builder().data(EmailCreateResponse.Data.OK).build()
-        assertThat(emailCreateResponse).isNotNull
+
         assertThat(emailCreateResponse.data()).isEqualTo(EmailCreateResponse.Data.OK)
     }
 }

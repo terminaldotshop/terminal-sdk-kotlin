@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class OrderGetResponseTest {
 
     @Test
-    fun createOrderGetResponse() {
+    fun create() {
         val orderGetResponse =
             OrderGetResponse.builder()
                 .data(
@@ -49,7 +49,7 @@ internal class OrderGetResponseTest {
                         .build()
                 )
                 .build()
-        assertThat(orderGetResponse).isNotNull
+
         assertThat(orderGetResponse.data())
             .isEqualTo(
                 Order.builder()

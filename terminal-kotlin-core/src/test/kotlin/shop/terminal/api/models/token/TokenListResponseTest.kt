@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class TokenListResponseTest {
 
     @Test
-    fun createTokenListResponse() {
+    fun create() {
         val tokenListResponse =
             TokenListResponse.builder()
                 .addData(
@@ -19,7 +19,7 @@ internal class TokenListResponseTest {
                         .build()
                 )
                 .build()
-        assertThat(tokenListResponse).isNotNull
+
         assertThat(tokenListResponse.data())
             .containsExactly(
                 Token.builder()

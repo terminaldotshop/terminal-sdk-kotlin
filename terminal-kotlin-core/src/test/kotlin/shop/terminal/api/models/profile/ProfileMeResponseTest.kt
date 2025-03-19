@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class ProfileMeResponseTest {
 
     @Test
-    fun createProfileMeResponse() {
+    fun create() {
         val profileMeResponse =
             ProfileMeResponse.builder()
                 .data(
@@ -25,7 +25,7 @@ internal class ProfileMeResponseTest {
                         .build()
                 )
                 .build()
-        assertThat(profileMeResponse).isNotNull
+
         assertThat(profileMeResponse.data())
             .isEqualTo(
                 Profile.builder()
