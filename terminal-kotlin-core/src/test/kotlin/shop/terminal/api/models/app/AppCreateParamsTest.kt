@@ -2,7 +2,6 @@
 
 package shop.terminal.api.models.app
 
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -26,7 +25,6 @@ internal class AppCreateParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.name()).isEqualTo("Example App")
         assertThat(body.redirectUri()).isEqualTo("https://example.com/callback")
     }
