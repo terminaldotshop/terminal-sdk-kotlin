@@ -1,5 +1,30 @@
 # Changelog
 
+## 2.0.0 (2025-03-22)
+
+Full Changelog: [v1.6.1...v2.0.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v1.6.1...v2.0.0)
+
+### ⚠ BREAKING CHANGES
+
+* **client:** refactor exception structure and methods ([#144](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/144))
+
+### Chores
+
+* **api:** more examples ([#142](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/142)) ([865c486](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/865c4862913eff986af2c5634068076de0eef96d))
+* **client:** refactor exception structure and methods ([#144](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/144)) ([2dfb04c](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/2dfb04cd76ddfdba4eb3ede63fc839208f491ac5))
+* **internal:** add missing release please block ([#143](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/143)) ([cc32863](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/cc32863a557137982bac2b3c65b1699725c68d7a))
+* **internal:** make multipart assertions more robust ([1bac7ac](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/1bac7acc9e9aef942a0be030309f5cfde1ac4acf))
+* **internal:** refactor enum query param serialization ([#140](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/140)) ([404cc0b](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/404cc0bc51dc16d6ded9370de7b3119d98ba0060))
+* **internal:** remove unnecessary `assertNotNull` calls ([1bac7ac](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/1bac7acc9e9aef942a0be030309f5cfde1ac4acf))
+* **internal:** remove unnecessary import ([#146](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/146)) ([a4b23e0](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/a4b23e097052afac70c7ac3a8b86967592ddf99a))
+
+
+### Documentation
+
+* minor readme tweak ([#148](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/148)) ([9443821](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/94438212f96e7ec9a17d7e459ca0a22576871689))
+* refine comments on multipart params ([#145](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/145)) ([1bac7ac](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/1bac7acc9e9aef942a0be030309f5cfde1ac4acf))
+* update readme exception docs ([#147](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/147)) ([142a8b2](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/142a8b2fd8d0e90f4808a5168298d08bb1243e4c))
+
 ## 1.6.1 (2025-03-19)
 
 Full Changelog: [v1.6.0...v1.6.1](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v1.6.0...v1.6.1)
