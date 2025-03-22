@@ -3,6 +3,7 @@
 package shop.terminal.api.services.blocking
 
 import shop.terminal.api.core.ClientOptions
+import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.handlers.errorHandler
 import shop.terminal.api.core.handlers.jsonHandler
@@ -14,7 +15,6 @@ import shop.terminal.api.core.http.HttpResponseFor
 import shop.terminal.api.core.http.json
 import shop.terminal.api.core.http.parseable
 import shop.terminal.api.core.prepare
-import shop.terminal.api.errors.TerminalError
 import shop.terminal.api.models.cart.CartClearParams
 import shop.terminal.api.models.cart.CartClearResponse
 import shop.terminal.api.models.cart.CartConvertParams
@@ -75,7 +75,7 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         CartService.WithRawResponse {
 
-        private val errorHandler: Handler<TerminalError> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
         private val clearHandler: Handler<CartClearResponse> =
             jsonHandler<CartClearResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

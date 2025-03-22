@@ -2,7 +2,6 @@
 
 package shop.terminal.api.models.profile
 
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -20,7 +19,6 @@ internal class ProfileUpdateParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.email()).isEqualTo("john@example.com")
         assertThat(body.name()).isEqualTo("John Doe")
     }

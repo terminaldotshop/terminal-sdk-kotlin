@@ -2,7 +2,6 @@
 
 package shop.terminal.api.models.order
 
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import shop.terminal.api.core.JsonValue
@@ -37,7 +36,6 @@ internal class OrderCreateParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.addressId()).isEqualTo("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
         assertThat(body.cardId()).isEqualTo("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
         assertThat(body.variants())

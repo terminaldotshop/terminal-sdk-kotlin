@@ -2,7 +2,6 @@
 
 package shop.terminal.api.models.cart
 
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -20,7 +19,6 @@ internal class CartSetAddressParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.addressId()).isEqualTo("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
     }
 }

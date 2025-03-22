@@ -3,6 +3,7 @@
 package shop.terminal.api.services.blocking
 
 import shop.terminal.api.core.ClientOptions
+import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.handlers.errorHandler
 import shop.terminal.api.core.handlers.jsonHandler
@@ -13,7 +14,6 @@ import shop.terminal.api.core.http.HttpResponse.Handler
 import shop.terminal.api.core.http.HttpResponseFor
 import shop.terminal.api.core.http.parseable
 import shop.terminal.api.core.prepare
-import shop.terminal.api.errors.TerminalError
 import shop.terminal.api.models.view.ViewInitParams
 import shop.terminal.api.models.view.ViewInitResponse
 
@@ -32,7 +32,7 @@ class ViewServiceImpl internal constructor(private val clientOptions: ClientOpti
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         ViewService.WithRawResponse {
 
-        private val errorHandler: Handler<TerminalError> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
         private val initHandler: Handler<ViewInitResponse> =
             jsonHandler<ViewInitResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
