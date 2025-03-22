@@ -7,7 +7,7 @@
 
 <!-- x-release-please-end -->
 
-The Terminal Kotlin SDK provides convenient access to the Terminal REST API from applications written in Kotlin.
+The Terminal Kotlin SDK provides convenient access to the [Terminal REST API](https://terminal.shop/docs) from applications written in Kotlin.
 
 The Terminal Kotlin SDK is similar to the Terminal Java SDK but with minor differences that make it more ergonomic for use in Kotlin, such as nullable values instead of `Optional`, `Sequence` instead of `Stream`, and suspend functions instead of `CompletableFuture`.
 
@@ -33,9 +33,9 @@ implementation("shop.terminal.api:terminal-kotlin:1.6.1")
 
 ```xml
 <dependency>
-    <groupId>shop.terminal.api</groupId>
-    <artifactId>terminal-kotlin</artifactId>
-    <version>1.6.1</version>
+  <groupId>shop.terminal.api</groupId>
+  <artifactId>terminal-kotlin</artifactId>
+  <version>1.6.1</version>
 </dependency>
 ```
 
