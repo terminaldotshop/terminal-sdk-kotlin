@@ -6,18 +6,16 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 import shop.terminal.api.core.ExcludeMissing
 import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
-import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.Params
 import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
-import shop.terminal.api.core.immutableEmptyMap
-import shop.terminal.api.core.toImmutable
 import shop.terminal.api.errors.TerminalInvalidDataException
 
 /** Create an order without a cart. The order will be placed immediately. */
@@ -79,220 +77,6 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    internal fun _body(): Body = body
-
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams = additionalQueryParams
-
-    /** Order information. */
-    @NoAutoDetect
-    class Body
-    @JsonCreator
-    private constructor(
-        @JsonProperty("addressID")
-        @ExcludeMissing
-        private val addressId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("cardID")
-        @ExcludeMissing
-        private val cardId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("variants")
-        @ExcludeMissing
-        private val variants: JsonField<Variants> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-    ) {
-
-        /**
-         * Shipping address ID.
-         *
-         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun addressId(): String = addressId.getRequired("addressID")
-
-        /**
-         * Card ID.
-         *
-         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun cardId(): String = cardId.getRequired("cardID")
-
-        /**
-         * Product variants to include in the order, along with their quantities.
-         *
-         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun variants(): Variants = variants.getRequired("variants")
-
-        /**
-         * Returns the raw JSON value of [addressId].
-         *
-         * Unlike [addressId], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("addressID") @ExcludeMissing fun _addressId(): JsonField<String> = addressId
-
-        /**
-         * Returns the raw JSON value of [cardId].
-         *
-         * Unlike [cardId], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("cardID") @ExcludeMissing fun _cardId(): JsonField<String> = cardId
-
-        /**
-         * Returns the raw JSON value of [variants].
-         *
-         * Unlike [variants], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("variants") @ExcludeMissing fun _variants(): JsonField<Variants> = variants
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Body = apply {
-            if (validated) {
-                return@apply
-            }
-
-            addressId()
-            cardId()
-            variants().validate()
-            validated = true
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [Body].
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .addressId()
-             * .cardId()
-             * .variants()
-             * ```
-             */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [Body]. */
-        class Builder internal constructor() {
-
-            private var addressId: JsonField<String>? = null
-            private var cardId: JsonField<String>? = null
-            private var variants: JsonField<Variants>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(body: Body) = apply {
-                addressId = body.addressId
-                cardId = body.cardId
-                variants = body.variants
-                additionalProperties = body.additionalProperties.toMutableMap()
-            }
-
-            /** Shipping address ID. */
-            fun addressId(addressId: String) = addressId(JsonField.of(addressId))
-
-            /**
-             * Sets [Builder.addressId] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.addressId] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun addressId(addressId: JsonField<String>) = apply { this.addressId = addressId }
-
-            /** Card ID. */
-            fun cardId(cardId: String) = cardId(JsonField.of(cardId))
-
-            /**
-             * Sets [Builder.cardId] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.cardId] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun cardId(cardId: JsonField<String>) = apply { this.cardId = cardId }
-
-            /** Product variants to include in the order, along with their quantities. */
-            fun variants(variants: Variants) = variants(JsonField.of(variants))
-
-            /**
-             * Sets [Builder.variants] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.variants] with a well-typed [Variants] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun variants(variants: JsonField<Variants>) = apply { this.variants = variants }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Body].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .addressId()
-             * .cardId()
-             * .variants()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): Body =
-                Body(
-                    checkRequired("addressId", addressId),
-                    checkRequired("cardId", cardId),
-                    checkRequired("variants", variants),
-                    additionalProperties.toImmutable(),
-                )
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Body && addressId == other.addressId && cardId == other.cardId && variants == other.variants && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(addressId, cardId, variants, additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Body{addressId=$addressId, cardId=$cardId, variants=$variants, additionalProperties=$additionalProperties}"
-    }
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -311,7 +95,6 @@ private constructor(
     }
 
     /** A builder for [OrderCreateParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var body: Body.Builder = Body.builder()
@@ -498,28 +281,243 @@ private constructor(
             )
     }
 
-    /** Product variants to include in the order, along with their quantities. */
-    @NoAutoDetect
-    class Variants
-    @JsonCreator
+    internal fun _body(): Body = body
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    /** Order information. */
+    class Body
     private constructor(
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
+        private val addressId: JsonField<String>,
+        private val cardId: JsonField<String>,
+        private val variants: JsonField<Variants>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("addressID")
+            @ExcludeMissing
+            addressId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("cardID") @ExcludeMissing cardId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("variants")
+            @ExcludeMissing
+            variants: JsonField<Variants> = JsonMissing.of(),
+        ) : this(addressId, cardId, variants, mutableMapOf())
+
+        /**
+         * Shipping address ID.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun addressId(): String = addressId.getRequired("addressID")
+
+        /**
+         * Card ID.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun cardId(): String = cardId.getRequired("cardID")
+
+        /**
+         * Product variants to include in the order, along with their quantities.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun variants(): Variants = variants.getRequired("variants")
+
+        /**
+         * Returns the raw JSON value of [addressId].
+         *
+         * Unlike [addressId], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("addressID") @ExcludeMissing fun _addressId(): JsonField<String> = addressId
+
+        /**
+         * Returns the raw JSON value of [cardId].
+         *
+         * Unlike [cardId], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("cardID") @ExcludeMissing fun _cardId(): JsonField<String> = cardId
+
+        /**
+         * Returns the raw JSON value of [variants].
+         *
+         * Unlike [variants], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("variants") @ExcludeMissing fun _variants(): JsonField<Variants> = variants
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [Body].
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .addressId()
+             * .cardId()
+             * .variants()
+             * ```
+             */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [Body]. */
+        class Builder internal constructor() {
+
+            private var addressId: JsonField<String>? = null
+            private var cardId: JsonField<String>? = null
+            private var variants: JsonField<Variants>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(body: Body) = apply {
+                addressId = body.addressId
+                cardId = body.cardId
+                variants = body.variants
+                additionalProperties = body.additionalProperties.toMutableMap()
+            }
+
+            /** Shipping address ID. */
+            fun addressId(addressId: String) = addressId(JsonField.of(addressId))
+
+            /**
+             * Sets [Builder.addressId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.addressId] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun addressId(addressId: JsonField<String>) = apply { this.addressId = addressId }
+
+            /** Card ID. */
+            fun cardId(cardId: String) = cardId(JsonField.of(cardId))
+
+            /**
+             * Sets [Builder.cardId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.cardId] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun cardId(cardId: JsonField<String>) = apply { this.cardId = cardId }
+
+            /** Product variants to include in the order, along with their quantities. */
+            fun variants(variants: Variants) = variants(JsonField.of(variants))
+
+            /**
+             * Sets [Builder.variants] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.variants] with a well-typed [Variants] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun variants(variants: JsonField<Variants>) = apply { this.variants = variants }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Body].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .addressId()
+             * .cardId()
+             * .variants()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): Body =
+                Body(
+                    checkRequired("addressId", addressId),
+                    checkRequired("cardId", cardId),
+                    checkRequired("variants", variants),
+                    additionalProperties.toMutableMap(),
+                )
+        }
 
         private var validated: Boolean = false
 
-        fun validate(): Variants = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
 
+            addressId()
+            cardId()
+            variants().validate()
             validated = true
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Body && addressId == other.addressId && cardId == other.cardId && variants == other.variants && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(addressId, cardId, variants, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Body{addressId=$addressId, cardId=$cardId, variants=$variants, additionalProperties=$additionalProperties}"
+    }
+
+    /** Product variants to include in the order, along with their quantities. */
+    class Variants
+    private constructor(private val additionalProperties: MutableMap<String, JsonValue>) {
+
+        @JsonCreator private constructor() : this(mutableMapOf())
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -562,7 +560,17 @@ private constructor(
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              */
-            fun build(): Variants = Variants(additionalProperties.toImmutable())
+            fun build(): Variants = Variants(additionalProperties.toMutableMap())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Variants = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
         }
 
         override fun equals(other: Any?): Boolean {

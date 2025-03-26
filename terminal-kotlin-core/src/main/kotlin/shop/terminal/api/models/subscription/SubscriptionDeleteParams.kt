@@ -2,14 +2,16 @@
 
 package shop.terminal.api.models.subscription
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter
+import com.fasterxml.jackson.annotation.JsonAnySetter
+import java.util.Collections
 import java.util.Objects
+import shop.terminal.api.core.ExcludeMissing
 import shop.terminal.api.core.JsonValue
-import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.Params
 import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
-import shop.terminal.api.core.toImmutable
 
 /** Cancel a subscription for the current user. */
 class SubscriptionDeleteParams
@@ -17,7 +19,7 @@ private constructor(
     private val id: String,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
+    private val additionalBodyProperties: MutableMap<String, JsonValue>,
 ) : Params {
 
     /** ID of the subscription to cancel. */
@@ -27,19 +29,15 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    @JsonAnySetter
+    private fun putAdditionalBodyProperty(key: String, value: JsonValue) {
+        additionalBodyProperties.put(key, value)
+    }
 
-    internal fun _body(): Map<String, JsonValue>? = additionalBodyProperties.ifEmpty { null }
-
-    fun _pathParam(index: Int): String =
-        when (index) {
-            0 -> id
-            else -> ""
-        }
-
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams = additionalQueryParams
+    @JsonAnyGetter
+    @ExcludeMissing
+    fun _additionalBodyProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalBodyProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -57,7 +55,6 @@ private constructor(
     }
 
     /** A builder for [SubscriptionDeleteParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var id: String? = null
@@ -213,9 +210,21 @@ private constructor(
                 checkRequired("id", id),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
+                additionalBodyProperties.toMutableMap(),
             )
     }
+
+    internal fun _body(): Map<String, JsonValue>? = additionalBodyProperties.ifEmpty { null }
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> id
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
