@@ -6,15 +6,14 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 import shop.terminal.api.core.ExcludeMissing
 import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
-import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.checkKnown
 import shop.terminal.api.core.checkRequired
-import shop.terminal.api.core.immutableEmptyMap
 import shop.terminal.api.core.toImmutable
 import shop.terminal.api.errors.TerminalInvalidDataException
 import shop.terminal.api.models.address.Address
@@ -27,13 +26,16 @@ import shop.terminal.api.models.profile.Profile
 import shop.terminal.api.models.subscription.Subscription
 import shop.terminal.api.models.token.Token
 
-@NoAutoDetect
 class ViewInitResponse
-@JsonCreator
 private constructor(
-    @JsonProperty("data") @ExcludeMissing private val data: JsonField<Data> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val data: JsonField<Data>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("data") @ExcludeMissing data: JsonField<Data> = JsonMissing.of()
+    ) : this(data, mutableMapOf())
 
     /**
      * Initial app data.
@@ -50,20 +52,15 @@ private constructor(
      */
     @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): ViewInitResponse = apply {
-        if (validated) {
-            return@apply
-        }
-
-        data().validate()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -134,45 +131,71 @@ private constructor(
          * @throws IllegalStateException if any required field is unset.
          */
         fun build(): ViewInitResponse =
-            ViewInitResponse(checkRequired("data", data), additionalProperties.toImmutable())
+            ViewInitResponse(checkRequired("data", data), additionalProperties.toMutableMap())
+    }
+
+    private var validated: Boolean = false
+
+    fun validate(): ViewInitResponse = apply {
+        if (validated) {
+            return@apply
+        }
+
+        data().validate()
+        validated = true
     }
 
     /** Initial app data. */
-    @NoAutoDetect
     class Data
-    @JsonCreator
     private constructor(
-        @JsonProperty("addresses")
-        @ExcludeMissing
-        private val addresses: JsonField<List<Address>> = JsonMissing.of(),
-        @JsonProperty("apps")
-        @ExcludeMissing
-        private val apps: JsonField<List<App>> = JsonMissing.of(),
-        @JsonProperty("cards")
-        @ExcludeMissing
-        private val cards: JsonField<List<Card>> = JsonMissing.of(),
-        @JsonProperty("cart") @ExcludeMissing private val cart: JsonField<Cart> = JsonMissing.of(),
-        @JsonProperty("orders")
-        @ExcludeMissing
-        private val orders: JsonField<List<Order>> = JsonMissing.of(),
-        @JsonProperty("products")
-        @ExcludeMissing
-        private val products: JsonField<List<Product>> = JsonMissing.of(),
-        @JsonProperty("profile")
-        @ExcludeMissing
-        private val profile: JsonField<Profile> = JsonMissing.of(),
-        @JsonProperty("region")
-        @ExcludeMissing
-        private val region: JsonField<Region> = JsonMissing.of(),
-        @JsonProperty("subscriptions")
-        @ExcludeMissing
-        private val subscriptions: JsonField<List<Subscription>> = JsonMissing.of(),
-        @JsonProperty("tokens")
-        @ExcludeMissing
-        private val tokens: JsonField<List<Token>> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val addresses: JsonField<List<Address>>,
+        private val apps: JsonField<List<App>>,
+        private val cards: JsonField<List<Card>>,
+        private val cart: JsonField<Cart>,
+        private val orders: JsonField<List<Order>>,
+        private val products: JsonField<List<Product>>,
+        private val profile: JsonField<Profile>,
+        private val region: JsonField<Region>,
+        private val subscriptions: JsonField<List<Subscription>>,
+        private val tokens: JsonField<List<Token>>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("addresses")
+            @ExcludeMissing
+            addresses: JsonField<List<Address>> = JsonMissing.of(),
+            @JsonProperty("apps") @ExcludeMissing apps: JsonField<List<App>> = JsonMissing.of(),
+            @JsonProperty("cards") @ExcludeMissing cards: JsonField<List<Card>> = JsonMissing.of(),
+            @JsonProperty("cart") @ExcludeMissing cart: JsonField<Cart> = JsonMissing.of(),
+            @JsonProperty("orders")
+            @ExcludeMissing
+            orders: JsonField<List<Order>> = JsonMissing.of(),
+            @JsonProperty("products")
+            @ExcludeMissing
+            products: JsonField<List<Product>> = JsonMissing.of(),
+            @JsonProperty("profile") @ExcludeMissing profile: JsonField<Profile> = JsonMissing.of(),
+            @JsonProperty("region") @ExcludeMissing region: JsonField<Region> = JsonMissing.of(),
+            @JsonProperty("subscriptions")
+            @ExcludeMissing
+            subscriptions: JsonField<List<Subscription>> = JsonMissing.of(),
+            @JsonProperty("tokens")
+            @ExcludeMissing
+            tokens: JsonField<List<Token>> = JsonMissing.of(),
+        ) : this(
+            addresses,
+            apps,
+            cards,
+            cart,
+            orders,
+            products,
+            profile,
+            region,
+            subscriptions,
+            tokens,
+            mutableMapOf(),
+        )
 
         /**
          * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
@@ -317,29 +340,15 @@ private constructor(
          */
         @JsonProperty("tokens") @ExcludeMissing fun _tokens(): JsonField<List<Token>> = tokens
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Data = apply {
-            if (validated) {
-                return@apply
-            }
-
-            addresses().forEach { it.validate() }
-            apps().forEach { it.validate() }
-            cards().forEach { it.validate() }
-            cart().validate()
-            orders().forEach { it.validate() }
-            products().forEach { it.validate() }
-            profile().validate()
-            region()
-            subscriptions().forEach { it.validate() }
-            tokens().forEach { it.validate() }
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -656,8 +665,28 @@ private constructor(
                     checkRequired("region", region),
                     checkRequired("subscriptions", subscriptions).map { it.toImmutable() },
                     checkRequired("tokens", tokens).map { it.toImmutable() },
-                    additionalProperties.toImmutable(),
+                    additionalProperties.toMutableMap(),
                 )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Data = apply {
+            if (validated) {
+                return@apply
+            }
+
+            addresses().forEach { it.validate() }
+            apps().forEach { it.validate() }
+            cards().forEach { it.validate() }
+            cart().validate()
+            orders().forEach { it.validate() }
+            products().forEach { it.validate() }
+            profile().validate()
+            region()
+            subscriptions().forEach { it.validate() }
+            tokens().forEach { it.validate() }
+            validated = true
         }
 
         override fun equals(other: Any?): Boolean {

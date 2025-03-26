@@ -1,8 +1,6 @@
 package shop.terminal.api.core
 
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside
-import com.fasterxml.jackson.annotation.JsonAutoDetect
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.JsonGenerator
@@ -443,18 +441,12 @@ private constructor(
 @JsonInclude(JsonInclude.Include.CUSTOM, valueFilter = JsonField.IsMissing::class)
 annotation class ExcludeMissing
 
-@JacksonAnnotationsInside
-@JsonAutoDetect(
-    getterVisibility = Visibility.NONE,
-    isGetterVisibility = Visibility.NONE,
-    setterVisibility = Visibility.NONE,
-    creatorVisibility = Visibility.NONE,
-    fieldVisibility = Visibility.NONE,
-)
-annotation class NoAutoDetect
-
 class MultipartField<T : Any>
-private constructor(val value: JsonField<T>, val contentType: String, val filename: String?) {
+private constructor(
+    @get:com.fasterxml.jackson.annotation.JsonValue val value: JsonField<T>,
+    val contentType: String,
+    val filename: String?,
+) {
 
     companion object {
 
@@ -466,11 +458,7 @@ private constructor(val value: JsonField<T>, val contentType: String, val filena
     }
 
     internal fun <R : Any> map(transform: (T) -> R): MultipartField<R> =
-        MultipartField.builder<R>()
-            .value(value.map(transform))
-            .contentType(contentType)
-            .filename(filename)
-            .build()
+        builder<R>().value(value.map(transform)).contentType(contentType).filename(filename).build()
 
     /** A builder for [MultipartField]. */
     class Builder<T : Any> internal constructor() {
