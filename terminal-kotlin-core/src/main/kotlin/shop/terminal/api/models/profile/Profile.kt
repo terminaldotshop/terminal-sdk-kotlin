@@ -6,25 +6,26 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 import shop.terminal.api.core.ExcludeMissing
 import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
-import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.checkRequired
-import shop.terminal.api.core.immutableEmptyMap
-import shop.terminal.api.core.toImmutable
 import shop.terminal.api.errors.TerminalInvalidDataException
 
 /** A Terminal shop user's profile. (We have users, btw.) */
-@NoAutoDetect
 class Profile
-@JsonCreator
 private constructor(
-    @JsonProperty("user") @ExcludeMissing private val user: JsonField<User> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val user: JsonField<User>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("user") @ExcludeMissing user: JsonField<User> = JsonMissing.of()
+    ) : this(user, mutableMapOf())
 
     /**
      * A Terminal shop user. (We have users, btw.)
@@ -41,20 +42,15 @@ private constructor(
      */
     @JsonProperty("user") @ExcludeMissing fun _user(): JsonField<User> = user
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): Profile = apply {
-        if (validated) {
-            return@apply
-        }
-
-        user().validate()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -125,30 +121,43 @@ private constructor(
          * @throws IllegalStateException if any required field is unset.
          */
         fun build(): Profile =
-            Profile(checkRequired("user", user), additionalProperties.toImmutable())
+            Profile(checkRequired("user", user), additionalProperties.toMutableMap())
+    }
+
+    private var validated: Boolean = false
+
+    fun validate(): Profile = apply {
+        if (validated) {
+            return@apply
+        }
+
+        user().validate()
+        validated = true
     }
 
     /** A Terminal shop user. (We have users, btw.) */
-    @NoAutoDetect
     class User
-    @JsonCreator
     private constructor(
-        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("email")
-        @ExcludeMissing
-        private val email: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("fingerprint")
-        @ExcludeMissing
-        private val fingerprint: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("name")
-        @ExcludeMissing
-        private val name: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("stripeCustomerID")
-        @ExcludeMissing
-        private val stripeCustomerId: JsonField<String> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val id: JsonField<String>,
+        private val email: JsonField<String>,
+        private val fingerprint: JsonField<String>,
+        private val name: JsonField<String>,
+        private val stripeCustomerId: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("email") @ExcludeMissing email: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("fingerprint")
+            @ExcludeMissing
+            fingerprint: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("stripeCustomerID")
+            @ExcludeMissing
+            stripeCustomerId: JsonField<String> = JsonMissing.of(),
+        ) : this(id, email, fingerprint, name, stripeCustomerId, mutableMapOf())
 
         /**
          * Unique object identifier. The format and length of IDs may change over time.
@@ -230,24 +239,15 @@ private constructor(
         @ExcludeMissing
         fun _stripeCustomerId(): JsonField<String> = stripeCustomerId
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): User = apply {
-            if (validated) {
-                return@apply
-            }
-
-            id()
-            email()
-            fingerprint()
-            name()
-            stripeCustomerId()
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -394,8 +394,23 @@ private constructor(
                     checkRequired("fingerprint", fingerprint),
                     checkRequired("name", name),
                     checkRequired("stripeCustomerId", stripeCustomerId),
-                    additionalProperties.toImmutable(),
+                    additionalProperties.toMutableMap(),
                 )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): User = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            email()
+            fingerprint()
+            name()
+            stripeCustomerId()
+            validated = true
         }
 
         override fun equals(other: Any?): Boolean {
