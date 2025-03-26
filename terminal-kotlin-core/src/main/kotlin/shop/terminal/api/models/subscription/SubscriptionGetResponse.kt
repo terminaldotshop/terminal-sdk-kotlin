@@ -6,26 +6,25 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 import shop.terminal.api.core.ExcludeMissing
 import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
-import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.checkRequired
-import shop.terminal.api.core.immutableEmptyMap
-import shop.terminal.api.core.toImmutable
 import shop.terminal.api.errors.TerminalInvalidDataException
 
-@NoAutoDetect
 class SubscriptionGetResponse
-@JsonCreator
 private constructor(
-    @JsonProperty("data")
-    @ExcludeMissing
-    private val data: JsonField<Subscription> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val data: JsonField<Subscription>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("data") @ExcludeMissing data: JsonField<Subscription> = JsonMissing.of()
+    ) : this(data, mutableMapOf())
 
     /**
      * Subscription to a Terminal shop product.
@@ -42,20 +41,15 @@ private constructor(
      */
     @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Subscription> = data
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): SubscriptionGetResponse = apply {
-        if (validated) {
-            return@apply
-        }
-
-        data().validate()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -127,7 +121,21 @@ private constructor(
          * @throws IllegalStateException if any required field is unset.
          */
         fun build(): SubscriptionGetResponse =
-            SubscriptionGetResponse(checkRequired("data", data), additionalProperties.toImmutable())
+            SubscriptionGetResponse(
+                checkRequired("data", data),
+                additionalProperties.toMutableMap(),
+            )
+    }
+
+    private var validated: Boolean = false
+
+    fun validate(): SubscriptionGetResponse = apply {
+        if (validated) {
+            return@apply
+        }
+
+        data().validate()
+        validated = true
     }
 
     override fun equals(other: Any?): Boolean {

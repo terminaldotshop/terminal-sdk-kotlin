@@ -6,32 +6,33 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 import shop.terminal.api.core.ExcludeMissing
 import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
-import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.checkRequired
-import shop.terminal.api.core.immutableEmptyMap
-import shop.terminal.api.core.toImmutable
 import shop.terminal.api.errors.TerminalInvalidDataException
 
 /**
  * A personal access token used to access the Terminal API. If you leak this, expect large sums of
  * coffee to be ordered on your credit card.
  */
-@NoAutoDetect
 class Token
-@JsonCreator
 private constructor(
-    @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("token") @ExcludeMissing private val token: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("created")
-    @ExcludeMissing
-    private val created: JsonField<String> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val id: JsonField<String>,
+    private val token: JsonField<String>,
+    private val created: JsonField<String>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("token") @ExcludeMissing token: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("created") @ExcludeMissing created: JsonField<String> = JsonMissing.of(),
+    ) : this(id, token, created, mutableMapOf())
 
     /**
      * Unique object identifier. The format and length of IDs may change over time.
@@ -78,22 +79,15 @@ private constructor(
      */
     @JsonProperty("created") @ExcludeMissing fun _created(): JsonField<String> = created
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): Token = apply {
-        if (validated) {
-            return@apply
-        }
-
-        id()
-        token()
-        created()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -198,8 +192,21 @@ private constructor(
                 checkRequired("id", id),
                 checkRequired("token", token),
                 checkRequired("created", created),
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
+    }
+
+    private var validated: Boolean = false
+
+    fun validate(): Token = apply {
+        if (validated) {
+            return@apply
+        }
+
+        id()
+        token()
+        created()
+        validated = true
     }
 
     override fun equals(other: Any?): Boolean {

@@ -6,24 +6,25 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 import shop.terminal.api.core.ExcludeMissing
 import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
-import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.checkRequired
-import shop.terminal.api.core.immutableEmptyMap
-import shop.terminal.api.core.toImmutable
 import shop.terminal.api.errors.TerminalInvalidDataException
 
-@NoAutoDetect
 class AddressCreateResponse
-@JsonCreator
 private constructor(
-    @JsonProperty("data") @ExcludeMissing private val data: JsonField<String> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val data: JsonField<String>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("data") @ExcludeMissing data: JsonField<String> = JsonMissing.of()
+    ) : this(data, mutableMapOf())
 
     /**
      * Shipping address ID.
@@ -40,20 +41,15 @@ private constructor(
      */
     @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<String> = data
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): AddressCreateResponse = apply {
-        if (validated) {
-            return@apply
-        }
-
-        data()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -124,7 +120,18 @@ private constructor(
          * @throws IllegalStateException if any required field is unset.
          */
         fun build(): AddressCreateResponse =
-            AddressCreateResponse(checkRequired("data", data), additionalProperties.toImmutable())
+            AddressCreateResponse(checkRequired("data", data), additionalProperties.toMutableMap())
+    }
+
+    private var validated: Boolean = false
+
+    fun validate(): AddressCreateResponse = apply {
+        if (validated) {
+            return@apply
+        }
+
+        data()
+        validated = true
     }
 
     override fun equals(other: Any?): Boolean {

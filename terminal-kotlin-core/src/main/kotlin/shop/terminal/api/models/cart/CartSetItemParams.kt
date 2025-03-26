@@ -6,18 +6,16 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 import shop.terminal.api.core.ExcludeMissing
 import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
-import shop.terminal.api.core.NoAutoDetect
 import shop.terminal.api.core.Params
 import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
-import shop.terminal.api.core.immutableEmptyMap
-import shop.terminal.api.core.toImmutable
 import shop.terminal.api.errors.TerminalInvalidDataException
 
 /** Add an item to the current user's cart. */
@@ -65,189 +63,6 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    internal fun _body(): Body = body
-
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams = additionalQueryParams
-
-    @NoAutoDetect
-    class Body
-    @JsonCreator
-    private constructor(
-        @JsonProperty("productVariantID")
-        @ExcludeMissing
-        private val productVariantId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("quantity")
-        @ExcludeMissing
-        private val quantity: JsonField<Long> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-    ) {
-
-        /**
-         * ID of the product variant to add to the cart.
-         *
-         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun productVariantId(): String = productVariantId.getRequired("productVariantID")
-
-        /**
-         * Quantity of the item to add to the cart.
-         *
-         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun quantity(): Long = quantity.getRequired("quantity")
-
-        /**
-         * Returns the raw JSON value of [productVariantId].
-         *
-         * Unlike [productVariantId], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("productVariantID")
-        @ExcludeMissing
-        fun _productVariantId(): JsonField<String> = productVariantId
-
-        /**
-         * Returns the raw JSON value of [quantity].
-         *
-         * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Long> = quantity
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Body = apply {
-            if (validated) {
-                return@apply
-            }
-
-            productVariantId()
-            quantity()
-            validated = true
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [Body].
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .productVariantId()
-             * .quantity()
-             * ```
-             */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [Body]. */
-        class Builder internal constructor() {
-
-            private var productVariantId: JsonField<String>? = null
-            private var quantity: JsonField<Long>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(body: Body) = apply {
-                productVariantId = body.productVariantId
-                quantity = body.quantity
-                additionalProperties = body.additionalProperties.toMutableMap()
-            }
-
-            /** ID of the product variant to add to the cart. */
-            fun productVariantId(productVariantId: String) =
-                productVariantId(JsonField.of(productVariantId))
-
-            /**
-             * Sets [Builder.productVariantId] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.productVariantId] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun productVariantId(productVariantId: JsonField<String>) = apply {
-                this.productVariantId = productVariantId
-            }
-
-            /** Quantity of the item to add to the cart. */
-            fun quantity(quantity: Long) = quantity(JsonField.of(quantity))
-
-            /**
-             * Sets [Builder.quantity] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.quantity] with a well-typed [Long] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun quantity(quantity: JsonField<Long>) = apply { this.quantity = quantity }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Body].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .productVariantId()
-             * .quantity()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): Body =
-                Body(
-                    checkRequired("productVariantId", productVariantId),
-                    checkRequired("quantity", quantity),
-                    additionalProperties.toImmutable(),
-                )
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Body && productVariantId == other.productVariantId && quantity == other.quantity && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(productVariantId, quantity, additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Body{productVariantId=$productVariantId, quantity=$quantity, additionalProperties=$additionalProperties}"
-    }
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -265,7 +80,6 @@ private constructor(
     }
 
     /** A builder for [CartSetItemParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var body: Body.Builder = Body.builder()
@@ -441,6 +255,196 @@ private constructor(
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
+    }
+
+    internal fun _body(): Body = body
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    class Body
+    private constructor(
+        private val productVariantId: JsonField<String>,
+        private val quantity: JsonField<Long>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("productVariantID")
+            @ExcludeMissing
+            productVariantId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("quantity") @ExcludeMissing quantity: JsonField<Long> = JsonMissing.of(),
+        ) : this(productVariantId, quantity, mutableMapOf())
+
+        /**
+         * ID of the product variant to add to the cart.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun productVariantId(): String = productVariantId.getRequired("productVariantID")
+
+        /**
+         * Quantity of the item to add to the cart.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun quantity(): Long = quantity.getRequired("quantity")
+
+        /**
+         * Returns the raw JSON value of [productVariantId].
+         *
+         * Unlike [productVariantId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("productVariantID")
+        @ExcludeMissing
+        fun _productVariantId(): JsonField<String> = productVariantId
+
+        /**
+         * Returns the raw JSON value of [quantity].
+         *
+         * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Long> = quantity
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [Body].
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .productVariantId()
+             * .quantity()
+             * ```
+             */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [Body]. */
+        class Builder internal constructor() {
+
+            private var productVariantId: JsonField<String>? = null
+            private var quantity: JsonField<Long>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(body: Body) = apply {
+                productVariantId = body.productVariantId
+                quantity = body.quantity
+                additionalProperties = body.additionalProperties.toMutableMap()
+            }
+
+            /** ID of the product variant to add to the cart. */
+            fun productVariantId(productVariantId: String) =
+                productVariantId(JsonField.of(productVariantId))
+
+            /**
+             * Sets [Builder.productVariantId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.productVariantId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun productVariantId(productVariantId: JsonField<String>) = apply {
+                this.productVariantId = productVariantId
+            }
+
+            /** Quantity of the item to add to the cart. */
+            fun quantity(quantity: Long) = quantity(JsonField.of(quantity))
+
+            /**
+             * Sets [Builder.quantity] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.quantity] with a well-typed [Long] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun quantity(quantity: JsonField<Long>) = apply { this.quantity = quantity }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Body].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .productVariantId()
+             * .quantity()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): Body =
+                Body(
+                    checkRequired("productVariantId", productVariantId),
+                    checkRequired("quantity", quantity),
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Body = apply {
+            if (validated) {
+                return@apply
+            }
+
+            productVariantId()
+            quantity()
+            validated = true
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Body && productVariantId == other.productVariantId && quantity == other.quantity && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(productVariantId, quantity, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Body{productVariantId=$productVariantId, quantity=$quantity, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
