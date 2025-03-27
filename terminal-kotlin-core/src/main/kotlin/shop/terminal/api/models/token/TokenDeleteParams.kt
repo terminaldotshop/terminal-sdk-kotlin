@@ -2,16 +2,13 @@
 
 package shop.terminal.api.models.token
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import java.util.Collections
 import java.util.Objects
-import shop.terminal.api.core.ExcludeMissing
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.Params
 import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
+import shop.terminal.api.core.toImmutable
 
 /** Delete the personal access token with the given ID. */
 class TokenDeleteParams
@@ -19,25 +16,17 @@ private constructor(
     private val id: String,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: MutableMap<String, JsonValue>,
+    private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
     /** ID of the personal token to delete. */
     fun id(): String = id
 
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    @JsonAnySetter
-    private fun putAdditionalBodyProperty(key: String, value: JsonValue) {
-        additionalBodyProperties.put(key, value)
-    }
-
-    @JsonAnyGetter
-    @ExcludeMissing
-    fun _additionalBodyProperties(): Map<String, JsonValue> =
-        Collections.unmodifiableMap(additionalBodyProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -209,7 +198,7 @@ private constructor(
                 checkRequired("id", id),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toMutableMap(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
