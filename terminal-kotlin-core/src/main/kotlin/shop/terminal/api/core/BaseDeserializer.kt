@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import kotlin.reflect.KClass
+import shop.terminal.api.errors.TerminalInvalidDataException
 
 abstract class BaseDeserializer<T : Any>(type: KClass<T>) :
     StdDeserializer<T>(type.java), ContextualDeserializer {
@@ -28,6 +29,13 @@ abstract class BaseDeserializer<T : Any>(type: KClass<T>) :
     }
 
     protected abstract fun ObjectCodec.deserialize(node: JsonNode): T
+
+    protected fun <T> ObjectCodec.deserialize(node: JsonNode, type: TypeReference<T>): T =
+        try {
+            readValue(treeAsTokens(node), type)
+        } catch (e: Exception) {
+            throw TerminalInvalidDataException("Error deserializing", e)
+        }
 
     protected fun <T> ObjectCodec.tryDeserialize(
         node: JsonNode,
