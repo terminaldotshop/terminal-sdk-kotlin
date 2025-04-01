@@ -37,9 +37,9 @@ private constructor(
 
     companion object {
 
-        const val PRODUCTION_URL = "https://api.terminal.shop/"
+        const val PRODUCTION_URL = "https://api.terminal.shop"
 
-        const val DEV_URL = "https://api.dev.terminal.shop/"
+        const val DEV_URL = "https://api.dev.terminal.shop"
 
         /**
          * Returns a mutable builder for constructing an instance of [ClientOptions].
