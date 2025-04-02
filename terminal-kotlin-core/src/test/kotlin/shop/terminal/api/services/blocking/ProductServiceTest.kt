@@ -20,9 +20,9 @@ internal class ProductServiceTest {
                 .build()
         val productService = client.product()
 
-        val product = productService.list()
+        val products = productService.list()
 
-        product.validate()
+        products.validate()
     }
 
     @Test
