@@ -245,6 +245,25 @@ private constructor(
         validated = true
     }
 
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: TerminalInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    internal fun validity(): Int =
+        (if (id.asKnown() == null) 0 else 1) +
+            (if (brand.asKnown() == null) 0 else 1) +
+            (expiration.asKnown()?.validity() ?: 0) +
+            (if (last4.asKnown() == null) 0 else 1)
+
     /** Expiration of the card. */
     class Expiration
     private constructor(
@@ -403,6 +422,23 @@ private constructor(
             year()
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: TerminalInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            (if (month.asKnown() == null) 0 else 1) + (if (year.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {

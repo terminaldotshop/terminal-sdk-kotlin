@@ -323,6 +323,27 @@ private constructor(
         validated = true
     }
 
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: TerminalInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    internal fun validity(): Int =
+        (if (id.asKnown() == null) 0 else 1) +
+            (amount.asKnown()?.validity() ?: 0) +
+            (items.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (shipping.asKnown()?.validity() ?: 0) +
+            (tracking.asKnown()?.validity() ?: 0) +
+            (if (index.asKnown() == null) 0 else 1)
+
     /** The subtotal and shipping amounts of the order. */
     class Amount
     private constructor(
@@ -481,6 +502,23 @@ private constructor(
             subtotal()
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: TerminalInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            (if (shipping.asKnown() == null) 0 else 1) + (if (subtotal.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -772,6 +810,27 @@ private constructor(
             productVariantId()
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: TerminalInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            (if (id.asKnown() == null) 0 else 1) +
+                (if (amount.asKnown() == null) 0 else 1) +
+                (if (quantity.asKnown() == null) 0 else 1) +
+                (if (description.asKnown() == null) 0 else 1) +
+                (if (productVariantId.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -1156,6 +1215,30 @@ private constructor(
             validated = true
         }
 
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: TerminalInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            (if (city.asKnown() == null) 0 else 1) +
+                (if (country.asKnown() == null) 0 else 1) +
+                (if (name.asKnown() == null) 0 else 1) +
+                (if (street1.asKnown() == null) 0 else 1) +
+                (if (zip.asKnown() == null) 0 else 1) +
+                (if (phone.asKnown() == null) 0 else 1) +
+                (if (province.asKnown() == null) 0 else 1) +
+                (if (street2.asKnown() == null) 0 else 1)
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
@@ -1344,6 +1427,25 @@ private constructor(
             url()
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: TerminalInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            (if (number.asKnown() == null) 0 else 1) +
+                (if (service.asKnown() == null) 0 else 1) +
+                (if (url.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {

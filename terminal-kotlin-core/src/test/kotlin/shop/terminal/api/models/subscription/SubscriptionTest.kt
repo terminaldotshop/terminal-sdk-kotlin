@@ -2,8 +2,10 @@
 
 package shop.terminal.api.models.subscription
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import shop.terminal.api.core.jsonMapper
 
 internal class SubscriptionTest {
 
@@ -40,5 +42,33 @@ internal class SubscriptionTest {
                         .build()
                 )
             )
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val subscription =
+            Subscription.builder()
+                .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .quantity(1L)
+                .next("2025-02-01T19:36:19.000Z")
+                .schedule(
+                    Subscription.Schedule.Weekly.builder()
+                        .interval(3L)
+                        .type(Subscription.Schedule.Weekly.Type.WEEKLY)
+                        .build()
+                )
+                .build()
+
+        val roundtrippedSubscription =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(subscription),
+                jacksonTypeRef<Subscription>(),
+            )
+
+        assertThat(roundtrippedSubscription).isEqualTo(subscription)
     }
 }

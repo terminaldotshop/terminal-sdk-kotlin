@@ -404,6 +404,30 @@ private constructor(
         validated = true
     }
 
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: TerminalInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    internal fun validity(): Int =
+        (if (id.asKnown() == null) 0 else 1) +
+            (if (city.asKnown() == null) 0 else 1) +
+            (if (country.asKnown() == null) 0 else 1) +
+            (if (name.asKnown() == null) 0 else 1) +
+            (if (street1.asKnown() == null) 0 else 1) +
+            (if (zip.asKnown() == null) 0 else 1) +
+            (if (phone.asKnown() == null) 0 else 1) +
+            (if (province.asKnown() == null) 0 else 1) +
+            (if (street2.asKnown() == null) 0 else 1)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
