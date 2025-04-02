@@ -39,9 +39,9 @@ internal class CardServiceAsyncTest {
                 .build()
         val cardServiceAsync = client.card()
 
-        val card = cardServiceAsync.list()
+        val cards = cardServiceAsync.list()
 
-        card.validate()
+        cards.validate()
     }
 
     @Test

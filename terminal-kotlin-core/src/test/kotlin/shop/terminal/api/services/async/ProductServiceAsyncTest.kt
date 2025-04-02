@@ -20,9 +20,9 @@ internal class ProductServiceAsyncTest {
                 .build()
         val productServiceAsync = client.product()
 
-        val product = productServiceAsync.list()
+        val products = productServiceAsync.list()
 
-        product.validate()
+        products.validate()
     }
 
     @Test

@@ -57,9 +57,9 @@ internal class SubscriptionServiceTest {
                 .build()
         val subscriptionService = client.subscription()
 
-        val subscription = subscriptionService.list()
+        val subscriptions = subscriptionService.list()
 
-        subscription.validate()
+        subscriptions.validate()
     }
 
     @Test
