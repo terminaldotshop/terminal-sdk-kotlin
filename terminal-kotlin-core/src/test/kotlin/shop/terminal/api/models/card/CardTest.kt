@@ -2,8 +2,10 @@
 
 package shop.terminal.api.models.card
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import shop.terminal.api.core.jsonMapper
 
 internal class CardTest {
 
@@ -22,5 +24,22 @@ internal class CardTest {
         assertThat(card.expiration())
             .isEqualTo(Card.Expiration.builder().month(12L).year(2023L).build())
         assertThat(card.last4()).isEqualTo("1234")
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val card =
+            Card.builder()
+                .id("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                .brand("Visa")
+                .expiration(Card.Expiration.builder().month(12L).year(2023L).build())
+                .last4("1234")
+                .build()
+
+        val roundtrippedCard =
+            jsonMapper.readValue(jsonMapper.writeValueAsString(card), jacksonTypeRef<Card>())
+
+        assertThat(roundtrippedCard).isEqualTo(card)
     }
 }

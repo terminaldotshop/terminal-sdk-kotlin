@@ -145,6 +145,21 @@ private constructor(
         validated = true
     }
 
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: TerminalInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    internal fun validity(): Int = (data.asKnown()?.validity() ?: 0)
+
     /** Initial app data. */
     class Data
     private constructor(
@@ -683,11 +698,37 @@ private constructor(
             orders().forEach { it.validate() }
             products().forEach { it.validate() }
             profile().validate()
-            region()
+            region().validate()
             subscriptions().forEach { it.validate() }
             tokens().forEach { it.validate() }
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: TerminalInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            (addresses.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+                (apps.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+                (cards.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+                (cart.asKnown()?.validity() ?: 0) +
+                (orders.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+                (products.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+                (profile.asKnown()?.validity() ?: 0) +
+                (region.asKnown()?.validity() ?: 0) +
+                (subscriptions.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+                (tokens.asKnown()?.sumOf { it.validity().toInt() } ?: 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
