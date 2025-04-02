@@ -56,7 +56,7 @@ import shop.terminal.api.models.product.ProductListResponse
 // Configures using the `TERMINAL_BEARER_TOKEN` environment variable
 val client: TerminalClient = TerminalOkHttpClient.fromEnv()
 
-val product: ProductListResponse = client.product().list()
+val products: ProductListResponse = client.product().list()
 ```
 
 ## Client configuration
@@ -132,7 +132,7 @@ import shop.terminal.api.models.product.ProductListResponse
 // Configures using the `TERMINAL_BEARER_TOKEN` environment variable
 val client: TerminalClient = TerminalOkHttpClient.fromEnv()
 
-val product: ProductListResponse = client.async().product().list()
+val products: ProductListResponse = client.async().product().list()
 ```
 
 Or create an asynchronous client from the beginning:
@@ -146,7 +146,7 @@ import shop.terminal.api.models.product.ProductListResponse
 // Configures using the `TERMINAL_BEARER_TOKEN` environment variable
 val client: TerminalClientAsync = TerminalOkHttpClientAsync.fromEnv()
 
-val product: ProductListResponse = client.product().list()
+val products: ProductListResponse = client.product().list()
 ```
 
 The asynchronous client supports the same options as the synchronous one, except most methods are [suspending](https://kotlinlang.org/docs/coroutines-guide.html).
@@ -163,10 +163,10 @@ import shop.terminal.api.core.http.HttpResponseFor
 import shop.terminal.api.models.product.ProductListParams
 import shop.terminal.api.models.product.ProductListResponse
 
-val product: HttpResponseFor<ProductListResponse> = client.product().withRawResponse().list()
+val products: HttpResponseFor<ProductListResponse> = client.product().withRawResponse().list()
 
-val statusCode: Int = product.statusCode()
-val headers: Headers = product.headers()
+val statusCode: Int = products.statusCode()
+val headers: Headers = products.headers()
 ```
 
 You can still deserialize the response into an instance of a Kotlin class if needed:
@@ -174,7 +174,7 @@ You can still deserialize the response into an instance of a Kotlin class if nee
 ```kotlin
 import shop.terminal.api.models.product.ProductListResponse
 
-val parsedProduct: ProductListResponse = product.parse()
+val parsedProducts: ProductListResponse = products.parse()
 ```
 
 ## Error handling
@@ -254,7 +254,7 @@ To set a custom timeout, configure the method call using the `timeout` method:
 import shop.terminal.api.models.product.ProductListParams
 import shop.terminal.api.models.product.ProductListResponse
 
-val product: ProductListResponse = client.product().list(RequestOptions.builder().timeout(Duration.ofSeconds(30)).build())
+val products: ProductListResponse = client.product().list(RequestOptions.builder().timeout(Duration.ofSeconds(30)).build())
 ```
 
 Or configure the default for all method calls at the client level:
@@ -422,7 +422,7 @@ If you would prefer to check that the response is completely well-typed upfront,
 ```kotlin
 import shop.terminal.api.models.product.ProductListResponse
 
-val product: ProductListResponse = client.product().list(params).validate()
+val products: ProductListResponse = client.product().list(params).validate()
 ```
 
 Or configure the method call to validate the response using the `responseValidation` method:
@@ -431,7 +431,7 @@ Or configure the method call to validate the response using the `responseValidat
 import shop.terminal.api.models.product.ProductListParams
 import shop.terminal.api.models.product.ProductListResponse
 
-val product: ProductListResponse = client.product().list(RequestOptions.builder().responseValidation(true).build())
+val products: ProductListResponse = client.product().list(RequestOptions.builder().responseValidation(true).build())
 ```
 
 Or configure the default for all method calls at the client level:

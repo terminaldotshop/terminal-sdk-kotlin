@@ -50,9 +50,9 @@ internal class OrderServiceTest {
                 .build()
         val orderService = client.order()
 
-        val order = orderService.list()
+        val orders = orderService.list()
 
-        order.validate()
+        orders.validate()
     }
 
     @Test

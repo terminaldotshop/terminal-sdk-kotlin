@@ -42,9 +42,9 @@ internal class AppServiceTest {
                 .build()
         val appService = client.app()
 
-        val app = appService.list()
+        val apps = appService.list()
 
-        app.validate()
+        apps.validate()
     }
 
     @Test

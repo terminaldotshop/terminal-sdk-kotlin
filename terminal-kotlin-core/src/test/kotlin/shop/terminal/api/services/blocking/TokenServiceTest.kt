@@ -35,9 +35,9 @@ internal class TokenServiceTest {
                 .build()
         val tokenService = client.token()
 
-        val token = tokenService.list()
+        val tokens = tokenService.list()
 
-        token.validate()
+        tokens.validate()
     }
 
     @Test
