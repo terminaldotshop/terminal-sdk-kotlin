@@ -39,9 +39,9 @@ internal class CardServiceTest {
                 .build()
         val cardService = client.card()
 
-        val card = cardService.list()
+        val cards = cardService.list()
 
-        card.validate()
+        cards.validate()
     }
 
     @Test

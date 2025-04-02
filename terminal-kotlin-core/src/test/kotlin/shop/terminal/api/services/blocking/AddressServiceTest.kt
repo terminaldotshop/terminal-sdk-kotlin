@@ -48,9 +48,9 @@ internal class AddressServiceTest {
                 .build()
         val addressService = client.address()
 
-        val address = addressService.list()
+        val addresses = addressService.list()
 
-        address.validate()
+        addresses.validate()
     }
 
     @Test

@@ -50,9 +50,9 @@ internal class OrderServiceAsyncTest {
                 .build()
         val orderServiceAsync = client.order()
 
-        val order = orderServiceAsync.list()
+        val orders = orderServiceAsync.list()
 
-        order.validate()
+        orders.validate()
     }
 
     @Test
