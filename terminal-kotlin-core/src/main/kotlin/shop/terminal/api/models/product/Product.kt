@@ -363,10 +363,32 @@ private constructor(
         name()
         variants().forEach { it.validate() }
         order()
-        subscription()
+        subscription()?.validate()
         tags()?.validate()
         validated = true
     }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: TerminalInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    internal fun validity(): Int =
+        (if (id.asKnown() == null) 0 else 1) +
+            (if (description.asKnown() == null) 0 else 1) +
+            (if (name.asKnown() == null) 0 else 1) +
+            (variants.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (if (order.asKnown() == null) 0 else 1) +
+            (subscription.asKnown()?.validity() ?: 0) +
+            (tags.asKnown()?.validity() ?: 0)
 
     /** Whether the product must be or can be subscribed to. */
     class Subscription @JsonCreator private constructor(private val value: JsonField<String>) :
@@ -456,6 +478,33 @@ private constructor(
          */
         fun asString(): String =
             _value().asString() ?: throw TerminalInvalidDataException("Value is not a String")
+
+        private var validated: Boolean = false
+
+        fun validate(): Subscription = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: TerminalInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -695,6 +744,27 @@ private constructor(
             marketNa()
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: TerminalInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            (if (app.asKnown() == null) 0 else 1) +
+                (if (color.asKnown() == null) 0 else 1) +
+                (if (featured.asKnown() == null) 0 else 1) +
+                (if (marketEu.asKnown() == null) 0 else 1) +
+                (if (marketNa.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {

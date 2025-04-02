@@ -22,6 +22,7 @@ import shop.terminal.api.core.ExcludeMissing
 import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
 import shop.terminal.api.core.JsonValue
+import shop.terminal.api.core.allMaxBy
 import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.getOrThrow
 import shop.terminal.api.errors.TerminalInvalidDataException
@@ -366,6 +367,28 @@ private constructor(
         validated = true
     }
 
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: TerminalInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    internal fun validity(): Int =
+        (if (id.asKnown() == null) 0 else 1) +
+            (if (addressId.asKnown() == null) 0 else 1) +
+            (if (cardId.asKnown() == null) 0 else 1) +
+            (if (productVariantId.asKnown() == null) 0 else 1) +
+            (if (quantity.asKnown() == null) 0 else 1) +
+            (if (next.asKnown() == null) 0 else 1) +
+            (schedule.asKnown()?.validity() ?: 0)
+
     /** Schedule of the subscription. */
     @JsonDeserialize(using = Schedule.Deserializer::class)
     @JsonSerialize(using = Schedule.Serializer::class)
@@ -390,13 +413,12 @@ private constructor(
 
         fun _json(): JsonValue? = _json
 
-        fun <T> accept(visitor: Visitor<T>): T {
-            return when {
+        fun <T> accept(visitor: Visitor<T>): T =
+            when {
                 fixed != null -> visitor.visitFixed(fixed)
                 weekly != null -> visitor.visitWeekly(weekly)
                 else -> visitor.unknown(_json)
             }
-        }
 
         private var validated: Boolean = false
 
@@ -418,6 +440,31 @@ private constructor(
             )
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: TerminalInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            accept(
+                object : Visitor<Int> {
+                    override fun visitFixed(fixed: Fixed) = fixed.validity()
+
+                    override fun visitWeekly(weekly: Weekly) = weekly.validity()
+
+                    override fun unknown(json: JsonValue?) = 0
+                }
+            )
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -473,16 +520,28 @@ private constructor(
             override fun ObjectCodec.deserialize(node: JsonNode): Schedule {
                 val json = JsonValue.fromJsonNode(node)
 
-                tryDeserialize(node, jacksonTypeRef<Fixed>()) { it.validate() }
-                    ?.let {
-                        return Schedule(fixed = it, _json = json)
-                    }
-                tryDeserialize(node, jacksonTypeRef<Weekly>()) { it.validate() }
-                    ?.let {
-                        return Schedule(weekly = it, _json = json)
-                    }
-
-                return Schedule(_json = json)
+                val bestMatches =
+                    sequenceOf(
+                            tryDeserialize(node, jacksonTypeRef<Fixed>())?.let {
+                                Schedule(fixed = it, _json = json)
+                            },
+                            tryDeserialize(node, jacksonTypeRef<Weekly>())?.let {
+                                Schedule(weekly = it, _json = json)
+                            },
+                        )
+                        .filterNotNull()
+                        .allMaxBy { it.validity() }
+                        .toList()
+                return when (bestMatches.size) {
+                    // This can happen if what we're deserializing is completely incompatible with
+                    // all the possible variants (e.g. deserializing from boolean).
+                    0 -> Schedule(_json = json)
+                    1 -> bestMatches.single()
+                    // If there's more than one match with the highest validity, then use the first
+                    // completely valid match, or simply the first match if none are completely
+                    // valid.
+                    else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
+                }
             }
         }
 
@@ -619,9 +678,25 @@ private constructor(
                     return@apply
                 }
 
-                type()
+                type().validate()
                 validated = true
             }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: TerminalInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            internal fun validity(): Int = (type.asKnown()?.validity() ?: 0)
 
             class Type @JsonCreator private constructor(private val value: JsonField<String>) :
                 Enum {
@@ -705,6 +780,33 @@ private constructor(
                 fun asString(): String =
                     _value().asString()
                         ?: throw TerminalInvalidDataException("Value is not a String")
+
+                private var validated: Boolean = false
+
+                fun validate(): Type = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: TerminalInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -893,9 +995,26 @@ private constructor(
                 }
 
                 interval()
-                type()
+                type().validate()
                 validated = true
             }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: TerminalInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            internal fun validity(): Int =
+                (if (interval.asKnown() == null) 0 else 1) + (type.asKnown()?.validity() ?: 0)
 
             class Type @JsonCreator private constructor(private val value: JsonField<String>) :
                 Enum {
@@ -979,6 +1098,33 @@ private constructor(
                 fun asString(): String =
                     _value().asString()
                         ?: throw TerminalInvalidDataException("Value is not a String")
+
+                private var validated: Boolean = false
+
+                fun validate(): Type = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: TerminalInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {

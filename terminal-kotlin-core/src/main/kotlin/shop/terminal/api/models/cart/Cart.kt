@@ -319,6 +319,27 @@ private constructor(
         validated = true
     }
 
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: TerminalInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    internal fun validity(): Int =
+        (amount.asKnown()?.validity() ?: 0) +
+            (items.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (if (subtotal.asKnown() == null) 0 else 1) +
+            (if (addressId.asKnown() == null) 0 else 1) +
+            (if (cardId.asKnown() == null) 0 else 1) +
+            (shipping.asKnown()?.validity() ?: 0)
+
     /** The subtotal and shipping amounts for the current user's cart. */
     class Amount
     private constructor(
@@ -508,6 +529,25 @@ private constructor(
             total()
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: TerminalInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            (if (subtotal.asKnown() == null) 0 else 1) +
+                (if (shipping.asKnown() == null) 0 else 1) +
+                (if (total.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -764,6 +804,26 @@ private constructor(
             validated = true
         }
 
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: TerminalInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            (if (id.asKnown() == null) 0 else 1) +
+                (if (productVariantId.asKnown() == null) 0 else 1) +
+                (if (quantity.asKnown() == null) 0 else 1) +
+                (if (subtotal.asKnown() == null) 0 else 1)
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
@@ -922,6 +982,23 @@ private constructor(
             timeframe()
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: TerminalInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            (if (service.asKnown() == null) 0 else 1) + (if (timeframe.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
