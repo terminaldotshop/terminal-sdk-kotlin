@@ -203,7 +203,7 @@ private constructor(
             )
     }
 
-    internal fun _body(): Map<String, JsonValue>? = additionalBodyProperties.ifEmpty { null }
+    fun _body(): Map<String, JsonValue>? = additionalBodyProperties.ifEmpty { null }
 
     fun _pathParam(index: Int): String =
         when (index) {
