@@ -75,6 +75,15 @@ private constructor(
             additionalQueryParams = cartSetAddressParams.additionalQueryParams.toBuilder()
         }
 
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [addressId]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
         /** ID of the shipping address to set for the current user's cart. */
         fun addressId(addressId: String) = apply { body.addressId(addressId) }
 
@@ -224,7 +233,7 @@ private constructor(
             )
     }
 
-    internal fun _body(): Body = body
+    fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 

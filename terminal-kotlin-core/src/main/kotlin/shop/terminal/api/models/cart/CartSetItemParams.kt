@@ -92,6 +92,16 @@ private constructor(
             additionalQueryParams = cartSetItemParams.additionalQueryParams.toBuilder()
         }
 
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [productVariantId]
+         * - [quantity]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
         /** ID of the product variant to add to the cart. */
         fun productVariantId(productVariantId: String) = apply {
             body.productVariantId(productVariantId)
@@ -257,7 +267,7 @@ private constructor(
             )
     }
 
-    internal fun _body(): Body = body
+    fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 

@@ -164,7 +164,7 @@ private constructor(
             )
     }
 
-    internal fun _body(): Subscription? = subscription
+    fun _body(): Subscription? = subscription
 
     override fun _headers(): Headers = additionalHeaders
 

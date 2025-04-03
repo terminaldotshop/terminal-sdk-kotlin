@@ -77,6 +77,15 @@ private constructor(
         }
 
         /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [token]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
+        /**
          * Stripe card token. Learn how to
          * [create one here](https://docs.stripe.com/api/tokens/create_card).
          */
@@ -223,7 +232,7 @@ private constructor(
             CardCreateParams(body.build(), additionalHeaders.build(), additionalQueryParams.build())
     }
 
-    internal fun _body(): Body = body
+    fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
