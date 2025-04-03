@@ -184,6 +184,20 @@ private constructor(
             additionalQueryParams = addressCreateParams.additionalQueryParams.toBuilder()
         }
 
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [city]
+         * - [country]
+         * - [name]
+         * - [street1]
+         * - [zip]
+         * - etc.
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
         /** City of the address. */
         fun city(city: String) = apply { body.city(city) }
 
@@ -413,7 +427,7 @@ private constructor(
             )
     }
 
-    internal fun _body(): Body = body
+    fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
