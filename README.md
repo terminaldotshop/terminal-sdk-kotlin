@@ -368,6 +368,20 @@ val complexValue: JsonValue = JsonValue.from(mapOf(
 ))
 ```
 
+Normally a `Builder` class's `build` method will throw [`IllegalStateException`](https://docs.oracle.com/javase/8/docs/api/java/lang/IllegalStateException.html) if any required parameter or property is unset.
+
+To forcibly omit a required parameter or property, pass [`JsonMissing`](terminal-kotlin-core/src/main/kotlin/shop/terminal/api/core/Values.kt):
+
+```kotlin
+import shop.terminal.api.core.JsonMissing
+import shop.terminal.api.models.product.ProductGetParams
+import shop.terminal.api.models.product.ProductListParams
+
+val params: ProductListParams = ProductGetParams.builder()
+    .id(JsonMissing.of())
+    .build()
+```
+
 ### Response properties
 
 To access undocumented response properties, call the `_additionalProperties()` method:
