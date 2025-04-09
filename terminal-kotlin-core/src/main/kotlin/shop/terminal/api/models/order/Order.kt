@@ -1262,6 +1262,9 @@ private constructor(
     private constructor(
         private val number: JsonField<String>,
         private val service: JsonField<String>,
+        private val status: JsonField<String>,
+        private val statusDetails: JsonField<String>,
+        private val statusUpdatedAt: JsonField<String>,
         private val url: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -1270,8 +1273,15 @@ private constructor(
         private constructor(
             @JsonProperty("number") @ExcludeMissing number: JsonField<String> = JsonMissing.of(),
             @JsonProperty("service") @ExcludeMissing service: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("status") @ExcludeMissing status: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("statusDetails")
+            @ExcludeMissing
+            statusDetails: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("statusUpdatedAt")
+            @ExcludeMissing
+            statusUpdatedAt: JsonField<String> = JsonMissing.of(),
             @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of(),
-        ) : this(number, service, url, mutableMapOf())
+        ) : this(number, service, status, statusDetails, statusUpdatedAt, url, mutableMapOf())
 
         /**
          * Tracking number of the order.
@@ -1288,6 +1298,30 @@ private constructor(
          *   the server responded with an unexpected value).
          */
         fun service(): String? = service.getNullable("service")
+
+        /**
+         * Current tracking status of the shipment.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun status(): String? = status.getNullable("status")
+
+        /**
+         * Additional details about the tracking status.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun statusDetails(): String? = statusDetails.getNullable("statusDetails")
+
+        /**
+         * When the tracking status was last updated.
+         *
+         * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun statusUpdatedAt(): String? = statusUpdatedAt.getNullable("statusUpdatedAt")
 
         /**
          * Tracking URL of the order.
@@ -1310,6 +1344,33 @@ private constructor(
          * Unlike [service], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("service") @ExcludeMissing fun _service(): JsonField<String> = service
+
+        /**
+         * Returns the raw JSON value of [status].
+         *
+         * Unlike [status], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("status") @ExcludeMissing fun _status(): JsonField<String> = status
+
+        /**
+         * Returns the raw JSON value of [statusDetails].
+         *
+         * Unlike [statusDetails], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("statusDetails")
+        @ExcludeMissing
+        fun _statusDetails(): JsonField<String> = statusDetails
+
+        /**
+         * Returns the raw JSON value of [statusUpdatedAt].
+         *
+         * Unlike [statusUpdatedAt], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("statusUpdatedAt")
+        @ExcludeMissing
+        fun _statusUpdatedAt(): JsonField<String> = statusUpdatedAt
 
         /**
          * Returns the raw JSON value of [url].
@@ -1341,12 +1402,18 @@ private constructor(
 
             private var number: JsonField<String> = JsonMissing.of()
             private var service: JsonField<String> = JsonMissing.of()
+            private var status: JsonField<String> = JsonMissing.of()
+            private var statusDetails: JsonField<String> = JsonMissing.of()
+            private var statusUpdatedAt: JsonField<String> = JsonMissing.of()
             private var url: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(tracking: Tracking) = apply {
                 number = tracking.number
                 service = tracking.service
+                status = tracking.status
+                statusDetails = tracking.statusDetails
+                statusUpdatedAt = tracking.statusUpdatedAt
                 url = tracking.url
                 additionalProperties = tracking.additionalProperties.toMutableMap()
             }
@@ -1374,6 +1441,47 @@ private constructor(
              * supported value.
              */
             fun service(service: JsonField<String>) = apply { this.service = service }
+
+            /** Current tracking status of the shipment. */
+            fun status(status: String) = status(JsonField.of(status))
+
+            /**
+             * Sets [Builder.status] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.status] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun status(status: JsonField<String>) = apply { this.status = status }
+
+            /** Additional details about the tracking status. */
+            fun statusDetails(statusDetails: String) = statusDetails(JsonField.of(statusDetails))
+
+            /**
+             * Sets [Builder.statusDetails] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.statusDetails] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun statusDetails(statusDetails: JsonField<String>) = apply {
+                this.statusDetails = statusDetails
+            }
+
+            /** When the tracking status was last updated. */
+            fun statusUpdatedAt(statusUpdatedAt: String) =
+                statusUpdatedAt(JsonField.of(statusUpdatedAt))
+
+            /**
+             * Sets [Builder.statusUpdatedAt] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.statusUpdatedAt] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun statusUpdatedAt(statusUpdatedAt: JsonField<String>) = apply {
+                this.statusUpdatedAt = statusUpdatedAt
+            }
 
             /** Tracking URL of the order. */
             fun url(url: String) = url(JsonField.of(url))
@@ -1412,7 +1520,15 @@ private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              */
             fun build(): Tracking =
-                Tracking(number, service, url, additionalProperties.toMutableMap())
+                Tracking(
+                    number,
+                    service,
+                    status,
+                    statusDetails,
+                    statusUpdatedAt,
+                    url,
+                    additionalProperties.toMutableMap(),
+                )
         }
 
         private var validated: Boolean = false
@@ -1424,6 +1540,9 @@ private constructor(
 
             number()
             service()
+            status()
+            statusDetails()
+            statusUpdatedAt()
             url()
             validated = true
         }
@@ -1445,6 +1564,9 @@ private constructor(
         internal fun validity(): Int =
             (if (number.asKnown() == null) 0 else 1) +
                 (if (service.asKnown() == null) 0 else 1) +
+                (if (status.asKnown() == null) 0 else 1) +
+                (if (statusDetails.asKnown() == null) 0 else 1) +
+                (if (statusUpdatedAt.asKnown() == null) 0 else 1) +
                 (if (url.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {
@@ -1452,17 +1574,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Tracking && number == other.number && service == other.service && url == other.url && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Tracking && number == other.number && service == other.service && status == other.status && statusDetails == other.statusDetails && statusUpdatedAt == other.statusUpdatedAt && url == other.url && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(number, service, url, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(number, service, status, statusDetails, statusUpdatedAt, url, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Tracking{number=$number, service=$service, url=$url, additionalProperties=$additionalProperties}"
+            "Tracking{number=$number, service=$service, status=$status, statusDetails=$statusDetails, statusUpdatedAt=$statusUpdatedAt, url=$url, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
