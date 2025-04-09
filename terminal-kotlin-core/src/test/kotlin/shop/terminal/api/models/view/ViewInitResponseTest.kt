@@ -163,7 +163,7 @@ internal class ViewInitResponseTest {
                                 )
                                 .build()
                         )
-                        .region(Region.EU)
+                        .region(Region.NA)
                         .addSubscription(
                             Subscription.builder()
                                 .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
@@ -328,7 +328,7 @@ internal class ViewInitResponseTest {
                             )
                             .build()
                     )
-                    .region(Region.EU)
+                    .region(Region.NA)
                     .addSubscription(
                         Subscription.builder()
                             .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
@@ -501,7 +501,7 @@ internal class ViewInitResponseTest {
                                 )
                                 .build()
                         )
-                        .region(Region.EU)
+                        .region(Region.NA)
                         .addSubscription(
                             Subscription.builder()
                                 .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
