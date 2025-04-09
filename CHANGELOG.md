@@ -1,5 +1,63 @@
 # Changelog
 
+## 2.0.0 (2025-04-09)
+
+Full Changelog: [v1.6.1...v2.0.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v1.6.1...v2.0.0)
+
+### ⚠ BREAKING CHANGES
+
+* **client:** refactor exception structure and methods ([#144](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/144))
+
+### Features
+
+* **api:** include shipment tracking info on order ([#162](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/162)) ([8b7f320](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/8b7f3208f5f98c67abe432c21826a5fd84d6ca9e))
+* **client:** add enum validation method ([a95f436](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/a95f436acd43b98ec56cc7969db87335f00e3431))
+* **client:** expose request body setter and getter ([#157](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/157)) ([4ede5bd](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/4ede5bd7dcc01b54ed366207ce53c926e2ad8103))
+* **client:** make datetime deserialization more lenient ([#156](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/156)) ([514a5b8](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/514a5b851c4c6027ee47626cf7f189b84ce6b692))
+* **client:** make union deserialization more robust ([#155](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/155)) ([a95f436](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/a95f436acd43b98ec56cc7969db87335f00e3431))
+* **client:** support a lower jackson version ([#149](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/149)) ([642a57d](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/642a57dce8e18246d332e27a8e9ff0012186a712))
+* **client:** throw on incompatible jackson version ([642a57d](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/642a57dce8e18246d332e27a8e9ff0012186a712))
+
+
+### Bug Fixes
+
+* **client:** don't call `validate()` during deserialization if we don't have to ([#151](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/151)) ([cbabcd5](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/cbabcd5a23b5fe9194fc478a19f5b57504528d51))
+* **client:** limit json deserialization coercion ([#152](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/152)) ([d77aa7e](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/d77aa7ea279b36452917dfa5e03fc0da34305de1))
+* **client:** map deserialization bug ([394d071](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/394d071c3f53c0ac657f61b043ff91be792c6ef3))
+* pluralize `list` response variables ([#154](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/154)) ([4e0fecc](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/4e0fecc26b39eb5e9e9fad90725bc860a34e7ad2))
+* remove trailing / for environments ([#153](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/153)) ([70d7774](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/70d7774984e70b0d8bbb9315ef4860c24e9a950c))
+
+
+### Performance Improvements
+
+* **client:** cached parsed type in `HttpResponseFor` ([#158](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/158)) ([fa5712d](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/fa5712da58ffe14a636e61b55e75b4abb3a0c1d8))
+
+
+### Chores
+
+* **api:** more examples ([#142](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/142)) ([865c486](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/865c4862913eff986af2c5634068076de0eef96d))
+* **client:** refactor exception structure and methods ([#144](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/144)) ([2dfb04c](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/2dfb04cd76ddfdba4eb3ede63fc839208f491ac5))
+* **client:** remove unnecessary json state from some query param classes ([a95f436](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/a95f436acd43b98ec56cc7969db87335f00e3431))
+* **internal:** add invalid json deserialization tests ([a95f436](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/a95f436acd43b98ec56cc7969db87335f00e3431))
+* **internal:** add json roundtripping tests ([a95f436](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/a95f436acd43b98ec56cc7969db87335f00e3431))
+* **internal:** add missing release please block ([#143](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/143)) ([cc32863](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/cc32863a557137982bac2b3c65b1699725c68d7a))
+* **internal:** delete unused methods and annotations ([#150](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/150)) ([394d071](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/394d071c3f53c0ac657f61b043ff91be792c6ef3))
+* **internal:** make multipart assertions more robust ([1bac7ac](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/1bac7acc9e9aef942a0be030309f5cfde1ac4acf))
+* **internal:** refactor enum query param serialization ([#140](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/140)) ([404cc0b](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/404cc0bc51dc16d6ded9370de7b3119d98ba0060))
+* **internal:** remove unnecessary `assertNotNull` calls ([1bac7ac](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/1bac7acc9e9aef942a0be030309f5cfde1ac4acf))
+* **internal:** remove unnecessary import ([#146](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/146)) ([a4b23e0](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/a4b23e097052afac70c7ac3a8b86967592ddf99a))
+* **tests:** improve enum examples ([#161](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/161)) ([14ec1dc](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/14ec1dc65d84e96099587f245e32bc249003a9ec))
+
+
+### Documentation
+
+* add comments to `JsonField` classes ([#159](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/159)) ([8a95934](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/8a95934aefee42bc20d145fa776341b27eada61a))
+* document how to forcibly omit required field ([5827e5e](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/5827e5eb1c742f0d5ed4288bc352d773d4b934b9))
+* minor readme tweak ([#148](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/148)) ([9443821](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/94438212f96e7ec9a17d7e459ca0a22576871689))
+* refine comments on multipart params ([#145](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/145)) ([1bac7ac](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/1bac7acc9e9aef942a0be030309f5cfde1ac4acf))
+* swap examples used in readme ([#160](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/160)) ([5827e5e](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/5827e5eb1c742f0d5ed4288bc352d773d4b934b9))
+* update readme exception docs ([#147](https://github.com/terminaldotshop/terminal-sdk-kotlin/issues/147)) ([142a8b2](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/142a8b2fd8d0e90f4808a5168298d08bb1243e4c))
+
 ## 1.6.1 (2025-03-19)
 
 Full Changelog: [v1.6.0...v1.6.1](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v1.6.0...v1.6.1)
