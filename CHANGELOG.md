@@ -1,5 +1,24 @@
 # Changelog
 
+## 2.1.0 (2025-04-10)
+
+Full Changelog: [v2.0.0...v2.1.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v2.0.0...v2.1.0)
+
+### Features
+
+* **client:** support setting base URL via env var ([39f358c](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/39f358c5584f013d8012b049136812512d358e7d))
+
+
+### Bug Fixes
+
+* **client:** bump to better jackson version ([e651123](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/e651123c791e78d4a2ff00497b36170998320eb5))
+
+
+### Chores
+
+* **internal:** expand CI branch coverage ([99c203a](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/99c203a467d310b18a214a2130da555d179aa713))
+* **internal:** reduce CI branch coverage ([143fa0e](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/143fa0ed7647d77624494332e74e1984f78c9f9a))
+
 ## 2.0.0 (2025-04-09)
 
 Full Changelog: [v1.6.1...v2.0.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v1.6.1...v2.0.0)
