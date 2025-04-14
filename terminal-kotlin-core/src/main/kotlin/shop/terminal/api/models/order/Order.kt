@@ -22,6 +22,7 @@ class Order
 private constructor(
     private val id: JsonField<String>,
     private val amount: JsonField<Amount>,
+    private val created: JsonField<String>,
     private val items: JsonField<List<Item>>,
     private val shipping: JsonField<Shipping>,
     private val tracking: JsonField<Tracking>,
@@ -33,11 +34,12 @@ private constructor(
     private constructor(
         @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
         @JsonProperty("amount") @ExcludeMissing amount: JsonField<Amount> = JsonMissing.of(),
+        @JsonProperty("created") @ExcludeMissing created: JsonField<String> = JsonMissing.of(),
         @JsonProperty("items") @ExcludeMissing items: JsonField<List<Item>> = JsonMissing.of(),
         @JsonProperty("shipping") @ExcludeMissing shipping: JsonField<Shipping> = JsonMissing.of(),
         @JsonProperty("tracking") @ExcludeMissing tracking: JsonField<Tracking> = JsonMissing.of(),
         @JsonProperty("index") @ExcludeMissing index: JsonField<Long> = JsonMissing.of(),
-    ) : this(id, amount, items, shipping, tracking, index, mutableMapOf())
+    ) : this(id, amount, created, items, shipping, tracking, index, mutableMapOf())
 
     /**
      * Unique object identifier. The format and length of IDs may change over time.
@@ -54,6 +56,14 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun amount(): Amount = amount.getRequired("amount")
+
+    /**
+     * Date the order was created.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun created(): String = created.getRequired("created")
 
     /**
      * Items in the order.
@@ -100,6 +110,13 @@ private constructor(
      * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Amount> = amount
+
+    /**
+     * Returns the raw JSON value of [created].
+     *
+     * Unlike [created], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("created") @ExcludeMissing fun _created(): JsonField<String> = created
 
     /**
      * Returns the raw JSON value of [items].
@@ -150,6 +167,7 @@ private constructor(
          * ```kotlin
          * .id()
          * .amount()
+         * .created()
          * .items()
          * .shipping()
          * .tracking()
@@ -163,6 +181,7 @@ private constructor(
 
         private var id: JsonField<String>? = null
         private var amount: JsonField<Amount>? = null
+        private var created: JsonField<String>? = null
         private var items: JsonField<MutableList<Item>>? = null
         private var shipping: JsonField<Shipping>? = null
         private var tracking: JsonField<Tracking>? = null
@@ -172,6 +191,7 @@ private constructor(
         internal fun from(order: Order) = apply {
             id = order.id
             amount = order.amount
+            created = order.created
             items = order.items.map { it.toMutableList() }
             shipping = order.shipping
             tracking = order.tracking
@@ -200,6 +220,17 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun amount(amount: JsonField<Amount>) = apply { this.amount = amount }
+
+        /** Date the order was created. */
+        fun created(created: String) = created(JsonField.of(created))
+
+        /**
+         * Sets [Builder.created] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.created] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun created(created: JsonField<String>) = apply { this.created = created }
 
         /** Items in the order. */
         fun items(items: List<Item>) = items(JsonField.of(items))
@@ -288,6 +319,7 @@ private constructor(
          * ```kotlin
          * .id()
          * .amount()
+         * .created()
          * .items()
          * .shipping()
          * .tracking()
@@ -299,6 +331,7 @@ private constructor(
             Order(
                 checkRequired("id", id),
                 checkRequired("amount", amount),
+                checkRequired("created", created),
                 checkRequired("items", items).map { it.toImmutable() },
                 checkRequired("shipping", shipping),
                 checkRequired("tracking", tracking),
@@ -316,6 +349,7 @@ private constructor(
 
         id()
         amount().validate()
+        created()
         items().forEach { it.validate() }
         shipping().validate()
         tracking().validate()
@@ -339,6 +373,7 @@ private constructor(
     internal fun validity(): Int =
         (if (id.asKnown() == null) 0 else 1) +
             (amount.asKnown()?.validity() ?: 0) +
+            (if (created.asKnown() == null) 0 else 1) +
             (items.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
             (shipping.asKnown()?.validity() ?: 0) +
             (tracking.asKnown()?.validity() ?: 0) +
@@ -1592,15 +1627,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Order && id == other.id && amount == other.amount && items == other.items && shipping == other.shipping && tracking == other.tracking && index == other.index && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Order && id == other.id && amount == other.amount && created == other.created && items == other.items && shipping == other.shipping && tracking == other.tracking && index == other.index && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, amount, items, shipping, tracking, index, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, amount, created, items, shipping, tracking, index, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Order{id=$id, amount=$amount, items=$items, shipping=$shipping, tracking=$tracking, index=$index, additionalProperties=$additionalProperties}"
+        "Order{id=$id, amount=$amount, created=$created, items=$items, shipping=$shipping, tracking=$tracking, index=$index, additionalProperties=$additionalProperties}"
 }
