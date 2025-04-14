@@ -30,6 +30,7 @@ internal class ViewInitResponseTest {
                                 .id("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
                                 .city("Anytown")
                                 .country("US")
+                                .created("2024-06-29T19:36:19.000Z")
                                 .name("John Doe")
                                 .street1("123 Main St")
                                 .zip("12345")
@@ -50,6 +51,7 @@ internal class ViewInitResponseTest {
                             Card.builder()
                                 .id("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
                                 .brand("Visa")
+                                .created("2024-06-29T19:36:19.000Z")
                                 .expiration(
                                     Card.Expiration.builder().month(12L).year(2023L).build()
                                 )
@@ -90,6 +92,7 @@ internal class ViewInitResponseTest {
                                 .amount(
                                     Order.Amount.builder().shipping(800L).subtotal(4400L).build()
                                 )
+                                .created("2024-06-29T19:36:19.000Z")
                                 .addItem(
                                     Order.Item.builder()
                                         .id("itm_XXXXXXXXXXXXXXXXXXXXXXXXX")
@@ -172,6 +175,7 @@ internal class ViewInitResponseTest {
                                 .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
                                 .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
                                 .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                                .created("2024-06-29T19:36:19.000Z")
                                 .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                                 .quantity(1L)
                                 .next("2025-02-01T19:36:19.000Z")
@@ -202,6 +206,7 @@ internal class ViewInitResponseTest {
                             .id("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
                             .city("Anytown")
                             .country("US")
+                            .created("2024-06-29T19:36:19.000Z")
                             .name("John Doe")
                             .street1("123 Main St")
                             .zip("12345")
@@ -222,6 +227,7 @@ internal class ViewInitResponseTest {
                         Card.builder()
                             .id("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
                             .brand("Visa")
+                            .created("2024-06-29T19:36:19.000Z")
                             .expiration(Card.Expiration.builder().month(12L).year(2023L).build())
                             .last4("1234")
                             .build()
@@ -258,6 +264,7 @@ internal class ViewInitResponseTest {
                         Order.builder()
                             .id("ord_XXXXXXXXXXXXXXXXXXXXXXXXX")
                             .amount(Order.Amount.builder().shipping(800L).subtotal(4400L).build())
+                            .created("2024-06-29T19:36:19.000Z")
                             .addItem(
                                 Order.Item.builder()
                                     .id("itm_XXXXXXXXXXXXXXXXXXXXXXXXX")
@@ -340,6 +347,7 @@ internal class ViewInitResponseTest {
                             .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
                             .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
                             .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                            .created("2024-06-29T19:36:19.000Z")
                             .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                             .quantity(1L)
                             .next("2025-02-01T19:36:19.000Z")
@@ -374,6 +382,7 @@ internal class ViewInitResponseTest {
                                 .id("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
                                 .city("Anytown")
                                 .country("US")
+                                .created("2024-06-29T19:36:19.000Z")
                                 .name("John Doe")
                                 .street1("123 Main St")
                                 .zip("12345")
@@ -394,6 +403,7 @@ internal class ViewInitResponseTest {
                             Card.builder()
                                 .id("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
                                 .brand("Visa")
+                                .created("2024-06-29T19:36:19.000Z")
                                 .expiration(
                                     Card.Expiration.builder().month(12L).year(2023L).build()
                                 )
@@ -434,6 +444,7 @@ internal class ViewInitResponseTest {
                                 .amount(
                                     Order.Amount.builder().shipping(800L).subtotal(4400L).build()
                                 )
+                                .created("2024-06-29T19:36:19.000Z")
                                 .addItem(
                                     Order.Item.builder()
                                         .id("itm_XXXXXXXXXXXXXXXXXXXXXXXXX")
@@ -516,6 +527,7 @@ internal class ViewInitResponseTest {
                                 .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
                                 .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
                                 .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                                .created("2024-06-29T19:36:19.000Z")
                                 .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                                 .quantity(1L)
                                 .next("2025-02-01T19:36:19.000Z")
