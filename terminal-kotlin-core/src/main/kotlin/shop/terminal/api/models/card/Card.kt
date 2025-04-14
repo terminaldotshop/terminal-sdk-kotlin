@@ -20,6 +20,7 @@ class Card
 private constructor(
     private val id: JsonField<String>,
     private val brand: JsonField<String>,
+    private val created: JsonField<String>,
     private val expiration: JsonField<Expiration>,
     private val last4: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -29,11 +30,12 @@ private constructor(
     private constructor(
         @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
         @JsonProperty("brand") @ExcludeMissing brand: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("created") @ExcludeMissing created: JsonField<String> = JsonMissing.of(),
         @JsonProperty("expiration")
         @ExcludeMissing
         expiration: JsonField<Expiration> = JsonMissing.of(),
         @JsonProperty("last4") @ExcludeMissing last4: JsonField<String> = JsonMissing.of(),
-    ) : this(id, brand, expiration, last4, mutableMapOf())
+    ) : this(id, brand, created, expiration, last4, mutableMapOf())
 
     /**
      * Unique object identifier. The format and length of IDs may change over time.
@@ -50,6 +52,14 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun brand(): String = brand.getRequired("brand")
+
+    /**
+     * Date the card was created.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun created(): String = created.getRequired("created")
 
     /**
      * Expiration of the card.
@@ -80,6 +90,13 @@ private constructor(
      * Unlike [brand], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("brand") @ExcludeMissing fun _brand(): JsonField<String> = brand
+
+    /**
+     * Returns the raw JSON value of [created].
+     *
+     * Unlike [created], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("created") @ExcludeMissing fun _created(): JsonField<String> = created
 
     /**
      * Returns the raw JSON value of [expiration].
@@ -118,6 +135,7 @@ private constructor(
          * ```kotlin
          * .id()
          * .brand()
+         * .created()
          * .expiration()
          * .last4()
          * ```
@@ -130,6 +148,7 @@ private constructor(
 
         private var id: JsonField<String>? = null
         private var brand: JsonField<String>? = null
+        private var created: JsonField<String>? = null
         private var expiration: JsonField<Expiration>? = null
         private var last4: JsonField<String>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -137,6 +156,7 @@ private constructor(
         internal fun from(card: Card) = apply {
             id = card.id
             brand = card.brand
+            created = card.created
             expiration = card.expiration
             last4 = card.last4
             additionalProperties = card.additionalProperties.toMutableMap()
@@ -163,6 +183,17 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun brand(brand: JsonField<String>) = apply { this.brand = brand }
+
+        /** Date the card was created. */
+        fun created(created: String) = created(JsonField.of(created))
+
+        /**
+         * Sets [Builder.created] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.created] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun created(created: JsonField<String>) = apply { this.created = created }
 
         /** Expiration of the card. */
         fun expiration(expiration: Expiration) = expiration(JsonField.of(expiration))
@@ -215,6 +246,7 @@ private constructor(
          * ```kotlin
          * .id()
          * .brand()
+         * .created()
          * .expiration()
          * .last4()
          * ```
@@ -225,6 +257,7 @@ private constructor(
             Card(
                 checkRequired("id", id),
                 checkRequired("brand", brand),
+                checkRequired("created", created),
                 checkRequired("expiration", expiration),
                 checkRequired("last4", last4),
                 additionalProperties.toMutableMap(),
@@ -240,6 +273,7 @@ private constructor(
 
         id()
         brand()
+        created()
         expiration().validate()
         last4()
         validated = true
@@ -261,6 +295,7 @@ private constructor(
     internal fun validity(): Int =
         (if (id.asKnown() == null) 0 else 1) +
             (if (brand.asKnown() == null) 0 else 1) +
+            (if (created.asKnown() == null) 0 else 1) +
             (expiration.asKnown()?.validity() ?: 0) +
             (if (last4.asKnown() == null) 0 else 1)
 
@@ -463,15 +498,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Card && id == other.id && brand == other.brand && expiration == other.expiration && last4 == other.last4 && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Card && id == other.id && brand == other.brand && created == other.created && expiration == other.expiration && last4 == other.last4 && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, brand, expiration, last4, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, brand, created, expiration, last4, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Card{id=$id, brand=$brand, expiration=$expiration, last4=$last4, additionalProperties=$additionalProperties}"
+        "Card{id=$id, brand=$brand, created=$created, expiration=$expiration, last4=$last4, additionalProperties=$additionalProperties}"
 }

@@ -17,6 +17,7 @@ internal class OrderListResponseTest {
                     Order.builder()
                         .id("ord_XXXXXXXXXXXXXXXXXXXXXXXXX")
                         .amount(Order.Amount.builder().shipping(800L).subtotal(4400L).build())
+                        .created("2024-06-29T19:36:19.000Z")
                         .addItem(
                             Order.Item.builder()
                                 .id("itm_XXXXXXXXXXXXXXXXXXXXXXXXX")
@@ -60,6 +61,7 @@ internal class OrderListResponseTest {
                 Order.builder()
                     .id("ord_XXXXXXXXXXXXXXXXXXXXXXXXX")
                     .amount(Order.Amount.builder().shipping(800L).subtotal(4400L).build())
+                    .created("2024-06-29T19:36:19.000Z")
                     .addItem(
                         Order.Item.builder()
                             .id("itm_XXXXXXXXXXXXXXXXXXXXXXXXX")
@@ -107,6 +109,7 @@ internal class OrderListResponseTest {
                     Order.builder()
                         .id("ord_XXXXXXXXXXXXXXXXXXXXXXXXX")
                         .amount(Order.Amount.builder().shipping(800L).subtotal(4400L).build())
+                        .created("2024-06-29T19:36:19.000Z")
                         .addItem(
                             Order.Item.builder()
                                 .id("itm_XXXXXXXXXXXXXXXXXXXXXXXXX")

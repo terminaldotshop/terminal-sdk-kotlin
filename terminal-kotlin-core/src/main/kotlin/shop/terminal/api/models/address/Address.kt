@@ -21,6 +21,7 @@ private constructor(
     private val id: JsonField<String>,
     private val city: JsonField<String>,
     private val country: JsonField<String>,
+    private val created: JsonField<String>,
     private val name: JsonField<String>,
     private val street1: JsonField<String>,
     private val zip: JsonField<String>,
@@ -35,13 +36,26 @@ private constructor(
         @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
         @JsonProperty("city") @ExcludeMissing city: JsonField<String> = JsonMissing.of(),
         @JsonProperty("country") @ExcludeMissing country: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("created") @ExcludeMissing created: JsonField<String> = JsonMissing.of(),
         @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
         @JsonProperty("street1") @ExcludeMissing street1: JsonField<String> = JsonMissing.of(),
         @JsonProperty("zip") @ExcludeMissing zip: JsonField<String> = JsonMissing.of(),
         @JsonProperty("phone") @ExcludeMissing phone: JsonField<String> = JsonMissing.of(),
         @JsonProperty("province") @ExcludeMissing province: JsonField<String> = JsonMissing.of(),
         @JsonProperty("street2") @ExcludeMissing street2: JsonField<String> = JsonMissing.of(),
-    ) : this(id, city, country, name, street1, zip, phone, province, street2, mutableMapOf())
+    ) : this(
+        id,
+        city,
+        country,
+        created,
+        name,
+        street1,
+        zip,
+        phone,
+        province,
+        street2,
+        mutableMapOf(),
+    )
 
     /**
      * Unique object identifier. The format and length of IDs may change over time.
@@ -66,6 +80,14 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun country(): String = country.getRequired("country")
+
+    /**
+     * Date the address was created.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun created(): String = created.getRequired("created")
 
     /**
      * The recipient's name.
@@ -137,6 +159,13 @@ private constructor(
     @JsonProperty("country") @ExcludeMissing fun _country(): JsonField<String> = country
 
     /**
+     * Returns the raw JSON value of [created].
+     *
+     * Unlike [created], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("created") @ExcludeMissing fun _created(): JsonField<String> = created
+
+    /**
      * Returns the raw JSON value of [name].
      *
      * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
@@ -200,6 +229,7 @@ private constructor(
          * .id()
          * .city()
          * .country()
+         * .created()
          * .name()
          * .street1()
          * .zip()
@@ -214,6 +244,7 @@ private constructor(
         private var id: JsonField<String>? = null
         private var city: JsonField<String>? = null
         private var country: JsonField<String>? = null
+        private var created: JsonField<String>? = null
         private var name: JsonField<String>? = null
         private var street1: JsonField<String>? = null
         private var zip: JsonField<String>? = null
@@ -226,6 +257,7 @@ private constructor(
             id = address.id
             city = address.city
             country = address.country
+            created = address.created
             name = address.name
             street1 = address.street1
             zip = address.zip
@@ -267,6 +299,17 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun country(country: JsonField<String>) = apply { this.country = country }
+
+        /** Date the address was created. */
+        fun created(created: String) = created(JsonField.of(created))
+
+        /**
+         * Sets [Builder.created] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.created] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun created(created: JsonField<String>) = apply { this.created = created }
 
         /** The recipient's name. */
         fun name(name: String) = name(JsonField.of(name))
@@ -363,6 +406,7 @@ private constructor(
          * .id()
          * .city()
          * .country()
+         * .created()
          * .name()
          * .street1()
          * .zip()
@@ -375,6 +419,7 @@ private constructor(
                 checkRequired("id", id),
                 checkRequired("city", city),
                 checkRequired("country", country),
+                checkRequired("created", created),
                 checkRequired("name", name),
                 checkRequired("street1", street1),
                 checkRequired("zip", zip),
@@ -395,6 +440,7 @@ private constructor(
         id()
         city()
         country()
+        created()
         name()
         street1()
         zip()
@@ -421,6 +467,7 @@ private constructor(
         (if (id.asKnown() == null) 0 else 1) +
             (if (city.asKnown() == null) 0 else 1) +
             (if (country.asKnown() == null) 0 else 1) +
+            (if (created.asKnown() == null) 0 else 1) +
             (if (name.asKnown() == null) 0 else 1) +
             (if (street1.asKnown() == null) 0 else 1) +
             (if (zip.asKnown() == null) 0 else 1) +
@@ -433,15 +480,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Address && id == other.id && city == other.city && country == other.country && name == other.name && street1 == other.street1 && zip == other.zip && phone == other.phone && province == other.province && street2 == other.street2 && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Address && id == other.id && city == other.city && country == other.country && created == other.created && name == other.name && street1 == other.street1 && zip == other.zip && phone == other.phone && province == other.province && street2 == other.street2 && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, city, country, name, street1, zip, phone, province, street2, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, city, country, created, name, street1, zip, phone, province, street2, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Address{id=$id, city=$city, country=$country, name=$name, street1=$street1, zip=$zip, phone=$phone, province=$province, street2=$street2, additionalProperties=$additionalProperties}"
+        "Address{id=$id, city=$city, country=$country, created=$created, name=$name, street1=$street1, zip=$zip, phone=$phone, province=$province, street2=$street2, additionalProperties=$additionalProperties}"
 }
