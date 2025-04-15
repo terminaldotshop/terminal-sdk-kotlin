@@ -15,7 +15,7 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 <!-- x-release-please-start-version -->
 
-The REST API documentation can be found on [terminal.shop](https://terminal.shop/docs). KDocs are also available on [javadoc.io](https://javadoc.io/doc/shop.terminal.api/terminal-kotlin/2.0.0).
+The REST API documentation can be found on [terminal.shop](https://terminal.shop/docs). KDocs are available on [javadoc.io](https://javadoc.io/doc/shop.terminal.api/terminal-kotlin/2.0.0).
 
 <!-- x-release-please-end -->
 
