@@ -5,15 +5,18 @@ import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import com.github.tomakehurst.wiremock.stubbing.Scenario
 import java.io.InputStream
+import java.time.Duration
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.parallel.ResourceLock
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import shop.terminal.api.client.okhttp.OkHttpClient
 import shop.terminal.api.core.RequestOptions
 
 @WireMockTest
+@ResourceLock("https://github.com/wiremock/wiremock/issues/169")
 internal class RetryingHttpClientTest {
 
     private var openResponseCount = 0
@@ -24,6 +27,7 @@ internal class RetryingHttpClientTest {
         val okHttpClient = OkHttpClient.builder().baseUrl(wmRuntimeInfo.httpBaseUrl).build()
         httpClient =
             object : HttpClient {
+
                 override fun execute(
                     request: HttpRequest,
                     requestOptions: RequestOptions,
@@ -39,6 +43,7 @@ internal class RetryingHttpClientTest {
                 private fun trackClose(response: HttpResponse): HttpResponse {
                     openResponseCount++
                     return object : HttpResponse {
+
                         private var isClosed = false
 
                         override fun statusCode(): Int = response.statusCode()
@@ -65,7 +70,7 @@ internal class RetryingHttpClientTest {
     @ValueSource(booleans = [false, true])
     fun execute(async: Boolean) {
         stubFor(post(urlPathEqualTo("/something")).willReturn(ok()))
-        val retryingClient = RetryingHttpClient.builder().httpClient(httpClient).build()
+        val retryingClient = retryingHttpClientBuilder().build()
 
         val response =
             retryingClient.execute(
@@ -87,11 +92,7 @@ internal class RetryingHttpClientTest {
                 .willReturn(ok())
         )
         val retryingClient =
-            RetryingHttpClient.builder()
-                .httpClient(httpClient)
-                .maxRetries(2)
-                .idempotencyHeader("X-Some-Header")
-                .build()
+            retryingHttpClientBuilder().maxRetries(2).idempotencyHeader("X-Some-Header").build()
 
         val response =
             retryingClient.execute(
@@ -133,8 +134,7 @@ internal class RetryingHttpClientTest {
                 .willReturn(ok())
                 .willSetStateTo("COMPLETED")
         )
-        val retryingClient =
-            RetryingHttpClient.builder().httpClient(httpClient).maxRetries(2).build()
+        val retryingClient = retryingHttpClientBuilder().maxRetries(2).build()
 
         val response =
             retryingClient.execute(
@@ -180,8 +180,7 @@ internal class RetryingHttpClientTest {
                 .willReturn(ok())
                 .willSetStateTo("COMPLETED")
         )
-        val retryingClient =
-            RetryingHttpClient.builder().httpClient(httpClient).maxRetries(2).build()
+        val retryingClient = retryingHttpClientBuilder().maxRetries(2).build()
 
         val response =
             retryingClient.execute(
@@ -219,8 +218,7 @@ internal class RetryingHttpClientTest {
                 .willReturn(ok())
                 .willSetStateTo("COMPLETED")
         )
-        val retryingClient =
-            RetryingHttpClient.builder().httpClient(httpClient).maxRetries(1).build()
+        val retryingClient = retryingHttpClientBuilder().maxRetries(1).build()
 
         val response =
             retryingClient.execute(
@@ -232,6 +230,19 @@ internal class RetryingHttpClientTest {
         verify(2, postRequestedFor(urlPathEqualTo("/something")))
         assertNoResponseLeaks()
     }
+
+    private fun retryingHttpClientBuilder() =
+        RetryingHttpClient.builder()
+            .httpClient(httpClient)
+            // Use a no-op `Sleeper` to make the test fast.
+            .sleeper(
+                object : RetryingHttpClient.Sleeper {
+
+                    override fun sleep(duration: Duration) {}
+
+                    override suspend fun sleepAsync(duration: Duration) {}
+                }
+            )
 
     private fun HttpClient.execute(request: HttpRequest, async: Boolean): HttpResponse =
         if (async) runBlocking { executeAsync(request) } else execute(request)
