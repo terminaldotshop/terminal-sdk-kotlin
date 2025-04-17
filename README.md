@@ -316,6 +316,42 @@ val client: TerminalClient = TerminalOkHttpClient.builder()
     .build()
 ```
 
+### Custom HTTP client
+
+The SDK consists of three artifacts:
+
+- `terminal-kotlin-core`
+  - Contains core SDK logic
+  - Does not depend on [OkHttp](https://square.github.io/okhttp)
+  - Exposes [`TerminalClient`](terminal-kotlin-core/src/main/kotlin/shop/terminal/api/client/TerminalClient.kt), [`TerminalClientAsync`](terminal-kotlin-core/src/main/kotlin/shop/terminal/api/client/TerminalClientAsync.kt), [`TerminalClientImpl`](terminal-kotlin-core/src/main/kotlin/shop/terminal/api/client/TerminalClientImpl.kt), and [`TerminalClientAsyncImpl`](terminal-kotlin-core/src/main/kotlin/shop/terminal/api/client/TerminalClientAsyncImpl.kt), all of which can work with any HTTP client
+- `terminal-kotlin-client-okhttp`
+  - Depends on [OkHttp](https://square.github.io/okhttp)
+  - Exposes [`TerminalOkHttpClient`](terminal-kotlin-client-okhttp/src/main/kotlin/shop/terminal/api/client/okhttp/TerminalOkHttpClient.kt) and [`TerminalOkHttpClientAsync`](terminal-kotlin-client-okhttp/src/main/kotlin/shop/terminal/api/client/okhttp/TerminalOkHttpClientAsync.kt), which provide a way to construct [`TerminalClientImpl`](terminal-kotlin-core/src/main/kotlin/shop/terminal/api/client/TerminalClientImpl.kt) and [`TerminalClientAsyncImpl`](terminal-kotlin-core/src/main/kotlin/shop/terminal/api/client/TerminalClientAsyncImpl.kt), respectively, using OkHttp
+- `terminal-kotlin`
+  - Depends on and exposes the APIs of both `terminal-kotlin-core` and `terminal-kotlin-client-okhttp`
+  - Does not have its own logic
+
+This structure allows replacing the SDK's default HTTP client without pulling in unnecessary dependencies.
+
+#### Customized [`OkHttpClient`](https://square.github.io/okhttp/3.x/okhttp/okhttp3/OkHttpClient.html)
+
+> [!TIP]
+> Try the available [network options](#network-options) before replacing the default client.
+
+To use a customized `OkHttpClient`:
+
+1. Replace your [`terminal-kotlin` dependency](#installation) with `terminal-kotlin-core`
+2. Copy `terminal-kotlin-client-okhttp`'s [`OkHttpClient`](terminal-kotlin-client-okhttp/src/main/kotlin/shop/terminal/api/client/okhttp/OkHttpClient.kt) class into your code and customize it
+3. Construct [`TerminalClientImpl`](terminal-kotlin-core/src/main/kotlin/shop/terminal/api/client/TerminalClientImpl.kt) or [`TerminalClientAsyncImpl`](terminal-kotlin-core/src/main/kotlin/shop/terminal/api/client/TerminalClientAsyncImpl.kt), similarly to [`TerminalOkHttpClient`](terminal-kotlin-client-okhttp/src/main/kotlin/shop/terminal/api/client/okhttp/TerminalOkHttpClient.kt) or [`TerminalOkHttpClientAsync`](terminal-kotlin-client-okhttp/src/main/kotlin/shop/terminal/api/client/okhttp/TerminalOkHttpClientAsync.kt), using your customized client
+
+### Completely custom HTTP client
+
+To use a completely custom HTTP client:
+
+1. Replace your [`terminal-kotlin` dependency](#installation) with `terminal-kotlin-core`
+2. Write a class that implements the [`HttpClient`](terminal-kotlin-core/src/main/kotlin/shop/terminal/api/core/http/HttpClient.kt) interface
+3. Construct [`TerminalClientImpl`](terminal-kotlin-core/src/main/kotlin/shop/terminal/api/client/TerminalClientImpl.kt) or [`TerminalClientAsyncImpl`](terminal-kotlin-core/src/main/kotlin/shop/terminal/api/client/TerminalClientAsyncImpl.kt), similarly to [`TerminalOkHttpClient`](terminal-kotlin-client-okhttp/src/main/kotlin/shop/terminal/api/client/okhttp/TerminalOkHttpClient.kt) or [`TerminalOkHttpClientAsync`](terminal-kotlin-client-okhttp/src/main/kotlin/shop/terminal/api/client/okhttp/TerminalOkHttpClientAsync.kt), using your new client class
+
 ## Undocumented API functionality
 
 The SDK is typed for convenient usage of the documented API. However, it also supports working with undocumented or not yet supported parts of the API.
