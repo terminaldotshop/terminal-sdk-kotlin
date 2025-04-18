@@ -13,6 +13,8 @@ import shop.terminal.api.models.subscription.SubscriptionGetParams
 import shop.terminal.api.models.subscription.SubscriptionGetResponse
 import shop.terminal.api.models.subscription.SubscriptionListParams
 import shop.terminal.api.models.subscription.SubscriptionListResponse
+import shop.terminal.api.models.subscription.SubscriptionUpdateParams
+import shop.terminal.api.models.subscription.SubscriptionUpdateResponse
 
 interface SubscriptionServiceAsync {
 
@@ -30,6 +32,12 @@ interface SubscriptionServiceAsync {
     /** @see [create] */
     suspend fun create(requestOptions: RequestOptions): SubscriptionCreateResponse =
         create(SubscriptionCreateParams.none(), requestOptions)
+
+    /** Update card, address, or interval for an existing subscription. */
+    suspend fun update(
+        params: SubscriptionUpdateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): SubscriptionUpdateResponse
 
     /** List the subscriptions associated with the current user. */
     suspend fun list(
@@ -75,6 +83,16 @@ interface SubscriptionServiceAsync {
             requestOptions: RequestOptions
         ): HttpResponseFor<SubscriptionCreateResponse> =
             create(SubscriptionCreateParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `put /subscription/{id}`, but is otherwise the same as
+         * [SubscriptionServiceAsync.update].
+         */
+        @MustBeClosed
+        suspend fun update(
+            params: SubscriptionUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionUpdateResponse>
 
         /**
          * Returns a raw HTTP response for `get /subscription`, but is otherwise the same as

@@ -10,6 +10,7 @@ import shop.terminal.api.models.subscription.Subscription
 import shop.terminal.api.models.subscription.SubscriptionCreateParams
 import shop.terminal.api.models.subscription.SubscriptionDeleteParams
 import shop.terminal.api.models.subscription.SubscriptionGetParams
+import shop.terminal.api.models.subscription.SubscriptionUpdateParams
 
 @ExtendWith(TestServerExtension::class)
 internal class SubscriptionServiceAsyncTest {
@@ -41,6 +42,33 @@ internal class SubscriptionServiceAsyncTest {
                                     .type(Subscription.Schedule.Weekly.Type.WEEKLY)
                                     .build()
                             )
+                            .build()
+                    )
+                    .build()
+            )
+
+        subscription.validate()
+    }
+
+    @Test
+    suspend fun update() {
+        val client =
+            TerminalOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val subscriptionServiceAsync = client.subscription()
+
+        val subscription =
+            subscriptionServiceAsync.update(
+                SubscriptionUpdateParams.builder()
+                    .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .schedule(
+                        SubscriptionUpdateParams.Schedule.Weekly.builder()
+                            .interval(3L)
+                            .type(SubscriptionUpdateParams.Schedule.Weekly.Type.WEEKLY)
                             .build()
                     )
                     .build()
