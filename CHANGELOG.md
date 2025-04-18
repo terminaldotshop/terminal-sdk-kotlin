@@ -1,5 +1,23 @@
 # Changelog
 
+## 2.2.0 (2025-04-18)
+
+Full Changelog: [v2.1.0...v2.2.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v2.1.0...v2.2.0)
+
+### Features
+
+* **api:** update subscription route ([ae3720b](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/ae3720b44cc8e87767103c9f9d28ccd9af4226f3))
+
+
+### Performance Improvements
+
+* **internal:** improve compilation+test speed ([88d805f](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/88d805ffa6aa73ec3d95f38fd43227043bb713b3))
+
+
+### Documentation
+
+* explain http client customization ([89f3ad9](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/89f3ad99ed3e21e3c517b847df78e8b57fa5fec6))
+
 ## 2.1.0 (2025-04-16)
 
 Full Changelog: [v2.0.0...v2.1.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v2.0.0...v2.1.0)
