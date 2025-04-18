@@ -23,6 +23,8 @@ import shop.terminal.api.models.subscription.SubscriptionGetParams
 import shop.terminal.api.models.subscription.SubscriptionGetResponse
 import shop.terminal.api.models.subscription.SubscriptionListParams
 import shop.terminal.api.models.subscription.SubscriptionListResponse
+import shop.terminal.api.models.subscription.SubscriptionUpdateParams
+import shop.terminal.api.models.subscription.SubscriptionUpdateResponse
 
 class SubscriptionServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     SubscriptionService {
@@ -39,6 +41,13 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
     ): SubscriptionCreateResponse =
         // post /subscription
         withRawResponse().create(params, requestOptions).parse()
+
+    override fun update(
+        params: SubscriptionUpdateParams,
+        requestOptions: RequestOptions,
+    ): SubscriptionUpdateResponse =
+        // put /subscription/{id}
+        withRawResponse().update(params, requestOptions).parse()
 
     override fun list(
         params: SubscriptionListParams,
@@ -86,6 +95,34 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
             return response.parseable {
                 response
                     .use { createHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val updateHandler: Handler<SubscriptionUpdateResponse> =
+            jsonHandler<SubscriptionUpdateResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
+
+        override fun update(
+            params: SubscriptionUpdateParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<SubscriptionUpdateResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .addPathSegments("subscription", params._pathParam(0))
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { updateHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()
