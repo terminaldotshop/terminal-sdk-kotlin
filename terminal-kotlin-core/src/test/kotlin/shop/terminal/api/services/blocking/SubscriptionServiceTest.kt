@@ -33,6 +33,7 @@ internal class SubscriptionServiceTest {
                             .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
                             .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
                             .created("2024-06-29T19:36:19.000Z")
+                            .price(2200L)
                             .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                             .quantity(1L)
                             .next("2025-02-01T19:36:19.000Z")
