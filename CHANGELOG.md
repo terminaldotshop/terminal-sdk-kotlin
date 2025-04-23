@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.3.0 (2025-04-23)
+
+Full Changelog: [v2.2.0...v2.3.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v2.2.0...v2.3.0)
+
+### Features
+
+* **api:** include price on subscriptions ([0af3996](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/0af39969ccbae7138c2ae18a3b1d5029b37c8fdd))
+
+
+### Chores
+
+* **ci:** add timeout thresholds for CI jobs ([9adaffa](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/9adaffaea7fc188a8b258cc7c99fbcdc13d65f94))
+
 ## 2.2.0 (2025-04-18)
 
 Full Changelog: [v2.1.0...v2.2.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v2.1.0...v2.2.0)
