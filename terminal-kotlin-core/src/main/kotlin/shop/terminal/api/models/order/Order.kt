@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
+import shop.terminal.api.core.Enum
 import shop.terminal.api.core.ExcludeMissing
 import shop.terminal.api.core.JsonField
 import shop.terminal.api.core.JsonMissing
@@ -1297,7 +1298,7 @@ private constructor(
     private constructor(
         private val number: JsonField<String>,
         private val service: JsonField<String>,
-        private val status: JsonField<String>,
+        private val status: JsonField<Status>,
         private val statusDetails: JsonField<String>,
         private val statusUpdatedAt: JsonField<String>,
         private val url: JsonField<String>,
@@ -1308,7 +1309,7 @@ private constructor(
         private constructor(
             @JsonProperty("number") @ExcludeMissing number: JsonField<String> = JsonMissing.of(),
             @JsonProperty("service") @ExcludeMissing service: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("status") @ExcludeMissing status: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("status") @ExcludeMissing status: JsonField<Status> = JsonMissing.of(),
             @JsonProperty("statusDetails")
             @ExcludeMissing
             statusDetails: JsonField<String> = JsonMissing.of(),
@@ -1340,7 +1341,7 @@ private constructor(
          * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
          */
-        fun status(): String? = status.getNullable("status")
+        fun status(): Status? = status.getNullable("status")
 
         /**
          * Additional details about the tracking status.
@@ -1385,7 +1386,7 @@ private constructor(
          *
          * Unlike [status], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("status") @ExcludeMissing fun _status(): JsonField<String> = status
+        @JsonProperty("status") @ExcludeMissing fun _status(): JsonField<Status> = status
 
         /**
          * Returns the raw JSON value of [statusDetails].
@@ -1437,7 +1438,7 @@ private constructor(
 
             private var number: JsonField<String> = JsonMissing.of()
             private var service: JsonField<String> = JsonMissing.of()
-            private var status: JsonField<String> = JsonMissing.of()
+            private var status: JsonField<Status> = JsonMissing.of()
             private var statusDetails: JsonField<String> = JsonMissing.of()
             private var statusUpdatedAt: JsonField<String> = JsonMissing.of()
             private var url: JsonField<String> = JsonMissing.of()
@@ -1478,16 +1479,16 @@ private constructor(
             fun service(service: JsonField<String>) = apply { this.service = service }
 
             /** Current tracking status of the shipment. */
-            fun status(status: String) = status(JsonField.of(status))
+            fun status(status: Status) = status(JsonField.of(status))
 
             /**
              * Sets [Builder.status] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.status] with a well-typed [String] value instead.
+             * You should usually call [Builder.status] with a well-typed [Status] value instead.
              * This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun status(status: JsonField<String>) = apply { this.status = status }
+            fun status(status: JsonField<Status>) = apply { this.status = status }
 
             /** Additional details about the tracking status. */
             fun statusDetails(statusDetails: String) = statusDetails(JsonField.of(statusDetails))
@@ -1575,7 +1576,7 @@ private constructor(
 
             number()
             service()
-            status()
+            status()?.validate()
             statusDetails()
             statusUpdatedAt()
             url()
@@ -1599,10 +1600,162 @@ private constructor(
         internal fun validity(): Int =
             (if (number.asKnown() == null) 0 else 1) +
                 (if (service.asKnown() == null) 0 else 1) +
-                (if (status.asKnown() == null) 0 else 1) +
+                (status.asKnown()?.validity() ?: 0) +
                 (if (statusDetails.asKnown() == null) 0 else 1) +
                 (if (statusUpdatedAt.asKnown() == null) 0 else 1) +
                 (if (url.asKnown() == null) 0 else 1)
+
+        /** Current tracking status of the shipment. */
+        class Status @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                val PRE_TRANSIT = of("PRE_TRANSIT")
+
+                val TRANSIT = of("TRANSIT")
+
+                val DELIVERED = of("DELIVERED")
+
+                val RETURNED = of("RETURNED")
+
+                val FAILURE = of("FAILURE")
+
+                val UNKNOWN = of("UNKNOWN")
+
+                fun of(value: String) = Status(JsonField.of(value))
+            }
+
+            /** An enum containing [Status]'s known values. */
+            enum class Known {
+                PRE_TRANSIT,
+                TRANSIT,
+                DELIVERED,
+                RETURNED,
+                FAILURE,
+                UNKNOWN,
+            }
+
+            /**
+             * An enum containing [Status]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [Status] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                PRE_TRANSIT,
+                TRANSIT,
+                DELIVERED,
+                RETURNED,
+                FAILURE,
+                UNKNOWN,
+                /**
+                 * An enum member indicating that [Status] was instantiated with an unknown value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    PRE_TRANSIT -> Value.PRE_TRANSIT
+                    TRANSIT -> Value.TRANSIT
+                    DELIVERED -> Value.DELIVERED
+                    RETURNED -> Value.RETURNED
+                    FAILURE -> Value.FAILURE
+                    UNKNOWN -> Value.UNKNOWN
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws TerminalInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    PRE_TRANSIT -> Known.PRE_TRANSIT
+                    TRANSIT -> Known.TRANSIT
+                    DELIVERED -> Known.DELIVERED
+                    RETURNED -> Known.RETURNED
+                    FAILURE -> Known.FAILURE
+                    UNKNOWN -> Known.UNKNOWN
+                    else -> throw TerminalInvalidDataException("Unknown Status: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws TerminalInvalidDataException if this class instance's value does not have the
+             *   expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString() ?: throw TerminalInvalidDataException("Value is not a String")
+
+            private var validated: Boolean = false
+
+            fun validate(): Status = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: TerminalInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is Status && value == other.value /* spotless:on */
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+        }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {

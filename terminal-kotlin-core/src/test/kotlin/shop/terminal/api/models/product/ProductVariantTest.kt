@@ -16,11 +16,28 @@ internal class ProductVariantTest {
                 .id("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                 .name("12oz")
                 .price(2200L)
+                .tags(
+                    ProductVariant.Tags.builder()
+                        .app("app")
+                        .marketEu(true)
+                        .marketGlobal(true)
+                        .marketNa(true)
+                        .build()
+                )
                 .build()
 
         assertThat(productVariant.id()).isEqualTo("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
         assertThat(productVariant.name()).isEqualTo("12oz")
         assertThat(productVariant.price()).isEqualTo(2200L)
+        assertThat(productVariant.tags())
+            .isEqualTo(
+                ProductVariant.Tags.builder()
+                    .app("app")
+                    .marketEu(true)
+                    .marketGlobal(true)
+                    .marketNa(true)
+                    .build()
+            )
     }
 
     @Test
@@ -31,6 +48,14 @@ internal class ProductVariantTest {
                 .id("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                 .name("12oz")
                 .price(2200L)
+                .tags(
+                    ProductVariant.Tags.builder()
+                        .app("app")
+                        .marketEu(true)
+                        .marketGlobal(true)
+                        .marketNa(true)
+                        .build()
+                )
                 .build()
 
         val roundtrippedProductVariant =
