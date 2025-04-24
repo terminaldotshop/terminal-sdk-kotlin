@@ -23,6 +23,7 @@ internal class ProductTest {
                         .id("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                         .name("12oz")
                         .price(2200L)
+                        .description("A detailed description of this variant")
                         .tags(
                             ProductVariant.Tags.builder()
                                 .app("app")
@@ -59,6 +60,7 @@ internal class ProductTest {
                     .id("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                     .name("12oz")
                     .price(2200L)
+                    .description("A detailed description of this variant")
                     .tags(
                         ProductVariant.Tags.builder()
                             .app("app")
@@ -99,6 +101,7 @@ internal class ProductTest {
                         .id("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                         .name("12oz")
                         .price(2200L)
+                        .description("A detailed description of this variant")
                         .tags(
                             ProductVariant.Tags.builder()
                                 .app("app")
