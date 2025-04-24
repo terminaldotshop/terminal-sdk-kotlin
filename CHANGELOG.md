@@ -1,5 +1,20 @@
 # Changelog
 
+## 2.4.0 (2025-04-24)
+
+Full Changelog: [v2.3.0...v2.4.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v2.3.0...v2.4.0)
+
+### Features
+
+* **api:** global region, typed tracking status, variant tags ([1c6430d](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/1c6430d9f7c9bbe5a53823c20a3bc61c12d66471))
+
+
+### Chores
+
+* **ci:** only use depot for staging repos ([2c572fa](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/2c572fa4daad2aca1eea994495b6009fc0ec4d7d))
+* **internal:** codegen related update ([e363d17](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/e363d17f2bc345ba929b1ad615f491d7ad7c2ea8))
+* **internal:** java 17 -&gt; 21 on ci ([5ba64a9](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/5ba64a95cd518321237ff0a4ed2e0a2e342e3d3b))
+
 ## 2.3.0 (2025-04-23)
 
 Full Changelog: [v2.2.0...v2.3.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v2.2.0...v2.3.0)
