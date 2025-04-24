@@ -43,7 +43,7 @@ internal class OrderGetResponseTest {
                             Order.Tracking.builder()
                                 .number("92346903470167000000000019")
                                 .service("USPS Ground Advantage")
-                                .status("DELIVERED")
+                                .status(Order.Tracking.Status.DELIVERED)
                                 .statusDetails("Your shipment has been delivered.")
                                 .statusUpdatedAt("2025-04-08T12:00:00.000Z")
                                 .url(
@@ -87,7 +87,7 @@ internal class OrderGetResponseTest {
                         Order.Tracking.builder()
                             .number("92346903470167000000000019")
                             .service("USPS Ground Advantage")
-                            .status("DELIVERED")
+                            .status(Order.Tracking.Status.DELIVERED)
                             .statusDetails("Your shipment has been delivered.")
                             .statusUpdatedAt("2025-04-08T12:00:00.000Z")
                             .url(
@@ -135,7 +135,7 @@ internal class OrderGetResponseTest {
                             Order.Tracking.builder()
                                 .number("92346903470167000000000019")
                                 .service("USPS Ground Advantage")
-                                .status("DELIVERED")
+                                .status(Order.Tracking.Status.DELIVERED)
                                 .statusDetails("Your shipment has been delivered.")
                                 .statusUpdatedAt("2025-04-08T12:00:00.000Z")
                                 .url(
