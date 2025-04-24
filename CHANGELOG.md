@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.5.0 (2025-04-24)
+
+Full Changelog: [v2.4.0...v2.5.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v2.4.0...v2.5.0)
+
+### Features
+
+* **api:** product variant descriptions ([6100039](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/6100039bdac0b46faf237bd3f72c536770773b0d))
+
 ## 2.4.0 (2025-04-24)
 
 Full Changelog: [v2.3.0...v2.4.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v2.3.0...v2.4.0)
