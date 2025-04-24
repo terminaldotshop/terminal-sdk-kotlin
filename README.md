@@ -2,8 +2,8 @@
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/shop.terminal.api/terminal-kotlin)](https://central.sonatype.com/artifact/shop.terminal.api/terminal-kotlin/2.4.0)
-[![javadoc](https://javadoc.io/badge2/shop.terminal.api/terminal-kotlin/2.4.0/javadoc.svg)](https://javadoc.io/doc/shop.terminal.api/terminal-kotlin/2.4.0)
+[![Maven Central](https://img.shields.io/maven-central/v/shop.terminal.api/terminal-kotlin)](https://central.sonatype.com/artifact/shop.terminal.api/terminal-kotlin/2.5.0)
+[![javadoc](https://javadoc.io/badge2/shop.terminal.api/terminal-kotlin/2.5.0/javadoc.svg)](https://javadoc.io/doc/shop.terminal.api/terminal-kotlin/2.5.0)
 
 <!-- x-release-please-end -->
 
@@ -15,7 +15,7 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 <!-- x-release-please-start-version -->
 
-The REST API documentation can be found on [terminal.shop](https://terminal.shop/docs). KDocs are available on [javadoc.io](https://javadoc.io/doc/shop.terminal.api/terminal-kotlin/2.4.0).
+The REST API documentation can be found on [terminal.shop](https://terminal.shop/docs). KDocs are available on [javadoc.io](https://javadoc.io/doc/shop.terminal.api/terminal-kotlin/2.5.0).
 
 <!-- x-release-please-end -->
 
@@ -26,7 +26,7 @@ The REST API documentation can be found on [terminal.shop](https://terminal.shop
 ### Gradle
 
 ```kotlin
-implementation("shop.terminal.api:terminal-kotlin:2.4.0")
+implementation("shop.terminal.api:terminal-kotlin:2.5.0")
 ```
 
 ### Maven
@@ -35,7 +35,7 @@ implementation("shop.terminal.api:terminal-kotlin:2.4.0")
 <dependency>
   <groupId>shop.terminal.api</groupId>
   <artifactId>terminal-kotlin</artifactId>
-  <version>2.4.0</version>
+  <version>2.5.0</version>
 </dependency>
 ```
 
