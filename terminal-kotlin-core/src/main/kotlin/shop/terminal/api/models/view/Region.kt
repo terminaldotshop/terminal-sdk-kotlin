@@ -25,6 +25,8 @@ class Region @JsonCreator private constructor(private val value: JsonField<Strin
 
         val NA = of("na")
 
+        val GLOBAL = of("global")
+
         fun of(value: String) = Region(JsonField.of(value))
     }
 
@@ -32,6 +34,7 @@ class Region @JsonCreator private constructor(private val value: JsonField<Strin
     enum class Known {
         EU,
         NA,
+        GLOBAL,
     }
 
     /**
@@ -46,6 +49,7 @@ class Region @JsonCreator private constructor(private val value: JsonField<Strin
     enum class Value {
         EU,
         NA,
+        GLOBAL,
         /** An enum member indicating that [Region] was instantiated with an unknown value. */
         _UNKNOWN,
     }
@@ -61,6 +65,7 @@ class Region @JsonCreator private constructor(private val value: JsonField<Strin
         when (this) {
             EU -> Value.EU
             NA -> Value.NA
+            GLOBAL -> Value.GLOBAL
             else -> Value._UNKNOWN
         }
 
@@ -76,6 +81,7 @@ class Region @JsonCreator private constructor(private val value: JsonField<Strin
         when (this) {
             EU -> Known.EU
             NA -> Known.NA
+            GLOBAL -> Known.GLOBAL
             else -> throw TerminalInvalidDataException("Unknown Region: $value")
         }
 
