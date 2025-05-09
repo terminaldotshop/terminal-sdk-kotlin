@@ -263,7 +263,6 @@ Requests time out after 1 minute by default.
 To set a custom timeout, configure the method call using the `timeout` method:
 
 ```kotlin
-import shop.terminal.api.models.product.ProductListParams
 import shop.terminal.api.models.product.ProductListResponse
 
 val products: ProductListResponse = client.product().list(RequestOptions.builder().timeout(Duration.ofSeconds(30)).build())
@@ -490,7 +489,6 @@ val products: ProductListResponse = client.product().list(params).validate()
 Or configure the method call to validate the response using the `responseValidation` method:
 
 ```kotlin
-import shop.terminal.api.models.product.ProductListParams
 import shop.terminal.api.models.product.ProductListResponse
 
 val products: ProductListResponse = client.product().list(RequestOptions.builder().responseValidation(true).build())
