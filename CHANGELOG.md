@@ -1,5 +1,28 @@
 # Changelog
 
+## 3.0.0 (2025-05-09)
+
+Full Changelog: [v2.5.0...v3.0.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v2.5.0...v3.0.0)
+
+### ⚠ BREAKING CHANGES
+
+* **client:** extract auto pagination to shared classes
+* **client:** **Migration:** - If you were referencing the `AutoPager` class on a specific `*Page` or `*PageAsync` type, then you should instead reference the shared `AutoPager` and `AutoPagerAsync` types, under the `core` package
+    - If you were referencing `getNextPage` or `getNextPageParams`:
+       - Swap to `nextPage()` and `nextPageParams()`
+       - Note that these both now return non-nullable types (use `hasNextPage()` before calling these, since they will throw if it's impossible to get another page)
+
+### Features
+
+* **client:** allow providing some params positionally ([ae20b5c](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/ae20b5c35bd4156811873b12b72777857684ce0d))
+* **client:** extract auto pagination to shared classes ([6f36edd](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/6f36edd7d76da0482c1c671e040a12740b693afb))
+
+
+### Chores
+
+* **internal:** remove flaky `-Xbackend-threads=0` option ([b824bf8](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/b824bf8da5b7f3d1fd43a716fef970a980b063ef))
+* **internal:** update java toolchain ([bb8987e](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/bb8987ef5a4396a6d78c12fb3f075cfa18560edc))
+
 ## 2.5.0 (2025-04-24)
 
 Full Changelog: [v2.4.0...v2.5.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v2.4.0...v2.5.0)

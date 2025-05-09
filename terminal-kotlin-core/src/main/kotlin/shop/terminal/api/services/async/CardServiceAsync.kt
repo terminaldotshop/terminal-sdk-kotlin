@@ -41,9 +41,20 @@ interface CardServiceAsync {
 
     /** Delete a credit card associated with the current user. */
     suspend fun delete(
+        id: String,
+        params: CardDeleteParams = CardDeleteParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CardDeleteResponse = delete(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see [delete] */
+    suspend fun delete(
         params: CardDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CardDeleteResponse
+
+    /** @see [delete] */
+    suspend fun delete(id: String, requestOptions: RequestOptions): CardDeleteResponse =
+        delete(id, CardDeleteParams.none(), requestOptions)
 
     /** Create a temporary URL for collecting credit card information for the current user. */
     suspend fun collect(
@@ -57,9 +68,20 @@ interface CardServiceAsync {
 
     /** Get a credit card by ID associated with the current user. */
     suspend fun get(
+        id: String,
+        params: CardGetParams = CardGetParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CardGetResponse = get(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see [get] */
+    suspend fun get(
         params: CardGetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CardGetResponse
+
+    /** @see [get] */
+    suspend fun get(id: String, requestOptions: RequestOptions): CardGetResponse =
+        get(id, CardGetParams.none(), requestOptions)
 
     /** A view of [CardServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -95,9 +117,25 @@ interface CardServiceAsync {
          */
         @MustBeClosed
         suspend fun delete(
+            id: String,
+            params: CardDeleteParams = CardDeleteParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CardDeleteResponse> =
+            delete(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see [delete] */
+        @MustBeClosed
+        suspend fun delete(
             params: CardDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CardDeleteResponse>
+
+        /** @see [delete] */
+        @MustBeClosed
+        suspend fun delete(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<CardDeleteResponse> = delete(id, CardDeleteParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /card/collect`, but is otherwise the same as
@@ -120,8 +158,23 @@ interface CardServiceAsync {
          */
         @MustBeClosed
         suspend fun get(
+            id: String,
+            params: CardGetParams = CardGetParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CardGetResponse> = get(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see [get] */
+        @MustBeClosed
+        suspend fun get(
             params: CardGetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CardGetResponse>
+
+        /** @see [get] */
+        @MustBeClosed
+        suspend fun get(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<CardGetResponse> = get(id, CardGetParams.none(), requestOptions)
     }
 }
