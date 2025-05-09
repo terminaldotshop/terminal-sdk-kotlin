@@ -29,9 +29,20 @@ interface ProductServiceAsync {
 
     /** Get a product by ID from the Terminal shop. */
     suspend fun get(
+        id: String,
+        params: ProductGetParams = ProductGetParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ProductGetResponse = get(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see [get] */
+    suspend fun get(
         params: ProductGetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ProductGetResponse
+
+    /** @see [get] */
+    suspend fun get(id: String, requestOptions: RequestOptions): ProductGetResponse =
+        get(id, ProductGetParams.none(), requestOptions)
 
     /**
      * A view of [ProductServiceAsync] that provides access to raw HTTP responses for each method.
@@ -59,8 +70,24 @@ interface ProductServiceAsync {
          */
         @MustBeClosed
         suspend fun get(
+            id: String,
+            params: ProductGetParams = ProductGetParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ProductGetResponse> =
+            get(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see [get] */
+        @MustBeClosed
+        suspend fun get(
             params: ProductGetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ProductGetResponse>
+
+        /** @see [get] */
+        @MustBeClosed
+        suspend fun get(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<ProductGetResponse> = get(id, ProductGetParams.none(), requestOptions)
     }
 }
