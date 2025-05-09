@@ -43,15 +43,37 @@ interface TokenServiceAsync {
 
     /** Delete the personal access token with the given ID. */
     suspend fun delete(
+        id: String,
+        params: TokenDeleteParams = TokenDeleteParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): TokenDeleteResponse = delete(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see [delete] */
+    suspend fun delete(
         params: TokenDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): TokenDeleteResponse
 
+    /** @see [delete] */
+    suspend fun delete(id: String, requestOptions: RequestOptions): TokenDeleteResponse =
+        delete(id, TokenDeleteParams.none(), requestOptions)
+
     /** Get the personal access token with the given ID. */
+    suspend fun get(
+        id: String,
+        params: TokenGetParams = TokenGetParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): TokenGetResponse = get(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see [get] */
     suspend fun get(
         params: TokenGetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): TokenGetResponse
+
+    /** @see [get] */
+    suspend fun get(id: String, requestOptions: RequestOptions): TokenGetResponse =
+        get(id, TokenGetParams.none(), requestOptions)
 
     /** A view of [TokenServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -92,9 +114,26 @@ interface TokenServiceAsync {
          */
         @MustBeClosed
         suspend fun delete(
+            id: String,
+            params: TokenDeleteParams = TokenDeleteParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<TokenDeleteResponse> =
+            delete(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see [delete] */
+        @MustBeClosed
+        suspend fun delete(
             params: TokenDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<TokenDeleteResponse>
+
+        /** @see [delete] */
+        @MustBeClosed
+        suspend fun delete(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<TokenDeleteResponse> =
+            delete(id, TokenDeleteParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /token/{id}`, but is otherwise the same as
@@ -102,8 +141,24 @@ interface TokenServiceAsync {
          */
         @MustBeClosed
         suspend fun get(
+            id: String,
+            params: TokenGetParams = TokenGetParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<TokenGetResponse> =
+            get(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see [get] */
+        @MustBeClosed
+        suspend fun get(
             params: TokenGetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<TokenGetResponse>
+
+        /** @see [get] */
+        @MustBeClosed
+        suspend fun get(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<TokenGetResponse> = get(id, TokenGetParams.none(), requestOptions)
     }
 }

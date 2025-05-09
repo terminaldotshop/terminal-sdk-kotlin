@@ -5,6 +5,7 @@ package shop.terminal.api.services.blocking
 import shop.terminal.api.core.ClientOptions
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.RequestOptions
+import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.handlers.errorHandler
 import shop.terminal.api.core.handlers.jsonHandler
 import shop.terminal.api.core.handlers.withErrorHandler
@@ -119,6 +120,9 @@ class AppServiceImpl internal constructor(private val clientOptions: ClientOptio
             params: AppDeleteParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<AppDeleteResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
@@ -146,6 +150,9 @@ class AppServiceImpl internal constructor(private val clientOptions: ClientOptio
             params: AppGetParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<AppGetResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)

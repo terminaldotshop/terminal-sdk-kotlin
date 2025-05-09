@@ -5,6 +5,7 @@ package shop.terminal.api.services.blocking
 import shop.terminal.api.core.ClientOptions
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.RequestOptions
+import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.handlers.errorHandler
 import shop.terminal.api.core.handlers.jsonHandler
 import shop.terminal.api.core.handlers.withErrorHandler
@@ -111,6 +112,9 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
             params: SubscriptionUpdateParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<SubscriptionUpdateResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -166,6 +170,9 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
             params: SubscriptionDeleteParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<SubscriptionDeleteResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
@@ -194,6 +201,9 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
             params: SubscriptionGetParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<SubscriptionGetResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)

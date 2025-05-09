@@ -29,9 +29,20 @@ interface ProductService {
 
     /** Get a product by ID from the Terminal shop. */
     fun get(
+        id: String,
+        params: ProductGetParams = ProductGetParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ProductGetResponse = get(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see [get] */
+    fun get(
         params: ProductGetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ProductGetResponse
+
+    /** @see [get] */
+    fun get(id: String, requestOptions: RequestOptions): ProductGetResponse =
+        get(id, ProductGetParams.none(), requestOptions)
 
     /** A view of [ProductService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -57,8 +68,22 @@ interface ProductService {
          */
         @MustBeClosed
         fun get(
+            id: String,
+            params: ProductGetParams = ProductGetParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ProductGetResponse> =
+            get(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see [get] */
+        @MustBeClosed
+        fun get(
             params: ProductGetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ProductGetResponse>
+
+        /** @see [get] */
+        @MustBeClosed
+        fun get(id: String, requestOptions: RequestOptions): HttpResponseFor<ProductGetResponse> =
+            get(id, ProductGetParams.none(), requestOptions)
     }
 }
