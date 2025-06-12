@@ -56,6 +56,7 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("product")
                     .build()
                     .prepare(clientOptions, params)
@@ -85,6 +86,7 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("product", params._pathParam(0))
                     .build()
                     .prepare(clientOptions, params)

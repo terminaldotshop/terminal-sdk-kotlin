@@ -56,6 +56,7 @@ class ProfileServiceImpl internal constructor(private val clientOptions: ClientO
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("profile")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -83,6 +84,7 @@ class ProfileServiceImpl internal constructor(private val clientOptions: ClientO
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("profile")
                     .build()
                     .prepare(clientOptions, params)

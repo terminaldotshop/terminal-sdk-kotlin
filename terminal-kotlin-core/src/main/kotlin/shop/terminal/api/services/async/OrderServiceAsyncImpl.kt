@@ -69,6 +69,7 @@ class OrderServiceAsyncImpl internal constructor(private val clientOptions: Clie
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("order")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -96,6 +97,7 @@ class OrderServiceAsyncImpl internal constructor(private val clientOptions: Clie
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("order")
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -125,6 +127,7 @@ class OrderServiceAsyncImpl internal constructor(private val clientOptions: Clie
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("order", params._pathParam(0))
                     .build()
                     .prepareAsync(clientOptions, params)
