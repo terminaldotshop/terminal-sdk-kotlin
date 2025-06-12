@@ -44,6 +44,7 @@ class ViewServiceImpl internal constructor(private val clientOptions: ClientOpti
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("view", "init")
                     .build()
                     .prepare(clientOptions, params)

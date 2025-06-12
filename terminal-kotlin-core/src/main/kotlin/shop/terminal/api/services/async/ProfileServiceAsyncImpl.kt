@@ -59,6 +59,7 @@ class ProfileServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("profile")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -86,6 +87,7 @@ class ProfileServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("profile")
                     .build()
                     .prepareAsync(clientOptions, params)
