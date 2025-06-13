@@ -37,6 +37,9 @@ class CartServiceAsyncImpl internal constructor(private val clientOptions: Clien
 
     override fun withRawResponse(): CartServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): CartServiceAsync =
+        CartServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun clear(
         params: CartClearParams,
         requestOptions: RequestOptions,
@@ -83,6 +86,13 @@ class CartServiceAsyncImpl internal constructor(private val clientOptions: Clien
         CartServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): CartServiceAsync.WithRawResponse =
+            CartServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val clearHandler: Handler<CartClearResponse> =
             jsonHandler<CartClearResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

@@ -32,6 +32,9 @@ class OrderServiceImpl internal constructor(private val clientOptions: ClientOpt
 
     override fun withRawResponse(): OrderService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): OrderService =
+        OrderServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun create(
         params: OrderCreateParams,
         requestOptions: RequestOptions,
@@ -51,6 +54,11 @@ class OrderServiceImpl internal constructor(private val clientOptions: ClientOpt
         OrderService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): OrderService.WithRawResponse =
+            OrderServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
 
         private val createHandler: Handler<OrderCreateResponse> =
             jsonHandler<OrderCreateResponse>(clientOptions.jsonMapper)

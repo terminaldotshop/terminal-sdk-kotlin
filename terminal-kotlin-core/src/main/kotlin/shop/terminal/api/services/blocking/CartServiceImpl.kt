@@ -36,6 +36,9 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
 
     override fun withRawResponse(): CartService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): CartService =
+        CartServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun clear(params: CartClearParams, requestOptions: RequestOptions): CartClearResponse =
         // delete /cart
         withRawResponse().clear(params, requestOptions).parse()
@@ -76,6 +79,11 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
         CartService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): CartService.WithRawResponse =
+            CartServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
 
         private val clearHandler: Handler<CartClearResponse> =
             jsonHandler<CartClearResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

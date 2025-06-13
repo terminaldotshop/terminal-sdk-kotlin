@@ -29,6 +29,9 @@ class ProductServiceAsyncImpl internal constructor(private val clientOptions: Cl
 
     override fun withRawResponse(): ProductServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ProductServiceAsync =
+        ProductServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun list(
         params: ProductListParams,
         requestOptions: RequestOptions,
@@ -47,6 +50,13 @@ class ProductServiceAsyncImpl internal constructor(private val clientOptions: Cl
         ProductServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): ProductServiceAsync.WithRawResponse =
+            ProductServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val listHandler: Handler<ProductListResponse> =
             jsonHandler<ProductListResponse>(clientOptions.jsonMapper)

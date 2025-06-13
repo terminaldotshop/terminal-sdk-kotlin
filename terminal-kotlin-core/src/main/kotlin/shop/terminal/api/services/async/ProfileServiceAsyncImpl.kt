@@ -29,6 +29,9 @@ class ProfileServiceAsyncImpl internal constructor(private val clientOptions: Cl
 
     override fun withRawResponse(): ProfileServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ProfileServiceAsync =
+        ProfileServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun update(
         params: ProfileUpdateParams,
         requestOptions: RequestOptions,
@@ -47,6 +50,13 @@ class ProfileServiceAsyncImpl internal constructor(private val clientOptions: Cl
         ProfileServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): ProfileServiceAsync.WithRawResponse =
+            ProfileServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val updateHandler: Handler<ProfileUpdateResponse> =
             jsonHandler<ProfileUpdateResponse>(clientOptions.jsonMapper)

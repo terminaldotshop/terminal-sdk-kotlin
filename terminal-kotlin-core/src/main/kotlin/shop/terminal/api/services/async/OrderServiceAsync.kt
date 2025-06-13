@@ -3,6 +3,7 @@
 package shop.terminal.api.services.async
 
 import com.google.errorprone.annotations.MustBeClosed
+import shop.terminal.api.core.ClientOptions
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.http.HttpResponseFor
 import shop.terminal.api.models.order.OrderCreateParams
@@ -18,6 +19,13 @@ interface OrderServiceAsync {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: (ClientOptions.Builder) -> Unit): OrderServiceAsync
 
     /** Create an order without a cart. The order will be placed immediately. */
     suspend fun create(
@@ -54,6 +62,15 @@ interface OrderServiceAsync {
 
     /** A view of [OrderServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): OrderServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /order`, but is otherwise the same as
