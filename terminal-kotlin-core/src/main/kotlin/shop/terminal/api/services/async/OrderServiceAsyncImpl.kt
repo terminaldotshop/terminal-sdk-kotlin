@@ -32,6 +32,9 @@ class OrderServiceAsyncImpl internal constructor(private val clientOptions: Clie
 
     override fun withRawResponse(): OrderServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): OrderServiceAsync =
+        OrderServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun create(
         params: OrderCreateParams,
         requestOptions: RequestOptions,
@@ -57,6 +60,13 @@ class OrderServiceAsyncImpl internal constructor(private val clientOptions: Clie
         OrderServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): OrderServiceAsync.WithRawResponse =
+            OrderServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val createHandler: Handler<OrderCreateResponse> =
             jsonHandler<OrderCreateResponse>(clientOptions.jsonMapper)

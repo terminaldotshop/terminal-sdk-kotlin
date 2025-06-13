@@ -34,6 +34,9 @@ class AddressServiceImpl internal constructor(private val clientOptions: ClientO
 
     override fun withRawResponse(): AddressService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): AddressService =
+        AddressServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun create(
         params: AddressCreateParams,
         requestOptions: RequestOptions,
@@ -63,6 +66,13 @@ class AddressServiceImpl internal constructor(private val clientOptions: ClientO
         AddressService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): AddressService.WithRawResponse =
+            AddressServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val createHandler: Handler<AddressCreateResponse> =
             jsonHandler<AddressCreateResponse>(clientOptions.jsonMapper)

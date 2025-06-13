@@ -34,6 +34,9 @@ class AppServiceAsyncImpl internal constructor(private val clientOptions: Client
 
     override fun withRawResponse(): AppServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): AppServiceAsync =
+        AppServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun create(
         params: AppCreateParams,
         requestOptions: RequestOptions,
@@ -63,6 +66,13 @@ class AppServiceAsyncImpl internal constructor(private val clientOptions: Client
         AppServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): AppServiceAsync.WithRawResponse =
+            AppServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val createHandler: Handler<AppCreateResponse> =
             jsonHandler<AppCreateResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

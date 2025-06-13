@@ -34,6 +34,9 @@ class TokenServiceImpl internal constructor(private val clientOptions: ClientOpt
 
     override fun withRawResponse(): TokenService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): TokenService =
+        TokenServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun create(
         params: TokenCreateParams,
         requestOptions: RequestOptions,
@@ -60,6 +63,11 @@ class TokenServiceImpl internal constructor(private val clientOptions: ClientOpt
         TokenService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): TokenService.WithRawResponse =
+            TokenServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
 
         private val createHandler: Handler<TokenCreateResponse> =
             jsonHandler<TokenCreateResponse>(clientOptions.jsonMapper)

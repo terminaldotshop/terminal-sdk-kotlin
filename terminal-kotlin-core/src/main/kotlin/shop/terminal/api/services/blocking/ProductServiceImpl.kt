@@ -29,6 +29,9 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
 
     override fun withRawResponse(): ProductService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ProductService =
+        ProductServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun list(
         params: ProductListParams,
         requestOptions: RequestOptions,
@@ -44,6 +47,13 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
         ProductService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): ProductService.WithRawResponse =
+            ProductServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val listHandler: Handler<ProductListResponse> =
             jsonHandler<ProductListResponse>(clientOptions.jsonMapper)

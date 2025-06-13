@@ -29,6 +29,9 @@ class ProfileServiceImpl internal constructor(private val clientOptions: ClientO
 
     override fun withRawResponse(): ProfileService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ProfileService =
+        ProfileServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun update(
         params: ProfileUpdateParams,
         requestOptions: RequestOptions,
@@ -44,6 +47,13 @@ class ProfileServiceImpl internal constructor(private val clientOptions: ClientO
         ProfileService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): ProfileService.WithRawResponse =
+            ProfileServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val updateHandler: Handler<ProfileUpdateResponse> =
             jsonHandler<ProfileUpdateResponse>(clientOptions.jsonMapper)

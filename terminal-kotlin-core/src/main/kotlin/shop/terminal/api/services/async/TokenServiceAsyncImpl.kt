@@ -34,6 +34,9 @@ class TokenServiceAsyncImpl internal constructor(private val clientOptions: Clie
 
     override fun withRawResponse(): TokenServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): TokenServiceAsync =
+        TokenServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun create(
         params: TokenCreateParams,
         requestOptions: RequestOptions,
@@ -66,6 +69,13 @@ class TokenServiceAsyncImpl internal constructor(private val clientOptions: Clie
         TokenServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): TokenServiceAsync.WithRawResponse =
+            TokenServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val createHandler: Handler<TokenCreateResponse> =
             jsonHandler<TokenCreateResponse>(clientOptions.jsonMapper)
