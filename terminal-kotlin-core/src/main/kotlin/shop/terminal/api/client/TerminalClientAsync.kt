@@ -2,6 +2,7 @@
 
 package shop.terminal.api.client
 
+import shop.terminal.api.core.ClientOptions
 import shop.terminal.api.services.async.AddressServiceAsync
 import shop.terminal.api.services.async.AppServiceAsync
 import shop.terminal.api.services.async.CardServiceAsync
@@ -43,6 +44,13 @@ interface TerminalClientAsync {
      */
     fun withRawResponse(): WithRawResponse
 
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: (ClientOptions.Builder) -> Unit): TerminalClientAsync
+
     fun product(): ProductServiceAsync
 
     fun profile(): ProfileServiceAsync
@@ -82,6 +90,15 @@ interface TerminalClientAsync {
      * A view of [TerminalClientAsync] that provides access to raw HTTP responses for each method.
      */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): TerminalClientAsync.WithRawResponse
 
         fun product(): ProductServiceAsync.WithRawResponse
 

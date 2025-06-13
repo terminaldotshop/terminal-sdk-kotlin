@@ -5,6 +5,7 @@ package shop.terminal.api.services.blocking
 import shop.terminal.api.core.ClientOptions
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.RequestOptions
+import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.handlers.errorHandler
 import shop.terminal.api.core.handlers.jsonHandler
 import shop.terminal.api.core.handlers.withErrorHandler
@@ -32,6 +33,9 @@ class AddressServiceImpl internal constructor(private val clientOptions: ClientO
     }
 
     override fun withRawResponse(): AddressService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): AddressService =
+        AddressServiceImpl(clientOptions.toBuilder().apply(modifier).build())
 
     override fun create(
         params: AddressCreateParams,
@@ -63,6 +67,13 @@ class AddressServiceImpl internal constructor(private val clientOptions: ClientO
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): AddressService.WithRawResponse =
+            AddressServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
+
         private val createHandler: Handler<AddressCreateResponse> =
             jsonHandler<AddressCreateResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
@@ -74,6 +85,7 @@ class AddressServiceImpl internal constructor(private val clientOptions: ClientO
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("address")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -102,6 +114,7 @@ class AddressServiceImpl internal constructor(private val clientOptions: ClientO
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("address")
                     .build()
                     .prepare(clientOptions, params)
@@ -126,9 +139,13 @@ class AddressServiceImpl internal constructor(private val clientOptions: ClientO
             params: AddressDeleteParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<AddressDeleteResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("address", params._pathParam(0))
                     .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
@@ -153,9 +170,13 @@ class AddressServiceImpl internal constructor(private val clientOptions: ClientO
             params: AddressGetParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<AddressGetResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("address", params._pathParam(0))
                     .build()
                     .prepare(clientOptions, params)

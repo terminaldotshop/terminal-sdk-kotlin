@@ -36,6 +36,9 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
 
     override fun withRawResponse(): CartService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): CartService =
+        CartServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun clear(params: CartClearParams, requestOptions: RequestOptions): CartClearResponse =
         // delete /cart
         withRawResponse().clear(params, requestOptions).parse()
@@ -77,6 +80,11 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): CartService.WithRawResponse =
+            CartServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
+
         private val clearHandler: Handler<CartClearResponse> =
             jsonHandler<CartClearResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
@@ -87,6 +95,7 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("cart")
                     .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
@@ -115,6 +124,7 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("cart", "convert")
                     .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
@@ -142,6 +152,7 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("cart")
                     .build()
                     .prepare(clientOptions, params)
@@ -169,6 +180,7 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("cart", "address")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -197,6 +209,7 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("cart", "card")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -225,6 +238,7 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("cart", "item")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()

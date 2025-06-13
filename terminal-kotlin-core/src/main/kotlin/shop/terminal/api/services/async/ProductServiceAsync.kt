@@ -3,6 +3,7 @@
 package shop.terminal.api.services.async
 
 import com.google.errorprone.annotations.MustBeClosed
+import shop.terminal.api.core.ClientOptions
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.http.HttpResponseFor
 import shop.terminal.api.models.product.ProductGetParams
@@ -17,6 +18,13 @@ interface ProductServiceAsync {
      */
     fun withRawResponse(): WithRawResponse
 
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ProductServiceAsync
+
     /** List all products for sale in the Terminal shop. */
     suspend fun list(
         params: ProductListParams = ProductListParams.none(),
@@ -29,14 +37,34 @@ interface ProductServiceAsync {
 
     /** Get a product by ID from the Terminal shop. */
     suspend fun get(
+        id: String,
+        params: ProductGetParams = ProductGetParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ProductGetResponse = get(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see [get] */
+    suspend fun get(
         params: ProductGetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ProductGetResponse
+
+    /** @see [get] */
+    suspend fun get(id: String, requestOptions: RequestOptions): ProductGetResponse =
+        get(id, ProductGetParams.none(), requestOptions)
 
     /**
      * A view of [ProductServiceAsync] that provides access to raw HTTP responses for each method.
      */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): ProductServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /product`, but is otherwise the same as
@@ -59,8 +87,24 @@ interface ProductServiceAsync {
          */
         @MustBeClosed
         suspend fun get(
+            id: String,
+            params: ProductGetParams = ProductGetParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ProductGetResponse> =
+            get(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see [get] */
+        @MustBeClosed
+        suspend fun get(
             params: ProductGetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ProductGetResponse>
+
+        /** @see [get] */
+        @MustBeClosed
+        suspend fun get(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<ProductGetResponse> = get(id, ProductGetParams.none(), requestOptions)
     }
 }

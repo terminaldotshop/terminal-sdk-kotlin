@@ -5,6 +5,7 @@ package shop.terminal.api.services.async
 import shop.terminal.api.core.ClientOptions
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.RequestOptions
+import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.handlers.errorHandler
 import shop.terminal.api.core.handlers.jsonHandler
 import shop.terminal.api.core.handlers.withErrorHandler
@@ -32,6 +33,9 @@ class TokenServiceAsyncImpl internal constructor(private val clientOptions: Clie
     }
 
     override fun withRawResponse(): TokenServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): TokenServiceAsync =
+        TokenServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
 
     override suspend fun create(
         params: TokenCreateParams,
@@ -66,6 +70,13 @@ class TokenServiceAsyncImpl internal constructor(private val clientOptions: Clie
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): TokenServiceAsync.WithRawResponse =
+            TokenServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
+
         private val createHandler: Handler<TokenCreateResponse> =
             jsonHandler<TokenCreateResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
@@ -77,6 +88,7 @@ class TokenServiceAsyncImpl internal constructor(private val clientOptions: Clie
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("token")
                     .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
@@ -104,6 +116,7 @@ class TokenServiceAsyncImpl internal constructor(private val clientOptions: Clie
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("token")
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -128,9 +141,13 @@ class TokenServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: TokenDeleteParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<TokenDeleteResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("token", params._pathParam(0))
                     .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
@@ -155,9 +172,13 @@ class TokenServiceAsyncImpl internal constructor(private val clientOptions: Clie
             params: TokenGetParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<TokenGetResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("token", params._pathParam(0))
                     .build()
                     .prepareAsync(clientOptions, params)

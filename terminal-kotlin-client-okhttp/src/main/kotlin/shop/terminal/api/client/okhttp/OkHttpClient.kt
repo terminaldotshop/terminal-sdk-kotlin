@@ -7,7 +7,6 @@ import java.time.Duration
 import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.Call
 import okhttp3.Callback
-import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
@@ -19,7 +18,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import okio.BufferedSink
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.Timeout
-import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.HttpClient
 import shop.terminal.api.core.http.HttpMethod
@@ -28,8 +26,7 @@ import shop.terminal.api.core.http.HttpRequestBody
 import shop.terminal.api.core.http.HttpResponse
 import shop.terminal.api.errors.TerminalIoException
 
-class OkHttpClient
-private constructor(private val okHttpClient: okhttp3.OkHttpClient, private val baseUrl: HttpUrl) :
+class OkHttpClient private constructor(private val okHttpClient: okhttp3.OkHttpClient) :
     HttpClient {
 
     override fun execute(request: HttpRequest, requestOptions: RequestOptions): HttpResponse {
@@ -148,11 +145,7 @@ private constructor(private val okHttpClient: okhttp3.OkHttpClient, private val 
         }
 
     private fun HttpRequest.toUrl(): String {
-        url?.let {
-            return it
-        }
-
-        val builder = baseUrl.newBuilder()
+        val builder = baseUrl.toHttpUrl().newBuilder()
         pathSegments.forEach(builder::addPathSegment)
         queryParams.keys().forEach { key ->
             queryParams.values(key).forEach { builder.addQueryParameter(key, it) }
@@ -202,11 +195,8 @@ private constructor(private val okHttpClient: okhttp3.OkHttpClient, private val 
 
     class Builder internal constructor() {
 
-        private var baseUrl: HttpUrl? = null
         private var timeout: Timeout = Timeout.default()
         private var proxy: Proxy? = null
-
-        fun baseUrl(baseUrl: String) = apply { this.baseUrl = baseUrl.toHttpUrl() }
 
         fun timeout(timeout: Timeout) = apply { this.timeout = timeout }
 
@@ -222,8 +212,7 @@ private constructor(private val okHttpClient: okhttp3.OkHttpClient, private val 
                     .writeTimeout(timeout.write())
                     .callTimeout(timeout.request())
                     .proxy(proxy)
-                    .build(),
-                checkRequired("baseUrl", baseUrl),
+                    .build()
             )
     }
 }

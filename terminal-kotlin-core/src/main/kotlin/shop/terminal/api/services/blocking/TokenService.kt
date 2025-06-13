@@ -3,6 +3,7 @@
 package shop.terminal.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
+import shop.terminal.api.core.ClientOptions
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.http.HttpResponseFor
 import shop.terminal.api.models.token.TokenCreateParams
@@ -20,6 +21,13 @@ interface TokenService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: (ClientOptions.Builder) -> Unit): TokenService
 
     /** Create a personal access token. */
     fun create(
@@ -43,18 +51,47 @@ interface TokenService {
 
     /** Delete the personal access token with the given ID. */
     fun delete(
+        id: String,
+        params: TokenDeleteParams = TokenDeleteParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): TokenDeleteResponse = delete(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see [delete] */
+    fun delete(
         params: TokenDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): TokenDeleteResponse
 
+    /** @see [delete] */
+    fun delete(id: String, requestOptions: RequestOptions): TokenDeleteResponse =
+        delete(id, TokenDeleteParams.none(), requestOptions)
+
     /** Get the personal access token with the given ID. */
+    fun get(
+        id: String,
+        params: TokenGetParams = TokenGetParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): TokenGetResponse = get(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see [get] */
     fun get(
         params: TokenGetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): TokenGetResponse
 
+    /** @see [get] */
+    fun get(id: String, requestOptions: RequestOptions): TokenGetResponse =
+        get(id, TokenGetParams.none(), requestOptions)
+
     /** A view of [TokenService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: (ClientOptions.Builder) -> Unit): TokenService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /token`, but is otherwise the same as
@@ -92,9 +129,26 @@ interface TokenService {
          */
         @MustBeClosed
         fun delete(
+            id: String,
+            params: TokenDeleteParams = TokenDeleteParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<TokenDeleteResponse> =
+            delete(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see [delete] */
+        @MustBeClosed
+        fun delete(
             params: TokenDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<TokenDeleteResponse>
+
+        /** @see [delete] */
+        @MustBeClosed
+        fun delete(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<TokenDeleteResponse> =
+            delete(id, TokenDeleteParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /token/{id}`, but is otherwise the same as
@@ -102,8 +156,22 @@ interface TokenService {
          */
         @MustBeClosed
         fun get(
+            id: String,
+            params: TokenGetParams = TokenGetParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<TokenGetResponse> =
+            get(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see [get] */
+        @MustBeClosed
+        fun get(
             params: TokenGetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<TokenGetResponse>
+
+        /** @see [get] */
+        @MustBeClosed
+        fun get(id: String, requestOptions: RequestOptions): HttpResponseFor<TokenGetResponse> =
+            get(id, TokenGetParams.none(), requestOptions)
     }
 }

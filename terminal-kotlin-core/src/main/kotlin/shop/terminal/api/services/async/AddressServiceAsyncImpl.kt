@@ -5,6 +5,7 @@ package shop.terminal.api.services.async
 import shop.terminal.api.core.ClientOptions
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.RequestOptions
+import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.handlers.errorHandler
 import shop.terminal.api.core.handlers.jsonHandler
 import shop.terminal.api.core.handlers.withErrorHandler
@@ -32,6 +33,9 @@ class AddressServiceAsyncImpl internal constructor(private val clientOptions: Cl
     }
 
     override fun withRawResponse(): AddressServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): AddressServiceAsync =
+        AddressServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
 
     override suspend fun create(
         params: AddressCreateParams,
@@ -66,6 +70,13 @@ class AddressServiceAsyncImpl internal constructor(private val clientOptions: Cl
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): AddressServiceAsync.WithRawResponse =
+            AddressServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
+
         private val createHandler: Handler<AddressCreateResponse> =
             jsonHandler<AddressCreateResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
@@ -77,6 +88,7 @@ class AddressServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("address")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -105,6 +117,7 @@ class AddressServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("address")
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -129,9 +142,13 @@ class AddressServiceAsyncImpl internal constructor(private val clientOptions: Cl
             params: AddressDeleteParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<AddressDeleteResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("address", params._pathParam(0))
                     .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
@@ -156,9 +173,13 @@ class AddressServiceAsyncImpl internal constructor(private val clientOptions: Cl
             params: AddressGetParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<AddressGetResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("address", params._pathParam(0))
                     .build()
                     .prepareAsync(clientOptions, params)

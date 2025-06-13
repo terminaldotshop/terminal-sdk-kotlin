@@ -3,6 +3,7 @@
 package shop.terminal.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
+import shop.terminal.api.core.ClientOptions
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.http.HttpResponseFor
 import shop.terminal.api.models.email.EmailCreateParams
@@ -15,6 +16,13 @@ interface EmailService {
      */
     fun withRawResponse(): WithRawResponse
 
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: (ClientOptions.Builder) -> Unit): EmailService
+
     /** Subscribe to email updates from Terminal. */
     fun create(
         params: EmailCreateParams,
@@ -23,6 +31,13 @@ interface EmailService {
 
     /** A view of [EmailService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: (ClientOptions.Builder) -> Unit): EmailService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /email`, but is otherwise the same as

@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
-import shop.terminal.api.models.product.ProductGetParams
 
 @ExtendWith(TestServerExtension::class)
 internal class ProductServiceTest {
@@ -34,10 +33,7 @@ internal class ProductServiceTest {
                 .build()
         val productService = client.product()
 
-        val product =
-            productService.get(
-                ProductGetParams.builder().id("prd_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
-            )
+        val product = productService.get("prd_XXXXXXXXXXXXXXXXXXXXXXXXX")
 
         product.validate()
     }

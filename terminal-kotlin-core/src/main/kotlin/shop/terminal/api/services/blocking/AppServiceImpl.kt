@@ -5,6 +5,7 @@ package shop.terminal.api.services.blocking
 import shop.terminal.api.core.ClientOptions
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.RequestOptions
+import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.handlers.errorHandler
 import shop.terminal.api.core.handlers.jsonHandler
 import shop.terminal.api.core.handlers.withErrorHandler
@@ -31,6 +32,9 @@ class AppServiceImpl internal constructor(private val clientOptions: ClientOptio
     }
 
     override fun withRawResponse(): AppService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): AppService =
+        AppServiceImpl(clientOptions.toBuilder().apply(modifier).build())
 
     override fun create(
         params: AppCreateParams,
@@ -59,6 +63,11 @@ class AppServiceImpl internal constructor(private val clientOptions: ClientOptio
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): AppService.WithRawResponse =
+            AppServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
+
         private val createHandler: Handler<AppCreateResponse> =
             jsonHandler<AppCreateResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
@@ -69,6 +78,7 @@ class AppServiceImpl internal constructor(private val clientOptions: ClientOptio
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("app")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -96,6 +106,7 @@ class AppServiceImpl internal constructor(private val clientOptions: ClientOptio
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("app")
                     .build()
                     .prepare(clientOptions, params)
@@ -119,9 +130,13 @@ class AppServiceImpl internal constructor(private val clientOptions: ClientOptio
             params: AppDeleteParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<AppDeleteResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("app", params._pathParam(0))
                     .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
@@ -146,9 +161,13 @@ class AppServiceImpl internal constructor(private val clientOptions: ClientOptio
             params: AppGetParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<AppGetResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("app", params._pathParam(0))
                     .build()
                     .prepare(clientOptions, params)
