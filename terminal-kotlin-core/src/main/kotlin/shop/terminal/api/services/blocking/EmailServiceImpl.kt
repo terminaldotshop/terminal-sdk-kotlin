@@ -27,6 +27,9 @@ class EmailServiceImpl internal constructor(private val clientOptions: ClientOpt
 
     override fun withRawResponse(): EmailService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): EmailService =
+        EmailServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun create(
         params: EmailCreateParams,
         requestOptions: RequestOptions,
@@ -39,6 +42,11 @@ class EmailServiceImpl internal constructor(private val clientOptions: ClientOpt
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): EmailService.WithRawResponse =
+            EmailServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
+
         private val createHandler: Handler<EmailCreateResponse> =
             jsonHandler<EmailCreateResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
@@ -50,6 +58,7 @@ class EmailServiceImpl internal constructor(private val clientOptions: ClientOpt
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("email")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()

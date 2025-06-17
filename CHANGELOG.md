@@ -1,5 +1,32 @@
 # Changelog
 
+## 3.0.0 (2025-06-17)
+
+Full Changelog: [v2.5.0...v3.0.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v2.5.0...v3.0.0)
+
+### ⚠ BREAKING CHANGES
+
+* **client:** extract auto pagination to shared classes
+* **client:** **Migration:** - If you were referencing the `AutoPager` class on a specific `*Page` or `*PageAsync` type, then you should instead reference the shared `AutoPager` and `AutoPagerAsync` types, under the `core` package
+    - If you were referencing `getNextPage` or `getNextPageParams`:
+       - Swap to `nextPage()` and `nextPageParams()`
+       - Note that these both now return non-nullable types (use `hasNextPage()` before calling these, since they will throw if it's impossible to get another page)
+
+### Features
+
+* **client:** add a `withOptions` method ([10bec03](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/10bec0350dadcbca0f17405dfa3282faf79c127e))
+* **client:** allow providing some params positionally ([ae20b5c](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/ae20b5c35bd4156811873b12b72777857684ce0d))
+* **client:** extract auto pagination to shared classes ([6f36edd](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/6f36edd7d76da0482c1c671e040a12740b693afb))
+* **client:** implement per-endpoint base URL support ([d8d9f14](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/d8d9f14405dae59211f0488a0f2a25717f2283e4))
+
+
+### Chores
+
+* **ci:** enable for pull requests ([4747b9c](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/4747b9c88d391b3bec6a4b35f033f37c0380543b))
+* **docs:** grammar improvements ([ee3cb4d](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/ee3cb4da514cbae3872e9b6d431d2b23f729b4e1))
+* **internal:** remove flaky `-Xbackend-threads=0` option ([b824bf8](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/b824bf8da5b7f3d1fd43a716fef970a980b063ef))
+* **internal:** update java toolchain ([bb8987e](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/bb8987ef5a4396a6d78c12fb3f075cfa18560edc))
+
 ## 2.5.0 (2025-04-24)
 
 Full Changelog: [v2.4.0...v2.5.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v2.4.0...v2.5.0)

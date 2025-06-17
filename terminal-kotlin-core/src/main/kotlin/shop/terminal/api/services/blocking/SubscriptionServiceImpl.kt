@@ -5,6 +5,7 @@ package shop.terminal.api.services.blocking
 import shop.terminal.api.core.ClientOptions
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.RequestOptions
+import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.handlers.errorHandler
 import shop.terminal.api.core.handlers.jsonHandler
 import shop.terminal.api.core.handlers.withErrorHandler
@@ -34,6 +35,9 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
     }
 
     override fun withRawResponse(): SubscriptionService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): SubscriptionService =
+        SubscriptionServiceImpl(clientOptions.toBuilder().apply(modifier).build())
 
     override fun create(
         params: SubscriptionCreateParams,
@@ -75,6 +79,13 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): SubscriptionService.WithRawResponse =
+            SubscriptionServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
+
         private val createHandler: Handler<SubscriptionCreateResponse> =
             jsonHandler<SubscriptionCreateResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
@@ -86,6 +97,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("subscription")
                     .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
@@ -111,9 +123,13 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
             params: SubscriptionUpdateParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<SubscriptionUpdateResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("subscription", params._pathParam(0))
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -142,6 +158,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("subscription")
                     .build()
                     .prepare(clientOptions, params)
@@ -166,9 +183,13 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
             params: SubscriptionDeleteParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<SubscriptionDeleteResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("subscription", params._pathParam(0))
                     .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
@@ -194,9 +215,13 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
             params: SubscriptionGetParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<SubscriptionGetResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("subscription", params._pathParam(0))
                     .build()
                     .prepare(clientOptions, params)
