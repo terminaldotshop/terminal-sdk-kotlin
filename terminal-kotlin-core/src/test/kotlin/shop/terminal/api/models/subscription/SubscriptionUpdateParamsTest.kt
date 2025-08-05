@@ -13,12 +13,7 @@ internal class SubscriptionUpdateParamsTest {
             .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
             .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
             .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-            .schedule(
-                SubscriptionUpdateParams.Schedule.Weekly.builder()
-                    .interval(3L)
-                    .type(SubscriptionUpdateParams.Schedule.Weekly.Type.WEEKLY)
-                    .build()
-            )
+            .schedule(SubscriptionUpdateParams.Schedule.Weekly.builder().interval(3L).build())
             .build()
     }
 
@@ -38,12 +33,7 @@ internal class SubscriptionUpdateParamsTest {
                 .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
                 .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
                 .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                .schedule(
-                    SubscriptionUpdateParams.Schedule.Weekly.builder()
-                        .interval(3L)
-                        .type(SubscriptionUpdateParams.Schedule.Weekly.Type.WEEKLY)
-                        .build()
-                )
+                .schedule(SubscriptionUpdateParams.Schedule.Weekly.builder().interval(3L).build())
                 .build()
 
         val body = params._body()
@@ -53,10 +43,7 @@ internal class SubscriptionUpdateParamsTest {
         assertThat(body.schedule())
             .isEqualTo(
                 SubscriptionUpdateParams.Schedule.ofWeekly(
-                    SubscriptionUpdateParams.Schedule.Weekly.builder()
-                        .interval(3L)
-                        .type(SubscriptionUpdateParams.Schedule.Weekly.Type.WEEKLY)
-                        .build()
+                    SubscriptionUpdateParams.Schedule.Weekly.builder().interval(3L).build()
                 )
             )
     }

@@ -11,17 +11,13 @@ internal class TokenDeleteResponseTest {
 
     @Test
     fun create() {
-        val tokenDeleteResponse =
-            TokenDeleteResponse.builder().data(TokenDeleteResponse.Data.OK).build()
-
-        assertThat(tokenDeleteResponse.data()).isEqualTo(TokenDeleteResponse.Data.OK)
+        val tokenDeleteResponse = TokenDeleteResponse.builder().build()
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val tokenDeleteResponse =
-            TokenDeleteResponse.builder().data(TokenDeleteResponse.Data.OK).build()
+        val tokenDeleteResponse = TokenDeleteResponse.builder().build()
 
         val roundtrippedTokenDeleteResponse =
             jsonMapper.readValue(

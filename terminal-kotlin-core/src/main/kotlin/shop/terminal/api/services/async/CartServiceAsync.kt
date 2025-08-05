@@ -39,7 +39,7 @@ interface CartServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CartClearResponse
 
-    /** @see [clear] */
+    /** @see clear */
     suspend fun clear(requestOptions: RequestOptions): CartClearResponse =
         clear(CartClearParams.none(), requestOptions)
 
@@ -49,7 +49,7 @@ interface CartServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CartConvertResponse
 
-    /** @see [convert] */
+    /** @see convert */
     suspend fun convert(requestOptions: RequestOptions): CartConvertResponse =
         convert(CartConvertParams.none(), requestOptions)
 
@@ -59,7 +59,7 @@ interface CartServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CartGetResponse
 
-    /** @see [get] */
+    /** @see get */
     suspend fun get(requestOptions: RequestOptions): CartGetResponse =
         get(CartGetParams.none(), requestOptions)
 
@@ -101,7 +101,7 @@ interface CartServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CartClearResponse>
 
-        /** @see [clear] */
+        /** @see clear */
         @MustBeClosed
         suspend fun clear(requestOptions: RequestOptions): HttpResponseFor<CartClearResponse> =
             clear(CartClearParams.none(), requestOptions)
@@ -116,7 +116,7 @@ interface CartServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CartConvertResponse>
 
-        /** @see [convert] */
+        /** @see convert */
         @MustBeClosed
         suspend fun convert(requestOptions: RequestOptions): HttpResponseFor<CartConvertResponse> =
             convert(CartConvertParams.none(), requestOptions)
@@ -131,7 +131,7 @@ interface CartServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CartGetResponse>
 
-        /** @see [get] */
+        /** @see get */
         @MustBeClosed
         suspend fun get(requestOptions: RequestOptions): HttpResponseFor<CartGetResponse> =
             get(CartGetParams.none(), requestOptions)

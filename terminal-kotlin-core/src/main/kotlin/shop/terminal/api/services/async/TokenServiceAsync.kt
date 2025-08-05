@@ -35,7 +35,7 @@ interface TokenServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): TokenCreateResponse
 
-    /** @see [create] */
+    /** @see create */
     suspend fun create(requestOptions: RequestOptions): TokenCreateResponse =
         create(TokenCreateParams.none(), requestOptions)
 
@@ -45,7 +45,7 @@ interface TokenServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): TokenListResponse
 
-    /** @see [list] */
+    /** @see list */
     suspend fun list(requestOptions: RequestOptions): TokenListResponse =
         list(TokenListParams.none(), requestOptions)
 
@@ -56,13 +56,13 @@ interface TokenServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): TokenDeleteResponse = delete(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [delete] */
+    /** @see delete */
     suspend fun delete(
         params: TokenDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): TokenDeleteResponse
 
-    /** @see [delete] */
+    /** @see delete */
     suspend fun delete(id: String, requestOptions: RequestOptions): TokenDeleteResponse =
         delete(id, TokenDeleteParams.none(), requestOptions)
 
@@ -73,13 +73,13 @@ interface TokenServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): TokenGetResponse = get(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [get] */
+    /** @see get */
     suspend fun get(
         params: TokenGetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): TokenGetResponse
 
-    /** @see [get] */
+    /** @see get */
     suspend fun get(id: String, requestOptions: RequestOptions): TokenGetResponse =
         get(id, TokenGetParams.none(), requestOptions)
 
@@ -105,7 +105,7 @@ interface TokenServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<TokenCreateResponse>
 
-        /** @see [create] */
+        /** @see create */
         @MustBeClosed
         suspend fun create(requestOptions: RequestOptions): HttpResponseFor<TokenCreateResponse> =
             create(TokenCreateParams.none(), requestOptions)
@@ -120,7 +120,7 @@ interface TokenServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<TokenListResponse>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         suspend fun list(requestOptions: RequestOptions): HttpResponseFor<TokenListResponse> =
             list(TokenListParams.none(), requestOptions)
@@ -137,14 +137,14 @@ interface TokenServiceAsync {
         ): HttpResponseFor<TokenDeleteResponse> =
             delete(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [delete] */
+        /** @see delete */
         @MustBeClosed
         suspend fun delete(
             params: TokenDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<TokenDeleteResponse>
 
-        /** @see [delete] */
+        /** @see delete */
         @MustBeClosed
         suspend fun delete(
             id: String,
@@ -164,14 +164,14 @@ interface TokenServiceAsync {
         ): HttpResponseFor<TokenGetResponse> =
             get(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [get] */
+        /** @see get */
         @MustBeClosed
         suspend fun get(
             params: TokenGetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<TokenGetResponse>
 
-        /** @see [get] */
+        /** @see get */
         @MustBeClosed
         suspend fun get(
             id: String,

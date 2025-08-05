@@ -28,6 +28,7 @@ private constructor(
     private val order: JsonField<Long>,
     private val subscription: JsonField<Subscription>,
     private val tags: JsonField<Tags>,
+    private val timeHidden: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -46,7 +47,8 @@ private constructor(
         @ExcludeMissing
         subscription: JsonField<Subscription> = JsonMissing.of(),
         @JsonProperty("tags") @ExcludeMissing tags: JsonField<Tags> = JsonMissing.of(),
-    ) : this(id, description, name, variants, order, subscription, tags, mutableMapOf())
+        @JsonProperty("timeHidden") @ExcludeMissing timeHidden: JsonField<String> = JsonMissing.of(),
+    ) : this(id, description, name, variants, order, subscription, tags, timeHidden, mutableMapOf())
 
     /**
      * Unique object identifier. The format and length of IDs may change over time.
@@ -105,6 +107,14 @@ private constructor(
     fun tags(): Tags? = tags.getNullable("tags")
 
     /**
+     * Timestamp when the product was hidden from public view.
+     *
+     * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun timeHidden(): String? = timeHidden.getNullable("timeHidden")
+
+    /**
      * Returns the raw JSON value of [id].
      *
      * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
@@ -157,6 +167,13 @@ private constructor(
      */
     @JsonProperty("tags") @ExcludeMissing fun _tags(): JsonField<Tags> = tags
 
+    /**
+     * Returns the raw JSON value of [timeHidden].
+     *
+     * Unlike [timeHidden], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("timeHidden") @ExcludeMissing fun _timeHidden(): JsonField<String> = timeHidden
+
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -195,6 +212,7 @@ private constructor(
         private var order: JsonField<Long> = JsonMissing.of()
         private var subscription: JsonField<Subscription> = JsonMissing.of()
         private var tags: JsonField<Tags> = JsonMissing.of()
+        private var timeHidden: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(product: Product) = apply {
@@ -205,6 +223,7 @@ private constructor(
             order = product.order
             subscription = product.subscription
             tags = product.tags
+            timeHidden = product.timeHidden
             additionalProperties = product.additionalProperties.toMutableMap()
         }
 
@@ -304,6 +323,18 @@ private constructor(
          */
         fun tags(tags: JsonField<Tags>) = apply { this.tags = tags }
 
+        /** Timestamp when the product was hidden from public view. */
+        fun timeHidden(timeHidden: String) = timeHidden(JsonField.of(timeHidden))
+
+        /**
+         * Sets [Builder.timeHidden] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.timeHidden] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun timeHidden(timeHidden: JsonField<String>) = apply { this.timeHidden = timeHidden }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -347,6 +378,7 @@ private constructor(
                 order,
                 subscription,
                 tags,
+                timeHidden,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -365,6 +397,7 @@ private constructor(
         order()
         subscription()?.validate()
         tags()?.validate()
+        timeHidden()
         validated = true
     }
 
@@ -388,7 +421,8 @@ private constructor(
             (variants.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
             (if (order.asKnown() == null) 0 else 1) +
             (subscription.asKnown()?.validity() ?: 0) +
-            (tags.asKnown()?.validity() ?: 0)
+            (tags.asKnown()?.validity() ?: 0) +
+            (if (timeHidden.asKnown() == null) 0 else 1)
 
     /** Whether the product must be or can be subscribed to. */
     class Subscription @JsonCreator private constructor(private val value: JsonField<String>) :
@@ -834,15 +868,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Product && id == other.id && description == other.description && name == other.name && variants == other.variants && order == other.order && subscription == other.subscription && tags == other.tags && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Product && id == other.id && description == other.description && name == other.name && variants == other.variants && order == other.order && subscription == other.subscription && tags == other.tags && timeHidden == other.timeHidden && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, description, name, variants, order, subscription, tags, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, description, name, variants, order, subscription, tags, timeHidden, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Product{id=$id, description=$description, name=$name, variants=$variants, order=$order, subscription=$subscription, tags=$tags, additionalProperties=$additionalProperties}"
+        "Product{id=$id, description=$description, name=$name, variants=$variants, order=$order, subscription=$subscription, tags=$tags, timeHidden=$timeHidden, additionalProperties=$additionalProperties}"
 }

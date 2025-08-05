@@ -4,6 +4,7 @@ package shop.terminal.api.core
 
 import java.util.Collections
 import java.util.SortedMap
+import java.util.concurrent.locks.Lock
 import shop.terminal.api.errors.TerminalInvalidDataException
 
 internal fun <T : Any> T?.getOrThrow(name: String): T =
@@ -83,3 +84,19 @@ internal fun Any?.contentToString(): String {
 }
 
 internal interface Enum
+
+/**
+ * Executes a suspending block of code while holding this lock.
+ *
+ * @param T the return type of the action
+ * @param action the suspending function to execute while holding the lock
+ * @return the result of executing the action
+ */
+internal suspend fun <T> Lock.withLockAsync(action: suspend () -> T): T {
+    lock()
+    return try {
+        action()
+    } finally {
+        unlock()
+    }
+}

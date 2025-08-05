@@ -31,7 +31,7 @@ interface ProductServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ProductListResponse
 
-    /** @see [list] */
+    /** @see list */
     suspend fun list(requestOptions: RequestOptions): ProductListResponse =
         list(ProductListParams.none(), requestOptions)
 
@@ -42,13 +42,13 @@ interface ProductServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ProductGetResponse = get(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [get] */
+    /** @see get */
     suspend fun get(
         params: ProductGetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ProductGetResponse
 
-    /** @see [get] */
+    /** @see get */
     suspend fun get(id: String, requestOptions: RequestOptions): ProductGetResponse =
         get(id, ProductGetParams.none(), requestOptions)
 
@@ -76,7 +76,7 @@ interface ProductServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ProductListResponse>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         suspend fun list(requestOptions: RequestOptions): HttpResponseFor<ProductListResponse> =
             list(ProductListParams.none(), requestOptions)
@@ -93,14 +93,14 @@ interface ProductServiceAsync {
         ): HttpResponseFor<ProductGetResponse> =
             get(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [get] */
+        /** @see get */
         @MustBeClosed
         suspend fun get(
             params: ProductGetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ProductGetResponse>
 
-        /** @see [get] */
+        /** @see get */
         @MustBeClosed
         suspend fun get(
             id: String,

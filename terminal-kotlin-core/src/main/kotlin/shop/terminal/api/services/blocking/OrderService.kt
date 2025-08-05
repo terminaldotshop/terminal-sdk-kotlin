@@ -39,7 +39,7 @@ interface OrderService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): OrderListResponse
 
-    /** @see [list] */
+    /** @see list */
     fun list(requestOptions: RequestOptions): OrderListResponse =
         list(OrderListParams.none(), requestOptions)
 
@@ -50,13 +50,13 @@ interface OrderService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): OrderGetResponse = get(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [get] */
+    /** @see get */
     fun get(
         params: OrderGetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): OrderGetResponse
 
-    /** @see [get] */
+    /** @see get */
     fun get(id: String, requestOptions: RequestOptions): OrderGetResponse =
         get(id, OrderGetParams.none(), requestOptions)
 
@@ -90,7 +90,7 @@ interface OrderService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<OrderListResponse>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<OrderListResponse> =
             list(OrderListParams.none(), requestOptions)
@@ -107,14 +107,14 @@ interface OrderService {
         ): HttpResponseFor<OrderGetResponse> =
             get(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [get] */
+        /** @see get */
         @MustBeClosed
         fun get(
             params: OrderGetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<OrderGetResponse>
 
-        /** @see [get] */
+        /** @see get */
         @MustBeClosed
         fun get(id: String, requestOptions: RequestOptions): HttpResponseFor<OrderGetResponse> =
             get(id, OrderGetParams.none(), requestOptions)

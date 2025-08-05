@@ -35,7 +35,7 @@ interface TokenService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): TokenCreateResponse
 
-    /** @see [create] */
+    /** @see create */
     fun create(requestOptions: RequestOptions): TokenCreateResponse =
         create(TokenCreateParams.none(), requestOptions)
 
@@ -45,7 +45,7 @@ interface TokenService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): TokenListResponse
 
-    /** @see [list] */
+    /** @see list */
     fun list(requestOptions: RequestOptions): TokenListResponse =
         list(TokenListParams.none(), requestOptions)
 
@@ -56,13 +56,13 @@ interface TokenService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): TokenDeleteResponse = delete(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [delete] */
+    /** @see delete */
     fun delete(
         params: TokenDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): TokenDeleteResponse
 
-    /** @see [delete] */
+    /** @see delete */
     fun delete(id: String, requestOptions: RequestOptions): TokenDeleteResponse =
         delete(id, TokenDeleteParams.none(), requestOptions)
 
@@ -73,13 +73,13 @@ interface TokenService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): TokenGetResponse = get(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [get] */
+    /** @see get */
     fun get(
         params: TokenGetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): TokenGetResponse
 
-    /** @see [get] */
+    /** @see get */
     fun get(id: String, requestOptions: RequestOptions): TokenGetResponse =
         get(id, TokenGetParams.none(), requestOptions)
 
@@ -103,7 +103,7 @@ interface TokenService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<TokenCreateResponse>
 
-        /** @see [create] */
+        /** @see create */
         @MustBeClosed
         fun create(requestOptions: RequestOptions): HttpResponseFor<TokenCreateResponse> =
             create(TokenCreateParams.none(), requestOptions)
@@ -118,7 +118,7 @@ interface TokenService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<TokenListResponse>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<TokenListResponse> =
             list(TokenListParams.none(), requestOptions)
@@ -135,14 +135,14 @@ interface TokenService {
         ): HttpResponseFor<TokenDeleteResponse> =
             delete(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [delete] */
+        /** @see delete */
         @MustBeClosed
         fun delete(
             params: TokenDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<TokenDeleteResponse>
 
-        /** @see [delete] */
+        /** @see delete */
         @MustBeClosed
         fun delete(
             id: String,
@@ -162,14 +162,14 @@ interface TokenService {
         ): HttpResponseFor<TokenGetResponse> =
             get(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [get] */
+        /** @see get */
         @MustBeClosed
         fun get(
             params: TokenGetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<TokenGetResponse>
 
-        /** @see [get] */
+        /** @see get */
         @MustBeClosed
         fun get(id: String, requestOptions: RequestOptions): HttpResponseFor<TokenGetResponse> =
             get(id, TokenGetParams.none(), requestOptions)

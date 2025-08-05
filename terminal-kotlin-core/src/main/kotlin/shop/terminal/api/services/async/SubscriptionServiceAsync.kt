@@ -37,7 +37,7 @@ interface SubscriptionServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionCreateResponse
 
-    /** @see [create] */
+    /** @see create */
     suspend fun create(requestOptions: RequestOptions): SubscriptionCreateResponse =
         create(SubscriptionCreateParams.none(), requestOptions)
 
@@ -48,13 +48,13 @@ interface SubscriptionServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionUpdateResponse = update(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [update] */
+    /** @see update */
     suspend fun update(
         params: SubscriptionUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionUpdateResponse
 
-    /** @see [update] */
+    /** @see update */
     suspend fun update(id: String, requestOptions: RequestOptions): SubscriptionUpdateResponse =
         update(id, SubscriptionUpdateParams.none(), requestOptions)
 
@@ -64,7 +64,7 @@ interface SubscriptionServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionListResponse
 
-    /** @see [list] */
+    /** @see list */
     suspend fun list(requestOptions: RequestOptions): SubscriptionListResponse =
         list(SubscriptionListParams.none(), requestOptions)
 
@@ -75,13 +75,13 @@ interface SubscriptionServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionDeleteResponse = delete(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [delete] */
+    /** @see delete */
     suspend fun delete(
         params: SubscriptionDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionDeleteResponse
 
-    /** @see [delete] */
+    /** @see delete */
     suspend fun delete(id: String, requestOptions: RequestOptions): SubscriptionDeleteResponse =
         delete(id, SubscriptionDeleteParams.none(), requestOptions)
 
@@ -92,13 +92,13 @@ interface SubscriptionServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionGetResponse = get(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [get] */
+    /** @see get */
     suspend fun get(
         params: SubscriptionGetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionGetResponse
 
-    /** @see [get] */
+    /** @see get */
     suspend fun get(id: String, requestOptions: RequestOptions): SubscriptionGetResponse =
         get(id, SubscriptionGetParams.none(), requestOptions)
 
@@ -127,7 +127,7 @@ interface SubscriptionServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<SubscriptionCreateResponse>
 
-        /** @see [create] */
+        /** @see create */
         @MustBeClosed
         suspend fun create(
             requestOptions: RequestOptions
@@ -146,14 +146,14 @@ interface SubscriptionServiceAsync {
         ): HttpResponseFor<SubscriptionUpdateResponse> =
             update(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         suspend fun update(
             params: SubscriptionUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<SubscriptionUpdateResponse>
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         suspend fun update(
             id: String,
@@ -171,7 +171,7 @@ interface SubscriptionServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<SubscriptionListResponse>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         suspend fun list(
             requestOptions: RequestOptions
@@ -190,14 +190,14 @@ interface SubscriptionServiceAsync {
         ): HttpResponseFor<SubscriptionDeleteResponse> =
             delete(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [delete] */
+        /** @see delete */
         @MustBeClosed
         suspend fun delete(
             params: SubscriptionDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<SubscriptionDeleteResponse>
 
-        /** @see [delete] */
+        /** @see delete */
         @MustBeClosed
         suspend fun delete(
             id: String,
@@ -217,14 +217,14 @@ interface SubscriptionServiceAsync {
         ): HttpResponseFor<SubscriptionGetResponse> =
             get(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [get] */
+        /** @see get */
         @MustBeClosed
         suspend fun get(
             params: SubscriptionGetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<SubscriptionGetResponse>
 
-        /** @see [get] */
+        /** @see get */
         @MustBeClosed
         suspend fun get(
             id: String,

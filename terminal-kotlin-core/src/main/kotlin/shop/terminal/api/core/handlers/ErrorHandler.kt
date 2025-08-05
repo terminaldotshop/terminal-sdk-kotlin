@@ -16,7 +16,7 @@ import shop.terminal.api.errors.UnauthorizedException
 import shop.terminal.api.errors.UnexpectedStatusCodeException
 import shop.terminal.api.errors.UnprocessableEntityException
 
-internal fun errorHandler(jsonMapper: JsonMapper): Handler<JsonValue> {
+internal fun errorBodyHandler(jsonMapper: JsonMapper): Handler<JsonValue> {
     val handler = jsonHandler<JsonValue>(jsonMapper)
 
     return object : Handler<JsonValue> {
@@ -29,52 +29,52 @@ internal fun errorHandler(jsonMapper: JsonMapper): Handler<JsonValue> {
     }
 }
 
-internal fun <T> Handler<T>.withErrorHandler(errorHandler: Handler<JsonValue>): Handler<T> =
-    object : Handler<T> {
-        override fun handle(response: HttpResponse): T =
+internal fun errorHandler(errorBodyHandler: Handler<JsonValue>): Handler<HttpResponse> =
+    object : Handler<HttpResponse> {
+        override fun handle(response: HttpResponse): HttpResponse =
             when (val statusCode = response.statusCode()) {
-                in 200..299 -> this@withErrorHandler.handle(response)
+                in 200..299 -> response
                 400 ->
                     throw BadRequestException.builder()
                         .headers(response.headers())
-                        .body(errorHandler.handle(response))
+                        .body(errorBodyHandler.handle(response))
                         .build()
                 401 ->
                     throw UnauthorizedException.builder()
                         .headers(response.headers())
-                        .body(errorHandler.handle(response))
+                        .body(errorBodyHandler.handle(response))
                         .build()
                 403 ->
                     throw PermissionDeniedException.builder()
                         .headers(response.headers())
-                        .body(errorHandler.handle(response))
+                        .body(errorBodyHandler.handle(response))
                         .build()
                 404 ->
                     throw NotFoundException.builder()
                         .headers(response.headers())
-                        .body(errorHandler.handle(response))
+                        .body(errorBodyHandler.handle(response))
                         .build()
                 422 ->
                     throw UnprocessableEntityException.builder()
                         .headers(response.headers())
-                        .body(errorHandler.handle(response))
+                        .body(errorBodyHandler.handle(response))
                         .build()
                 429 ->
                     throw RateLimitException.builder()
                         .headers(response.headers())
-                        .body(errorHandler.handle(response))
+                        .body(errorBodyHandler.handle(response))
                         .build()
                 in 500..599 ->
                     throw InternalServerException.builder()
                         .statusCode(statusCode)
                         .headers(response.headers())
-                        .body(errorHandler.handle(response))
+                        .body(errorBodyHandler.handle(response))
                         .build()
                 else ->
                     throw UnexpectedStatusCodeException.builder()
                         .statusCode(statusCode)
                         .headers(response.headers())
-                        .body(errorHandler.handle(response))
+                        .body(errorBodyHandler.handle(response))
                         .build()
             }
     }

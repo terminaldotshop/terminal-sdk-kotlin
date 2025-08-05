@@ -11,17 +11,13 @@ internal class SubscriptionCreateResponseTest {
 
     @Test
     fun create() {
-        val subscriptionCreateResponse =
-            SubscriptionCreateResponse.builder().data(SubscriptionCreateResponse.Data.OK).build()
-
-        assertThat(subscriptionCreateResponse.data()).isEqualTo(SubscriptionCreateResponse.Data.OK)
+        val subscriptionCreateResponse = SubscriptionCreateResponse.builder().build()
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val subscriptionCreateResponse =
-            SubscriptionCreateResponse.builder().data(SubscriptionCreateResponse.Data.OK).build()
+        val subscriptionCreateResponse = SubscriptionCreateResponse.builder().build()
 
         val roundtrippedSubscriptionCreateResponse =
             jsonMapper.readValue(

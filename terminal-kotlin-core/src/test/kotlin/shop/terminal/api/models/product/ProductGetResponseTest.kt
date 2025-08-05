@@ -25,7 +25,6 @@ internal class ProductGetResponseTest {
                                 .id("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                                 .name("12oz")
                                 .price(2200L)
-                                .description("A detailed description of this variant")
                                 .tags(
                                     ProductVariant.Tags.builder()
                                         .app("app")
@@ -48,6 +47,7 @@ internal class ProductGetResponseTest {
                                 .marketNa(true)
                                 .build()
                         )
+                        .timeHidden("timeHidden")
                         .build()
                 )
                 .build()
@@ -65,7 +65,6 @@ internal class ProductGetResponseTest {
                             .id("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                             .name("12oz")
                             .price(2200L)
-                            .description("A detailed description of this variant")
                             .tags(
                                 ProductVariant.Tags.builder()
                                     .app("app")
@@ -88,6 +87,7 @@ internal class ProductGetResponseTest {
                             .marketNa(true)
                             .build()
                     )
+                    .timeHidden("timeHidden")
                     .build()
             )
     }
@@ -109,7 +109,6 @@ internal class ProductGetResponseTest {
                                 .id("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                                 .name("12oz")
                                 .price(2200L)
-                                .description("A detailed description of this variant")
                                 .tags(
                                     ProductVariant.Tags.builder()
                                         .app("app")
@@ -132,6 +131,7 @@ internal class ProductGetResponseTest {
                                 .marketNa(true)
                                 .build()
                         )
+                        .timeHidden("timeHidden")
                         .build()
                 )
                 .build()
