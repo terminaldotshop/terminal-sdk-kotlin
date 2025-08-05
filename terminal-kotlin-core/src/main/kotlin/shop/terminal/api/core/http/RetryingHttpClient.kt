@@ -17,6 +17,7 @@ import kotlinx.coroutines.delay
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.checkRequired
 import shop.terminal.api.errors.TerminalIoException
+import shop.terminal.api.errors.TerminalRetryableException
 
 class RetryingHttpClient
 private constructor(
@@ -159,9 +160,10 @@ private constructor(
     }
 
     private fun shouldRetry(throwable: Throwable): Boolean =
-        // Only retry IOException and TerminalIoException, other exceptions are not intended to be
-        // retried.
-        throwable is IOException || throwable is TerminalIoException
+        // Only retry known retryable exceptions, other exceptions are not intended to be retried.
+        throwable is IOException ||
+            throwable is TerminalIoException ||
+            throwable is TerminalRetryableException
 
     private fun getRetryBackoffDuration(retries: Int, response: HttpResponse?): Duration {
         // About the Retry-After header:

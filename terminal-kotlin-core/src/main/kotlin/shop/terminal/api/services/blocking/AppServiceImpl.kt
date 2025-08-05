@@ -3,14 +3,14 @@
 package shop.terminal.api.services.blocking
 
 import shop.terminal.api.core.ClientOptions
-import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.checkRequired
+import shop.terminal.api.core.handlers.errorBodyHandler
 import shop.terminal.api.core.handlers.errorHandler
 import shop.terminal.api.core.handlers.jsonHandler
-import shop.terminal.api.core.handlers.withErrorHandler
 import shop.terminal.api.core.http.HttpMethod
 import shop.terminal.api.core.http.HttpRequest
+import shop.terminal.api.core.http.HttpResponse
 import shop.terminal.api.core.http.HttpResponse.Handler
 import shop.terminal.api.core.http.HttpResponseFor
 import shop.terminal.api.core.http.json
@@ -61,7 +61,8 @@ class AppServiceImpl internal constructor(private val clientOptions: ClientOptio
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         AppService.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
@@ -69,7 +70,7 @@ class AppServiceImpl internal constructor(private val clientOptions: ClientOptio
             AppServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
 
         private val createHandler: Handler<AppCreateResponse> =
-            jsonHandler<AppCreateResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<AppCreateResponse>(clientOptions.jsonMapper)
 
         override fun create(
             params: AppCreateParams,
@@ -85,7 +86,7 @@ class AppServiceImpl internal constructor(private val clientOptions: ClientOptio
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { createHandler.handle(it) }
                     .also {
@@ -97,7 +98,7 @@ class AppServiceImpl internal constructor(private val clientOptions: ClientOptio
         }
 
         private val listHandler: Handler<AppListResponse> =
-            jsonHandler<AppListResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<AppListResponse>(clientOptions.jsonMapper)
 
         override fun list(
             params: AppListParams,
@@ -112,7 +113,7 @@ class AppServiceImpl internal constructor(private val clientOptions: ClientOptio
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { listHandler.handle(it) }
                     .also {
@@ -124,7 +125,7 @@ class AppServiceImpl internal constructor(private val clientOptions: ClientOptio
         }
 
         private val deleteHandler: Handler<AppDeleteResponse> =
-            jsonHandler<AppDeleteResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<AppDeleteResponse>(clientOptions.jsonMapper)
 
         override fun delete(
             params: AppDeleteParams,
@@ -143,7 +144,7 @@ class AppServiceImpl internal constructor(private val clientOptions: ClientOptio
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { deleteHandler.handle(it) }
                     .also {
@@ -155,7 +156,7 @@ class AppServiceImpl internal constructor(private val clientOptions: ClientOptio
         }
 
         private val getHandler: Handler<AppGetResponse> =
-            jsonHandler<AppGetResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<AppGetResponse>(clientOptions.jsonMapper)
 
         override fun get(
             params: AppGetParams,
@@ -173,7 +174,7 @@ class AppServiceImpl internal constructor(private val clientOptions: ClientOptio
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { getHandler.handle(it) }
                     .also {

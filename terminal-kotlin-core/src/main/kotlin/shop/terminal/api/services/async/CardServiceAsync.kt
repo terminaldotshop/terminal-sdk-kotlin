@@ -43,7 +43,7 @@ interface CardServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CardListResponse
 
-    /** @see [list] */
+    /** @see list */
     suspend fun list(requestOptions: RequestOptions): CardListResponse =
         list(CardListParams.none(), requestOptions)
 
@@ -54,13 +54,13 @@ interface CardServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CardDeleteResponse = delete(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [delete] */
+    /** @see delete */
     suspend fun delete(
         params: CardDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CardDeleteResponse
 
-    /** @see [delete] */
+    /** @see delete */
     suspend fun delete(id: String, requestOptions: RequestOptions): CardDeleteResponse =
         delete(id, CardDeleteParams.none(), requestOptions)
 
@@ -70,7 +70,7 @@ interface CardServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CardCollectResponse
 
-    /** @see [collect] */
+    /** @see collect */
     suspend fun collect(requestOptions: RequestOptions): CardCollectResponse =
         collect(CardCollectParams.none(), requestOptions)
 
@@ -81,13 +81,13 @@ interface CardServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CardGetResponse = get(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [get] */
+    /** @see get */
     suspend fun get(
         params: CardGetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CardGetResponse
 
-    /** @see [get] */
+    /** @see get */
     suspend fun get(id: String, requestOptions: RequestOptions): CardGetResponse =
         get(id, CardGetParams.none(), requestOptions)
 
@@ -121,7 +121,7 @@ interface CardServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CardListResponse>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         suspend fun list(requestOptions: RequestOptions): HttpResponseFor<CardListResponse> =
             list(CardListParams.none(), requestOptions)
@@ -138,14 +138,14 @@ interface CardServiceAsync {
         ): HttpResponseFor<CardDeleteResponse> =
             delete(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [delete] */
+        /** @see delete */
         @MustBeClosed
         suspend fun delete(
             params: CardDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CardDeleteResponse>
 
-        /** @see [delete] */
+        /** @see delete */
         @MustBeClosed
         suspend fun delete(
             id: String,
@@ -162,7 +162,7 @@ interface CardServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CardCollectResponse>
 
-        /** @see [collect] */
+        /** @see collect */
         @MustBeClosed
         suspend fun collect(requestOptions: RequestOptions): HttpResponseFor<CardCollectResponse> =
             collect(CardCollectParams.none(), requestOptions)
@@ -178,14 +178,14 @@ interface CardServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CardGetResponse> = get(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [get] */
+        /** @see get */
         @MustBeClosed
         suspend fun get(
             params: CardGetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CardGetResponse>
 
-        /** @see [get] */
+        /** @see get */
         @MustBeClosed
         suspend fun get(
             id: String,

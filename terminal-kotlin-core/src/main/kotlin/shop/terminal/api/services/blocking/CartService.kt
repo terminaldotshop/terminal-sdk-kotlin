@@ -39,7 +39,7 @@ interface CartService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CartClearResponse
 
-    /** @see [clear] */
+    /** @see clear */
     fun clear(requestOptions: RequestOptions): CartClearResponse =
         clear(CartClearParams.none(), requestOptions)
 
@@ -49,7 +49,7 @@ interface CartService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CartConvertResponse
 
-    /** @see [convert] */
+    /** @see convert */
     fun convert(requestOptions: RequestOptions): CartConvertResponse =
         convert(CartConvertParams.none(), requestOptions)
 
@@ -59,7 +59,7 @@ interface CartService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CartGetResponse
 
-    /** @see [get] */
+    /** @see get */
     fun get(requestOptions: RequestOptions): CartGetResponse =
         get(CartGetParams.none(), requestOptions)
 
@@ -101,7 +101,7 @@ interface CartService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CartClearResponse>
 
-        /** @see [clear] */
+        /** @see clear */
         @MustBeClosed
         fun clear(requestOptions: RequestOptions): HttpResponseFor<CartClearResponse> =
             clear(CartClearParams.none(), requestOptions)
@@ -116,7 +116,7 @@ interface CartService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CartConvertResponse>
 
-        /** @see [convert] */
+        /** @see convert */
         @MustBeClosed
         fun convert(requestOptions: RequestOptions): HttpResponseFor<CartConvertResponse> =
             convert(CartConvertParams.none(), requestOptions)
@@ -131,7 +131,7 @@ interface CartService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CartGetResponse>
 
-        /** @see [get] */
+        /** @see get */
         @MustBeClosed
         fun get(requestOptions: RequestOptions): HttpResponseFor<CartGetResponse> =
             get(CartGetParams.none(), requestOptions)

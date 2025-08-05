@@ -37,7 +37,7 @@ interface ProfileServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ProfileMeResponse
 
-    /** @see [me] */
+    /** @see me */
     suspend fun me(requestOptions: RequestOptions): ProfileMeResponse =
         me(ProfileMeParams.none(), requestOptions)
 
@@ -75,7 +75,7 @@ interface ProfileServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ProfileMeResponse>
 
-        /** @see [me] */
+        /** @see me */
         @MustBeClosed
         suspend fun me(requestOptions: RequestOptions): HttpResponseFor<ProfileMeResponse> =
             me(ProfileMeParams.none(), requestOptions)

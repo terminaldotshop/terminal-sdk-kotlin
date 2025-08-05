@@ -39,7 +39,7 @@ interface OrderServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): OrderListResponse
 
-    /** @see [list] */
+    /** @see list */
     suspend fun list(requestOptions: RequestOptions): OrderListResponse =
         list(OrderListParams.none(), requestOptions)
 
@@ -50,13 +50,13 @@ interface OrderServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): OrderGetResponse = get(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [get] */
+    /** @see get */
     suspend fun get(
         params: OrderGetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): OrderGetResponse
 
-    /** @see [get] */
+    /** @see get */
     suspend fun get(id: String, requestOptions: RequestOptions): OrderGetResponse =
         get(id, OrderGetParams.none(), requestOptions)
 
@@ -92,7 +92,7 @@ interface OrderServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<OrderListResponse>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         suspend fun list(requestOptions: RequestOptions): HttpResponseFor<OrderListResponse> =
             list(OrderListParams.none(), requestOptions)
@@ -109,14 +109,14 @@ interface OrderServiceAsync {
         ): HttpResponseFor<OrderGetResponse> =
             get(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [get] */
+        /** @see get */
         @MustBeClosed
         suspend fun get(
             params: OrderGetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<OrderGetResponse>
 
-        /** @see [get] */
+        /** @see get */
         @MustBeClosed
         suspend fun get(
             id: String,

@@ -21,12 +21,7 @@ internal class SubscriptionTest {
                 .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                 .quantity(1L)
                 .next("2025-02-01T19:36:19.000Z")
-                .schedule(
-                    Subscription.Schedule.Weekly.builder()
-                        .interval(3L)
-                        .type(Subscription.Schedule.Weekly.Type.WEEKLY)
-                        .build()
-                )
+                .schedule(Subscription.Schedule.Weekly.builder().interval(3L).build())
                 .build()
 
         assertThat(subscription.id()).isEqualTo("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
@@ -40,10 +35,7 @@ internal class SubscriptionTest {
         assertThat(subscription.schedule())
             .isEqualTo(
                 Subscription.Schedule.ofWeekly(
-                    Subscription.Schedule.Weekly.builder()
-                        .interval(3L)
-                        .type(Subscription.Schedule.Weekly.Type.WEEKLY)
-                        .build()
+                    Subscription.Schedule.Weekly.builder().interval(3L).build()
                 )
             )
     }
@@ -61,12 +53,7 @@ internal class SubscriptionTest {
                 .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                 .quantity(1L)
                 .next("2025-02-01T19:36:19.000Z")
-                .schedule(
-                    Subscription.Schedule.Weekly.builder()
-                        .interval(3L)
-                        .type(Subscription.Schedule.Weekly.Type.WEEKLY)
-                        .build()
-                )
+                .schedule(Subscription.Schedule.Weekly.builder().interval(3L).build())
                 .build()
 
         val roundtrippedSubscription =

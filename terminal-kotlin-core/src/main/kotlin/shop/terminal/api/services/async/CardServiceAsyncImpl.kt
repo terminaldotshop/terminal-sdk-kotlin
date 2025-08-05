@@ -3,14 +3,14 @@
 package shop.terminal.api.services.async
 
 import shop.terminal.api.core.ClientOptions
-import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.checkRequired
+import shop.terminal.api.core.handlers.errorBodyHandler
 import shop.terminal.api.core.handlers.errorHandler
 import shop.terminal.api.core.handlers.jsonHandler
-import shop.terminal.api.core.handlers.withErrorHandler
 import shop.terminal.api.core.http.HttpMethod
 import shop.terminal.api.core.http.HttpRequest
+import shop.terminal.api.core.http.HttpResponse
 import shop.terminal.api.core.http.HttpResponse.Handler
 import shop.terminal.api.core.http.HttpResponseFor
 import shop.terminal.api.core.http.json
@@ -77,7 +77,8 @@ class CardServiceAsyncImpl internal constructor(private val clientOptions: Clien
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         CardServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
@@ -87,7 +88,7 @@ class CardServiceAsyncImpl internal constructor(private val clientOptions: Clien
             )
 
         private val createHandler: Handler<CardCreateResponse> =
-            jsonHandler<CardCreateResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<CardCreateResponse>(clientOptions.jsonMapper)
 
         override suspend fun create(
             params: CardCreateParams,
@@ -103,7 +104,7 @@ class CardServiceAsyncImpl internal constructor(private val clientOptions: Clien
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { createHandler.handle(it) }
                     .also {
@@ -115,7 +116,7 @@ class CardServiceAsyncImpl internal constructor(private val clientOptions: Clien
         }
 
         private val listHandler: Handler<CardListResponse> =
-            jsonHandler<CardListResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<CardListResponse>(clientOptions.jsonMapper)
 
         override suspend fun list(
             params: CardListParams,
@@ -130,7 +131,7 @@ class CardServiceAsyncImpl internal constructor(private val clientOptions: Clien
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { listHandler.handle(it) }
                     .also {
@@ -142,7 +143,7 @@ class CardServiceAsyncImpl internal constructor(private val clientOptions: Clien
         }
 
         private val deleteHandler: Handler<CardDeleteResponse> =
-            jsonHandler<CardDeleteResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<CardDeleteResponse>(clientOptions.jsonMapper)
 
         override suspend fun delete(
             params: CardDeleteParams,
@@ -161,7 +162,7 @@ class CardServiceAsyncImpl internal constructor(private val clientOptions: Clien
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { deleteHandler.handle(it) }
                     .also {
@@ -174,7 +175,6 @@ class CardServiceAsyncImpl internal constructor(private val clientOptions: Clien
 
         private val collectHandler: Handler<CardCollectResponse> =
             jsonHandler<CardCollectResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override suspend fun collect(
             params: CardCollectParams,
@@ -190,7 +190,7 @@ class CardServiceAsyncImpl internal constructor(private val clientOptions: Clien
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { collectHandler.handle(it) }
                     .also {
@@ -202,7 +202,7 @@ class CardServiceAsyncImpl internal constructor(private val clientOptions: Clien
         }
 
         private val getHandler: Handler<CardGetResponse> =
-            jsonHandler<CardGetResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<CardGetResponse>(clientOptions.jsonMapper)
 
         override suspend fun get(
             params: CardGetParams,
@@ -220,7 +220,7 @@ class CardServiceAsyncImpl internal constructor(private val clientOptions: Clien
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { getHandler.handle(it) }
                     .also {

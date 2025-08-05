@@ -41,7 +41,7 @@ interface AppServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AppListResponse
 
-    /** @see [list] */
+    /** @see list */
     suspend fun list(requestOptions: RequestOptions): AppListResponse =
         list(AppListParams.none(), requestOptions)
 
@@ -52,13 +52,13 @@ interface AppServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AppDeleteResponse = delete(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [delete] */
+    /** @see delete */
     suspend fun delete(
         params: AppDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AppDeleteResponse
 
-    /** @see [delete] */
+    /** @see delete */
     suspend fun delete(id: String, requestOptions: RequestOptions): AppDeleteResponse =
         delete(id, AppDeleteParams.none(), requestOptions)
 
@@ -69,13 +69,13 @@ interface AppServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AppGetResponse = get(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [get] */
+    /** @see get */
     suspend fun get(
         params: AppGetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AppGetResponse
 
-    /** @see [get] */
+    /** @see get */
     suspend fun get(id: String, requestOptions: RequestOptions): AppGetResponse =
         get(id, AppGetParams.none(), requestOptions)
 
@@ -109,7 +109,7 @@ interface AppServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<AppListResponse>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         suspend fun list(requestOptions: RequestOptions): HttpResponseFor<AppListResponse> =
             list(AppListParams.none(), requestOptions)
@@ -126,14 +126,14 @@ interface AppServiceAsync {
         ): HttpResponseFor<AppDeleteResponse> =
             delete(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [delete] */
+        /** @see delete */
         @MustBeClosed
         suspend fun delete(
             params: AppDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<AppDeleteResponse>
 
-        /** @see [delete] */
+        /** @see delete */
         @MustBeClosed
         suspend fun delete(
             id: String,
@@ -151,14 +151,14 @@ interface AppServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<AppGetResponse> = get(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [get] */
+        /** @see get */
         @MustBeClosed
         suspend fun get(
             params: AppGetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<AppGetResponse>
 
-        /** @see [get] */
+        /** @see get */
         @MustBeClosed
         suspend fun get(
             id: String,

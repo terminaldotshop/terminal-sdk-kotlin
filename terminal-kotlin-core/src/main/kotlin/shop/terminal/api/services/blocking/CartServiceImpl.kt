@@ -3,13 +3,13 @@
 package shop.terminal.api.services.blocking
 
 import shop.terminal.api.core.ClientOptions
-import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.RequestOptions
+import shop.terminal.api.core.handlers.errorBodyHandler
 import shop.terminal.api.core.handlers.errorHandler
 import shop.terminal.api.core.handlers.jsonHandler
-import shop.terminal.api.core.handlers.withErrorHandler
 import shop.terminal.api.core.http.HttpMethod
 import shop.terminal.api.core.http.HttpRequest
+import shop.terminal.api.core.http.HttpResponse
 import shop.terminal.api.core.http.HttpResponse.Handler
 import shop.terminal.api.core.http.HttpResponseFor
 import shop.terminal.api.core.http.json
@@ -78,7 +78,8 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         CartService.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
@@ -86,7 +87,7 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
             CartServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
 
         private val clearHandler: Handler<CartClearResponse> =
-            jsonHandler<CartClearResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<CartClearResponse>(clientOptions.jsonMapper)
 
         override fun clear(
             params: CartClearParams,
@@ -102,7 +103,7 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { clearHandler.handle(it) }
                     .also {
@@ -115,7 +116,6 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
 
         private val convertHandler: Handler<CartConvertResponse> =
             jsonHandler<CartConvertResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun convert(
             params: CartConvertParams,
@@ -131,7 +131,7 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { convertHandler.handle(it) }
                     .also {
@@ -143,7 +143,7 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
         }
 
         private val getHandler: Handler<CartGetResponse> =
-            jsonHandler<CartGetResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<CartGetResponse>(clientOptions.jsonMapper)
 
         override fun get(
             params: CartGetParams,
@@ -158,7 +158,7 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { getHandler.handle(it) }
                     .also {
@@ -171,7 +171,6 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
 
         private val setAddressHandler: Handler<CartSetAddressResponse> =
             jsonHandler<CartSetAddressResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun setAddress(
             params: CartSetAddressParams,
@@ -187,7 +186,7 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { setAddressHandler.handle(it) }
                     .also {
@@ -200,7 +199,6 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
 
         private val setCardHandler: Handler<CartSetCardResponse> =
             jsonHandler<CartSetCardResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun setCard(
             params: CartSetCardParams,
@@ -216,7 +214,7 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { setCardHandler.handle(it) }
                     .also {
@@ -229,7 +227,6 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
 
         private val setItemHandler: Handler<CartSetItemResponse> =
             jsonHandler<CartSetItemResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun setItem(
             params: CartSetItemParams,
@@ -245,7 +242,7 @@ class CartServiceImpl internal constructor(private val clientOptions: ClientOpti
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { setItemHandler.handle(it) }
                     .also {

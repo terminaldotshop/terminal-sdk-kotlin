@@ -11,17 +11,13 @@ internal class CartSetAddressResponseTest {
 
     @Test
     fun create() {
-        val cartSetAddressResponse =
-            CartSetAddressResponse.builder().data(CartSetAddressResponse.Data.OK).build()
-
-        assertThat(cartSetAddressResponse.data()).isEqualTo(CartSetAddressResponse.Data.OK)
+        val cartSetAddressResponse = CartSetAddressResponse.builder().build()
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val cartSetAddressResponse =
-            CartSetAddressResponse.builder().data(CartSetAddressResponse.Data.OK).build()
+        val cartSetAddressResponse = CartSetAddressResponse.builder().build()
 
         val roundtrippedCartSetAddressResponse =
             jsonMapper.readValue(

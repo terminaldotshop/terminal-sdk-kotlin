@@ -41,7 +41,7 @@ interface AddressServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AddressListResponse
 
-    /** @see [list] */
+    /** @see list */
     suspend fun list(requestOptions: RequestOptions): AddressListResponse =
         list(AddressListParams.none(), requestOptions)
 
@@ -52,13 +52,13 @@ interface AddressServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AddressDeleteResponse = delete(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [delete] */
+    /** @see delete */
     suspend fun delete(
         params: AddressDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AddressDeleteResponse
 
-    /** @see [delete] */
+    /** @see delete */
     suspend fun delete(id: String, requestOptions: RequestOptions): AddressDeleteResponse =
         delete(id, AddressDeleteParams.none(), requestOptions)
 
@@ -69,13 +69,13 @@ interface AddressServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AddressGetResponse = get(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [get] */
+    /** @see get */
     suspend fun get(
         params: AddressGetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AddressGetResponse
 
-    /** @see [get] */
+    /** @see get */
     suspend fun get(id: String, requestOptions: RequestOptions): AddressGetResponse =
         get(id, AddressGetParams.none(), requestOptions)
 
@@ -113,7 +113,7 @@ interface AddressServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<AddressListResponse>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         suspend fun list(requestOptions: RequestOptions): HttpResponseFor<AddressListResponse> =
             list(AddressListParams.none(), requestOptions)
@@ -130,14 +130,14 @@ interface AddressServiceAsync {
         ): HttpResponseFor<AddressDeleteResponse> =
             delete(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [delete] */
+        /** @see delete */
         @MustBeClosed
         suspend fun delete(
             params: AddressDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<AddressDeleteResponse>
 
-        /** @see [delete] */
+        /** @see delete */
         @MustBeClosed
         suspend fun delete(
             id: String,
@@ -157,14 +157,14 @@ interface AddressServiceAsync {
         ): HttpResponseFor<AddressGetResponse> =
             get(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [get] */
+        /** @see get */
         @MustBeClosed
         suspend fun get(
             params: AddressGetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<AddressGetResponse>
 
-        /** @see [get] */
+        /** @see get */
         @MustBeClosed
         suspend fun get(
             id: String,

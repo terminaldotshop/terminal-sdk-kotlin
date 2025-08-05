@@ -3,14 +3,14 @@
 package shop.terminal.api.services.blocking
 
 import shop.terminal.api.core.ClientOptions
-import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.checkRequired
+import shop.terminal.api.core.handlers.errorBodyHandler
 import shop.terminal.api.core.handlers.errorHandler
 import shop.terminal.api.core.handlers.jsonHandler
-import shop.terminal.api.core.handlers.withErrorHandler
 import shop.terminal.api.core.http.HttpMethod
 import shop.terminal.api.core.http.HttpRequest
+import shop.terminal.api.core.http.HttpResponse
 import shop.terminal.api.core.http.HttpResponse.Handler
 import shop.terminal.api.core.http.HttpResponseFor
 import shop.terminal.api.core.http.json
@@ -62,7 +62,8 @@ class TokenServiceImpl internal constructor(private val clientOptions: ClientOpt
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         TokenService.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
@@ -71,7 +72,6 @@ class TokenServiceImpl internal constructor(private val clientOptions: ClientOpt
 
         private val createHandler: Handler<TokenCreateResponse> =
             jsonHandler<TokenCreateResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun create(
             params: TokenCreateParams,
@@ -87,7 +87,7 @@ class TokenServiceImpl internal constructor(private val clientOptions: ClientOpt
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { createHandler.handle(it) }
                     .also {
@@ -99,7 +99,7 @@ class TokenServiceImpl internal constructor(private val clientOptions: ClientOpt
         }
 
         private val listHandler: Handler<TokenListResponse> =
-            jsonHandler<TokenListResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<TokenListResponse>(clientOptions.jsonMapper)
 
         override fun list(
             params: TokenListParams,
@@ -114,7 +114,7 @@ class TokenServiceImpl internal constructor(private val clientOptions: ClientOpt
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { listHandler.handle(it) }
                     .also {
@@ -127,7 +127,6 @@ class TokenServiceImpl internal constructor(private val clientOptions: ClientOpt
 
         private val deleteHandler: Handler<TokenDeleteResponse> =
             jsonHandler<TokenDeleteResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun delete(
             params: TokenDeleteParams,
@@ -146,7 +145,7 @@ class TokenServiceImpl internal constructor(private val clientOptions: ClientOpt
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { deleteHandler.handle(it) }
                     .also {
@@ -158,7 +157,7 @@ class TokenServiceImpl internal constructor(private val clientOptions: ClientOpt
         }
 
         private val getHandler: Handler<TokenGetResponse> =
-            jsonHandler<TokenGetResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<TokenGetResponse>(clientOptions.jsonMapper)
 
         override fun get(
             params: TokenGetParams,
@@ -176,7 +175,7 @@ class TokenServiceImpl internal constructor(private val clientOptions: ClientOpt
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { getHandler.handle(it) }
                     .also {

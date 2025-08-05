@@ -3,14 +3,14 @@
 package shop.terminal.api.services.blocking
 
 import shop.terminal.api.core.ClientOptions
-import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.checkRequired
+import shop.terminal.api.core.handlers.errorBodyHandler
 import shop.terminal.api.core.handlers.errorHandler
 import shop.terminal.api.core.handlers.jsonHandler
-import shop.terminal.api.core.handlers.withErrorHandler
 import shop.terminal.api.core.http.HttpMethod
 import shop.terminal.api.core.http.HttpRequest
+import shop.terminal.api.core.http.HttpResponse
 import shop.terminal.api.core.http.HttpResponse.Handler
 import shop.terminal.api.core.http.HttpResponseFor
 import shop.terminal.api.core.http.parseable
@@ -46,7 +46,8 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         ProductService.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
@@ -57,7 +58,6 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
 
         private val listHandler: Handler<ProductListResponse> =
             jsonHandler<ProductListResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun list(
             params: ProductListParams,
@@ -72,7 +72,7 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { listHandler.handle(it) }
                     .also {
@@ -84,7 +84,7 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
         }
 
         private val getHandler: Handler<ProductGetResponse> =
-            jsonHandler<ProductGetResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<ProductGetResponse>(clientOptions.jsonMapper)
 
         override fun get(
             params: ProductGetParams,
@@ -102,7 +102,7 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { getHandler.handle(it) }
                     .also {

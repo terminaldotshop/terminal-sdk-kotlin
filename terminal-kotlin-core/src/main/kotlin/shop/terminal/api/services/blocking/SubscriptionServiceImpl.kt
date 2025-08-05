@@ -3,14 +3,14 @@
 package shop.terminal.api.services.blocking
 
 import shop.terminal.api.core.ClientOptions
-import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.checkRequired
+import shop.terminal.api.core.handlers.errorBodyHandler
 import shop.terminal.api.core.handlers.errorHandler
 import shop.terminal.api.core.handlers.jsonHandler
-import shop.terminal.api.core.handlers.withErrorHandler
 import shop.terminal.api.core.http.HttpMethod
 import shop.terminal.api.core.http.HttpRequest
+import shop.terminal.api.core.http.HttpResponse
 import shop.terminal.api.core.http.HttpResponse.Handler
 import shop.terminal.api.core.http.HttpResponseFor
 import shop.terminal.api.core.http.json
@@ -77,7 +77,8 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         SubscriptionService.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
@@ -88,7 +89,6 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
 
         private val createHandler: Handler<SubscriptionCreateResponse> =
             jsonHandler<SubscriptionCreateResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun create(
             params: SubscriptionCreateParams,
@@ -104,7 +104,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { createHandler.handle(it) }
                     .also {
@@ -117,7 +117,6 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
 
         private val updateHandler: Handler<SubscriptionUpdateResponse> =
             jsonHandler<SubscriptionUpdateResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun update(
             params: SubscriptionUpdateParams,
@@ -136,7 +135,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { updateHandler.handle(it) }
                     .also {
@@ -149,7 +148,6 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
 
         private val listHandler: Handler<SubscriptionListResponse> =
             jsonHandler<SubscriptionListResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun list(
             params: SubscriptionListParams,
@@ -164,7 +162,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { listHandler.handle(it) }
                     .also {
@@ -177,7 +175,6 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
 
         private val deleteHandler: Handler<SubscriptionDeleteResponse> =
             jsonHandler<SubscriptionDeleteResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun delete(
             params: SubscriptionDeleteParams,
@@ -196,7 +193,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { deleteHandler.handle(it) }
                     .also {
@@ -209,7 +206,6 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
 
         private val getHandler: Handler<SubscriptionGetResponse> =
             jsonHandler<SubscriptionGetResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun get(
             params: SubscriptionGetParams,
@@ -227,7 +223,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { getHandler.handle(it) }
                     .also {

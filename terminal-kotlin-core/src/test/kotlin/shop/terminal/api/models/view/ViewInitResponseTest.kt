@@ -141,7 +141,6 @@ internal class ViewInitResponseTest {
                                         .id("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                                         .name("12oz")
                                         .price(2200L)
-                                        .description("A detailed description of this variant")
                                         .tags(
                                             ProductVariant.Tags.builder()
                                                 .app("app")
@@ -164,6 +163,7 @@ internal class ViewInitResponseTest {
                                         .marketNa(true)
                                         .build()
                                 )
+                                .timeHidden("timeHidden")
                                 .build()
                         )
                         .profile(
@@ -191,10 +191,7 @@ internal class ViewInitResponseTest {
                                 .quantity(1L)
                                 .next("2025-02-01T19:36:19.000Z")
                                 .schedule(
-                                    Subscription.Schedule.Weekly.builder()
-                                        .interval(3L)
-                                        .type(Subscription.Schedule.Weekly.Type.WEEKLY)
-                                        .build()
+                                    Subscription.Schedule.Weekly.builder().interval(3L).build()
                                 )
                                 .build()
                         )
@@ -324,7 +321,6 @@ internal class ViewInitResponseTest {
                                     .id("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                                     .name("12oz")
                                     .price(2200L)
-                                    .description("A detailed description of this variant")
                                     .tags(
                                         ProductVariant.Tags.builder()
                                             .app("app")
@@ -347,6 +343,7 @@ internal class ViewInitResponseTest {
                                     .marketNa(true)
                                     .build()
                             )
+                            .timeHidden("timeHidden")
                             .build()
                     )
                     .profile(
@@ -373,12 +370,7 @@ internal class ViewInitResponseTest {
                             .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                             .quantity(1L)
                             .next("2025-02-01T19:36:19.000Z")
-                            .schedule(
-                                Subscription.Schedule.Weekly.builder()
-                                    .interval(3L)
-                                    .type(Subscription.Schedule.Weekly.Type.WEEKLY)
-                                    .build()
-                            )
+                            .schedule(Subscription.Schedule.Weekly.builder().interval(3L).build())
                             .build()
                     )
                     .addToken(
@@ -515,7 +507,6 @@ internal class ViewInitResponseTest {
                                         .id("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
                                         .name("12oz")
                                         .price(2200L)
-                                        .description("A detailed description of this variant")
                                         .tags(
                                             ProductVariant.Tags.builder()
                                                 .app("app")
@@ -538,6 +529,7 @@ internal class ViewInitResponseTest {
                                         .marketNa(true)
                                         .build()
                                 )
+                                .timeHidden("timeHidden")
                                 .build()
                         )
                         .profile(
@@ -565,10 +557,7 @@ internal class ViewInitResponseTest {
                                 .quantity(1L)
                                 .next("2025-02-01T19:36:19.000Z")
                                 .schedule(
-                                    Subscription.Schedule.Weekly.builder()
-                                        .interval(3L)
-                                        .type(Subscription.Schedule.Weekly.Type.WEEKLY)
-                                        .build()
+                                    Subscription.Schedule.Weekly.builder().interval(3L).build()
                                 )
                                 .build()
                         )

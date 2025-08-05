@@ -32,7 +32,7 @@ interface ViewServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ViewInitResponse
 
-    /** @see [init] */
+    /** @see init */
     suspend fun init(requestOptions: RequestOptions): ViewInitResponse =
         init(ViewInitParams.none(), requestOptions)
 
@@ -56,7 +56,7 @@ interface ViewServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ViewInitResponse>
 
-        /** @see [init] */
+        /** @see init */
         @MustBeClosed
         suspend fun init(requestOptions: RequestOptions): HttpResponseFor<ViewInitResponse> =
             init(ViewInitParams.none(), requestOptions)
