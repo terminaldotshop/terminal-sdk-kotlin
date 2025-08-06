@@ -9,7 +9,7 @@ dependencies {
 
 application {
     // Use `./gradlew :terminal-kotlin-example:run` to run `Main`
-    // Use `./gradlew :terminal-kotlin-example:run -Dexample=Something` to run `SomethingExample`
+    // Use `./gradlew :terminal-kotlin-example:run -Pexample=Something` to run `SomethingExample`
     mainClass = "shop.terminal.api.example.${
         if (project.hasProperty("example"))
             "${project.property("example")}ExampleKt"
