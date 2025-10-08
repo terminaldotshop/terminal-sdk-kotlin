@@ -6,6 +6,7 @@ import com.google.errorprone.annotations.MustBeClosed
 import shop.terminal.api.core.ClientOptions
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.http.HttpResponseFor
+import shop.terminal.api.models.subscription.Subscription
 import shop.terminal.api.models.subscription.SubscriptionCreateParams
 import shop.terminal.api.models.subscription.SubscriptionCreateResponse
 import shop.terminal.api.models.subscription.SubscriptionDeleteParams
@@ -36,6 +37,16 @@ interface SubscriptionService {
         params: SubscriptionCreateParams = SubscriptionCreateParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionCreateResponse
+
+    /** @see create */
+    fun create(
+        subscription: Subscription,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): SubscriptionCreateResponse =
+        create(
+            SubscriptionCreateParams.builder().subscription(subscription).build(),
+            requestOptions,
+        )
 
     /** @see create */
     fun create(requestOptions: RequestOptions): SubscriptionCreateResponse =
@@ -125,6 +136,17 @@ interface SubscriptionService {
             params: SubscriptionCreateParams = SubscriptionCreateParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<SubscriptionCreateResponse>
+
+        /** @see create */
+        @MustBeClosed
+        fun create(
+            subscription: Subscription,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionCreateResponse> =
+            create(
+                SubscriptionCreateParams.builder().subscription(subscription).build(),
+                requestOptions,
+            )
 
         /** @see create */
         @MustBeClosed

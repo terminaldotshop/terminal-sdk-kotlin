@@ -27,6 +27,7 @@ import shop.terminal.api.models.subscription.Subscription
 import shop.terminal.api.models.token.Token
 
 class ViewInitResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val data: JsonField<Data>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -162,6 +163,7 @@ private constructor(
 
     /** Initial app data. */
     class Data
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val addresses: JsonField<List<Address>>,
         private val apps: JsonField<List<App>>,
@@ -735,12 +737,35 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Data && addresses == other.addresses && apps == other.apps && cards == other.cards && cart == other.cart && orders == other.orders && products == other.products && profile == other.profile && region == other.region && subscriptions == other.subscriptions && tokens == other.tokens && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Data &&
+                addresses == other.addresses &&
+                apps == other.apps &&
+                cards == other.cards &&
+                cart == other.cart &&
+                orders == other.orders &&
+                products == other.products &&
+                profile == other.profile &&
+                region == other.region &&
+                subscriptions == other.subscriptions &&
+                tokens == other.tokens &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(addresses, apps, cards, cart, orders, products, profile, region, subscriptions, tokens, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                addresses,
+                apps,
+                cards,
+                cart,
+                orders,
+                products,
+                profile,
+                region,
+                subscriptions,
+                tokens,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -753,12 +778,12 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ViewInitResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is ViewInitResponse &&
+            data == other.data &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
     private val hashCode: Int by lazy { Objects.hash(data, additionalProperties) }
-    /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 

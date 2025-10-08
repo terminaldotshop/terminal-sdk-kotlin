@@ -17,6 +17,7 @@ import shop.terminal.api.errors.TerminalInvalidDataException
 
 /** A Terminal App used for configuring an OAuth 2.0 client. */
 class App
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
     private val name: JsonField<String>,
@@ -267,12 +268,17 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is App && id == other.id && name == other.name && redirectUri == other.redirectUri && secret == other.secret && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is App &&
+            id == other.id &&
+            name == other.name &&
+            redirectUri == other.redirectUri &&
+            secret == other.secret &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, name, redirectUri, secret, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(id, name, redirectUri, secret, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 

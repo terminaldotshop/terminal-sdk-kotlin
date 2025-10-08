@@ -128,7 +128,7 @@ class Region @JsonCreator private constructor(private val value: JsonField<Strin
             return true
         }
 
-        return /* spotless:off */ other is Region && value == other.value /* spotless:on */
+        return other is Region && value == other.value
     }
 
     override fun hashCode() = value.hashCode()

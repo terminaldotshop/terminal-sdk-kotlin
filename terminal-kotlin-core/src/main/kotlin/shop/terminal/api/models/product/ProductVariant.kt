@@ -17,6 +17,7 @@ import shop.terminal.api.errors.TerminalInvalidDataException
 
 /** Variant of a product in the Terminal shop. */
 class ProductVariant
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
     private val name: JsonField<String>,
@@ -259,6 +260,7 @@ private constructor(
 
     /** Tags for the product variant. */
     class Tags
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val app: JsonField<String>,
         private val marketEu: JsonField<Boolean>,
@@ -484,12 +486,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Tags && app == other.app && marketEu == other.marketEu && marketGlobal == other.marketGlobal && marketNa == other.marketNa && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Tags &&
+                app == other.app &&
+                marketEu == other.marketEu &&
+                marketGlobal == other.marketGlobal &&
+                marketNa == other.marketNa &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(app, marketEu, marketGlobal, marketNa, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(app, marketEu, marketGlobal, marketNa, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -502,12 +509,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ProductVariant && id == other.id && name == other.name && price == other.price && tags == other.tags && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is ProductVariant &&
+            id == other.id &&
+            name == other.name &&
+            price == other.price &&
+            tags == other.tags &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
     private val hashCode: Int by lazy { Objects.hash(id, name, price, tags, additionalProperties) }
-    /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 

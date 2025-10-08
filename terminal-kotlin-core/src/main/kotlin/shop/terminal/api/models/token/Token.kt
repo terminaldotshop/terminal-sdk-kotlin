@@ -20,6 +20,7 @@ import shop.terminal.api.errors.TerminalInvalidDataException
  * coffee to be ordered on your credit card.
  */
 class Token
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
     private val token: JsonField<String>,
@@ -232,12 +233,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Token && id == other.id && token == other.token && created == other.created && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is Token &&
+            id == other.id &&
+            token == other.token &&
+            created == other.created &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
     private val hashCode: Int by lazy { Objects.hash(id, token, created, additionalProperties) }
-    /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 

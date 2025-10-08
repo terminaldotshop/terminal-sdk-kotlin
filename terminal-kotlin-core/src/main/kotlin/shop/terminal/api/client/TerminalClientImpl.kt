@@ -97,7 +97,7 @@ class TerminalClientImpl(private val clientOptions: ClientOptions) : TerminalCli
 
     override fun view(): ViewService = view
 
-    override fun close() = clientOptions.httpClient.close()
+    override fun close() = clientOptions.close()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         TerminalClient.WithRawResponse {

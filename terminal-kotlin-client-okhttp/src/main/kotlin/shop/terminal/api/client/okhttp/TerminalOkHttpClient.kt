@@ -12,6 +12,7 @@ import javax.net.ssl.X509TrustManager
 import shop.terminal.api.client.TerminalClient
 import shop.terminal.api.client.TerminalClientImpl
 import shop.terminal.api.core.ClientOptions
+import shop.terminal.api.core.Sleeper
 import shop.terminal.api.core.Timeout
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.HttpClient
@@ -102,6 +103,17 @@ class TerminalOkHttpClient private constructor() {
          * rarely needs to be overridden.
          */
         fun jsonMapper(jsonMapper: JsonMapper) = apply { clientOptions.jsonMapper(jsonMapper) }
+
+        /**
+         * The interface to use for delaying execution, like during retries.
+         *
+         * This is primarily useful for using fake delays in tests.
+         *
+         * Defaults to real execution delays.
+         *
+         * This class takes ownership of the sleeper and closes it when closed.
+         */
+        fun sleeper(sleeper: Sleeper) = apply { clientOptions.sleeper(sleeper) }
 
         /**
          * The clock to use for operations that require timing, like retries.

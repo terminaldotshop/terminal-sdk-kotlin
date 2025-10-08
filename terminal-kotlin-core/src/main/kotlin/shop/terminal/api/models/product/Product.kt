@@ -20,6 +20,7 @@ import shop.terminal.api.errors.TerminalInvalidDataException
 
 /** Product sold in the Terminal shop. */
 class Product
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
     private val description: JsonField<String>,
@@ -545,7 +546,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Subscription && value == other.value /* spotless:on */
+            return other is Subscription && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -555,6 +556,7 @@ private constructor(
 
     /** Tags for the product. */
     class Tags
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val app: JsonField<String>,
         private val color: JsonField<String>,
@@ -850,12 +852,27 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Tags && app == other.app && color == other.color && featured == other.featured && marketEu == other.marketEu && marketGlobal == other.marketGlobal && marketNa == other.marketNa && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Tags &&
+                app == other.app &&
+                color == other.color &&
+                featured == other.featured &&
+                marketEu == other.marketEu &&
+                marketGlobal == other.marketGlobal &&
+                marketNa == other.marketNa &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(app, color, featured, marketEu, marketGlobal, marketNa, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                app,
+                color,
+                featured,
+                marketEu,
+                marketGlobal,
+                marketNa,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -868,12 +885,31 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Product && id == other.id && description == other.description && name == other.name && variants == other.variants && order == other.order && subscription == other.subscription && tags == other.tags && timeHidden == other.timeHidden && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is Product &&
+            id == other.id &&
+            description == other.description &&
+            name == other.name &&
+            variants == other.variants &&
+            order == other.order &&
+            subscription == other.subscription &&
+            tags == other.tags &&
+            timeHidden == other.timeHidden &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, description, name, variants, order, subscription, tags, timeHidden, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            id,
+            description,
+            name,
+            variants,
+            order,
+            subscription,
+            tags,
+            timeHidden,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 
