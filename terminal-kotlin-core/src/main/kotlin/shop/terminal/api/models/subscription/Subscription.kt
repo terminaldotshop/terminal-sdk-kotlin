@@ -28,6 +28,7 @@ import shop.terminal.api.errors.TerminalInvalidDataException
 
 /** Subscription to a Terminal shop product. */
 class Subscription
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
     private val addressId: JsonField<String>,
@@ -558,10 +559,10 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Schedule && fixed == other.fixed && weekly == other.weekly /* spotless:on */
+            return other is Schedule && fixed == other.fixed && weekly == other.weekly
         }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(fixed, weekly) /* spotless:on */
+        override fun hashCode(): Int = Objects.hash(fixed, weekly)
 
         override fun toString(): String =
             when {
@@ -649,6 +650,7 @@ private constructor(
         }
 
         class Weekly
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val interval: JsonField<Long>,
             private val type: JsonValue,
@@ -833,12 +835,13 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Weekly && interval == other.interval && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Weekly &&
+                    interval == other.interval &&
+                    type == other.type &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(interval, type, additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -852,12 +855,33 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Subscription && id == other.id && addressId == other.addressId && cardId == other.cardId && created == other.created && price == other.price && productVariantId == other.productVariantId && quantity == other.quantity && next == other.next && schedule == other.schedule && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is Subscription &&
+            id == other.id &&
+            addressId == other.addressId &&
+            cardId == other.cardId &&
+            created == other.created &&
+            price == other.price &&
+            productVariantId == other.productVariantId &&
+            quantity == other.quantity &&
+            next == other.next &&
+            schedule == other.schedule &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, addressId, cardId, created, price, productVariantId, quantity, next, schedule, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            id,
+            addressId,
+            cardId,
+            created,
+            price,
+            productVariantId,
+            quantity,
+            next,
+            schedule,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

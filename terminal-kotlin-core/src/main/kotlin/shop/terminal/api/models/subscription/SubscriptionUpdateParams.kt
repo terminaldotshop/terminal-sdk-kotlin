@@ -318,6 +318,7 @@ private constructor(
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     class Body
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val addressId: JsonField<String>,
         private val cardId: JsonField<String>,
@@ -521,12 +522,16 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && addressId == other.addressId && cardId == other.cardId && schedule == other.schedule && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Body &&
+                addressId == other.addressId &&
+                cardId == other.cardId &&
+                schedule == other.schedule &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(addressId, cardId, schedule, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(addressId, cardId, schedule, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -623,10 +628,10 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Schedule && fixed == other.fixed && weekly == other.weekly /* spotless:on */
+            return other is Schedule && fixed == other.fixed && weekly == other.weekly
         }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(fixed, weekly) /* spotless:on */
+        override fun hashCode(): Int = Objects.hash(fixed, weekly)
 
         override fun toString(): String =
             when {
@@ -714,6 +719,7 @@ private constructor(
         }
 
         class Weekly
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val interval: JsonField<Long>,
             private val type: JsonValue,
@@ -898,12 +904,13 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is Weekly && interval == other.interval && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Weekly &&
+                    interval == other.interval &&
+                    type == other.type &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(interval, type, additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -917,10 +924,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is SubscriptionUpdateParams && id == other.id && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is SubscriptionUpdateParams &&
+            id == other.id &&
+            body == other.body &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, body, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = Objects.hash(id, body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "SubscriptionUpdateParams{id=$id, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

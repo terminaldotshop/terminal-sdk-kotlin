@@ -16,6 +16,7 @@ import shop.terminal.api.core.checkRequired
 import shop.terminal.api.errors.TerminalInvalidDataException
 
 class CardCollectResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val data: JsonField<Data>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -151,6 +152,7 @@ private constructor(
 
     /** URL for collecting card information. */
     class Data
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val url: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -294,12 +296,12 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Data && url == other.url && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Data &&
+                url == other.url &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(url, additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -311,12 +313,12 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CardCollectResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is CardCollectResponse &&
+            data == other.data &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
     private val hashCode: Int by lazy { Objects.hash(data, additionalProperties) }
-    /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 

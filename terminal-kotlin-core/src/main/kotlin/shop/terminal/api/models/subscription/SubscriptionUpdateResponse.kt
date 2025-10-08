@@ -16,6 +16,7 @@ import shop.terminal.api.core.checkRequired
 import shop.terminal.api.errors.TerminalInvalidDataException
 
 class SubscriptionUpdateResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val data: JsonField<Subscription>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -158,12 +159,12 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is SubscriptionUpdateResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is SubscriptionUpdateResponse &&
+            data == other.data &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
     private val hashCode: Int by lazy { Objects.hash(data, additionalProperties) }
-    /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
