@@ -29,10 +29,6 @@ private constructor(
 ) : HttpClient {
 
     override fun execute(request: HttpRequest, requestOptions: RequestOptions): HttpResponse {
-        if (!isRetryable(request) || maxRetries <= 0) {
-            return httpClient.execute(request, requestOptions)
-        }
-
         var modifiedRequest = maybeAddIdempotencyHeader(request)
 
         // Don't send the current retry count in the headers if the caller set their own value.
@@ -44,6 +40,10 @@ private constructor(
         while (true) {
             if (shouldSendRetryCount) {
                 modifiedRequest = setRetryCountHeader(modifiedRequest, retries)
+            }
+
+            if (!isRetryable(modifiedRequest)) {
+                return httpClient.execute(modifiedRequest, requestOptions)
             }
 
             val response =
@@ -73,10 +73,6 @@ private constructor(
         request: HttpRequest,
         requestOptions: RequestOptions,
     ): HttpResponse {
-        if (!isRetryable(request) || maxRetries <= 0) {
-            return httpClient.executeAsync(request, requestOptions)
-        }
-
         var modifiedRequest = maybeAddIdempotencyHeader(request)
 
         // Don't send the current retry count in the headers if the caller set their own value.
@@ -88,6 +84,10 @@ private constructor(
         while (true) {
             if (shouldSendRetryCount) {
                 modifiedRequest = setRetryCountHeader(modifiedRequest, retries)
+            }
+
+            if (!isRetryable(modifiedRequest)) {
+                return httpClient.executeAsync(modifiedRequest, requestOptions)
             }
 
             val response =

@@ -4,7 +4,8 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":terminal-kotlin"))
+    implementation(project(":terminal-kotlin-core"))
+    implementation(project(":terminal-kotlin-client-okhttp"))
 }
 
 application {
