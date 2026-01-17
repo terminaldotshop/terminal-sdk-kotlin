@@ -232,6 +232,8 @@ class OkHttpClient private constructor(private val okHttpClient: okhttp3.OkHttpC
         fun build(): OkHttpClient =
             OkHttpClient(
                 okhttp3.OkHttpClient.Builder()
+                    // `RetryingHttpClient` handles retries if the user enabled them.
+                    .retryOnConnectionFailure(false)
                     .connectTimeout(timeout.connect())
                     .readTimeout(timeout.read())
                     .writeTimeout(timeout.write())
