@@ -34,7 +34,7 @@ interface SubscriptionServiceAsync {
 
     /** Create a subscription for the current user. */
     suspend fun create(
-        params: SubscriptionCreateParams = SubscriptionCreateParams.none(),
+        params: SubscriptionCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionCreateResponse
 
@@ -47,10 +47,6 @@ interface SubscriptionServiceAsync {
             SubscriptionCreateParams.builder().subscription(subscription).build(),
             requestOptions,
         )
-
-    /** @see create */
-    suspend fun create(requestOptions: RequestOptions): SubscriptionCreateResponse =
-        create(SubscriptionCreateParams.none(), requestOptions)
 
     /** Update card, address, or interval for an existing subscription. */
     suspend fun update(
@@ -134,7 +130,7 @@ interface SubscriptionServiceAsync {
          */
         @MustBeClosed
         suspend fun create(
-            params: SubscriptionCreateParams = SubscriptionCreateParams.none(),
+            params: SubscriptionCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<SubscriptionCreateResponse>
 
@@ -148,13 +144,6 @@ interface SubscriptionServiceAsync {
                 SubscriptionCreateParams.builder().subscription(subscription).build(),
                 requestOptions,
             )
-
-        /** @see create */
-        @MustBeClosed
-        suspend fun create(
-            requestOptions: RequestOptions
-        ): HttpResponseFor<SubscriptionCreateResponse> =
-            create(SubscriptionCreateParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `put /subscription/{id}`, but is otherwise the same as

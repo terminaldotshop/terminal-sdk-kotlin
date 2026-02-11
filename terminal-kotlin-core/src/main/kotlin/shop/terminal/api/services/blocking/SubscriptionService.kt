@@ -34,7 +34,7 @@ interface SubscriptionService {
 
     /** Create a subscription for the current user. */
     fun create(
-        params: SubscriptionCreateParams = SubscriptionCreateParams.none(),
+        params: SubscriptionCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionCreateResponse
 
@@ -47,10 +47,6 @@ interface SubscriptionService {
             SubscriptionCreateParams.builder().subscription(subscription).build(),
             requestOptions,
         )
-
-    /** @see create */
-    fun create(requestOptions: RequestOptions): SubscriptionCreateResponse =
-        create(SubscriptionCreateParams.none(), requestOptions)
 
     /** Update card, address, or interval for an existing subscription. */
     fun update(
@@ -133,7 +129,7 @@ interface SubscriptionService {
          */
         @MustBeClosed
         fun create(
-            params: SubscriptionCreateParams = SubscriptionCreateParams.none(),
+            params: SubscriptionCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<SubscriptionCreateResponse>
 
@@ -147,11 +143,6 @@ interface SubscriptionService {
                 SubscriptionCreateParams.builder().subscription(subscription).build(),
                 requestOptions,
             )
-
-        /** @see create */
-        @MustBeClosed
-        fun create(requestOptions: RequestOptions): HttpResponseFor<SubscriptionCreateResponse> =
-            create(SubscriptionCreateParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `put /subscription/{id}`, but is otherwise the same as

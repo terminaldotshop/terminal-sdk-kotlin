@@ -5,23 +5,22 @@ package shop.terminal.api.models.subscription
 import java.util.Objects
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.Params
+import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
-import shop.terminal.api.core.immutableEmptyMap
 
 /** Create a subscription for the current user. */
 class SubscriptionCreateParams
 private constructor(
-    private val subscription: Subscription?,
+    private val subscription: Subscription,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     /** Subscription to a Terminal shop product. */
-    fun subscription(): Subscription? = subscription
+    fun subscription(): Subscription = subscription
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> =
-        subscription?._additionalProperties() ?: immutableEmptyMap()
+    fun _additionalBodyProperties(): Map<String, JsonValue> = subscription._additionalProperties()
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -33,9 +32,14 @@ private constructor(
 
     companion object {
 
-        fun none(): SubscriptionCreateParams = builder().build()
-
-        /** Returns a mutable builder for constructing an instance of [SubscriptionCreateParams]. */
+        /**
+         * Returns a mutable builder for constructing an instance of [SubscriptionCreateParams].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .subscription()
+         * ```
+         */
         fun builder() = Builder()
     }
 
@@ -53,7 +57,7 @@ private constructor(
         }
 
         /** Subscription to a Terminal shop product. */
-        fun subscription(subscription: Subscription?) = apply { this.subscription = subscription }
+        fun subscription(subscription: Subscription) = apply { this.subscription = subscription }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -157,16 +161,23 @@ private constructor(
          * Returns an immutable instance of [SubscriptionCreateParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .subscription()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): SubscriptionCreateParams =
             SubscriptionCreateParams(
-                subscription,
+                checkRequired("subscription", subscription),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
     }
 
-    fun _body(): Subscription? = subscription
+    fun _body(): Subscription = subscription
 
     override fun _headers(): Headers = additionalHeaders
 
