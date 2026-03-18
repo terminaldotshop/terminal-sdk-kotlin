@@ -17,6 +17,44 @@ internal class ClientOptionsTest {
     private val httpClient = mock<HttpClient>()
 
     @Test
+    fun putHeader_canOverwriteDefaultHeader() {
+        val clientOptions =
+            ClientOptions.builder()
+                .httpClient(httpClient)
+                .putHeader("User-Agent", "My User Agent")
+                .bearerToken("My Bearer Token")
+                .build()
+
+        assertThat(clientOptions.headers.values("User-Agent")).containsExactly("My User Agent")
+    }
+
+    @Test
+    fun toBuilder_appIdCanBeUpdated() {
+        var clientOptions =
+            ClientOptions.builder()
+                .httpClient(httpClient)
+                .appId("My App ID")
+                .bearerToken("My Bearer Token")
+                .build()
+
+        clientOptions = clientOptions.toBuilder().appId("another My App ID").build()
+
+        assertThat(clientOptions.headers.values("x-terminal-app-id"))
+            .containsExactly("another My App ID")
+    }
+
+    @Test
+    fun toBuilder_bearerCanBeUpdated() {
+        var clientOptions =
+            ClientOptions.builder().httpClient(httpClient).bearerToken("My Bearer Token").build()
+
+        clientOptions = clientOptions.toBuilder().bearerToken("another My Bearer Token").build()
+
+        assertThat(clientOptions.headers.values("Authorization"))
+            .containsExactly("Bearer another My Bearer Token")
+    }
+
+    @Test
     fun toBuilder_whenOriginalClientOptionsGarbageCollected_doesNotCloseOriginalClient() {
         var clientOptions =
             ClientOptions.builder().httpClient(httpClient).bearerToken("My Bearer Token").build()
