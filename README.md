@@ -342,6 +342,21 @@ val client: TerminalClient = TerminalOkHttpClient.builder()
     .build()
 ```
 
+If the proxy responds with `407 Proxy Authentication Required`, supply credentials by also configuring `proxyAuthenticator`:
+
+```kotlin
+import shop.terminal.api.client.TerminalClient
+import shop.terminal.api.client.okhttp.TerminalOkHttpClient
+import shop.terminal.api.core.http.ProxyAuthenticator
+
+val client: TerminalClient = TerminalOkHttpClient.builder()
+    .fromEnv()
+    .proxy(...)
+    // Or a custom implementation of `ProxyAuthenticator`.
+    .proxyAuthenticator(ProxyAuthenticator.basic("username", "password"))
+    .build()
+```
+
 ### Connection pooling
 
 To customize the underlying OkHttp connection pool, configure the client using the `maxIdleConnections` and `keepAliveDuration` methods:
