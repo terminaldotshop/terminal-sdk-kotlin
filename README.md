@@ -236,8 +236,6 @@ The SDK throws custom unchecked exception types:
 
 ## Logging
 
-The SDK uses the standard [OkHttp logging interceptor](https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor).
-
 Enable logging by setting the `TERMINAL_LOG` environment variable to `info`:
 
 ```sh
@@ -248,6 +246,19 @@ Or to `debug` for more verbose logging:
 
 ```sh
 export TERMINAL_LOG=debug
+```
+
+Or configure the client manually using the `logLevel` method:
+
+```kotlin
+import shop.terminal.api.client.TerminalClient
+import shop.terminal.api.client.okhttp.TerminalOkHttpClient
+import shop.terminal.api.core.LogLevel
+
+val client: TerminalClient = TerminalOkHttpClient.builder()
+    .fromEnv()
+    .logLevel(LogLevel.INFO)
+    .build()
 ```
 
 ## ProGuard and R8
