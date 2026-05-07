@@ -13,6 +13,7 @@ import javax.net.ssl.X509TrustManager
 import shop.terminal.api.client.TerminalClient
 import shop.terminal.api.client.TerminalClientImpl
 import shop.terminal.api.core.ClientOptions
+import shop.terminal.api.core.LogLevel
 import shop.terminal.api.core.Sleeper
 import shop.terminal.api.core.Timeout
 import shop.terminal.api.core.http.Headers
@@ -239,6 +240,15 @@ class TerminalOkHttpClient private constructor() {
          * Defaults to 2.
          */
         fun maxRetries(maxRetries: Int) = apply { clientOptions.maxRetries(maxRetries) }
+
+        /**
+         * The level at which to log request and response information.
+         *
+         * [fromEnv] will set the level from environment variables. See [LogLevel.fromEnv].
+         *
+         * Defaults to [LogLevel.fromEnv].
+         */
+        fun logLevel(logLevel: LogLevel) = apply { clientOptions.logLevel(logLevel) }
 
         fun bearerToken(bearerToken: String) = apply { clientOptions.bearerToken(bearerToken) }
 
