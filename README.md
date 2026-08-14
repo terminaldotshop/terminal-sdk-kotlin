@@ -3,7 +3,7 @@
 <!-- x-release-please-start-version -->
 
 [![Maven Central](https://img.shields.io/maven-central/v/shop.terminal.api/terminal-kotlin)](https://central.sonatype.com/artifact/shop.terminal.api/terminal-kotlin/2.5.0)
-[![javadoc](https://javadoc.io/badge2/shop.terminal.api/terminal-kotlin/2.5.0/javadoc.svg)](https://javadoc.io/doc/shop.terminal.api/terminal-kotlin/2.5.0)
+[![javadoc](https://javadoc.io/badge2/shop.terminal.api/terminal-kotlin/javadoc.svg)](https://javadoc.io/doc/shop.terminal.api/terminal-kotlin/2.5.0)
 
 <!-- x-release-please-end -->
 
