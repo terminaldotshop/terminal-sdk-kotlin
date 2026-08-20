@@ -84,6 +84,9 @@ class TerminalClientAsyncImpl(private val clientOptions: ClientOptions) : Termin
 
     override fun withRawResponse(): TerminalClientAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): TerminalClientAsync =
+        TerminalClientAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun product(): ProductServiceAsync = product
 
     override fun profile(): ProfileServiceAsync = profile
@@ -106,7 +109,7 @@ class TerminalClientAsyncImpl(private val clientOptions: ClientOptions) : Termin
 
     override fun view(): ViewServiceAsync = view
 
-    override fun close() = clientOptions.httpClient.close()
+    override fun close() = clientOptions.close()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         TerminalClientAsync.WithRawResponse {
@@ -154,6 +157,13 @@ class TerminalClientAsyncImpl(private val clientOptions: ClientOptions) : Termin
         private val view: ViewServiceAsync.WithRawResponse by lazy {
             ViewServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): TerminalClientAsync.WithRawResponse =
+            TerminalClientAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         override fun product(): ProductServiceAsync.WithRawResponse = product
 

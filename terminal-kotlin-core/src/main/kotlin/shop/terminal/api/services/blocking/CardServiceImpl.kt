@@ -3,13 +3,14 @@
 package shop.terminal.api.services.blocking
 
 import shop.terminal.api.core.ClientOptions
-import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.RequestOptions
+import shop.terminal.api.core.checkRequired
+import shop.terminal.api.core.handlers.errorBodyHandler
 import shop.terminal.api.core.handlers.errorHandler
 import shop.terminal.api.core.handlers.jsonHandler
-import shop.terminal.api.core.handlers.withErrorHandler
 import shop.terminal.api.core.http.HttpMethod
 import shop.terminal.api.core.http.HttpRequest
+import shop.terminal.api.core.http.HttpResponse
 import shop.terminal.api.core.http.HttpResponse.Handler
 import shop.terminal.api.core.http.HttpResponseFor
 import shop.terminal.api.core.http.json
@@ -33,6 +34,9 @@ class CardServiceImpl internal constructor(private val clientOptions: ClientOpti
     }
 
     override fun withRawResponse(): CardService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): CardService =
+        CardServiceImpl(clientOptions.toBuilder().apply(modifier).build())
 
     override fun create(
         params: CardCreateParams,
@@ -66,10 +70,16 @@ class CardServiceImpl internal constructor(private val clientOptions: ClientOpti
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         CardService.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): CardService.WithRawResponse =
+            CardServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
 
         private val createHandler: Handler<CardCreateResponse> =
-            jsonHandler<CardCreateResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<CardCreateResponse>(clientOptions.jsonMapper)
 
         override fun create(
             params: CardCreateParams,
@@ -78,13 +88,14 @@ class CardServiceImpl internal constructor(private val clientOptions: ClientOpti
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("card")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { createHandler.handle(it) }
                     .also {
@@ -96,7 +107,7 @@ class CardServiceImpl internal constructor(private val clientOptions: ClientOpti
         }
 
         private val listHandler: Handler<CardListResponse> =
-            jsonHandler<CardListResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<CardListResponse>(clientOptions.jsonMapper)
 
         override fun list(
             params: CardListParams,
@@ -105,12 +116,13 @@ class CardServiceImpl internal constructor(private val clientOptions: ClientOpti
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("card")
                     .build()
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { listHandler.handle(it) }
                     .also {
@@ -122,22 +134,26 @@ class CardServiceImpl internal constructor(private val clientOptions: ClientOpti
         }
 
         private val deleteHandler: Handler<CardDeleteResponse> =
-            jsonHandler<CardDeleteResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<CardDeleteResponse>(clientOptions.jsonMapper)
 
         override fun delete(
             params: CardDeleteParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<CardDeleteResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("card", params._pathParam(0))
                     .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { deleteHandler.handle(it) }
                     .also {
@@ -150,7 +166,6 @@ class CardServiceImpl internal constructor(private val clientOptions: ClientOpti
 
         private val collectHandler: Handler<CardCollectResponse> =
             jsonHandler<CardCollectResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun collect(
             params: CardCollectParams,
@@ -159,13 +174,14 @@ class CardServiceImpl internal constructor(private val clientOptions: ClientOpti
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("card", "collect")
                     .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { collectHandler.handle(it) }
                     .also {
@@ -177,21 +193,25 @@ class CardServiceImpl internal constructor(private val clientOptions: ClientOpti
         }
 
         private val getHandler: Handler<CardGetResponse> =
-            jsonHandler<CardGetResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<CardGetResponse>(clientOptions.jsonMapper)
 
         override fun get(
             params: CardGetParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<CardGetResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("card", params._pathParam(0))
                     .build()
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { getHandler.handle(it) }
                     .also {

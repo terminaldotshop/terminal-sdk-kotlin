@@ -7,9 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClientAsync
 import shop.terminal.api.models.subscription.Subscription
-import shop.terminal.api.models.subscription.SubscriptionCreateParams
-import shop.terminal.api.models.subscription.SubscriptionDeleteParams
-import shop.terminal.api.models.subscription.SubscriptionGetParams
 import shop.terminal.api.models.subscription.SubscriptionUpdateParams
 
 @ExtendWith(TestServerExtension::class)
@@ -26,25 +23,16 @@ internal class SubscriptionServiceAsyncTest {
 
         val subscription =
             subscriptionServiceAsync.create(
-                SubscriptionCreateParams.builder()
-                    .subscription(
-                        Subscription.builder()
-                            .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                            .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                            .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                            .created("2024-06-29T19:36:19.000Z")
-                            .price(2200L)
-                            .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
-                            .quantity(1L)
-                            .next("2025-02-01T19:36:19.000Z")
-                            .schedule(
-                                Subscription.Schedule.Weekly.builder()
-                                    .interval(3L)
-                                    .type(Subscription.Schedule.Weekly.Type.WEEKLY)
-                                    .build()
-                            )
-                            .build()
-                    )
+                Subscription.builder()
+                    .id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .created("2024-06-29T19:36:19.000Z")
+                    .price(2200L)
+                    .productVariantId("var_XXXXXXXXXXXXXXXXXXXXXXXXX")
+                    .quantity(1L)
+                    .next("2025-02-01T19:36:19.000Z")
+                    .schedule(Subscription.Schedule.Weekly.builder().interval(3L).build())
                     .build()
             )
 
@@ -67,10 +55,7 @@ internal class SubscriptionServiceAsyncTest {
                     .addressId("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
                     .cardId("crd_XXXXXXXXXXXXXXXXXXXXXXXXX")
                     .schedule(
-                        SubscriptionUpdateParams.Schedule.Weekly.builder()
-                            .interval(3L)
-                            .type(SubscriptionUpdateParams.Schedule.Weekly.Type.WEEKLY)
-                            .build()
+                        SubscriptionUpdateParams.Schedule.Weekly.builder().interval(3L).build()
                     )
                     .build()
             )
@@ -101,10 +86,7 @@ internal class SubscriptionServiceAsyncTest {
                 .build()
         val subscriptionServiceAsync = client.subscription()
 
-        val subscription =
-            subscriptionServiceAsync.delete(
-                SubscriptionDeleteParams.builder().id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
-            )
+        val subscription = subscriptionServiceAsync.delete("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
 
         subscription.validate()
     }
@@ -118,10 +100,7 @@ internal class SubscriptionServiceAsyncTest {
                 .build()
         val subscriptionServiceAsync = client.subscription()
 
-        val subscription =
-            subscriptionServiceAsync.get(
-                SubscriptionGetParams.builder().id("sub_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
-            )
+        val subscription = subscriptionServiceAsync.get("sub_XXXXXXXXXXXXXXXXXXXXXXXXX")
 
         subscription.validate()
     }

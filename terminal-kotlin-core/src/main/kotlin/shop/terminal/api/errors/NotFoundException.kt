@@ -5,10 +5,14 @@ package shop.terminal.api.errors
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.http.Headers
+import shop.terminal.api.core.jsonMapper
 
 class NotFoundException
 private constructor(private val headers: Headers, private val body: JsonValue, cause: Throwable?) :
-    TerminalServiceException("404: $body", cause) {
+    TerminalServiceException(
+        "404: ${if (body.isMissing()) "Unknown" else jsonMapper().writeValueAsString(body)}",
+        cause,
+    ) {
 
     override fun statusCode(): Int = 404
 

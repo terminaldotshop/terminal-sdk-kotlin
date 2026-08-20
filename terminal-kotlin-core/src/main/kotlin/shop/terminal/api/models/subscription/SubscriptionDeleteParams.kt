@@ -5,7 +5,6 @@ package shop.terminal.api.models.subscription
 import java.util.Objects
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.Params
-import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 import shop.terminal.api.core.toImmutable
@@ -13,33 +12,31 @@ import shop.terminal.api.core.toImmutable
 /** Cancel a subscription for the current user. */
 class SubscriptionDeleteParams
 private constructor(
-    private val id: String,
+    private val id: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
     /** ID of the subscription to cancel. */
-    fun id(): String = id
+    fun id(): String? = id
 
+    /** Additional body properties to send with the request. */
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
+    /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
 
+    /** Additional query param to send with the request. */
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [SubscriptionDeleteParams].
-         *
-         * The following fields are required:
-         * ```kotlin
-         * .id()
-         * ```
-         */
+        fun none(): SubscriptionDeleteParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [SubscriptionDeleteParams]. */
         fun builder() = Builder()
     }
 
@@ -60,7 +57,7 @@ private constructor(
         }
 
         /** ID of the subscription to cancel. */
-        fun id(id: String) = apply { this.id = id }
+        fun id(id: String?) = apply { this.id = id }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -186,17 +183,10 @@ private constructor(
          * Returns an immutable instance of [SubscriptionDeleteParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```kotlin
-         * .id()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): SubscriptionDeleteParams =
             SubscriptionDeleteParams(
-                checkRequired("id", id),
+                id,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -207,7 +197,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> id
+            0 -> id ?: ""
             else -> ""
         }
 
@@ -220,10 +210,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is SubscriptionDeleteParams && id == other.id && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return other is SubscriptionDeleteParams &&
+            id == other.id &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams &&
+            additionalBodyProperties == other.additionalBodyProperties
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(id, additionalHeaders, additionalQueryParams, additionalBodyProperties)
 
     override fun toString() =
         "SubscriptionDeleteParams{id=$id, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"

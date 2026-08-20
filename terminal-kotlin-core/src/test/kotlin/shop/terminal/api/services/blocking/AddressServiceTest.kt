@@ -7,8 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
 import shop.terminal.api.models.address.AddressCreateParams
-import shop.terminal.api.models.address.AddressDeleteParams
-import shop.terminal.api.models.address.AddressGetParams
 
 @ExtendWith(TestServerExtension::class)
 internal class AddressServiceTest {
@@ -62,10 +60,7 @@ internal class AddressServiceTest {
                 .build()
         val addressService = client.address()
 
-        val address =
-            addressService.delete(
-                AddressDeleteParams.builder().id("shp_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
-            )
+        val address = addressService.delete("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
 
         address.validate()
     }
@@ -79,10 +74,7 @@ internal class AddressServiceTest {
                 .build()
         val addressService = client.address()
 
-        val address =
-            addressService.get(
-                AddressGetParams.builder().id("shp_XXXXXXXXXXXXXXXXXXXXXXXXX").build()
-            )
+        val address = addressService.get("shp_XXXXXXXXXXXXXXXXXXXXXXXXX")
 
         address.validate()
     }

@@ -18,6 +18,7 @@ import shop.terminal.api.core.toImmutable
 import shop.terminal.api.errors.TerminalInvalidDataException
 
 class AppListResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val data: JsonField<List<App>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -142,6 +143,14 @@ private constructor(
 
     private var validated: Boolean = false
 
+    /**
+     * Validates that the types of all values in this object match their expected types recursively.
+     *
+     * This method is _not_ forwards compatible with new types from the API for existing fields.
+     *
+     * @throws TerminalInvalidDataException if any value type in this object doesn't match its
+     *   expected type.
+     */
     fun validate(): AppListResponse = apply {
         if (validated) {
             return@apply
@@ -171,12 +180,12 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is AppListResponse && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is AppListResponse &&
+            data == other.data &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
     private val hashCode: Int by lazy { Objects.hash(data, additionalProperties) }
-    /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 

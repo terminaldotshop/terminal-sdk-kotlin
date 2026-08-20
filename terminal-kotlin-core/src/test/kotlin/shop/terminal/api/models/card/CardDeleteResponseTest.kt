@@ -11,17 +11,13 @@ internal class CardDeleteResponseTest {
 
     @Test
     fun create() {
-        val cardDeleteResponse =
-            CardDeleteResponse.builder().data(CardDeleteResponse.Data.OK).build()
-
-        assertThat(cardDeleteResponse.data()).isEqualTo(CardDeleteResponse.Data.OK)
+        val cardDeleteResponse = CardDeleteResponse.builder().build()
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val cardDeleteResponse =
-            CardDeleteResponse.builder().data(CardDeleteResponse.Data.OK).build()
+        val cardDeleteResponse = CardDeleteResponse.builder().build()
 
         val roundtrippedCardDeleteResponse =
             jsonMapper.readValue(

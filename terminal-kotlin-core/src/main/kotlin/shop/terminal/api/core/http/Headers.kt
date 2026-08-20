@@ -1,6 +1,16 @@
+// File generated from our OpenAPI spec by Stainless.
+
 package shop.terminal.api.core.http
 
 import java.util.TreeMap
+import shop.terminal.api.core.JsonArray
+import shop.terminal.api.core.JsonBoolean
+import shop.terminal.api.core.JsonMissing
+import shop.terminal.api.core.JsonNull
+import shop.terminal.api.core.JsonNumber
+import shop.terminal.api.core.JsonObject
+import shop.terminal.api.core.JsonString
+import shop.terminal.api.core.JsonValue
 import shop.terminal.api.core.toImmutable
 
 class Headers private constructor(private val map: Map<String, List<String>>, val size: Int) {
@@ -23,6 +33,19 @@ class Headers private constructor(private val map: Map<String, List<String>>, va
         private val map: MutableMap<String, MutableList<String>> =
             TreeMap(String.CASE_INSENSITIVE_ORDER)
         private var size: Int = 0
+
+        fun put(name: String, value: JsonValue): Builder = apply {
+            when (value) {
+                is JsonMissing,
+                is JsonNull -> {}
+                is JsonBoolean -> put(name, value.value.toString())
+                is JsonNumber -> put(name, value.value.toString())
+                is JsonString -> put(name, value.value)
+                is JsonArray -> value.values.forEach { put(name, it) }
+                is JsonObject ->
+                    value.values.forEach { (nestedName, value) -> put("$name.$nestedName", value) }
+            }
+        }
 
         fun put(name: String, value: String) = apply {
             map.getOrPut(name) { mutableListOf() }.add(value)

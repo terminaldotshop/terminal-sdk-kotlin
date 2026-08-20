@@ -1,5 +1,88 @@
 # Changelog
 
+## 3.0.0 (2026-08-20)
+
+Full Changelog: [v2.5.0...v3.0.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v2.5.0...v3.0.0)
+
+### ⚠ BREAKING CHANGES
+
+* **client:** extract auto pagination to shared classes
+* **client:** **Migration:** - If you were referencing the `AutoPager` class on a specific `*Page` or `*PageAsync` type, then you should instead reference the shared `AutoPager` and `AutoPagerAsync` types, under the `core` package
+    - If you were referencing `getNextPage` or `getNextPageParams`:
+       - Swap to `nextPage()` and `nextPageParams()`
+       - Note that these both now return non-nullable types (use `hasNextPage()` before calling these, since they will throw if it's impossible to get another page)
+
+### Features
+
+* **api:** manual updates ([c62f6b8](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/c62f6b85a4246e90e5c0cd8a100898ba2e1f452e))
+* **api:** manual updates ([7021f13](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/7021f13f88995d2a72cae5cad1c6fa22431bc155))
+* **client:** add a `withOptions` method ([10bec03](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/10bec0350dadcbca0f17405dfa3282faf79c127e))
+* **client:** allow providing some params positionally ([ae20b5c](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/ae20b5c35bd4156811873b12b72777857684ce0d))
+* **client:** extract auto pagination to shared classes ([6f36edd](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/6f36edd7d76da0482c1c671e040a12740b693afb))
+* **client:** implement per-endpoint base URL support ([d8d9f14](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/d8d9f14405dae59211f0488a0f2a25717f2283e4))
+* **client:** improve logging ([1a887b8](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/1a887b8e43fac3263004e6319239d014958d18c6))
+* **stlc:** configurable CI runner and private-production-repo support in workflow templates ([afc5d45](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/afc5d45b9fbc8d4a511295213d7cc3d079a7cb46))
+
+
+### Bug Fixes
+
+* **client:** bump max requests per host to max requests (5 -&gt; 64) ([84f3565](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/84f356552ed37e89c83dc730a31c088de09aad0c))
+
+
+### Chores
+
+* **ci:** enable for pull requests ([4747b9c](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/4747b9c88d391b3bec6a4b35f033f37c0380543b))
+* **ci:** only run for pushes and fork pull requests ([a64d048](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/a64d048c0b1fbb22f52bf033eca8b76e0a43cd1e))
+* **docs:** grammar improvements ([ee3cb4d](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/ee3cb4da514cbae3872e9b6d431d2b23f729b4e1))
+* **example:** fix run example comment ([b7e4d1c](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/b7e4d1c7e44685b5fef7c1d47fd6255945579954))
+* **internal:** allow the mock server port to be set with STAINLESS_MOCK_PORT ([bc02be7](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/bc02be7e73a0a16e65f57ff25fe35ab94bd14119))
+* **internal:** codegen related update ([406e746](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/406e746fad64b779bdc9259d770eae1cb6274b40))
+* **internal:** codegen related update ([a1cb69e](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/a1cb69e292e3cb76dcad018ffd95eab4341d45ef))
+* **internal:** codegen related update ([a11c6c6](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/a11c6c69b704f7e5cc0a39cbdfce92740684fea6))
+* **internal:** codegen related update ([c56a65b](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/c56a65b09c0c20358cdefcdf1b610535993f3fde))
+* **internal:** codegen related update ([8e4d8df](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/8e4d8df824013ab82c35ca5ac093fe32af22459c))
+* **internal:** codegen related update ([ab74ac6](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/ab74ac647f4d344fe9b2a77c739ce09c060ba497))
+* **internal:** codegen related update ([b38aa94](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/b38aa94c32a92dd9c42188f34d79d6e0f2f70482))
+* **internal:** codegen related update ([86f3eb9](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/86f3eb98ab2830a2cf9841e86e7a81d80c8f9389))
+* **internal:** codegen related update ([1fe8f9d](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/1fe8f9d005432c79d802b25b609169484536d9fd))
+* **internal:** codegen related update ([f4b61b5](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/f4b61b5a8f29686c80a024f0f4631814832294a8))
+* **internal:** codegen related update ([72143da](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/72143da5ec96ee6bbc0fac8f7a48a6b30e22b800))
+* **internal:** codegen related update ([dd8aa20](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/dd8aa20da73f85ef2ffa4d67d640f498806d58e5))
+* **internal:** codegen related update ([39af5bc](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/39af5bcd18ebac38b78f8e791c26f5683fda4358))
+* **internal:** codegen related update ([c234edc](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/c234edc403afad68952356d4394712ce319eb963))
+* **internal:** codegen related update ([a98ac09](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/a98ac096a984c3fd1f1e43a708cdfc34ebcf527d))
+* **internal:** codegen related update ([d8e522e](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/d8e522e37999a9dadb6865428e8293b08a2d3333))
+* **internal:** codegen related update ([b4d126e](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/b4d126ecaf35fb225d84448447d4b65f2f729d3d))
+* **internal:** codegen related update ([29900a5](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/29900a5e5ae5b30a688f42eb1e4d1272cb944d89))
+* **internal:** codegen related update ([2877356](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/28773563281779a2f50524a2b9c9cfaa0d8a8eb9))
+* **internal:** codegen related update ([6bc3db9](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/6bc3db96674fba8455328a8bc5eb6d729ce48f57))
+* **internal:** codegen related update ([51a7d76](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/51a7d76e5ac224c1ba3c5e07f0de367b5a0df271))
+* **internal:** codegen related update ([59e5ec0](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/59e5ec09cea8ea1e249dc098e1e8af802b7ffdb1))
+* **internal:** codegen related update ([30e2a3e](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/30e2a3e625162655deadd6cf53c9cb55468e1123))
+* **internal:** codegen related update ([62c0078](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/62c00785fd26a6a1304a1f366fa6714ebffc167a))
+* **internal:** codegen related update ([c2fa082](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/c2fa082619b0d397979492c8089683ce844fdd0b))
+* **internal:** codegen related update ([fc92455](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/fc924555b807ee38f897df54ae7fbdd7621f7076))
+* **internal:** codegen related update ([beff4e9](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/beff4e9d34a8ffdab1a6aa12e52b8b51bcad1892))
+* **internal:** codegen related update ([689545c](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/689545c026bd80b8d61817fed1237440222e43e2))
+* **internal:** codegen related update ([198a8c9](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/198a8c988063daf0dfffb87956400edbe1ee92cf))
+* **internal:** codegen related update ([c05d376](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/c05d3766c538a6b108148844734cc66e8afed678))
+* **internal:** codegen related update ([2a41435](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/2a41435d5b2cd011d00b8627c3fee9ed9c1dceaf))
+* **internal:** codegen related update ([068fd9a](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/068fd9a06d0e242d6b7ad9e7a26be4c5d3317dcc))
+* **internal:** codegen related update ([1cebabb](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/1cebabbd48fe9e07fcca7982a2e2e386a18c4b86))
+* **internal:** codegen related update ([cfa8298](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/cfa82985020009e02b8c4df9f96a8d7478f566be))
+* **internal:** codegen related update ([04dda6f](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/04dda6fc09c2c1e43683e279c39b874fc96376ee))
+* **internal:** codegen related update ([468f6ba](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/468f6ba7b9ea38db4c616bc493a03df18866a062))
+* **internal:** codegen related update ([4b8af6e](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/4b8af6e3e81ffa3e1ed7c42c562c988ea0c68ffd))
+* **internal:** codegen related update ([8544214](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/85442141b4783d7a88c78d358d5e829ad30c3648))
+* **internal:** codegen related update ([d8ef808](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/d8ef808110375cde12889df5ddbb6f59b0f08a46))
+* **internal:** remove flaky `-Xbackend-threads=0` option ([b824bf8](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/b824bf8da5b7f3d1fd43a716fef970a980b063ef))
+* **internal:** update java toolchain ([bb8987e](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/bb8987ef5a4396a6d78c12fb3f075cfa18560edc))
+
+
+### Refactors
+
+* **internal:** minor `ClientOptionsTest` change ([95a3dd6](https://github.com/terminaldotshop/terminal-sdk-kotlin/commit/95a3dd686c4894fb2af59f32b73da1ea182b75d1))
+
 ## 2.5.0 (2025-04-24)
 
 Full Changelog: [v2.4.0...v2.5.0](https://github.com/terminaldotshop/terminal-sdk-kotlin/compare/v2.4.0...v2.5.0)

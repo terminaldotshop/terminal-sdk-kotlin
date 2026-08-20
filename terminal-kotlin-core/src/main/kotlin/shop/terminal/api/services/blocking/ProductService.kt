@@ -3,6 +3,7 @@
 package shop.terminal.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
+import shop.terminal.api.core.ClientOptions
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.http.HttpResponseFor
 import shop.terminal.api.models.product.ProductGetParams
@@ -17,24 +18,49 @@ interface ProductService {
      */
     fun withRawResponse(): WithRawResponse
 
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ProductService
+
     /** List all products for sale in the Terminal shop. */
     fun list(
         params: ProductListParams = ProductListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ProductListResponse
 
-    /** @see [list] */
+    /** @see list */
     fun list(requestOptions: RequestOptions): ProductListResponse =
         list(ProductListParams.none(), requestOptions)
 
     /** Get a product by ID from the Terminal shop. */
     fun get(
+        id: String,
+        params: ProductGetParams = ProductGetParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ProductGetResponse = get(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see get */
+    fun get(
         params: ProductGetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ProductGetResponse
 
+    /** @see get */
+    fun get(id: String, requestOptions: RequestOptions): ProductGetResponse =
+        get(id, ProductGetParams.none(), requestOptions)
+
     /** A view of [ProductService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ProductService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /product`, but is otherwise the same as
@@ -46,7 +72,7 @@ interface ProductService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ProductListResponse>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<ProductListResponse> =
             list(ProductListParams.none(), requestOptions)
@@ -57,8 +83,22 @@ interface ProductService {
          */
         @MustBeClosed
         fun get(
+            id: String,
+            params: ProductGetParams = ProductGetParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ProductGetResponse> =
+            get(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see get */
+        @MustBeClosed
+        fun get(
             params: ProductGetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ProductGetResponse>
+
+        /** @see get */
+        @MustBeClosed
+        fun get(id: String, requestOptions: RequestOptions): HttpResponseFor<ProductGetResponse> =
+            get(id, ProductGetParams.none(), requestOptions)
     }
 }

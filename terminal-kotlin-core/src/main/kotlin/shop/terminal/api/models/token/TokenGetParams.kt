@@ -4,37 +4,33 @@ package shop.terminal.api.models.token
 
 import java.util.Objects
 import shop.terminal.api.core.Params
-import shop.terminal.api.core.checkRequired
 import shop.terminal.api.core.http.Headers
 import shop.terminal.api.core.http.QueryParams
 
 /** Get the personal access token with the given ID. */
 class TokenGetParams
 private constructor(
-    private val id: String,
+    private val id: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     /** ID of the personal token to get. */
-    fun id(): String = id
+    fun id(): String? = id
 
+    /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
 
+    /** Additional query param to send with the request. */
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [TokenGetParams].
-         *
-         * The following fields are required:
-         * ```kotlin
-         * .id()
-         * ```
-         */
+        fun none(): TokenGetParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [TokenGetParams]. */
         fun builder() = Builder()
     }
 
@@ -52,7 +48,7 @@ private constructor(
         }
 
         /** ID of the personal token to get. */
-        fun id(id: String) = apply { this.id = id }
+        fun id(id: String?) = apply { this.id = id }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -156,25 +152,14 @@ private constructor(
          * Returns an immutable instance of [TokenGetParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```kotlin
-         * .id()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): TokenGetParams =
-            TokenGetParams(
-                checkRequired("id", id),
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
-            )
+            TokenGetParams(id, additionalHeaders.build(), additionalQueryParams.build())
     }
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> id
+            0 -> id ?: ""
             else -> ""
         }
 
@@ -187,10 +172,13 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is TokenGetParams && id == other.id && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is TokenGetParams &&
+            id == other.id &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = Objects.hash(id, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "TokenGetParams{id=$id, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

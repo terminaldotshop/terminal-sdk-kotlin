@@ -3,6 +3,7 @@
 package shop.terminal.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
+import shop.terminal.api.core.ClientOptions
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.http.HttpResponseFor
 import shop.terminal.api.models.address.AddressCreateParams
@@ -21,6 +22,13 @@ interface AddressService {
      */
     fun withRawResponse(): WithRawResponse
 
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: (ClientOptions.Builder) -> Unit): AddressService
+
     /** Create and add a shipping address to the current user. */
     fun create(
         params: AddressCreateParams,
@@ -33,24 +41,53 @@ interface AddressService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AddressListResponse
 
-    /** @see [list] */
+    /** @see list */
     fun list(requestOptions: RequestOptions): AddressListResponse =
         list(AddressListParams.none(), requestOptions)
 
     /** Delete a shipping address from the current user. */
     fun delete(
+        id: String,
+        params: AddressDeleteParams = AddressDeleteParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): AddressDeleteResponse = delete(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see delete */
+    fun delete(
         params: AddressDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AddressDeleteResponse
 
+    /** @see delete */
+    fun delete(id: String, requestOptions: RequestOptions): AddressDeleteResponse =
+        delete(id, AddressDeleteParams.none(), requestOptions)
+
     /** Get the shipping address with the given ID. */
+    fun get(
+        id: String,
+        params: AddressGetParams = AddressGetParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): AddressGetResponse = get(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see get */
     fun get(
         params: AddressGetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AddressGetResponse
 
+    /** @see get */
+    fun get(id: String, requestOptions: RequestOptions): AddressGetResponse =
+        get(id, AddressGetParams.none(), requestOptions)
+
     /** A view of [AddressService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: (ClientOptions.Builder) -> Unit): AddressService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /address`, but is otherwise the same as
@@ -72,7 +109,7 @@ interface AddressService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<AddressListResponse>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<AddressListResponse> =
             list(AddressListParams.none(), requestOptions)
@@ -83,9 +120,26 @@ interface AddressService {
          */
         @MustBeClosed
         fun delete(
+            id: String,
+            params: AddressDeleteParams = AddressDeleteParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<AddressDeleteResponse> =
+            delete(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see delete */
+        @MustBeClosed
+        fun delete(
             params: AddressDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<AddressDeleteResponse>
+
+        /** @see delete */
+        @MustBeClosed
+        fun delete(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<AddressDeleteResponse> =
+            delete(id, AddressDeleteParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /address/{id}`, but is otherwise the same as
@@ -93,8 +147,22 @@ interface AddressService {
          */
         @MustBeClosed
         fun get(
+            id: String,
+            params: AddressGetParams = AddressGetParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<AddressGetResponse> =
+            get(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see get */
+        @MustBeClosed
+        fun get(
             params: AddressGetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<AddressGetResponse>
+
+        /** @see get */
+        @MustBeClosed
+        fun get(id: String, requestOptions: RequestOptions): HttpResponseFor<AddressGetResponse> =
+            get(id, AddressGetParams.none(), requestOptions)
     }
 }

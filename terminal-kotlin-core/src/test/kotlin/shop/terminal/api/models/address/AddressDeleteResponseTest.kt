@@ -11,17 +11,13 @@ internal class AddressDeleteResponseTest {
 
     @Test
     fun create() {
-        val addressDeleteResponse =
-            AddressDeleteResponse.builder().data(AddressDeleteResponse.Data.OK).build()
-
-        assertThat(addressDeleteResponse.data()).isEqualTo(AddressDeleteResponse.Data.OK)
+        val addressDeleteResponse = AddressDeleteResponse.builder().build()
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val addressDeleteResponse =
-            AddressDeleteResponse.builder().data(AddressDeleteResponse.Data.OK).build()
+        val addressDeleteResponse = AddressDeleteResponse.builder().build()
 
         val roundtrippedAddressDeleteResponse =
             jsonMapper.readValue(

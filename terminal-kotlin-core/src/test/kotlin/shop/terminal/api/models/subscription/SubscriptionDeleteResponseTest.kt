@@ -11,17 +11,13 @@ internal class SubscriptionDeleteResponseTest {
 
     @Test
     fun create() {
-        val subscriptionDeleteResponse =
-            SubscriptionDeleteResponse.builder().data(SubscriptionDeleteResponse.Data.OK).build()
-
-        assertThat(subscriptionDeleteResponse.data()).isEqualTo(SubscriptionDeleteResponse.Data.OK)
+        val subscriptionDeleteResponse = SubscriptionDeleteResponse.builder().build()
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val subscriptionDeleteResponse =
-            SubscriptionDeleteResponse.builder().data(SubscriptionDeleteResponse.Data.OK).build()
+        val subscriptionDeleteResponse = SubscriptionDeleteResponse.builder().build()
 
         val roundtrippedSubscriptionDeleteResponse =
             jsonMapper.readValue(

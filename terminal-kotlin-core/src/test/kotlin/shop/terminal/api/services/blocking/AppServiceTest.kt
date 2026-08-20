@@ -7,8 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
 import shop.terminal.api.models.app.AppCreateParams
-import shop.terminal.api.models.app.AppDeleteParams
-import shop.terminal.api.models.app.AppGetParams
 
 @ExtendWith(TestServerExtension::class)
 internal class AppServiceTest {
@@ -56,8 +54,7 @@ internal class AppServiceTest {
                 .build()
         val appService = client.app()
 
-        val app =
-            appService.delete(AppDeleteParams.builder().id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX").build())
+        val app = appService.delete("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
 
         app.validate()
     }
@@ -71,7 +68,7 @@ internal class AppServiceTest {
                 .build()
         val appService = client.app()
 
-        val app = appService.get(AppGetParams.builder().id("cli_XXXXXXXXXXXXXXXXXXXXXXXXX").build())
+        val app = appService.get("cli_XXXXXXXXXXXXXXXXXXXXXXXXX")
 
         app.validate()
     }

@@ -3,6 +3,7 @@
 package shop.terminal.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
+import shop.terminal.api.core.ClientOptions
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.http.HttpResponseFor
 import shop.terminal.api.models.cart.CartClearParams
@@ -25,13 +26,20 @@ interface CartService {
      */
     fun withRawResponse(): WithRawResponse
 
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: (ClientOptions.Builder) -> Unit): CartService
+
     /** Clear the current user's cart. */
     fun clear(
         params: CartClearParams = CartClearParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CartClearResponse
 
-    /** @see [clear] */
+    /** @see clear */
     fun clear(requestOptions: RequestOptions): CartClearResponse =
         clear(CartClearParams.none(), requestOptions)
 
@@ -41,7 +49,7 @@ interface CartService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CartConvertResponse
 
-    /** @see [convert] */
+    /** @see convert */
     fun convert(requestOptions: RequestOptions): CartConvertResponse =
         convert(CartConvertParams.none(), requestOptions)
 
@@ -51,7 +59,7 @@ interface CartService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CartGetResponse
 
-    /** @see [get] */
+    /** @see get */
     fun get(requestOptions: RequestOptions): CartGetResponse =
         get(CartGetParams.none(), requestOptions)
 
@@ -77,6 +85,13 @@ interface CartService {
     interface WithRawResponse {
 
         /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: (ClientOptions.Builder) -> Unit): CartService.WithRawResponse
+
+        /**
          * Returns a raw HTTP response for `delete /cart`, but is otherwise the same as
          * [CartService.clear].
          */
@@ -86,7 +101,7 @@ interface CartService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CartClearResponse>
 
-        /** @see [clear] */
+        /** @see clear */
         @MustBeClosed
         fun clear(requestOptions: RequestOptions): HttpResponseFor<CartClearResponse> =
             clear(CartClearParams.none(), requestOptions)
@@ -101,7 +116,7 @@ interface CartService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CartConvertResponse>
 
-        /** @see [convert] */
+        /** @see convert */
         @MustBeClosed
         fun convert(requestOptions: RequestOptions): HttpResponseFor<CartConvertResponse> =
             convert(CartConvertParams.none(), requestOptions)
@@ -116,7 +131,7 @@ interface CartService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CartGetResponse>
 
-        /** @see [get] */
+        /** @see get */
         @MustBeClosed
         fun get(requestOptions: RequestOptions): HttpResponseFor<CartGetResponse> =
             get(CartGetParams.none(), requestOptions)

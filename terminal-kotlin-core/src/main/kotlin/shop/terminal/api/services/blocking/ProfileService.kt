@@ -3,6 +3,7 @@
 package shop.terminal.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
+import shop.terminal.api.core.ClientOptions
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.http.HttpResponseFor
 import shop.terminal.api.models.profile.ProfileMeParams
@@ -17,6 +18,13 @@ interface ProfileService {
      */
     fun withRawResponse(): WithRawResponse
 
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ProfileService
+
     /** Update the current user's profile. */
     fun update(
         params: ProfileUpdateParams,
@@ -29,12 +37,19 @@ interface ProfileService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ProfileMeResponse
 
-    /** @see [me] */
+    /** @see me */
     fun me(requestOptions: RequestOptions): ProfileMeResponse =
         me(ProfileMeParams.none(), requestOptions)
 
     /** A view of [ProfileService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ProfileService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `put /profile`, but is otherwise the same as
@@ -56,7 +71,7 @@ interface ProfileService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ProfileMeResponse>
 
-        /** @see [me] */
+        /** @see me */
         @MustBeClosed
         fun me(requestOptions: RequestOptions): HttpResponseFor<ProfileMeResponse> =
             me(ProfileMeParams.none(), requestOptions)

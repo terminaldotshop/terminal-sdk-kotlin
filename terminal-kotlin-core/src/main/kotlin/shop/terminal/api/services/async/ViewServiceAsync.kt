@@ -3,6 +3,7 @@
 package shop.terminal.api.services.async
 
 import com.google.errorprone.annotations.MustBeClosed
+import shop.terminal.api.core.ClientOptions
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.http.HttpResponseFor
 import shop.terminal.api.models.view.ViewInitParams
@@ -16,6 +17,13 @@ interface ViewServiceAsync {
     fun withRawResponse(): WithRawResponse
 
     /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ViewServiceAsync
+
+    /**
      * Get initial app data, including user, products, cart, addresses, cards, subscriptions, and
      * orders.
      */
@@ -24,12 +32,19 @@ interface ViewServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ViewInitResponse
 
-    /** @see [init] */
+    /** @see init */
     suspend fun init(requestOptions: RequestOptions): ViewInitResponse =
         init(ViewInitParams.none(), requestOptions)
 
     /** A view of [ViewServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ViewServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /view/init`, but is otherwise the same as
@@ -41,7 +56,7 @@ interface ViewServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ViewInitResponse>
 
-        /** @see [init] */
+        /** @see init */
         @MustBeClosed
         suspend fun init(requestOptions: RequestOptions): HttpResponseFor<ViewInitResponse> =
             init(ViewInitParams.none(), requestOptions)

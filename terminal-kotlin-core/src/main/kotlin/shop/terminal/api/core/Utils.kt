@@ -4,6 +4,8 @@ package shop.terminal.api.core
 
 import java.util.Collections
 import java.util.SortedMap
+import java.util.SortedSet
+import java.util.concurrent.locks.Lock
 import shop.terminal.api.errors.TerminalInvalidDataException
 
 internal fun <T : Any> T?.getOrThrow(name: String): T =
@@ -11,6 +13,10 @@ internal fun <T : Any> T?.getOrThrow(name: String): T =
 
 internal fun <T> List<T>.toImmutable(): List<T> =
     if (isEmpty()) Collections.emptyList() else Collections.unmodifiableList(toList())
+
+internal fun <V : Comparable<V>> SortedSet<V>.toImmutable(): SortedSet<V> =
+    if (isEmpty()) Collections.emptySortedSet()
+    else Collections.unmodifiableSortedSet(toSortedSet(comparator() ?: Comparator.naturalOrder()))
 
 internal fun <K, V> Map<K, V>.toImmutable(): Map<K, V> =
     if (isEmpty()) immutableEmptyMap() else Collections.unmodifiableMap(toMap())
@@ -83,3 +89,19 @@ internal fun Any?.contentToString(): String {
 }
 
 internal interface Enum
+
+/**
+ * Executes a suspending block of code while holding this lock.
+ *
+ * @param T the return type of the action
+ * @param action the suspending function to execute while holding the lock
+ * @return the result of executing the action
+ */
+internal suspend fun <T> Lock.withLockAsync(action: suspend () -> T): T {
+    lock()
+    return try {
+        action()
+    } finally {
+        unlock()
+    }
+}

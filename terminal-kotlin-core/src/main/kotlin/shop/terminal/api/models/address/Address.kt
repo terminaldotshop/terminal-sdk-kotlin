@@ -17,6 +17,7 @@ import shop.terminal.api.errors.TerminalInvalidDataException
 
 /** Physical address associated with a Terminal shop user. */
 class Address
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
     private val city: JsonField<String>,
@@ -432,6 +433,14 @@ private constructor(
 
     private var validated: Boolean = false
 
+    /**
+     * Validates that the types of all values in this object match their expected types recursively.
+     *
+     * This method is _not_ forwards compatible with new types from the API for existing fields.
+     *
+     * @throws TerminalInvalidDataException if any value type in this object doesn't match its
+     *   expected type.
+     */
     fun validate(): Address = apply {
         if (validated) {
             return@apply
@@ -480,12 +489,35 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Address && id == other.id && city == other.city && country == other.country && created == other.created && name == other.name && street1 == other.street1 && zip == other.zip && phone == other.phone && province == other.province && street2 == other.street2 && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is Address &&
+            id == other.id &&
+            city == other.city &&
+            country == other.country &&
+            created == other.created &&
+            name == other.name &&
+            street1 == other.street1 &&
+            zip == other.zip &&
+            phone == other.phone &&
+            province == other.province &&
+            street2 == other.street2 &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, city, country, created, name, street1, zip, phone, province, street2, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            id,
+            city,
+            country,
+            created,
+            name,
+            street1,
+            zip,
+            phone,
+            province,
+            street2,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

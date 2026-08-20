@@ -17,11 +17,11 @@ import shop.terminal.api.errors.TerminalInvalidDataException
 
 /** Variant of a product in the Terminal shop. */
 class ProductVariant
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
     private val name: JsonField<String>,
     private val price: JsonField<Long>,
-    private val description: JsonField<String>,
     private val tags: JsonField<Tags>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
@@ -31,11 +31,8 @@ private constructor(
         @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
         @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
         @JsonProperty("price") @ExcludeMissing price: JsonField<Long> = JsonMissing.of(),
-        @JsonProperty("description")
-        @ExcludeMissing
-        description: JsonField<String> = JsonMissing.of(),
         @JsonProperty("tags") @ExcludeMissing tags: JsonField<Tags> = JsonMissing.of(),
-    ) : this(id, name, price, description, tags, mutableMapOf())
+    ) : this(id, name, price, tags, mutableMapOf())
 
     /**
      * Unique object identifier. The format and length of IDs may change over time.
@@ -60,14 +57,6 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun price(): Long = price.getRequired("price")
-
-    /**
-     * Description of the product variant.
-     *
-     * @throws TerminalInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
-    fun description(): String? = description.getNullable("description")
 
     /**
      * Tags for the product variant.
@@ -97,13 +86,6 @@ private constructor(
      * Unlike [price], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Long> = price
-
-    /**
-     * Returns the raw JSON value of [description].
-     *
-     * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("description") @ExcludeMissing fun _description(): JsonField<String> = description
 
     /**
      * Returns the raw JSON value of [tags].
@@ -145,7 +127,6 @@ private constructor(
         private var id: JsonField<String>? = null
         private var name: JsonField<String>? = null
         private var price: JsonField<Long>? = null
-        private var description: JsonField<String> = JsonMissing.of()
         private var tags: JsonField<Tags> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -153,7 +134,6 @@ private constructor(
             id = productVariant.id
             name = productVariant.name
             price = productVariant.price
-            description = productVariant.description
             tags = productVariant.tags
             additionalProperties = productVariant.additionalProperties.toMutableMap()
         }
@@ -190,18 +170,6 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun price(price: JsonField<Long>) = apply { this.price = price }
-
-        /** Description of the product variant. */
-        fun description(description: String) = description(JsonField.of(description))
-
-        /**
-         * Sets [Builder.description] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.description] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun description(description: JsonField<String>) = apply { this.description = description }
 
         /** Tags for the product variant. */
         fun tags(tags: Tags) = tags(JsonField.of(tags))
@@ -252,7 +220,6 @@ private constructor(
                 checkRequired("id", id),
                 checkRequired("name", name),
                 checkRequired("price", price),
-                description,
                 tags,
                 additionalProperties.toMutableMap(),
             )
@@ -260,6 +227,14 @@ private constructor(
 
     private var validated: Boolean = false
 
+    /**
+     * Validates that the types of all values in this object match their expected types recursively.
+     *
+     * This method is _not_ forwards compatible with new types from the API for existing fields.
+     *
+     * @throws TerminalInvalidDataException if any value type in this object doesn't match its
+     *   expected type.
+     */
     fun validate(): ProductVariant = apply {
         if (validated) {
             return@apply
@@ -268,7 +243,6 @@ private constructor(
         id()
         name()
         price()
-        description()
         tags()?.validate()
         validated = true
     }
@@ -290,11 +264,11 @@ private constructor(
         (if (id.asKnown() == null) 0 else 1) +
             (if (name.asKnown() == null) 0 else 1) +
             (if (price.asKnown() == null) 0 else 1) +
-            (if (description.asKnown() == null) 0 else 1) +
             (tags.asKnown()?.validity() ?: 0)
 
     /** Tags for the product variant. */
     class Tags
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val app: JsonField<String>,
         private val marketEu: JsonField<Boolean>,
@@ -483,6 +457,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws TerminalInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): Tags = apply {
             if (validated) {
                 return@apply
@@ -520,12 +503,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Tags && app == other.app && marketEu == other.marketEu && marketGlobal == other.marketGlobal && marketNa == other.marketNa && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Tags &&
+                app == other.app &&
+                marketEu == other.marketEu &&
+                marketGlobal == other.marketGlobal &&
+                marketNa == other.marketNa &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(app, marketEu, marketGlobal, marketNa, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(app, marketEu, marketGlobal, marketNa, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -538,15 +526,18 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ProductVariant && id == other.id && name == other.name && price == other.price && description == other.description && tags == other.tags && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is ProductVariant &&
+            id == other.id &&
+            name == other.name &&
+            price == other.price &&
+            tags == other.tags &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, name, price, description, tags, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy { Objects.hash(id, name, price, tags, additionalProperties) }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ProductVariant{id=$id, name=$name, price=$price, description=$description, tags=$tags, additionalProperties=$additionalProperties}"
+        "ProductVariant{id=$id, name=$name, price=$price, tags=$tags, additionalProperties=$additionalProperties}"
 }

@@ -3,6 +3,7 @@
 package shop.terminal.api.services.async
 
 import com.google.errorprone.annotations.MustBeClosed
+import shop.terminal.api.core.ClientOptions
 import shop.terminal.api.core.RequestOptions
 import shop.terminal.api.core.http.HttpResponseFor
 import shop.terminal.api.models.cart.CartClearParams
@@ -25,13 +26,20 @@ interface CartServiceAsync {
      */
     fun withRawResponse(): WithRawResponse
 
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: (ClientOptions.Builder) -> Unit): CartServiceAsync
+
     /** Clear the current user's cart. */
     suspend fun clear(
         params: CartClearParams = CartClearParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CartClearResponse
 
-    /** @see [clear] */
+    /** @see clear */
     suspend fun clear(requestOptions: RequestOptions): CartClearResponse =
         clear(CartClearParams.none(), requestOptions)
 
@@ -41,7 +49,7 @@ interface CartServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CartConvertResponse
 
-    /** @see [convert] */
+    /** @see convert */
     suspend fun convert(requestOptions: RequestOptions): CartConvertResponse =
         convert(CartConvertParams.none(), requestOptions)
 
@@ -51,7 +59,7 @@ interface CartServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CartGetResponse
 
-    /** @see [get] */
+    /** @see get */
     suspend fun get(requestOptions: RequestOptions): CartGetResponse =
         get(CartGetParams.none(), requestOptions)
 
@@ -77,6 +85,13 @@ interface CartServiceAsync {
     interface WithRawResponse {
 
         /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: (ClientOptions.Builder) -> Unit): CartServiceAsync.WithRawResponse
+
+        /**
          * Returns a raw HTTP response for `delete /cart`, but is otherwise the same as
          * [CartServiceAsync.clear].
          */
@@ -86,7 +101,7 @@ interface CartServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CartClearResponse>
 
-        /** @see [clear] */
+        /** @see clear */
         @MustBeClosed
         suspend fun clear(requestOptions: RequestOptions): HttpResponseFor<CartClearResponse> =
             clear(CartClearParams.none(), requestOptions)
@@ -101,7 +116,7 @@ interface CartServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CartConvertResponse>
 
-        /** @see [convert] */
+        /** @see convert */
         @MustBeClosed
         suspend fun convert(requestOptions: RequestOptions): HttpResponseFor<CartConvertResponse> =
             convert(CartConvertParams.none(), requestOptions)
@@ -116,7 +131,7 @@ interface CartServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CartGetResponse>
 
-        /** @see [get] */
+        /** @see get */
         @MustBeClosed
         suspend fun get(requestOptions: RequestOptions): HttpResponseFor<CartGetResponse> =
             get(CartGetParams.none(), requestOptions)

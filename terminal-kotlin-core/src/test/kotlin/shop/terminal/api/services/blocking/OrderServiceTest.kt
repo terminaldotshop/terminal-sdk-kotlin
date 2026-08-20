@@ -8,7 +8,6 @@ import shop.terminal.api.TestServerExtension
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
 import shop.terminal.api.core.JsonValue
 import shop.terminal.api.models.order.OrderCreateParams
-import shop.terminal.api.models.order.OrderGetParams
 
 @ExtendWith(TestServerExtension::class)
 internal class OrderServiceTest {
@@ -64,8 +63,7 @@ internal class OrderServiceTest {
                 .build()
         val orderService = client.order()
 
-        val order =
-            orderService.get(OrderGetParams.builder().id("ord_XXXXXXXXXXXXXXXXXXXXXXXXX").build())
+        val order = orderService.get("ord_XXXXXXXXXXXXXXXXXXXXXXXXX")
 
         order.validate()
     }

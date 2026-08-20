@@ -2,8 +2,8 @@
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/shop.terminal.api/terminal-kotlin)](https://central.sonatype.com/artifact/shop.terminal.api/terminal-kotlin/2.5.0)
-[![javadoc](https://javadoc.io/badge2/shop.terminal.api/terminal-kotlin/2.5.0/javadoc.svg)](https://javadoc.io/doc/shop.terminal.api/terminal-kotlin/2.5.0)
+[![Maven Central](https://img.shields.io/maven-central/v/shop.terminal.api/terminal-kotlin)](https://central.sonatype.com/artifact/shop.terminal.api/terminal-kotlin/3.0.0)
+[![javadoc](https://javadoc.io/badge2/shop.terminal.api/terminal-kotlin/javadoc.svg)](https://javadoc.io/doc/shop.terminal.api/terminal-kotlin/3.0.0)
 
 <!-- x-release-please-end -->
 
@@ -13,9 +13,18 @@ The Terminal Kotlin SDK is similar to the Terminal Java SDK but with minor diffe
 
 It is generated with [Stainless](https://www.stainless.com/).
 
+## MCP Server
+
+Use the Terminal MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.
+
+[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40terminaldotshop%2Fmcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkB0ZXJtaW5hbGRvdHNob3AvbWNwIl0sImVudiI6eyJURVJNSU5BTF9CRUFSRVJfVE9LRU4iOiJNeSBCZWFyZXIgVG9rZW4iLCJURVJNSU5BTF9BUFBfSUQiOiJNeSBBcHAgSUQifX0)
+[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40terminaldotshop%2Fmcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40terminaldotshop%2Fmcp%22%5D%2C%22env%22%3A%7B%22TERMINAL_BEARER_TOKEN%22%3A%22My%20Bearer%20Token%22%2C%22TERMINAL_APP_ID%22%3A%22My%20App%20ID%22%7D%7D)
+
+> Note: You may need to set environment variables in your MCP client.
+
 <!-- x-release-please-start-version -->
 
-The REST API documentation can be found on [terminal.shop](https://terminal.shop/docs). KDocs are available on [javadoc.io](https://javadoc.io/doc/shop.terminal.api/terminal-kotlin/2.5.0).
+The REST API documentation can be found on [terminal.shop](https://terminal.shop/docs). KDocs are available on [javadoc.io](https://javadoc.io/doc/shop.terminal.api/terminal-kotlin/3.0.0).
 
 <!-- x-release-please-end -->
 
@@ -26,7 +35,7 @@ The REST API documentation can be found on [terminal.shop](https://terminal.shop
 ### Gradle
 
 ```kotlin
-implementation("shop.terminal.api:terminal-kotlin:2.5.0")
+implementation("shop.terminal.api:terminal-kotlin:3.0.0")
 ```
 
 ### Maven
@@ -35,7 +44,7 @@ implementation("shop.terminal.api:terminal-kotlin:2.5.0")
 <dependency>
   <groupId>shop.terminal.api</groupId>
   <artifactId>terminal-kotlin</artifactId>
-  <version>2.5.0</version>
+  <version>3.0.0</version>
 </dependency>
 ```
 
@@ -53,7 +62,8 @@ import shop.terminal.api.client.okhttp.TerminalOkHttpClient
 import shop.terminal.api.models.product.ProductListParams
 import shop.terminal.api.models.product.ProductListResponse
 
-// Configures using the `TERMINAL_BEARER_TOKEN` and `TERMINAL_BASE_URL` environment variables
+// Configures using the `terminal.bearerToken` and `terminal.baseUrl` system properties
+// Or configures using the `TERMINAL_BEARER_TOKEN` and `TERMINAL_BASE_URL` environment variables
 val client: TerminalClient = TerminalOkHttpClient.fromEnv()
 
 val products: ProductListResponse = client.product().list()
@@ -61,13 +71,14 @@ val products: ProductListResponse = client.product().list()
 
 ## Client configuration
 
-Configure the client using environment variables:
+Configure the client using system properties or environment variables:
 
 ```kotlin
 import shop.terminal.api.client.TerminalClient
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
 
-// Configures using the `TERMINAL_BEARER_TOKEN` and `TERMINAL_BASE_URL` environment variables
+// Configures using the `terminal.bearerToken` and `terminal.baseUrl` system properties
+// Or configures using the `TERMINAL_BEARER_TOKEN` and `TERMINAL_BASE_URL` environment variables
 val client: TerminalClient = TerminalOkHttpClient.fromEnv()
 ```
 
@@ -89,7 +100,8 @@ import shop.terminal.api.client.TerminalClient
 import shop.terminal.api.client.okhttp.TerminalOkHttpClient
 
 val client: TerminalClient = TerminalOkHttpClient.builder()
-    // Configures using the `TERMINAL_BEARER_TOKEN` and `TERMINAL_BASE_URL` environment variables
+    // Configures using the `terminal.bearerToken` and `terminal.baseUrl` system properties
+    // Or configures using the `TERMINAL_BEARER_TOKEN` and `TERMINAL_BASE_URL` environment variables
     .fromEnv()
     .appId("My App ID")
     .build()
@@ -97,14 +109,31 @@ val client: TerminalClient = TerminalOkHttpClient.builder()
 
 See this table for the available options:
 
-| Setter        | Environment variable    | Required | Default value                 |
-| ------------- | ----------------------- | -------- | ----------------------------- |
-| `bearerToken` | `TERMINAL_BEARER_TOKEN` | true     | -                             |
-| `baseUrl`     | `TERMINAL_BASE_URL`     | true     | `"https://api.terminal.shop"` |
+| Setter        | System property        | Environment variable    | Required | Default value                 |
+| ------------- | ---------------------- | ----------------------- | -------- | ----------------------------- |
+| `bearerToken` | `terminal.bearerToken` | `TERMINAL_BEARER_TOKEN` | true     | -                             |
+| `baseUrl`     | `terminal.baseUrl`     | `TERMINAL_BASE_URL`     | true     | `"https://api.terminal.shop"` |
+
+System properties take precedence over environment variables.
 
 > [!TIP]
 > Don't create more than one client in the same application. Each client has a connection pool and
 > thread pools, which are more efficient to share between requests.
+
+### Modifying configuration
+
+To temporarily use a modified client configuration, while reusing the same connection and thread pools, call `withOptions()` on any client or service:
+
+```kotlin
+import shop.terminal.api.client.TerminalClient
+
+val clientWithOptions: TerminalClient = client.withOptions {
+    it.baseUrl("https://example.com")
+    it.maxRetries(42)
+}
+```
+
+The `withOptions()` method does not affect the original client or service.
 
 ## Requests and responses
 
@@ -130,7 +159,8 @@ import shop.terminal.api.client.okhttp.TerminalOkHttpClient
 import shop.terminal.api.models.product.ProductListParams
 import shop.terminal.api.models.product.ProductListResponse
 
-// Configures using the `TERMINAL_BEARER_TOKEN` and `TERMINAL_BASE_URL` environment variables
+// Configures using the `terminal.bearerToken` and `terminal.baseUrl` system properties
+// Or configures using the `TERMINAL_BEARER_TOKEN` and `TERMINAL_BASE_URL` environment variables
 val client: TerminalClient = TerminalOkHttpClient.fromEnv()
 
 val products: ProductListResponse = client.async().product().list()
@@ -144,7 +174,8 @@ import shop.terminal.api.client.okhttp.TerminalOkHttpClientAsync
 import shop.terminal.api.models.product.ProductListParams
 import shop.terminal.api.models.product.ProductListResponse
 
-// Configures using the `TERMINAL_BEARER_TOKEN` and `TERMINAL_BASE_URL` environment variables
+// Configures using the `terminal.bearerToken` and `terminal.baseUrl` system properties
+// Or configures using the `TERMINAL_BEARER_TOKEN` and `TERMINAL_BASE_URL` environment variables
 val client: TerminalClientAsync = TerminalOkHttpClientAsync.fromEnv()
 
 val products: ProductListResponse = client.product().list()
@@ -197,25 +228,44 @@ The SDK throws custom unchecked exception types:
 
 - [`TerminalIoException`](terminal-kotlin-core/src/main/kotlin/shop/terminal/api/errors/TerminalIoException.kt): I/O networking errors.
 
+- [`TerminalRetryableException`](terminal-kotlin-core/src/main/kotlin/shop/terminal/api/errors/TerminalRetryableException.kt): Generic error indicating a failure that could be retried by the client.
+
 - [`TerminalInvalidDataException`](terminal-kotlin-core/src/main/kotlin/shop/terminal/api/errors/TerminalInvalidDataException.kt): Failure to interpret successfully parsed data. For example, when accessing a property that's supposed to be required, but the API unexpectedly omitted it from the response.
 
 - [`TerminalException`](terminal-kotlin-core/src/main/kotlin/shop/terminal/api/errors/TerminalException.kt): Base class for all exceptions. Most errors will result in one of the previously mentioned ones, but completely generic errors may be thrown using the base class.
 
 ## Logging
 
-The SDK uses the standard [OkHttp logging interceptor](https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor).
-
 Enable logging by setting the `TERMINAL_LOG` environment variable to `info`:
 
 ```sh
-$ export TERMINAL_LOG=info
+export TERMINAL_LOG=info
 ```
 
 Or to `debug` for more verbose logging:
 
 ```sh
-$ export TERMINAL_LOG=debug
+export TERMINAL_LOG=debug
 ```
+
+Or configure the client manually using the `logLevel` method:
+
+```kotlin
+import shop.terminal.api.client.TerminalClient
+import shop.terminal.api.client.okhttp.TerminalOkHttpClient
+import shop.terminal.api.core.LogLevel
+
+val client: TerminalClient = TerminalOkHttpClient.builder()
+    .fromEnv()
+    .logLevel(LogLevel.INFO)
+    .build()
+```
+
+## ProGuard and R8
+
+Although the SDK uses reflection, it is still usable with [ProGuard](https://github.com/Guardsquare/proguard) and [R8](https://developer.android.com/topic/performance/app-optimization/enable-app-optimization) because `terminal-kotlin-core` is published with a [configuration file](terminal-kotlin-core/src/main/resources/META-INF/proguard/terminal-kotlin-core.pro) containing [keep rules](https://www.guardsquare.com/manual/configuration/usage).
+
+ProGuard and R8 should automatically detect and use the published rules, but you can also manually copy the keep rules if necessary.
 
 ## Jackson
 
@@ -228,11 +278,13 @@ If the SDK threw an exception, but you're _certain_ the version is compatible, t
 > [!CAUTION]
 > We make no guarantee that the SDK works correctly when the Jackson version check is disabled.
 
+Also note that there are bugs in older Jackson versions that can affect the SDK. We don't work around all Jackson bugs ([example](https://github.com/FasterXML/jackson-databind/issues/3240)) and expect users to upgrade Jackson for those instead.
+
 ## Network options
 
 ### Retries
 
-The SDK automatically retries 2 times by default, with a short exponential backoff.
+The SDK automatically retries 2 times by default, with a short exponential backoff between requests.
 
 Only the following error types are retried:
 
@@ -242,7 +294,7 @@ Only the following error types are retried:
 - 429 Rate Limit
 - 5xx Internal
 
-The API may also explicitly instruct the SDK to retry or not retry a response.
+The API may also explicitly instruct the SDK to retry or not retry a request.
 
 To set a custom number of retries, configure the client using the `maxRetries` method:
 
@@ -263,7 +315,6 @@ Requests time out after 1 minute by default.
 To set a custom timeout, configure the method call using the `timeout` method:
 
 ```kotlin
-import shop.terminal.api.models.product.ProductListParams
 import shop.terminal.api.models.product.ProductListResponse
 
 val products: ProductListResponse = client.product().list(RequestOptions.builder().timeout(Duration.ofSeconds(30)).build())
@@ -299,6 +350,61 @@ val client: TerminalClient = TerminalOkHttpClient.builder()
         "https://example.com", 8080
       )
     ))
+    .build()
+```
+
+If the proxy responds with `407 Proxy Authentication Required`, supply credentials by also configuring `proxyAuthenticator`:
+
+```kotlin
+import shop.terminal.api.client.TerminalClient
+import shop.terminal.api.client.okhttp.TerminalOkHttpClient
+import shop.terminal.api.core.http.ProxyAuthenticator
+
+val client: TerminalClient = TerminalOkHttpClient.builder()
+    .fromEnv()
+    .proxy(...)
+    // Or a custom implementation of `ProxyAuthenticator`.
+    .proxyAuthenticator(ProxyAuthenticator.basic("username", "password"))
+    .build()
+```
+
+### Connection pooling
+
+To customize the underlying OkHttp connection pool, configure the client using the `maxIdleConnections` and `keepAliveDuration` methods:
+
+```kotlin
+import java.time.Duration
+import shop.terminal.api.client.TerminalClient
+import shop.terminal.api.client.okhttp.TerminalOkHttpClient
+
+val client: TerminalClient = TerminalOkHttpClient.builder()
+    .fromEnv()
+    // If `maxIdleConnections` is set, then `keepAliveDuration` must be set, and vice versa.
+    .maxIdleConnections(10)
+    .keepAliveDuration(Duration.ofMinutes(2))
+    .build()
+```
+
+If both options are unset, OkHttp's default connection pool settings are used.
+
+### HTTPS
+
+> [!NOTE]
+> Most applications should not call these methods, and instead use the system defaults. The defaults include
+> special optimizations that can be lost if the implementations are modified.
+
+To configure how HTTPS connections are secured, configure the client using the `sslSocketFactory`, `trustManager`, and `hostnameVerifier` methods:
+
+```kotlin
+import shop.terminal.api.client.TerminalClient
+import shop.terminal.api.client.okhttp.TerminalOkHttpClient
+
+val client: TerminalClient = TerminalOkHttpClient.builder()
+    .fromEnv()
+    // If `sslSocketFactory` is set, then `trustManager` must be set, and vice versa.
+    .sslSocketFactory(yourSSLSocketFactory)
+    .trustManager(yourTrustManager)
+    .hostnameVerifier(yourHostnameVerifier)
     .build()
 ```
 
@@ -479,7 +585,9 @@ In rare cases, the API may return a response that doesn't match the expected typ
 
 By default, the SDK will not throw an exception in this case. It will throw [`TerminalInvalidDataException`](terminal-kotlin-core/src/main/kotlin/shop/terminal/api/errors/TerminalInvalidDataException.kt) only if you directly access the property.
 
-If you would prefer to check that the response is completely well-typed upfront, then either call `validate()`:
+Validating the response is _not_ forwards compatible with new types from the API for existing fields.
+
+If you would still prefer to check that the response is completely well-typed upfront, then either call `validate()`:
 
 ```kotlin
 import shop.terminal.api.models.product.ProductListResponse
@@ -490,7 +598,6 @@ val products: ProductListResponse = client.product().list(params).validate()
 Or configure the method call to validate the response using the `responseValidation` method:
 
 ```kotlin
-import shop.terminal.api.models.product.ProductListParams
 import shop.terminal.api.models.product.ProductListResponse
 
 val products: ProductListResponse = client.product().list(RequestOptions.builder().responseValidation(true).build())
